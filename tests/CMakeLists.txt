@@ -1,0 +1,43 @@
+FIND_PACKAGE (Threads REQUIRED)
+INCLUDE_DIRECTORIES (${Threads_INCLUDE_DIR})
+
+# GTest
+FIND_PACKAGE (GTest)
+
+IF (NOT GTEST_FOUND)
+		FIND_PATH (GTEST_SRC_DIR src/gtest_main.cc HINTS /usr/src/gtest)
+		FIND_PATH (GTEST_INCLUDE_DIRS gtest.h HINTS /usr/include/gtest)
+		IF (GTEST_SRC_DIR AND GTEST_INCLUDE_DIRS)
+			MESSAGE (STATUS "GTest source package found. Compiling...")
+			ADD_SUBDIRECTORY (${GTEST_SRC_DIR} ${CMAKE_BINARY_DIR}/gtest)
+			SET (GTEST_FOUND 1)
+			SET (GTEST_MAIN_LIBRARIES ${CMAKE_BINARY_DIR}/gtest/libgtest_main.a)
+			SET (GTEST_LIBRARIES ${CMAKE_BINARY_DIR}/gtest/libgtest.a)
+			SET (GTEST_BOTH_LIBRARIES ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES})
+		ELSE (GTEST_SRC_DIR AND GTEST_INCLUDE_DIRS)
+			MESSAGE (SEND_ERROR "Cannot find required package: GTest")
+		ENDIF (GTEST_SRC_DIR AND GTEST_INCLUDE_DIRS)
+ELSE (NOT GTEST_FOUND)
+ENDIF (NOT GTEST_FOUND)
+
+INCLUDE_DIRECTORIES (${GTEST_INCLUDE_DIRS})
+
+SET (GTEST_TARGETS gtest gtest_main)
+
+ADD_CUSTOM_TARGET (check_tests ALL touch ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt)
+
+SET (CMAKE_TEST_COMMAND ctest -V)
+ADD_CUSTOM_TARGET (run_tests ${CMAKE_CTEST_COMMAND})
+
+INCLUDE_DIRECTORIES (${GTEST_SOURCE_DIR} ${GTEST_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR})
+
+FILE (GLOB_RECURSE test_src_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.test.cpp")
+
+FOREACH (test_src_file IN LISTS test_src_files)
+	STRING (REGEX REPLACE "[.]test[.]cpp$" "_test" test_exec_file ${test_src_file})
+	ADD_EXECUTABLE (${test_exec_file} ${test_src_file})
+	TARGET_LINK_LIBRARIES (${test_exec_file} ${CMAKE_THREAD_LIBS_INIT} ${GTEST_BOTH_LIBRARIES} rt)
+	ADD_TEST (${test_exec_file} ${test_exec_file})
+	ADD_DEPENDENCIES (${test_exec_file} ${GTEST_TARGETS})
+ENDFOREACH (test_src_file)
+

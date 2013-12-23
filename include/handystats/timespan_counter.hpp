@@ -59,15 +59,15 @@ public:
 
 	duration_type get_running_time(const time_point& timestamp = clock::now()) const {
 		if (!running) {
-			return base_counter::value;
+			return this->value;
 		}
 		else {
-			return base_counter::value + get_last_span_duration(timestamp);
+			return this->value + get_last_span_duration(timestamp);
 		}
 	}
 
 	void start(const time_point& timestamp = clock::now()) {
-		base_counter::update_timestamp(timestamp);
+		this->update_timestamp(timestamp);
 
 		if (!running) {
 			running = true;
@@ -76,11 +76,11 @@ public:
 	}
 
 	void stop(const time_point& timestamp = clock::now()) {
-		base_counter::update_timestamp(timestamp);
+		this->update_timestamp(timestamp);
 
 		if (running) {
 			last_span_duration = timestamp - span_start_time;
-			base_counter::value += last_span_duration;
+			this->value += last_span_duration;
 
 			span_start_time = time_point::min();
 			running = false;

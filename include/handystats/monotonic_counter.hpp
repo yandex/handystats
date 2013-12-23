@@ -39,8 +39,8 @@ public:
 	}
 
 	void increment(value_type inc_value = 1, time_point timestamp = clock::now()) {
-		base_counter::value += inc_value;
-		base_counter::update_timestamp(timestamp);
+		this->value += inc_value;
+		this->update_timestamp(timestamp);
 	}
 
 	void incident(time_point timestamp = clock::now()) {
@@ -51,9 +51,9 @@ public:
 	std::string to_string() const {
 		return std::string("[ counter")
 			.append("  value: ")
-			.append(std::to_string(base_counter::get_value()))
+			.append(std::to_string(this->get_value()))
 			.append("  active_time: ")
-			.append(std::to_string(chrono::to_microseconds(base_counter::get_active_time()).count()))
+			.append(std::to_string(chrono::to_microseconds(this->get_active_time()).count()))
 			.append(" us ]");
 	}
 };

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <chrono>
+#include <type_traits>
 
 #include <handystats/chrono.hpp>
 #include <handystats/counter.hpp>
@@ -16,6 +17,7 @@ public:
 	// XXX check Value type for some condition (integer, arithmetic, ...)
 	// or leave the decision to the user
 	//static_assert(std::numeric_limits<Value>::is_integer, "value type must be integer!");
+	static_assert(std::is_arithmetic<Value>::value, "Value type must be arithmetic!");
 
 	typedef counter<monotonic_counter<Value, Duration>, Value, Duration> base_counter;
 

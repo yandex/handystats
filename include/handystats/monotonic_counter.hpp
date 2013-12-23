@@ -4,8 +4,8 @@
 #include <string>
 #include <chrono>
 
-#include "chrono.hpp"
-#include "counter.hpp"
+#include <handystats/chrono.hpp>
+#include <handystats/counter.hpp>
 
 namespace handystats {
 

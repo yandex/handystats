@@ -33,9 +33,7 @@ public:
 	{}
 
 	void reset(value_type value = 0, time_point timestamp = clock::now()) {
-		base_counter::value = value;
-		base_counter::first_timestamp = timestamp;
-		base_counter::last_timestamp = timestamp;
+		base_counter::reset(value, timestamp);
 	}
 
 	void increment(value_type inc_value = 1, time_point timestamp = clock::now()) {

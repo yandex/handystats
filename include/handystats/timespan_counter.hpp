@@ -33,9 +33,7 @@ public:
 	{}
 
 	void reset(const duration_type& value = duration_type::zero(), const time_point& timestamp = clock::now()) {
-		base_counter::value = value;
-		base_counter::first_timestamp = timestamp;
-		base_counter::last_timestamp = timestamp;
+		base_counter::reset(value, timestamp);
 
 		running = false;
 		span_start_time = time_point::min();

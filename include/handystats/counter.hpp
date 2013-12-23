@@ -34,6 +34,12 @@ public:
 		}
 	}
 
+	void reset(value_type value, time_point timestamp = clock::now()) {
+		this->value = value;
+		first_timestamp = timestamp;
+		last_timestamp = timestamp;
+	}
+
 	value_type get_value() const {
 		return value;
 	}

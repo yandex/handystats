@@ -66,6 +66,10 @@ public:
 		}
 	}
 
+	duration_type get_value() const {
+		return get_running_time();
+	}
+
 	void start(const time_point& timestamp = clock::now()) {
 		this->update_timestamp(timestamp);
 

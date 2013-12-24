@@ -19,6 +19,19 @@ public:
 		, max(std::numeric_limits<double>::min())
 	{}
 
+	template<typename iterator>
+	incremental_statistics(iterator first, iterator last)
+		: count(0)
+		, sum(0)
+		, squared_sum(0)
+		, min(std::numeric_limits<double>::max())
+		, max(std::numeric_limits<double>::min())
+	{
+		for (iterator it = first; it != last; ++it) {
+			add_value(*it);
+		}
+	}
+
 	void reset() {
 		count = 0;
 		sum = 0;

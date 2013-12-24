@@ -10,7 +10,7 @@ TEST(TimespanCounter, TimespanInitializedWithZero) {
 	typedef handystats::timespan_counter<> timespan_counter;
 	timespan_counter counter;
 
-	EXPECT_EQ(counter.get_value().count(), 0);
+	EXPECT_EQ(counter.get_value(), 0);
 	EXPECT_EQ(counter.get_running_time().count(), 0);
 }
 
@@ -24,7 +24,7 @@ TEST(TimespanCounter, TimespanCountsAtLeastCorrectly) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(SLEEP_MILLIS));
 	counter.stop();
 
-	ASSERT_GE(counter.get_value().count(), SLEEP_MILLIS);
+	ASSERT_GE(counter.get_value(), SLEEP_MILLIS);
 }
 
 TEST(TimespanCounter, TimespanIsRunningWorksCorrectly) {
@@ -72,7 +72,7 @@ TEST(TimespanCounter, TimespanAccumulatesSpans) {
 		summary_sleep += sleep;
 	}
 
-	ASSERT_GE(counter.get_value().count(), summary_sleep);
+	ASSERT_GE(counter.get_value(), summary_sleep);
 }
 
 TEST(TimespanCounter, TimespanTotalRunningTimeCollectsCorrectly) {

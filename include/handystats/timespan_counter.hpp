@@ -10,14 +10,15 @@
 namespace handystats {
 
 template<class Duration = std::chrono::microseconds>
-class timespan_counter : public counter<timespan_counter<Duration>, Duration, Duration>
+class timespan_counter : public counter<timespan_counter<Duration>, typename Duration::rep, Duration>
 {
 public:
 	// XXX check Duration type
 	//static_assert(std::is_same<Duration, std::chrono::duration>::value, "duration type must be std::chrono::duration-compatible!");
 
-	typedef counter<timespan_counter<Duration>, Duration, Duration> base_counter;
+	typedef counter<timespan_counter<Duration>, typename Duration::rep, Duration> base_counter;
 
+	typedef typename base_counter::value_type value_type;
 	typedef typename base_counter::duration_type duration_type;
 	typedef typename base_counter::clock clock;
 	typedef typename base_counter::time_point time_point;
@@ -59,15 +60,15 @@ public:
 
 	duration_type get_running_time(const time_point& timestamp = clock::now()) const {
 		if (!running) {
-			return this->value;
+			return duration_type(this->value);
 		}
 		else {
-			return this->value + get_last_span_duration(timestamp);
+			return duration_type(this->value) + get_last_span_duration(timestamp);
 		}
 	}
 
-	duration_type get_value() const {
-		return get_running_time();
+	value_type get_value() const {
+		return get_running_time().count();
 	}
 
 	void start(const time_point& timestamp = clock::now()) {
@@ -84,7 +85,7 @@ public:
 
 		if (running) {
 			last_span_duration = timestamp - span_start_time;
-			this->value += last_span_duration;
+			this->value += last_span_duration.count();
 
 			span_start_time = time_point::min();
 			running = false;

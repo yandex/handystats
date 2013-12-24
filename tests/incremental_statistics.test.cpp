@@ -36,3 +36,49 @@ TEST(IncrementalStatistics, CheckAllCollectedValues) {
 	EXPECT_NEAR(stats.get_range(), 4, epsilon);
 }
 
+TEST(IncrementalStatistics, CheckThatDataOrderIsInsignificant) {
+	const double epsilon = std::numeric_limits<double>::epsilon();
+
+	std::vector<int> data{100, 45, 3, 200, 15, 36, -450, 90, 13};
+
+	handystats::incremental_statistics order_stats;
+	for (const auto& elem : data) {
+		order_stats.add_value(elem);
+	}
+
+	std::random_shuffle(std::begin(data), std::end(data));
+	handystats::incremental_statistics shuffle_stats;
+	for (const auto& elem : data) {
+		shuffle_stats.add_value(elem);
+	}
+
+	EXPECT_EQ(order_stats.get_count(), shuffle_stats.get_count());
+
+	EXPECT_NEAR(order_stats.get_sum(), shuffle_stats.get_sum(), epsilon);
+	EXPECT_NEAR(order_stats.get_squared_sum(), shuffle_stats.get_squared_sum(), epsilon);
+
+	EXPECT_NEAR(order_stats.get_min(), shuffle_stats.get_min(), epsilon);
+	EXPECT_NEAR(order_stats.get_max(), shuffle_stats.get_max(), epsilon);
+}
+
+TEST(IncrementalStatistics, CheckConstructorFromIterators) {
+	const double epsilon = std::numeric_limits<double>::epsilon();
+
+	std::vector<int> data{10, 4, -1, 15, 0, 1, 6, 10};
+
+	handystats::incremental_statistics simple_stats;
+	for (const auto& value : data) {
+		simple_stats.add_value(value);
+	}
+
+	handystats::incremental_statistics smart_stats(std::begin(data), std::end(data));
+
+	EXPECT_EQ(simple_stats.get_count(), smart_stats.get_count());
+
+	EXPECT_NEAR(simple_stats.get_sum(), smart_stats.get_sum(), epsilon);
+	EXPECT_NEAR(simple_stats.get_squared_sum(), smart_stats.get_squared_sum(), epsilon);
+
+	EXPECT_NEAR(simple_stats.get_min(), smart_stats.get_min(), epsilon);
+	EXPECT_NEAR(simple_stats.get_max(), smart_stats.get_max(), epsilon);
+
+}

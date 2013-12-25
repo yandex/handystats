@@ -46,16 +46,6 @@ public:
 	void incident(time_point timestamp = clock::now()) {
 		increment(1, timestamp);
 	}
-
-	// TODO to_string method should be rewritten
-	std::string to_string() const {
-		return std::string("[ counter")
-			.append("  value: ")
-			.append(std::to_string(this->get_value()))
-			.append("  active_time: ")
-			.append(std::to_string(chrono::to_microseconds(this->get_active_time()).count()))
-			.append(" us ]");
-	}
 };
 
 } // namespace handystats

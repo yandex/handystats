@@ -2,6 +2,7 @@
 #define HANDY_COUNTER_H_
 
 #include <chrono>
+#include <sstream>
 #include <string>
 
 namespace handystats {
@@ -60,8 +61,15 @@ public:
 		return last_timestamp - first_timestamp;
 	}
 
+	friend std::ostream& operator<< (std::ostream& os, const counter& cntr) {
+		// TODO implement proper output operator
+		return os << "NOT IMPLEMENTED";
+	}
+
 	std::string to_string() const {
-		return std::string("NOT IMPLEMENTED");
+		std::ostringstream os;
+		os << *this;
+		return os.str();
 	}
 
 protected:

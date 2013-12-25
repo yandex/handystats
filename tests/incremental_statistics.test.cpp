@@ -9,15 +9,32 @@
 #include <handystats/math_utils.hpp>
 #include <handystats/incremental_statistics.hpp>
 
+class dummy_measurement {
+public:
+	dummy_measurement()
+		: value(0)
+	{}
+
+	dummy_measurement(const double& value)
+		: value(value)
+	{}
+
+	double get_value() const {
+		return value;
+	}
+
+	double value;
+};
+
 TEST(IncrementalStatistics, CheckAllCollectedValues) {
 	const double epsilon = std::numeric_limits<double>::epsilon();
 
-	std::vector<int> data{-2, -1, 0, 1, 2};
+	std::vector<dummy_measurement> data{-2, -1, 0, 1, 2};
 	std::random_shuffle(data.begin(), data.end());
 
-	handystats::incremental_statistics stats;
+	handystats::incremental_statistics<dummy_measurement> stats;
 	for (const auto& value : data) {
-		stats.add_value(value);
+		stats.add_measurement(value);
 	}
 
 	EXPECT_EQ(stats.get_count(), 5);
@@ -39,17 +56,17 @@ TEST(IncrementalStatistics, CheckAllCollectedValues) {
 TEST(IncrementalStatistics, CheckThatDataOrderIsInsignificant) {
 	const double epsilon = std::numeric_limits<double>::epsilon();
 
-	std::vector<int> data{100, 45, 3, 200, 15, 36, -450, 90, 13};
+	std::vector<dummy_measurement> data{100, 45, 3, 200, 15, 36, -450, 90, 13};
 
-	handystats::incremental_statistics order_stats;
+	handystats::incremental_statistics<dummy_measurement> order_stats;
 	for (const auto& elem : data) {
-		order_stats.add_value(elem);
+		order_stats.add_measurement(elem);
 	}
 
 	std::random_shuffle(std::begin(data), std::end(data));
-	handystats::incremental_statistics shuffle_stats;
+	handystats::incremental_statistics<dummy_measurement> shuffle_stats;
 	for (const auto& elem : data) {
-		shuffle_stats.add_value(elem);
+		shuffle_stats.add_measurement(elem);
 	}
 
 	EXPECT_EQ(order_stats.get_count(), shuffle_stats.get_count());
@@ -64,14 +81,14 @@ TEST(IncrementalStatistics, CheckThatDataOrderIsInsignificant) {
 TEST(IncrementalStatistics, CheckConstructorFromIterators) {
 	const double epsilon = std::numeric_limits<double>::epsilon();
 
-	std::vector<int> data{10, 4, -1, 15, 0, 1, 6, 10};
+	std::vector<dummy_measurement> data{10, 4, -1, 15, 0, 1, 6, 10};
 
-	handystats::incremental_statistics simple_stats;
+	handystats::incremental_statistics<dummy_measurement> simple_stats;
 	for (const auto& value : data) {
-		simple_stats.add_value(value);
+		simple_stats.add_measurement(value);
 	}
 
-	handystats::incremental_statistics smart_stats(std::begin(data), std::end(data));
+	handystats::incremental_statistics<dummy_measurement> smart_stats(std::begin(data), std::end(data));
 
 	EXPECT_EQ(simple_stats.get_count(), smart_stats.get_count());
 
@@ -80,5 +97,4 @@ TEST(IncrementalStatistics, CheckConstructorFromIterators) {
 
 	EXPECT_NEAR(simple_stats.get_min(), smart_stats.get_min(), epsilon);
 	EXPECT_NEAR(simple_stats.get_max(), smart_stats.get_max(), epsilon);
-
 }

@@ -6,11 +6,16 @@
 #include <limits>
 
 #include <handystats/math_utils.hpp>
+#include <handystats/statistics.hpp>
 
 namespace handystats {
 
-class incremental_statistics {
+template<class Measurement>
+class incremental_statistics : public statistics<incremental_statistics<Measurement>, Measurement> {
 public:
+	typedef statistics<incremental_statistics<Measurement>, Measurement> base_statistics;
+	typedef typename base_statistics::measurement_type measurement_type;
+
 	incremental_statistics()
 		: count(0)
 		, sum(0)
@@ -21,15 +26,8 @@ public:
 
 	template<typename iterator>
 	incremental_statistics(iterator first, iterator last)
-		: count(0)
-		, sum(0)
-		, squared_sum(0)
-		, min(std::numeric_limits<double>::max())
-		, max(std::numeric_limits<double>::min())
+		: base_statistics(first, last)
 	{
-		for (iterator it = first; it != last; ++it) {
-			add_value(*it);
-		}
 	}
 
 	void reset() {
@@ -38,6 +36,10 @@ public:
 		squared_sum = 0;
 		min = std::numeric_limits<double>::max();
 		max = std::numeric_limits<double>::min();
+	}
+
+	void add_measurement(const measurement_type& measurement) {
+		add_value(measurement.get_value());
 	}
 
 	void add_value(double value) {
@@ -107,17 +109,6 @@ public:
 
 	double get_range() const {
 		return max - min;
-	}
-
-	friend std::ostream& operator<< (std::ostream& os, const incremental_statistics& stats) {
-		// TODO implement proper output operator
-		return os;
-	}
-
-	std::string to_string() const {
-		std::ostringstream os;
-		os << *this;
-		return os.str();
 	}
 
 private:

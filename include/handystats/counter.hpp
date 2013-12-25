@@ -52,6 +52,10 @@ public:
 		return last_timestamp;
 	}
 
+	time_point get_timestamp() const {
+		return get_last_timestamp();
+	}
+
 	duration_type get_active_time() const {
 		return last_timestamp - first_timestamp;
 	}

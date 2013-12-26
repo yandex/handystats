@@ -11,6 +11,8 @@
 
 class dummy_measurement {
 public:
+	typedef double value_type;
+
 	dummy_measurement()
 		: value(0)
 	{}

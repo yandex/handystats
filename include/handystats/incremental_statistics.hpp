@@ -15,11 +15,14 @@ class incremental_statistics : public statistics<incremental_statistics<Measurem
 public:
 	typedef statistics<incremental_statistics<Measurement>, Measurement> base_statistics;
 	typedef typename base_statistics::measurement_type measurement_type;
+	typedef typename measurement_type::value_type value_type;
+
+	static_assert(std::is_convertible<value_type, double>::value, "Measurement value type must be convertible to double!");
 
 	incremental_statistics()
-		: count(0)
-		, sum(0)
-		, squared_sum(0)
+		: count{}
+		, sum{}
+		, squared_sum{}
 		, min(std::numeric_limits<double>::max())
 		, max(std::numeric_limits<double>::min())
 	{}
@@ -30,16 +33,16 @@ public:
 	{
 	}
 
-	void reset() {
-		count = 0;
-		sum = 0;
-		squared_sum = 0;
-		min = std::numeric_limits<double>::max();
-		max = std::numeric_limits<double>::min();
-	}
-
 	void add_measurement(const measurement_type& measurement) {
 		add_value(measurement.get_value());
+	}
+
+	void clear() {
+		count = {};
+		sum = {};
+		squared_sum = {};
+		min = std::numeric_limits<double>::max();
+		max = std::numeric_limits<double>::min();
 	}
 
 	void add_value(double value) {

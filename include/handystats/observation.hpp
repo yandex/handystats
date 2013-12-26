@@ -8,8 +8,8 @@ class observation : public Storage<Measurement>, public Statistics<Measurement>
 {
 public:
 	typedef Measurement measurement_type;
-	typedef Storage<Measurement> storage_type;
-	typedef Statistics<Measurement> statistics_type;
+	typedef Storage<Measurement> storage;
+	typedef Statistics<Measurement> statistics;
 
 	observation()
 		: Storage<Measurement>()
@@ -17,8 +17,8 @@ public:
 	{}
 
 	void add_measurement(const measurement_type& measurement) {
-		storage_type::add_measurement(measurement);
-		statistics_type::add_measurement(measurement);
+		storage::add_measurement(measurement);
+		statistics::add_measurement(measurement);
 	}
 };
 

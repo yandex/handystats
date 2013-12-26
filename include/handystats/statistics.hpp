@@ -38,6 +38,29 @@ public:
 
 }; // class statistics
 
+template<class Measurement>
+class no_statistics : public statistics<no_statistics<Measurement>, Measurement> {
+public:
+	typedef statistics<no_statistics<Measurement>, Measurement> base_statistics;
+
+	typedef typename base_statistics::measurement_type measurement_type;
+
+	no_statistics() : base_statistics()
+	{}
+
+	void add_measurement(const measurement_type& measurement) {
+	}
+
+	friend std::ostream& operator<< (std::ostream& os, const no_statistics& stats) {
+		return os;
+	}
+
+	std::string to_string() const {
+		return {};
+	}
+
+}; // class no_statistics
+
 } // namespace handystats
 
 #endif // HANDY_STATISTICS_H_

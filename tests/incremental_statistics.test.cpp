@@ -8,25 +8,9 @@
 
 #include <handystats/math_utils.hpp>
 #include <handystats/incremental_statistics.hpp>
+#include <handystats/measurement_wrapper.hpp>
 
-class dummy_measurement {
-public:
-	typedef double value_type;
-
-	dummy_measurement()
-		: value(0)
-	{}
-
-	dummy_measurement(const double& value)
-		: value(value)
-	{}
-
-	double get_value() const {
-		return value;
-	}
-
-	double value;
-};
+typedef handystats::measurement_wrapper<double> dummy_measurement;
 
 TEST(IncrementalStatistics, CheckAllCollectedValues) {
 	const double epsilon = std::numeric_limits<double>::epsilon();

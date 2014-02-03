@@ -7,7 +7,7 @@ ADD_DEFINITIONS ("-O2 -std=c++0x -Wreorder -Wreturn-type -Wunused-variable -peda
 INCLUDE_DIRECTORIES (${PROJECT_SOURCE_DIR}/include)
 
 FILE (GLOB_RECURSE handy_src src/ "*.cpp")
-ADD_LIBRARY (handy SHARED ${handy_src})
+ADD_LIBRARY (handy STATIC ${handy_src})
 
 ENABLE_TESTING ()
 ADD_SUBDIRECTORY (tests)

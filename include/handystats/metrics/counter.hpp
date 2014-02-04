@@ -11,7 +11,7 @@ class counter
 {
 public:
 
-	typedef unsigned long long value_type;
+	typedef long long value_type;
 	typedef std::chrono::nanoseconds time_duration;
 	typedef typename chrono::steady_clock<time_duration>::time_point time_point;
 

@@ -37,7 +37,7 @@ FOREACH (test_src_file IN LISTS test_src_files)
 	STRING (REGEX REPLACE "[.]test[.]cpp$" "_test" test_exec_file ${test_src_file})
 	ADD_EXECUTABLE (${test_exec_file} ${test_src_file})
 	TARGET_LINK_LIBRARIES (${test_exec_file} ${CMAKE_THREAD_LIBS_INIT} ${GTEST_BOTH_LIBRARIES}
-		handy rt)
+		handy tbb rt)
 	ADD_TEST (${test_exec_file} ${test_exec_file})
 	ADD_DEPENDENCIES (${test_exec_file} ${GTEST_TARGETS})
 ENDFOREACH (test_src_file)

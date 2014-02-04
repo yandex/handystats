@@ -13,7 +13,8 @@ public:
 
 	typedef long double value_type;
 	typedef std::chrono::nanoseconds time_duration;
-	typedef typename chrono::steady_clock<time_duration>::time_point time_point;
+	typedef typename chrono::steady_clock<time_duration> clock;
+	typedef typename clock::time_point time_point;
 
 	struct internal_stats {
 		value_type min_value;

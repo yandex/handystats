@@ -231,3 +231,79 @@ void delete_transaction_event(event_message* message) {
 
 
 }} // namespace handystats::events
+
+
+inline void HANDY_TRANSACTION_INIT(
+		const std::string transaction_name,
+		handystats::transaction::state init_state,
+		handystats::transaction::time_point timestamp
+		)
+{
+	auto message = handystats::events::transaction_init_event(transaction_name, init_state, timestamp);
+	handystats::event_message_queue.push(message);
+}
+
+inline void HANDY_TRANSACTION_START(
+		const std::string transaction_name,
+		handystats::transaction::time_point timestamp
+		)
+{
+	auto message = handystats::events::transaction_start_event(transaction_name, timestamp);
+	handystats::event_message_queue.push(message);
+}
+
+inline void HANDY_TRANSACTION_STOP(
+		const std::string transaction_name,
+		handystats::transaction::status final_status,
+		handystats::transaction::time_point timestamp
+		)
+{
+	auto message = handystats::events::transaction_stop_event(transaction_name, final_status, timestamp);
+	handystats::event_message_queue.push(message);
+}
+
+inline void HANDY_TRANSACTION_PAUSE(
+		const std::string transaction_name,
+		handystats::transaction::time_point timestamp
+		)
+{
+	auto message = handystats::events::transaction_pause_event(transaction_name, timestamp);
+	handystats::event_message_queue.push(message);
+}
+
+inline void HANDY_TRANSACTION_RESUME(
+		const std::string transaction_name,
+		handystats::transaction::time_point timestamp
+		)
+{
+	auto message = handystats::events::transaction_resume_event(transaction_name, timestamp);
+	handystats::event_message_queue.push(message);
+}
+
+inline void HANDY_TRANSACTION_BLOCK(
+		const std::string transaction_name,
+		handystats::transaction::time_point timestamp
+		)
+{
+	auto message = handystats::events::transaction_block_event(transaction_name, timestamp);
+	handystats::event_message_queue.push(message);
+}
+
+inline void HANDY_TRANSACTION_UNBLOCK(
+		const std::string transaction_name,
+		handystats::transaction::time_point timestamp
+		)
+{
+	auto message = handystats::events::transaction_unblock_event(transaction_name, timestamp);
+	handystats::event_message_queue.push(message);
+}
+
+inline void HANDY_TRANSACTION_HEARTBEAT(
+		const std::string transaction_name,
+		handystats::transaction::time_point timestamp
+		)
+{
+	auto message = handystats::events::transaction_heartbeat_event(transaction_name, timestamp);
+	handystats::event_message_queue.push(message);
+}
+

@@ -41,4 +41,23 @@ void delete_counter_event(event_message*);
 
 }} // namespace handystats::events
 
+
+inline void HANDY_COUNTER_INIT(
+		const std::string counter_name,
+		handystats::metrics::counter::value_type init_value,
+		handystats::metrics::counter::time_point timestamp = handystats::metrics::counter::clock::now()
+		);
+
+inline void HANDY_COUNTER_INCREMENT(
+		const std::string counter_name,
+		handystats::metrics::counter::value_type value,
+		handystats::metrics::counter::time_point timestamp = handystats::metrics::counter::clock::now()
+		);
+
+inline void HANDY_COUNTER_DECREMENT(
+		const std::string counter_name,
+		handystats::metrics::counter::value_type value,
+		handystats::metrics::counter::time_point timestamp = handystats::metrics::counter::clock::now()
+		);
+
 #endif // HANDYSTATS_COUNTER_EVENT_H_

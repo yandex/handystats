@@ -100,3 +100,34 @@ void delete_counter_event(event_message* message) {
 
 }} // namespace handystats::events
 
+
+inline void HANDY_COUNTER_INIT(
+		const std::string counter_name,
+		handystats::metrics::counter::value_type init_value,
+		handystats::metrics::counter::time_point timestamp
+		)
+{
+	auto message = handystats::events::counter_init_event(counter_name, init_value, timestamp);
+	handystats::event_message_queue.push(message);
+}
+
+inline void HANDY_COUNTER_INCREMENT(
+		const std::string counter_name,
+		handystats::metrics::counter::value_type value,
+		handystats::metrics::counter::time_point timestamp
+		)
+{
+	auto message = handystats::events::counter_increment_event(counter_name, value, timestamp);
+	handystats::event_message_queue.push(message);
+}
+
+inline void HANDY_COUNTER_DECREMENT(
+		const std::string counter_name,
+		handystats::metrics::counter::value_type value,
+		handystats::metrics::counter::time_point timestamp
+		)
+{
+	auto message = handystats::events::counter_decrement_event(counter_name, value, timestamp);
+	handystats::event_message_queue.push(message);
+}
+

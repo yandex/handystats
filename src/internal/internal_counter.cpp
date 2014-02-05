@@ -1,4 +1,4 @@
-#include "handystats/internal.hpp"
+#include "handystats/internal/internal_counter.hpp"
 #include "handystats/events/counter_events.hpp"
 
 namespace handystats { namespace internal {

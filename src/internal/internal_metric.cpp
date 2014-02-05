@@ -1,4 +1,4 @@
-#include "handystats/internal.hpp"
+#include "handystats/internal/internal_metric.hpp"
 
 namespace handystats { namespace internal {
 

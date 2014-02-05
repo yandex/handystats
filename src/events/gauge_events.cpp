@@ -72,7 +72,7 @@ void delete_gauge_event(event_message* message) {
 }} // namespace handystats::events
 
 
-inline void HANDY_GAUGE_INIT(
+void HANDY_GAUGE_INIT(
 		const std::string gauge_name,
 		handystats::metrics::gauge::value_type init_value,
 		handystats::metrics::gauge::time_point timestamp
@@ -82,7 +82,7 @@ inline void HANDY_GAUGE_INIT(
 	handystats::internal::event_message_queue.push(message);
 }
 
-inline void HANDY_GAUGE_SET(
+void HANDY_GAUGE_SET(
 		const std::string gauge_name,
 		handystats::metrics::gauge::value_type value,
 		handystats::metrics::gauge::time_point timestamp

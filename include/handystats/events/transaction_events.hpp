@@ -76,44 +76,44 @@ void delete_transaction_event(event_message*);
 }} // namespace handystats::events
 
 
-inline void HANDY_TRANSACTION_INIT(
+void HANDY_TRANSACTION_INIT(
 		const std::string transaction_name,
 		handystats::transaction::state init_state = handystats::transaction::state::NOT_STARTED,
 		handystats::transaction::time_point timestamp = handystats::transaction::clock::now()
 		);
 
-inline void HANDY_TRANSACTION_START(
+void HANDY_TRANSACTION_START(
 		const std::string transaction_name,
 		handystats::transaction::time_point timestamp = handystats::transaction::clock::now()
 		);
 
-inline void HANDY_TRANSACTION_STOP(
+void HANDY_TRANSACTION_STOP(
 		const std::string transaction_name,
 		handystats::transaction::status final_status = handystats::transaction::status::SUCCESS,
 		handystats::transaction::time_point timestamp = handystats::transaction::clock::now()
 		);
 
-inline void HANDY_TRANSACTION_PAUSE(
+void HANDY_TRANSACTION_PAUSE(
 		const std::string transaction_name,
 		handystats::transaction::time_point timestamp = handystats::transaction::clock::now()
 		);
 
-inline void HANDY_TRANSACTION_RESUME(
+void HANDY_TRANSACTION_RESUME(
 		const std::string transaction_name,
 		handystats::transaction::time_point timestamp = handystats::transaction::clock::now()
 		);
 
-inline void HANDY_TRANSACTION_BLOCK(
+void HANDY_TRANSACTION_BLOCK(
 		const std::string transaction_name,
 		handystats::transaction::time_point timestamp = handystats::transaction::clock::now()
 		);
 
-inline void HANDY_TRANSACTION_UNBLOCK(
+void HANDY_TRANSACTION_UNBLOCK(
 		const std::string transaction_name,
 		handystats::transaction::time_point timestamp = handystats::transaction::clock::now()
 		);
 
-inline void HANDY_TRANSACTION_HEARTBEAT(
+void HANDY_TRANSACTION_HEARTBEAT(
 		const std::string transaction_name,
 		handystats::transaction::time_point timestamp = handystats::transaction::clock::now()
 		);

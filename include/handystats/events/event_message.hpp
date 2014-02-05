@@ -4,12 +4,9 @@
 #include <string>
 #include <vector>
 
-#include <tbb/concurrent_queue.h>
-
 #include "handystats/chrono.hpp"
 
-namespace handystats {
-namespace events {
+namespace handystats { namespace events {
 
 enum class event_destination_type {
 	COUNTER,
@@ -27,11 +24,6 @@ struct event_message {
 	std::vector<void*> event_data;
 };
 
-} // namespace handystats::events
-
-
-static tbb::concurrent_queue<events::event_message*> event_message_queue;
-
-} // namespace handystats
+}} // namespace handystats::events
 
 #endif // HANDYSTATS_EVENT_MESSAGE_H_

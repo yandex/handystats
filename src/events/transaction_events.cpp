@@ -1,3 +1,4 @@
+#include "handystats/internal.hpp"
 #include "handystats/events/transaction_events.hpp"
 
 namespace handystats { namespace events {
@@ -240,7 +241,7 @@ inline void HANDY_TRANSACTION_INIT(
 		)
 {
 	auto message = handystats::events::transaction_init_event(transaction_name, init_state, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_TRANSACTION_START(
@@ -249,7 +250,7 @@ inline void HANDY_TRANSACTION_START(
 		)
 {
 	auto message = handystats::events::transaction_start_event(transaction_name, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_TRANSACTION_STOP(
@@ -259,7 +260,7 @@ inline void HANDY_TRANSACTION_STOP(
 		)
 {
 	auto message = handystats::events::transaction_stop_event(transaction_name, final_status, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_TRANSACTION_PAUSE(
@@ -268,7 +269,7 @@ inline void HANDY_TRANSACTION_PAUSE(
 		)
 {
 	auto message = handystats::events::transaction_pause_event(transaction_name, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_TRANSACTION_RESUME(
@@ -277,7 +278,7 @@ inline void HANDY_TRANSACTION_RESUME(
 		)
 {
 	auto message = handystats::events::transaction_resume_event(transaction_name, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_TRANSACTION_BLOCK(
@@ -286,7 +287,7 @@ inline void HANDY_TRANSACTION_BLOCK(
 		)
 {
 	auto message = handystats::events::transaction_block_event(transaction_name, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_TRANSACTION_UNBLOCK(
@@ -295,7 +296,7 @@ inline void HANDY_TRANSACTION_UNBLOCK(
 		)
 {
 	auto message = handystats::events::transaction_unblock_event(transaction_name, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_TRANSACTION_HEARTBEAT(
@@ -304,6 +305,6 @@ inline void HANDY_TRANSACTION_HEARTBEAT(
 		)
 {
 	auto message = handystats::events::transaction_heartbeat_event(transaction_name, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 

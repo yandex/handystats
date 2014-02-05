@@ -1,3 +1,4 @@
+#include "handystats/internal.hpp"
 #include "handystats/events/gauge_events.hpp"
 
 namespace handystats { namespace events {
@@ -78,7 +79,7 @@ inline void HANDY_GAUGE_INIT(
 		)
 {
 	auto message = handystats::events::gauge_init_event(gauge_name, init_value, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_GAUGE_SET(
@@ -88,6 +89,6 @@ inline void HANDY_GAUGE_SET(
 		)
 {
 	auto message = handystats::events::gauge_set_event(gauge_name, value, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 

@@ -1,3 +1,4 @@
+#include "handystats/internal.hpp"
 #include "handystats/events/counter_events.hpp"
 
 namespace handystats { namespace events {
@@ -108,7 +109,7 @@ inline void HANDY_COUNTER_INIT(
 		)
 {
 	auto message = handystats::events::counter_init_event(counter_name, init_value, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_COUNTER_INCREMENT(
@@ -118,7 +119,7 @@ inline void HANDY_COUNTER_INCREMENT(
 		)
 {
 	auto message = handystats::events::counter_increment_event(counter_name, value, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 
 inline void HANDY_COUNTER_DECREMENT(
@@ -128,6 +129,6 @@ inline void HANDY_COUNTER_DECREMENT(
 		)
 {
 	auto message = handystats::events::counter_decrement_event(counter_name, value, timestamp);
-	handystats::event_message_queue.push(message);
+	handystats::internal::event_message_queue.push(message);
 }
 

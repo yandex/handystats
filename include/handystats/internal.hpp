@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include <boost/variant.hpp>
+#include <tbb/concurrent_queue.h>
 
 #include "handystats/events/event_message.hpp"
 #include "handystats/internal/internal_counter.hpp"
@@ -23,6 +24,8 @@ enum internal_monitor_index {
 };
 
 static std::unordered_map<std::string, internal_monitor> monitors;
+
+static tbb::concurrent_queue<events::event_message*> event_message_queue;
 
 void process_event_message(events::event_message* message);
 void process_event_message(events::event_message* message, internal_monitor& monitor);

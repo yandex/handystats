@@ -2,6 +2,10 @@
 
 namespace handystats { namespace internal {
 
+std::unordered_map<std::string, internal_monitor> monitors;
+tbb::concurrent_queue<events::event_message*> event_message_queue;
+
+
 void process_event_message(events::event_message* message) {
 	if (!message) {
 		return;

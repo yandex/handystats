@@ -23,9 +23,9 @@ enum internal_monitor_index {
 	INTERNAL_GAUGE
 };
 
-static std::unordered_map<std::string, internal_monitor> monitors;
+extern std::unordered_map<std::string, internal_monitor> monitors;
 
-static tbb::concurrent_queue<events::event_message*> event_message_queue;
+extern tbb::concurrent_queue<events::event_message*> event_message_queue;
 
 void process_event_message(events::event_message* message);
 void process_event_message(events::event_message* message, internal_monitor& monitor);

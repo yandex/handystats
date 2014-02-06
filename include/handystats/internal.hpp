@@ -30,6 +30,8 @@ extern tbb::concurrent_queue<events::event_message*> event_message_queue;
 void process_event_message(events::event_message* message);
 void process_event_message(events::event_message* message, internal_monitor& monitor);
 
+void clean_up();
+
 }} // namespace handystats::internal
 
 #endif // HANDYSTATS_INTERNAL_H_

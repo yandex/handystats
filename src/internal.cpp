@@ -29,4 +29,9 @@ void process_event_message(events::event_message* message, internal_monitor& mon
 }
 
 
+void clean_up() {
+	event_message_queue.clear();
+	monitors.clear();
+}
+
 }} // namespace handystats::internal

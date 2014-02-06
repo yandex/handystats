@@ -42,4 +42,4 @@ inline void HANDY_DISABLE() {
 	}
 }
 
-#endif // HANDYSTATS_MESSAGE_QUEUE_PROCESSOR_H_
+#endif // HANDYSTATS_CORE_H_

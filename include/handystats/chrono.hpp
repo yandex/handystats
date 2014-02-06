@@ -1,5 +1,5 @@
-#ifndef HANDY_CHRONO_H_
-#define HANDY_CHRONO_H_
+#ifndef HANDYSTATS_CHRONO_H_
+#define HANDYSTATS_CHRONO_H_
 
 #include <chrono>
 
@@ -53,4 +53,4 @@ std::chrono::hours to_hours(const time_duration& duration) {
 
 }} // namespace handystats::chrono
 
-#endif
+#endif // HANDYSTATS_CHRONO_H_

@@ -1,5 +1,5 @@
-#ifndef HANDY_MATH_UTILS_H_
-#define HANDY_MATH_UTILS_H_
+#ifndef HANDYSTATS_MATH_UTILS_H_
+#define HANDYSTATS_MATH_UTILS_H_
 
 #include <limits>
 #include <cmath>
@@ -34,4 +34,4 @@ public:
 
 } // namespace handystats
 
-#endif // HANDY_MATH_UTILS_H_
+#endif // HANDYSTATS_MATH_UTILS_H_

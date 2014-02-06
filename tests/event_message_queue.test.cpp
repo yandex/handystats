@@ -3,51 +3,46 @@
 
 #include <gtest/gtest.h>
 
-#include "handystats/internal.hpp"
-#include "handystats/events/counter_events.hpp"
-#include "handystats/events/gauge_events.hpp"
-#include "handystats/events/transaction_events.hpp"
-
-size_t pop_all_events() {
-	size_t popped_count = 0;
-	while (!handystats::internal::event_message_queue.empty()) {
-		handystats::events::event_message* element;
-		handystats::internal::event_message_queue.try_pop(element);
-		++popped_count;
-	}
-
-	return popped_count;
-}
+#include "handystats/message_queue/counter_event_message.hpp"
+#include "handystats/message_queue/gauge_event_message.hpp"
+#include "handystats/message_queue/transaction_event_message.hpp"
 
 TEST(EventMessageQueue, SinglePushCorrectlyAddsMessage) {
+	handystats::message_queue::initialize();
+
 	HANDY_COUNTER_INIT("counter.name", 10);
-	ASSERT_EQ(pop_all_events(), 1);
+	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 1);
 
 	HANDY_COUNTER_INCREMENT("counter.name", 1);
-	ASSERT_EQ(pop_all_events(), 1);
+	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 2);
 
 	HANDY_COUNTER_DECREMENT("counter.name", 11);
-	ASSERT_EQ(pop_all_events(), 1);
+	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 3);
 
-	ASSERT_TRUE(handystats::internal::event_message_queue.empty());
+	handystats::message_queue::clean_up();
 }
 
 TEST(EventMessageQueue, MultiplePushesCorrectlyAddMessages) {
+	handystats::message_queue::initialize();
+
 	HANDY_COUNTER_INIT("counter.name", 10);
 	HANDY_COUNTER_INCREMENT("counter.name", 1);
 	HANDY_COUNTER_DECREMENT("counter.name", 11);
 
-	ASSERT_EQ(pop_all_events(), 3);
+	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 3);
 
-	ASSERT_TRUE(handystats::internal::event_message_queue.empty());
+	handystats::message_queue::clean_up();
 }
 
 TEST(EventMessageQueue, PushDifferentMessages) {
+	handystats::message_queue::initialize();
+
 	HANDY_COUNTER_INIT("counter.name", 10);
 	HANDY_GAUGE_INIT("gauge.name", 10);
 	HANDY_TRANSACTION_INIT("trans.name");
 
-	ASSERT_EQ(pop_all_events(), 3);
+	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 3);
 
-	ASSERT_TRUE(handystats::internal::event_message_queue.empty());
+	handystats::message_queue::clean_up();
 }
+

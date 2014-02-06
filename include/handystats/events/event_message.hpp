@@ -24,6 +24,8 @@ struct event_message {
 	std::vector<void*> event_data;
 };
 
+void delete_event_message(event_message* message);
+
 }} // namespace handystats::events
 
 #endif // HANDYSTATS_EVENT_MESSAGE_H_

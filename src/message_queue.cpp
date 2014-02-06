@@ -28,7 +28,11 @@ void initialize() {
 
 void clean_up() {
 	if (event_message_queue) {
-		event_message_queue->clear();
+		while (!event_message_queue->empty()) {
+			events::event_message* message = pop_event_message();
+			events::delete_event_message(message);
+		}
+
 		delete event_message_queue;
 		event_message_queue = nullptr;
 	}

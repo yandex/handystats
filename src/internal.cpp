@@ -10,6 +10,18 @@ void process_event_message(events::event_message* message) {
 		return;
 	}
 
+	if (monitors.find(message->destination_name) == monitors.end()) {
+		switch (message->destination_type) {
+			case events::event_destination_type::COUNTER:
+				monitors.emplace(message->destination_name, new internal_counter());
+				break;
+			case events::event_destination_type::GAUGE:
+				monitors.emplace(message->destination_name, new internal_gauge());
+				break;
+			default:
+				return;
+		}
+	}
 	auto& monitor = monitors[message->destination_name];
 	process_event_message(message, monitor);
 }

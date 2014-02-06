@@ -17,12 +17,18 @@ struct internal_metric {
 	metric_type* base_metric;
 	time_point timestamp;
 
-	internal_metric();
+	internal_metric() {
+		base_metric = nullptr;
+	}
 
 	void process_event_message(events::event_message* message);
 	std::string to_string() const;
 
-	~internal_metric();
+	~internal_metric() {
+		if (base_metric) {
+			delete base_metric;
+		}
+	}
 };
 
 }} // namespace handystats::internal

@@ -11,7 +11,7 @@ namespace handystats { namespace events {
 enum class event_destination_type {
 	COUNTER,
 	GAUGE,
-	TRANSACTION
+	TIMER
 };
 
 struct event_message {

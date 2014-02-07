@@ -5,7 +5,7 @@
 
 #include "handystats/message_queue/counter_event_message.hpp"
 #include "handystats/message_queue/gauge_event_message.hpp"
-#include "handystats/message_queue/transaction_event_message.hpp"
+#include "handystats/message_queue/timer_event_message.hpp"
 
 TEST(EventMessageQueue, SinglePushCorrectlyAddsMessage) {
 	handystats::message_queue::initialize();
@@ -39,7 +39,7 @@ TEST(EventMessageQueue, PushDifferentMessages) {
 
 	HANDY_COUNTER_INIT("counter.name", 10);
 	HANDY_GAUGE_INIT("gauge.name", 10);
-	HANDY_TRANSACTION_INIT("trans.name");
+	HANDY_TIMER_INIT("timer.name");
 
 	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 3);
 

@@ -32,6 +32,8 @@ TEST(CounterTest, TestCounterIncrementDecrement) {
 }
 
 TEST(CounterTest, TestCounterInternalStats) {
+	using namespace boost::accumulators;
+
 	counter sample_counter;
 
 	const int min_test_value = 1E3;
@@ -39,14 +41,19 @@ TEST(CounterTest, TestCounterInternalStats) {
 
 	sample_counter.increment(min_test_value, handystats::chrono::steady_clock<counter::time_duration>::now());
 	sample_counter.increment(max_test_value - min_test_value, handystats::chrono::steady_clock<counter::time_duration>::now());
-	ASSERT_EQ(sample_counter.get_stats().count, 2);
-	ASSERT_EQ(sample_counter.get_stats().min_value, min_test_value);
-	ASSERT_EQ(sample_counter.get_stats().max_value, max_test_value);
+
+	auto stats = sample_counter.get_stats();
+	ASSERT_EQ(count(stats.incr_deltas), 2);
+	ASSERT_EQ(min(stats.values), 0);
+	ASSERT_EQ(max(stats.values), max_test_value);
 
 	for (int step = 0; step < max_test_value; ++step) {
 		sample_counter.decrement(1, handystats::chrono::steady_clock<counter::time_duration>::now());
 	}
-	ASSERT_EQ(sample_counter.get_stats().count, 2 + max_test_value);
-	ASSERT_EQ(sample_counter.get_stats().min_value, 0);
-	ASSERT_EQ(sample_counter.get_stats().max_value, max_test_value);
+
+	stats = sample_counter.get_stats();
+	ASSERT_EQ(count(stats.deltas), 2 + max_test_value);
+	ASSERT_EQ(min(stats.values), 0);
+	ASSERT_EQ(max(stats.decr_deltas), 1);
+	ASSERT_EQ(max(stats.values), max_test_value);
 }

@@ -5,10 +5,11 @@
 
 namespace handystats { namespace metrics {
 
-class timer {
+class timer
+{
 public:
 
-	typedef std::chrono::nanoseconds time_duration;
+	typedef chrono::default_duration time_duration;
 	typedef typename chrono::steady_clock<time_duration> clock;
 	typedef typename clock::time_point time_point;
 

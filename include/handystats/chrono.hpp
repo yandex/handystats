@@ -5,7 +5,8 @@
 
 namespace handystats { namespace chrono {
 
-template<class time_duration = std::chrono::microseconds>
+
+template<class time_duration>
 class steady_clock {
 public:
 	typedef time_duration duration;
@@ -20,6 +21,11 @@ public:
 		return time_point(std::chrono::duration_cast<duration>(std::chrono::seconds(ts.tv_sec) + std::chrono::nanoseconds(ts.tv_nsec)));
 	}
 };
+
+typedef std::chrono::microseconds default_duration;
+typedef steady_clock<default_duration> default_clock;
+typedef default_clock::time_point default_time_point;
+
 
 template<class time_duration>
 std::chrono::nanoseconds to_nanoseconds(const time_duration& duration) {

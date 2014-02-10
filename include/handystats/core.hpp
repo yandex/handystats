@@ -7,11 +7,6 @@
 
 namespace handystats {
 
-typedef std::chrono::nanoseconds time_duration;
-typedef chrono::steady_clock<time_duration> clock;
-typedef clock::time_point time_point;
-
-
 extern bool handy_enabled;
 
 inline bool is_handy_enabled() {

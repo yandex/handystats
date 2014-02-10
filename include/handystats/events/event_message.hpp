@@ -18,7 +18,7 @@ struct event_message {
 	std::string destination_name;
 	event_destination_type destination_type;
 
-	chrono::steady_clock<std::chrono::nanoseconds>::time_point timestamp;
+	chrono::default_time_point timestamp;
 
 	void* event_type;
 	std::vector<void*> event_data;

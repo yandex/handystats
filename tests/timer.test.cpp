@@ -11,7 +11,7 @@ TEST(TimerTest, CheckTimerCountsRunningTimeCorrectly) {
 	timer inter;
 	inter.start(timer::clock::now());
 
-	std::this_thread::sleep_for(std::chrono::nanoseconds(100));
+	std::this_thread::sleep_for(handystats::chrono::default_duration(100));
 
 	inter.finish(timer::clock::now());
 
@@ -21,7 +21,7 @@ TEST(TimerTest, CheckTimerCountsRunningTimeCorrectly) {
 TEST(Timer, CheckNotStartedTimerHasNoDuration) {
 	timer inter;
 
-	std::this_thread::sleep_for(std::chrono::nanoseconds(100));
+	std::this_thread::sleep_for(handystats::chrono::default_duration(100));
 
 	ASSERT_EQ(inter.get_stats().duration.count(), 0);
 }
@@ -30,7 +30,7 @@ TEST(TimerTest, CheckNotFinishedTimerHasNoDuration) {
 	timer inter;
 	inter.start(timer::clock::now());
 
-	std::this_thread::sleep_for(std::chrono::nanoseconds(100));
+	std::this_thread::sleep_for(handystats::chrono::default_duration(100));
 
 	ASSERT_EQ(inter.get_stats().duration.count(), 0);
 }

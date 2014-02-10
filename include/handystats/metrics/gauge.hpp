@@ -12,7 +12,7 @@ class gauge
 public:
 
 	typedef long double value_type;
-	typedef std::chrono::nanoseconds time_duration;
+	typedef chrono::default_duration time_duration;
 	typedef typename chrono::steady_clock<time_duration> clock;
 	typedef typename clock::time_point time_point;
 

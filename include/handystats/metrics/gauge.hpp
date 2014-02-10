@@ -3,6 +3,9 @@
 
 #include <utility>
 
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics.hpp>
+
 #include <handystats/chrono.hpp>
 
 namespace handystats { namespace metrics {
@@ -17,17 +20,19 @@ public:
 	typedef typename clock::time_point time_point;
 
 	struct internal_stats {
-		value_type min_value;
-		time_point min_value_timestamp;
+		typedef boost::accumulators::features <
+				boost::accumulators::tag::min,
+				boost::accumulators::tag::max,
+				boost::accumulators::tag::sum,
+				boost::accumulators::tag::count,
+				boost::accumulators::tag::mean
+			> value_features;
 
-		value_type max_value;
-		time_point max_value_timestamp;
-
-		size_t count;
+		boost::accumulators::accumulator_set<value_type, value_features> values;
 
 		static void initialize(internal_stats& stats);
 		static void initialize(internal_stats& stats, value_type value, time_point timestamp);
-		static void update(internal_stats& stats, value_type value, time_point timestamp);
+		static void update_value(internal_stats& stats, value_type value, time_point timestamp);
 	};
 
 	gauge();

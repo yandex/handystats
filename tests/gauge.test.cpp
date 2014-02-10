@@ -22,6 +22,8 @@ TEST(GaugeTest, TestGaugeSetMethod) {
 }
 
 TEST(GaugeTest, TestGaugeInternalStats) {
+	using namespace boost::accumulators;
+
 	gauge sample_gauge;
 
 	const int min_test_value = -1E3;
@@ -31,8 +33,12 @@ TEST(GaugeTest, TestGaugeInternalStats) {
 		sample_gauge.set(test_value, handystats::chrono::steady_clock<gauge::time_duration>::now());
 	}
 
-	ASSERT_NEAR(sample_gauge.get_stats().min_value, min_test_value, 1E-9);
-	ASSERT_NEAR(sample_gauge.get_stats().max_value, max_test_value, 1E-9);
 
-	ASSERT_EQ(sample_gauge.get_stats().count, max_test_value - min_test_value + 1);
+	auto stats = sample_gauge.get_stats().values;
+	ASSERT_NEAR(min(stats), min_test_value, 1E-9);
+	ASSERT_NEAR(max(stats), max_test_value, 1E-9);
+
+	ASSERT_EQ(count(stats), max_test_value - min_test_value + 1);
+	ASSERT_NEAR(sum(stats), 0, 1E-9);
+	ASSERT_NEAR(mean(stats), 0, 1E-9);
 }

@@ -57,7 +57,7 @@ void delete_timer_start_event(event_message* message) {
 }
 
 
-event_message* timer_finish_event(
+event_message* timer_stop_event(
 		const std::string timer_name,
 		const uint64_t instance_id,
 		metrics::timer::time_point timestamp
@@ -70,13 +70,13 @@ event_message* timer_finish_event(
 
 	message->timestamp = timestamp;
 
-	message->event_type = new timer_event(timer_event::FINISH);
+	message->event_type = new timer_event(timer_event::STOP);
 	message->event_data.push_back(new uint64_t(instance_id));
 
 	return message;
 }
 
-void delete_timer_finish_event(event_message* message) {
+void delete_timer_stop_event(event_message* message) {
 	delete static_cast<timer_event*>(message->event_type);
 	delete static_cast<uint64_t*>(message->event_data[0]);
 
@@ -146,8 +146,8 @@ void delete_timer_event(event_message* message) {
 		case timer_event::START:
 			delete_timer_start_event(message);
 			break;
-		case timer_event::FINISH:
-			delete_timer_finish_event(message);
+		case timer_event::STOP:
+			delete_timer_stop_event(message);
 			break;
 		case timer_event::DISCARD:
 			delete_timer_discard_event(message);

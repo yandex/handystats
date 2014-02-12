@@ -24,13 +24,13 @@ inline void HANDY_TIMER_START(
 	handystats::message_queue::push_event_message(message);
 }
 
-inline void HANDY_TIMER_FINISH(
+inline void HANDY_TIMER_STOP(
 		const std::string timer_name,
 		const uint64_t instance_id = -1,
 		handystats::metrics::timer::time_point timestamp = handystats::metrics::timer::clock::now()
 		)
 {
-	auto message = handystats::events::timer_finish_event(timer_name, instance_id, timestamp);
+	auto message = handystats::events::timer_stop_event(timer_name, instance_id, timestamp);
 	handystats::message_queue::push_event_message(message);
 }
 

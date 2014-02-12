@@ -11,7 +11,7 @@ namespace handystats { namespace events {
 enum class timer_event {
 	INIT,
 	START,
-	FINISH,
+	STOP,
 	DISCARD,
 	HEARTBEAT
 };
@@ -29,7 +29,7 @@ event_message* timer_start_event(
 		metrics::timer::time_point timestamp = metrics::timer::clock::now()
 		);
 
-event_message* timer_finish_event(
+event_message* timer_stop_event(
 		const std::string timer_name,
 		const uint64_t instance_id = -1,
 		metrics::timer::time_point timestamp = metrics::timer::clock::now()
@@ -50,7 +50,7 @@ event_message* timer_heartbeat_event(
 
 void delete_timer_init_event(event_message*);
 void delete_timer_start_event(event_message*);
-void delete_timer_finish_event(event_message*);
+void delete_timer_stop_event(event_message*);
 void delete_timer_discard_event(event_message*);
 void delete_timer_heartbeat_event(event_message*);
 

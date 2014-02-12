@@ -2,43 +2,30 @@
 
 namespace handystats { namespace metrics {
 
-void timer::internal_stats::initialize(internal_stats& stats) {
-	stats.duration = time_duration(0);
-}
-
-void timer::internal_stats::update(internal_stats& stats, time_duration timer_time) {
-	stats.duration += timer_time;
-}
-
-
 timer::timer() {
-	internal_stats::initialize(stats);
-
-	start_timestamp = time_point();
-	finish_timestamp = time_point();
+	this->timestamp = time_point();
+	this->duration = value_type();
 }
 
 timer::timer(time_point start_timestamp) {
-	internal_stats::initialize(stats);
-
-	this->start_timestamp = start_timestamp;
-	this->finish_timestamp = time_point();
+	this->timestamp = start_timestamp;
+	this->duration = value_type();
 }
 
 
 void timer::start(time_point timestamp) {
-	start_timestamp = timestamp;
+	this->timestamp = timestamp;
 }
 
 void timer::finish(time_point timestamp) {
-	internal_stats::update(stats, timestamp - start_timestamp);
+	duration += std::chrono::duration_cast<value_type>(timestamp - this->timestamp);
 
-	finish_timestamp = timestamp;
+	this->timestamp = timestamp;
 }
 
 
-timer::internal_stats timer::get_stats() const {
-	return stats;
+std::pair<timer::value_type, timer::time_point> timer::get() const {
+	return std::make_pair(this->duration, this->timestamp);
 }
 
 }} // namespace handystats::metrics

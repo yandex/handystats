@@ -1,6 +1,8 @@
 #ifndef HANDYSTATS_METRICS_TIMER_H_
 #define HANDYSTATS_METRICS_TIMER_H_
 
+#include <utility>
+
 #include <handystats/chrono.hpp>
 
 namespace handystats { namespace metrics {
@@ -9,16 +11,10 @@ class timer
 {
 public:
 
+	typedef chrono::default_duration value_type;
 	typedef chrono::default_duration time_duration;
 	typedef typename chrono::steady_clock<time_duration> clock;
 	typedef typename clock::time_point time_point;
-
-	struct internal_stats {
-		time_duration duration;
-
-		static void initialize(internal_stats& stats);
-		static void update(internal_stats& stats, time_duration timer_time);
-	};
 
 	timer();
 	timer(time_point start_timestamp);
@@ -26,13 +22,11 @@ public:
 	void start(time_point timestamp);
 	void finish(time_point timestamp);
 
-	internal_stats get_stats() const;
+	std::pair<value_type, time_point> get() const;
 
 private:
-	time_point start_timestamp;
-	time_point finish_timestamp;
-
-	internal_stats stats;
+	time_point timestamp;
+	value_type duration;
 
 }; // class timer
 

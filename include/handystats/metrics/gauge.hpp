@@ -3,12 +3,15 @@
 
 #include <utility>
 
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics.hpp>
-
 #include <handystats/chrono.hpp>
+#include <handystats/accumulators.hpp>
 
 namespace handystats { namespace metrics {
+
+namespace default_parameters {
+	extern std::vector<double> quantile_probs;
+	extern long double moving_average_alpha;
+}
 
 class gauge
 {
@@ -25,13 +28,21 @@ public:
 				boost::accumulators::tag::max,
 				boost::accumulators::tag::sum,
 				boost::accumulators::tag::count,
-				boost::accumulators::tag::mean
+				boost::accumulators::tag::mean,
+				boost::accumulators::tag::moving_average,
+				boost::accumulators::tag::extended_p_square_quantile
 			> value_features;
 
 		boost::accumulators::accumulator_set<value_type, value_features> values;
 
-		static void initialize(internal_stats& stats);
-		static void initialize(internal_stats& stats, value_type value, time_point timestamp);
+		internal_stats()
+			: values(
+					boost::accumulators::tag::extended_p_square::probabilities = default_parameters::quantile_probs,
+					boost::accumulators::tag::moving_average::alpha = default_parameters::moving_average_alpha
+					)
+		{
+		}
+
 		static void update_value(internal_stats& stats, value_type value, time_point timestamp);
 	};
 

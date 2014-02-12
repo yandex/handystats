@@ -2,27 +2,24 @@
 
 namespace handystats { namespace metrics {
 
-void gauge::internal_stats::initialize(internal_stats& stats) {
+namespace default_parameters {
+	std::vector<double> quantile_probs({0.5, 0.75, 0.90, 0.95});
+	long double moving_average_alpha = 2.0 / (1 + 15);
 }
 
-void gauge::internal_stats::initialize(internal_stats& stats, value_type value, time_point timestamp) {
-	stats.values(value);
-}
-
-void gauge::internal_stats::update_value(internal_stats& stats, value_type value, time_point timestamp) {
+void gauge::internal_stats::update_value(internal_stats& stats, value_type value, time_point) {
 	stats.values(value);
 }
 
 gauge::gauge()
 {
-	internal_stats::initialize(stats);
 }
 
 gauge::gauge(value_type value, time_point timestamp)
 	: value(value)
 	, timestamp(timestamp)
 {
-	internal_stats::initialize(stats, value, timestamp);
+	internal_stats::update_value(stats, value, timestamp);
 }
 
 

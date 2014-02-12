@@ -43,7 +43,7 @@ public:
 		{
 		}
 
-		static void update_value(internal_stats& stats, value_type value, time_point timestamp);
+		void update_value(value_type value, time_point timestamp);
 	};
 
 	gauge();

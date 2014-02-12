@@ -7,8 +7,8 @@ namespace default_parameters {
 	long double moving_average_alpha = 2.0 / (1 + 15);
 }
 
-void gauge::internal_stats::update_value(internal_stats& stats, value_type value, time_point) {
-	stats.values(value);
+void gauge::internal_stats::update_value(value_type value, time_point) {
+	values(value);
 }
 
 gauge::gauge()
@@ -19,7 +19,7 @@ gauge::gauge(value_type value, time_point timestamp)
 	: value(value)
 	, timestamp(timestamp)
 {
-	internal_stats::update_value(stats, value, timestamp);
+	stats.update_value(value, timestamp);
 }
 
 
@@ -27,7 +27,7 @@ void gauge::set(value_type value, time_point timestamp) {
 	this->value = value;
 	this->timestamp = timestamp;
 
-	internal_stats::update_value(stats, this->value, this->timestamp);
+	stats.update_value(this->value, this->timestamp);
 }
 
 std::pair<gauge::value_type, gauge::time_point> gauge::get() const {

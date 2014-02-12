@@ -1,5 +1,5 @@
-#include "handystats/internal/internal_gauge.hpp"
-#include "handystats/events/gauge_events.hpp"
+#include <handystats/internal/internal_gauge.hpp>
+#include <handystats/events/gauge_events.hpp>
 
 namespace handystats { namespace internal {
 
@@ -28,19 +28,19 @@ void internal_gauge::process_event_message(events::event_message* message) {
 
 
 void internal_gauge::process_init_event(events::event_message* message) {
-	if (base_metric) {
+	if (base_gauge) {
 		return;
 	}
 
-	base_metric = new metric_type(*static_cast<metric_type::value_type*>(message->event_data[0]), message->timestamp);
+	base_gauge = new metrics::gauge(*static_cast<metrics::gauge::value_type*>(message->event_data[0]), message->timestamp);
 }
 
 void internal_gauge::process_set_event(events::event_message* message) {
-	if (!base_metric) {
-		base_metric = new metric_type();
+	if (!base_gauge) {
+		base_gauge = new metrics::gauge();
 	}
 
-	base_metric->set(*static_cast<metric_type::value_type*>(message->event_data[0]), message->timestamp);
+	base_gauge->set(*static_cast<metrics::gauge::value_type*>(message->event_data[0]), message->timestamp);
 }
 
 

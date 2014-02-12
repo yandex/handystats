@@ -1,5 +1,5 @@
-#include "handystats/internal/internal_counter.hpp"
-#include "handystats/events/counter_events.hpp"
+#include <handystats/internal/internal_counter.hpp>
+#include <handystats/events/counter_events.hpp>
 
 namespace handystats { namespace internal {
 
@@ -31,27 +31,27 @@ void internal_counter::process_event_message(events::event_message* message) {
 
 
 void internal_counter::process_init_event(events::event_message* message) {
-	if (base_metric) {
+	if (base_counter) {
 		return;
 	}
 
-	base_metric = new metric_type(*static_cast<metric_type::value_type*>(message->event_data[0]), message->timestamp);
+	base_counter = new metrics::counter(*static_cast<metrics::counter::value_type*>(message->event_data[0]), message->timestamp);
 }
 
 void internal_counter::process_increment_event(events::event_message* message) {
-	if (!base_metric) {
-		base_metric = new metric_type();
+	if (!base_counter) {
+		base_counter = new metrics::counter();
 	}
 
-	base_metric->increment(*static_cast<metric_type::value_type*>(message->event_data[0]), message->timestamp);
+	base_counter->increment(*static_cast<metrics::counter::value_type*>(message->event_data[0]), message->timestamp);
 }
 
 void internal_counter::process_decrement_event(events::event_message* message) {
-	if (!base_metric) {
-		base_metric = new metric_type();
+	if (!base_counter) {
+		base_counter = new metrics::counter();
 	}
 
-	base_metric->decrement(*static_cast<metric_type::value_type*>(message->event_data[0]), message->timestamp);
+	base_counter->decrement(*static_cast<metrics::counter::value_type*>(message->event_data[0]), message->timestamp);
 }
 
 

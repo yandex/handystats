@@ -43,7 +43,7 @@ TEST(HandyCounterTest, HandyBubbleSortMonitoring) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_count =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["swaps.count"])
-		->base_metric
+		->base_counter
 		->get().first;
 
 	ASSERT_EQ(handy_count, swaps_count);
@@ -82,7 +82,7 @@ TEST(HandyGaugeTest, HandyQueueSizeMonitoring) {
 	int handy_max_size =
 		boost::accumulators::max(
 			boost::get<handystats::internal::internal_gauge*>(handystats::internal::monitors["queue.size"])
-			->base_metric
+			->base_gauge
 			->get_stats()
 			.values
 		);
@@ -105,7 +105,7 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_value_1 =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["test.counter"])
-		->base_metric
+		->base_counter
 		->get().first;
 
 	ASSERT_EQ(handy_value_1, value_1);
@@ -124,7 +124,7 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_value_2 =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["test.counter"])
-		->base_metric
+		->base_counter
 		->get().first;
 
 	ASSERT_EQ(handy_value_2, value_2);
@@ -145,7 +145,7 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_value_1 =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["test.metric"])
-		->base_metric
+		->base_counter
 		->get().first;
 
 	ASSERT_EQ(handy_value_1, value_1);
@@ -164,7 +164,7 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_value_2 =
 		boost::get<handystats::internal::internal_gauge*>(handystats::internal::monitors["test.metric"])
-		->base_metric
+		->base_gauge
 		->get().first;
 
 	ASSERT_EQ(handy_value_2, value_2);

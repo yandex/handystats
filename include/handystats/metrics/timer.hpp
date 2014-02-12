@@ -20,13 +20,13 @@ public:
 	timer(time_point start_timestamp);
 
 	void start(time_point timestamp);
-	void finish(time_point timestamp);
+	void stop(time_point timestamp);
 
 	std::pair<value_type, time_point> get() const;
 
 private:
 	time_point timestamp;
-	value_type duration;
+	value_type value;
 
 }; // class timer
 

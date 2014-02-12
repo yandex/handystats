@@ -3,10 +3,10 @@
 
 #include <utility>
 
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics.hpp>
-
 #include <handystats/chrono.hpp>
+#include <handystats/accumulators.hpp>
+
+#include <handystats/metrics/gauge.hpp>
 
 namespace handystats { namespace metrics {
 
@@ -20,32 +20,18 @@ public:
 	typedef typename clock::time_point time_point;
 
 	struct internal_stats {
-		typedef boost::accumulators::features <
-				boost::accumulators::tag::min,
-				boost::accumulators::tag::max,
-				boost::accumulators::tag::count
-			> value_features;
+		gauge values;
 
-		typedef boost::accumulators::features <
-				boost::accumulators::tag::min,
-				boost::accumulators::tag::max,
-				boost::accumulators::tag::sum,
-				boost::accumulators::tag::count,
-				boost::accumulators::tag::mean
-			> delta_features;
+		gauge incr_deltas;
+		gauge decr_deltas;
+		gauge deltas;
 
-		boost::accumulators::accumulator_set<value_type, value_features> values;
+		internal_stats()
+		{}
 
-		boost::accumulators::accumulator_set<value_type, delta_features> incr_deltas;
-		boost::accumulators::accumulator_set<value_type, delta_features> decr_deltas;
-		boost::accumulators::accumulator_set<value_type, delta_features> deltas;
-
-		static void initialize(internal_stats& stats);
-		static void initialize(internal_stats& stats, value_type value, time_point timestamp);
-
-		static void update_value(internal_stats& stats, value_type value, time_point timestamp);
-		static void update_increment(internal_stats& stats, value_type delta, time_point timestamp);
-		static void update_decrement(internal_stats& stats, value_type delta, time_point timestamp);
+		void update_value(value_type value, time_point timestamp);
+		void update_increment(value_type delta, time_point timestamp);
+		void update_decrement(value_type delta, time_point timestamp);
 	};
 
 	counter();

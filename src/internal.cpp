@@ -18,6 +18,9 @@ void process_event_message(events::event_message* message) {
 			case events::event_destination_type::GAUGE:
 				monitors.emplace(message->destination_name, new internal_gauge());
 				break;
+			case events::event_destination_type::TIMER:
+				monitors.emplace(message->destination_name, new internal_timer());
+				break;
 			default:
 				return;
 		}
@@ -34,6 +37,9 @@ void process_event_message(events::event_message* message, internal_monitor& mon
 		case internal_monitor_index::INTERNAL_GAUGE:
 			boost::get<internal_gauge*>(monitor)->process_event_message(message);
 			break;
+		case internal_monitor_index::INTERNAL_TIMER:
+			boost::get<internal_timer*>(monitor)->process_event_message(message);
+			break;
 		default:
 			return;
 	}
@@ -44,6 +50,22 @@ void initialize() {
 }
 
 void clean_up() {
+	for (auto monitor_entry : monitors) {
+		switch (monitor_entry.second.which()) {
+			case internal_monitor_index::INTERNAL_COUNTER:
+				delete boost::get<internal_counter*>(monitor_entry.second);
+				break;
+			case internal_monitor_index::INTERNAL_GAUGE:
+				delete boost::get<internal_gauge*>(monitor_entry.second);
+				break;
+			case internal_monitor_index::INTERNAL_TIMER:
+				delete boost::get<internal_timer*>(monitor_entry.second);
+				break;
+			default:
+				return;
+		}
+	}
+
 	monitors.clear();
 }
 

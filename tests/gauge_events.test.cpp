@@ -6,7 +6,7 @@ using namespace handystats::events;
 
 TEST(GaugeEventsTest, TestGaugeInitEvent) {
 	const std::string gauge_name = "proc.load";
-	const long double init_value = 0.75;
+	const double init_value = 0.75;
 	event_message* message = gauge_init_event(gauge_name, init_value);
 
 	ASSERT_EQ(message->destination_name, gauge_name);
@@ -20,7 +20,7 @@ TEST(GaugeEventsTest, TestGaugeInitEvent) {
 
 TEST(GaugeEventsTest, TestGaugeSetEvent) {
 	const std::string gauge_name = "proc.load";
-	const long double value = 1.5;
+	const double value = 1.5;
 	event_message* message = gauge_set_event(gauge_name, value);
 
 	ASSERT_EQ(message->destination_name, gauge_name);

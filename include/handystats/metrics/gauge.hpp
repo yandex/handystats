@@ -10,14 +10,15 @@ namespace handystats { namespace metrics {
 
 namespace default_parameters {
 	extern std::vector<double> quantile_probs;
-	extern long double moving_average_alpha;
+	extern std::vector<std::string> quantile_percents;
+	extern double moving_average_alpha;
 }
 
 class gauge
 {
 public:
 
-	typedef long double value_type;
+	typedef double value_type;
 	typedef chrono::default_duration time_duration;
 	typedef typename chrono::steady_clock<time_duration> clock;
 	typedef typename clock::time_point time_point;

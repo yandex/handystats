@@ -13,7 +13,7 @@ namespace impl {
 template <typename value_type>
 struct moving_average_impl : accumulator_base {
 
-	typedef long double result_type;
+	typedef double result_type;
 
 	template <typename Args>
 	moving_average_impl(Args const& args)
@@ -38,8 +38,8 @@ struct moving_average_impl : accumulator_base {
 	}
 
 private:
-	long double moving_average;
-	long double alpha;
+	double moving_average;
+	double alpha;
 };
 
 } // namespace boost::accumulators::impl

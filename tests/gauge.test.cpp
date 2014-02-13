@@ -3,12 +3,16 @@
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/gauge.hpp>
 
+#include <handystats/json/gauge_json_writer.hpp>
+
 using namespace handystats::metrics;
 
 TEST(GaugeTest, TestGaugeConstruction) {
 	gauge sample_gauge(-10, handystats::chrono::steady_clock<gauge::time_duration>::now());
 
 	ASSERT_NEAR(sample_gauge.get().first, -10, 1E-9);
+
+	std::cout << handystats::json::write_to_json_string(&sample_gauge) << std::endl;
 }
 
 TEST(GaugeTest, TestGaugeSetMethod) {
@@ -19,6 +23,8 @@ TEST(GaugeTest, TestGaugeSetMethod) {
 
 		ASSERT_NEAR(sample_gauge.get().first, test_value, 1E-9);
 	}
+
+	std::cout << handystats::json::write_to_json_string(&sample_gauge) << std::endl;
 }
 
 TEST(GaugeTest, TestGaugeInternalStats) {
@@ -41,4 +47,6 @@ TEST(GaugeTest, TestGaugeInternalStats) {
 	ASSERT_EQ(count(stats), max_test_value - min_test_value + 1);
 	ASSERT_NEAR(sum(stats), 0, 1E-9);
 	ASSERT_NEAR(mean(stats), 0, 1E-9);
+
+	std::cout << handystats::json::write_to_json_string(&sample_gauge) << std::endl;
 }

@@ -3,12 +3,16 @@
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/counter.hpp>
 
+#include <handystats/json/counter_json_writer.hpp>
+
 using namespace handystats::metrics;
 
 TEST(CounterTest, TestCounterConstruction) {
 	counter sample_counter(10, handystats::chrono::steady_clock<counter::time_duration>::now());
 
 	ASSERT_EQ(sample_counter.get().first, 10);
+
+	std::cout << handystats::json::write_to_json_string(&sample_counter) << std::endl;
 }
 
 TEST(CounterTest, TestCounterIncrementDecrement) {
@@ -29,6 +33,8 @@ TEST(CounterTest, TestCounterIncrementDecrement) {
 		sample_counter.decrement(1, handystats::chrono::steady_clock<counter::time_duration>::now());
 	}
 	ASSERT_EQ(sample_counter.get().first, 0);
+
+	std::cout << handystats::json::write_to_json_string(&sample_counter) << std::endl;
 }
 
 TEST(CounterTest, TestCounterInternalStats) {
@@ -56,4 +62,6 @@ TEST(CounterTest, TestCounterInternalStats) {
 	ASSERT_EQ(min(stats.values.get_stats().values), 0);
 	ASSERT_EQ(max(stats.decr_deltas.get_stats().values), 1);
 	ASSERT_EQ(max(stats.values.get_stats().values), max_test_value);
+
+	std::cout << handystats::json::write_to_json_string(&sample_counter) << std::endl;
 }

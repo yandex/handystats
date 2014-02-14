@@ -14,7 +14,7 @@
 namespace handystats { namespace json {
 
 template<typename Allocator>
-void write_to_json_value(metrics::timer* obj, rapidjson::Value* json_value, Allocator& allocator) {
+inline void write_to_json_value(metrics::timer* obj, rapidjson::Value* json_value, Allocator& allocator) {
 	if (!obj) {
 		json_value = new rapidjson::Value();
 		return;
@@ -36,7 +36,7 @@ void write_to_json_value(metrics::timer* obj, rapidjson::Value* json_value, Allo
 }
 
 template<typename StringBuffer, typename Allocator>
-void write_to_json_buffer(metrics::timer* obj, StringBuffer* buffer, Allocator& allocator) {
+inline void write_to_json_buffer(metrics::timer* obj, StringBuffer* buffer, Allocator& allocator) {
 	rapidjson::Value json_value;
 	write_to_json_value(obj, &json_value, allocator);
 
@@ -48,7 +48,7 @@ void write_to_json_buffer(metrics::timer* obj, StringBuffer* buffer, Allocator& 
 	json_value.Accept(writer);
 }
 
-std::string write_to_json_string(metrics::timer* obj) {
+inline std::string write_to_json_string(metrics::timer* obj) {
 	rapidjson::StringBuffer buffer(&crtAllocator);
 	write_to_json_buffer(obj, &buffer, memoryPoolAllocator);
 

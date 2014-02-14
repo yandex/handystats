@@ -9,8 +9,7 @@
 
 #include "handystats/handystats.hpp"
 
-#include <handystats/json/internal_gauge_json_writer.hpp>
-#include <handystats/json/internal_counter_json_writer.hpp>
+#include <handystats/json_dump.hpp>
 
 TEST(HandyCounterTest, HandyBubbleSortMonitoring) {
 	HANDY_ENABLE();
@@ -57,6 +56,8 @@ TEST(HandyCounterTest, HandyBubbleSortMonitoring) {
 	std::cout << "message-queue-size: " << handystats::json::write_to_json_string(&handystats::event_message_queue_size) << std::endl;
 	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
 	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
+
+	std::cout << *HANDY_JSON_DUMP() << std::endl;
 
 	HANDY_DISABLE();
 }
@@ -106,6 +107,8 @@ TEST(HandyGaugeTest, HandyQueueSizeMonitoring) {
 	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
 	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
 
+	std::cout << *HANDY_JSON_DUMP() << std::endl;
+
 	HANDY_DISABLE();
 }
 
@@ -146,6 +149,8 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 
 	ASSERT_EQ(handy_value_2, value_2);
 
+	std::cout << *HANDY_JSON_DUMP() << std::endl;
+
 	HANDY_DISABLE();
 }
 
@@ -185,6 +190,8 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 		->get().first;
 
 	ASSERT_EQ(handy_value_2, value_2);
+
+	std::cout << *HANDY_JSON_DUMP() << std::endl;
 
 	HANDY_DISABLE();
 }

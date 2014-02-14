@@ -42,6 +42,8 @@ void process_message_queue() {
 		event_message_queue_size.set(message_queue::event_message_queue->unsafe_size(), timestamp);
 		monitors_size.set(internal::monitors.size(), timestamp);
 	}
+
+	json::update_json_dump();
 }
 
 

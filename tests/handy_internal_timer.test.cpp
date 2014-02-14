@@ -9,6 +9,8 @@
 
 #include "handystats/handystats.hpp"
 
+#include <handystats/json/internal_timer_json_writer.hpp>
+
 TEST(HandyTimerTest, CommonTestSingleInstanceTimer) {
 	HANDY_ENABLE();
 
@@ -41,6 +43,9 @@ TEST(HandyTimerTest, CommonTestSingleInstanceTimer) {
 	ASSERT_EQ(boost::accumulators::count(agg_stats), COUNT);
 	ASSERT_GE(boost::accumulators::min(agg_stats), sleep_time.count());
 	ASSERT_NEAR(boost::accumulators::mean(agg_stats), sleep_time.count(), sleep_time.count() * 0.25);
+
+	auto timer = boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"]);
+	std::cout << handystats::json::write_to_json_string(timer) << std::endl;
 
 	/*
 	std::cout << "0.5: " << boost::accumulators::quantile(agg_stats, boost::accumulators::quantile_probability = 0.5) << std::endl;
@@ -83,6 +88,9 @@ TEST(HandyTimerTest, CommonTestMultiInstanceTimer) {
 	ASSERT_EQ(boost::accumulators::count(agg_stats), COUNT);
 	ASSERT_GE(boost::accumulators::min(agg_stats), sleep_time.count());
 	ASSERT_NEAR(boost::accumulators::mean(agg_stats), sleep_time.count(), sleep_time.count() * 0.25);
+
+	auto timer = boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"]);
+	std::cout << handystats::json::write_to_json_string(timer) << std::endl;
 
 	/*
 	std::cout << "0.5: " << boost::accumulators::quantile(agg_stats, boost::accumulators::quantile_probability = 0.5) << std::endl;
@@ -129,6 +137,9 @@ TEST(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 	ASSERT_EQ(boost::accumulators::count(agg_stats), COUNT);
 	ASSERT_GE(boost::accumulators::min(agg_stats), sleep_time.count());
 	ASSERT_NEAR(boost::accumulators::mean(agg_stats), sleep_time.count(), sleep_time.count() * 0.5);
+
+	auto timer = boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"]);
+	std::cout << handystats::json::write_to_json_string(timer) << std::endl;
 
 /*
 	std::cout << "0.5: " << boost::accumulators::quantile(agg_stats, boost::accumulators::quantile_probability = 0.5) << std::endl;

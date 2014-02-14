@@ -8,6 +8,9 @@ void push_event_message(events::event_message* message) {
 	if (event_message_queue) {
 		event_message_queue->push(message);
 	}
+	else {
+		events::delete_event_message(message);
+	}
 }
 
 events::event_message* pop_event_message() {

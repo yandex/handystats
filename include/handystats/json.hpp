@@ -8,5 +8,6 @@
 
 #include <handystats/json/gauge_json_writer.hpp>
 #include <handystats/json/counter_json_writer.hpp>
+#include <handystats/json/timer_json_writer.hpp>
 
 #endif // HANDYSTATS_JSON_WRITERS_H_

@@ -54,6 +54,10 @@ TEST(HandyCounterTest, HandyBubbleSortMonitoring) {
 	auto counter = boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["swaps.count"]);
 	std::cout << handystats::json::write_to_json_string(counter) << std::endl;
 
+	std::cout << "message-queue-size: " << handystats::json::write_to_json_string(&handystats::event_message_queue_size) << std::endl;
+	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
+	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
+
 	HANDY_DISABLE();
 }
 
@@ -97,6 +101,10 @@ TEST(HandyGaugeTest, HandyQueueSizeMonitoring) {
 
 	auto gauge = boost::get<handystats::internal::internal_gauge*>(handystats::internal::monitors["queue.size"]);
 	std::cout << handystats::json::write_to_json_string(gauge) << std::endl;
+
+	std::cout << "message-queue-size: " << handystats::json::write_to_json_string(&handystats::event_message_queue_size) << std::endl;
+	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
+	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
 
 	HANDY_DISABLE();
 }

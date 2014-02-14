@@ -4,8 +4,15 @@
 #include <thread>
 
 #include "handystats/chrono.hpp"
+#include "handystats/message_queue.hpp"
+#include "handystats/internal.hpp"
+
 
 namespace handystats {
+
+extern metrics::gauge event_message_queue_size;
+extern metrics::gauge monitors_size;
+extern metrics::gauge message_processing_time;
 
 extern bool handy_enabled;
 

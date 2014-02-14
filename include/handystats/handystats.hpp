@@ -9,4 +9,6 @@
 #include "handystats/message_queue/gauge_event_message.hpp"
 #include "handystats/message_queue/timer_event_message.hpp"
 
+#include "handystats/json.hpp"
+
 #endif // HANDYSTATS_HANDYSTATS_H_

@@ -47,6 +47,10 @@ TEST(HandyTimerTest, CommonTestSingleInstanceTimer) {
 	auto timer = boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"]);
 	std::cout << handystats::json::write_to_json_string(timer) << std::endl;
 
+	std::cout << "message-queue-size: " << handystats::json::write_to_json_string(&handystats::event_message_queue_size) << std::endl;
+	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
+	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
+
 	/*
 	std::cout << "0.5: " << boost::accumulators::quantile(agg_stats, boost::accumulators::quantile_probability = 0.5) << std::endl;
 	std::cout << "0.75: " << boost::accumulators::quantile(agg_stats, boost::accumulators::quantile_probability = 0.75) << std::endl;
@@ -91,6 +95,10 @@ TEST(HandyTimerTest, CommonTestMultiInstanceTimer) {
 
 	auto timer = boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"]);
 	std::cout << handystats::json::write_to_json_string(timer) << std::endl;
+
+	std::cout << "message-queue-size: " << handystats::json::write_to_json_string(&handystats::event_message_queue_size) << std::endl;
+	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
+	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
 
 	/*
 	std::cout << "0.5: " << boost::accumulators::quantile(agg_stats, boost::accumulators::quantile_probability = 0.5) << std::endl;
@@ -140,6 +148,10 @@ TEST(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 
 	auto timer = boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"]);
 	std::cout << handystats::json::write_to_json_string(timer) << std::endl;
+
+	std::cout << "message-queue-size: " << handystats::json::write_to_json_string(&handystats::event_message_queue_size) << std::endl;
+	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
+	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
 
 /*
 	std::cout << "0.5: " << boost::accumulators::quantile(agg_stats, boost::accumulators::quantile_probability = 0.5) << std::endl;

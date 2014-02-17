@@ -13,13 +13,13 @@ void process_event_message(events::event_message* message) {
 	if (monitors.find(message->destination_name) == monitors.end()) {
 		switch (message->destination_type) {
 			case events::event_destination_type::COUNTER:
-				monitors.emplace(message->destination_name, new internal_counter());
+				monitors[message->destination_name] = new internal_counter();
 				break;
 			case events::event_destination_type::GAUGE:
-				monitors.emplace(message->destination_name, new internal_gauge());
+				monitors[message->destination_name] = new internal_gauge();
 				break;
 			case events::event_destination_type::TIMER:
-				monitors.emplace(message->destination_name, new internal_timer());
+				monitors[message->destination_name] = new internal_timer();
 				break;
 			default:
 				return;

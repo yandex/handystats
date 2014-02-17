@@ -3,6 +3,17 @@
 #include <handystats/internal.hpp>
 #include <handystats/json.hpp>
 
+namespace handystats {
+
+extern metrics::gauge event_message_queue_size;
+extern metrics::gauge monitors_size;
+extern metrics::gauge message_processing_time;
+extern metrics::gauge message_push_time;
+extern metrics::gauge message_pop_time;
+extern metrics::gauge message_delete_time;
+
+}
+
 namespace handystats { namespace json {
 
 chrono::default_time_point dump_timestamp;
@@ -39,6 +50,37 @@ std::shared_ptr<const std::string> create_json_dump() {
 		}
 
 		dump_value.AddMember(monitor_entry.first.c_str(), memoryPoolAllocator, monitor_value, memoryPoolAllocator);
+	}
+
+	{
+		rapidjson::Value queue_size_value;
+		write_to_json_value(&event_message_queue_size, &queue_size_value, memoryPoolAllocator);
+		dump_value.AddMember("message-queue-size", queue_size_value, memoryPoolAllocator);
+	}
+	{
+		rapidjson::Value monitors_size_value;
+		write_to_json_value(&monitors_size, &monitors_size_value, memoryPoolAllocator);
+		dump_value.AddMember("monitors-size", monitors_size_value, memoryPoolAllocator);
+	}
+	{
+		rapidjson::Value processing_time_value;
+		write_to_json_value(&message_processing_time, &processing_time_value, memoryPoolAllocator);
+		dump_value.AddMember("message-processing-time", processing_time_value, memoryPoolAllocator);
+	}
+	{
+		rapidjson::Value push_time_value;
+		write_to_json_value(&message_push_time, &push_time_value, memoryPoolAllocator);
+		dump_value.AddMember("message-push-time", push_time_value, memoryPoolAllocator);
+	}
+	{
+		rapidjson::Value pop_time_value;
+		write_to_json_value(&message_pop_time, &pop_time_value, memoryPoolAllocator);
+		dump_value.AddMember("message-pop-time", pop_time_value, memoryPoolAllocator);
+	}
+	{
+		rapidjson::Value delete_time_value;
+		write_to_json_value(&message_delete_time, &delete_time_value, memoryPoolAllocator);
+		dump_value.AddMember("message-delete-time", delete_time_value, memoryPoolAllocator);
 	}
 
 	rapidjson::StringBuffer buffer;

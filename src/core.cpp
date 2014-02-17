@@ -5,6 +5,9 @@ namespace handystats {
 metrics::gauge event_message_queue_size;
 metrics::gauge monitors_size;
 metrics::gauge message_processing_time;
+metrics::gauge message_push_time;
+metrics::gauge message_pop_time;
+metrics::gauge message_delete_time;
 
 bool handy_enabled = false;
 
@@ -30,15 +33,18 @@ void process_message_queue() {
 
 	auto processing_start_time = chrono::default_clock::now();
 	events::event_message* message = message_queue::pop_event_message();
+	auto pop_end_time = chrono::default_clock::now();
 	internal::process_event_message(message);
+	auto delete_start_time = chrono::default_clock::now();
 	events::delete_event_message(message);
 	auto processing_end_time = chrono::default_clock::now();
 
 	if (message) {
-		auto processing_duration = processing_end_time - processing_start_time;
 		auto timestamp = chrono::default_clock::now();
 
-		message_processing_time.set(processing_duration.count(), timestamp);
+		message_processing_time.set((processing_end_time - processing_start_time).count(), timestamp);
+		message_pop_time.set((pop_end_time - processing_start_time).count(), timestamp);
+		message_delete_time.set((processing_end_time - delete_start_time).count(), timestamp);
 		event_message_queue_size.set(message_queue::event_message_queue->unsafe_size(), timestamp);
 		monitors_size.set(internal::monitors.size(), timestamp);
 	}

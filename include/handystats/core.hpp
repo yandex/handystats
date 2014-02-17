@@ -13,6 +13,9 @@ namespace handystats {
 extern metrics::gauge event_message_queue_size;
 extern metrics::gauge monitors_size;
 extern metrics::gauge message_processing_time;
+extern metrics::gauge message_push_time;
+extern metrics::gauge message_pop_time;
+extern metrics::gauge message_delete_time;
 
 extern bool handy_enabled;
 

@@ -49,7 +49,7 @@ inline void write_to_json_buffer(metrics::timer* obj, StringBuffer* buffer, Allo
 }
 
 inline std::string write_to_json_string(metrics::timer* obj) {
-	rapidjson::StringBuffer buffer(&crtAllocator);
+	rapidjson::StringBuffer buffer;
 	write_to_json_buffer(obj, &buffer, memoryPoolAllocator);
 
 	return std::string(buffer.GetString(), buffer.GetSize());

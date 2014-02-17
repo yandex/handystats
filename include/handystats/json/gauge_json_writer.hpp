@@ -43,7 +43,7 @@ inline void write_to_json_value(metrics::gauge* obj, rapidjson::Value* json_valu
 		json_value->AddMember("count", boost::accumulators::count(gauge_stats), allocator);
 		json_value->AddMember("mean", boost::accumulators::mean(gauge_stats), allocator);
 		json_value->AddMember("moving-avg", boost::accumulators::moving_average(gauge_stats), allocator);
-
+/*
 		{
 			rapidjson::Value stats_quantile(rapidjson::kObjectType);
 
@@ -64,6 +64,7 @@ inline void write_to_json_value(metrics::gauge* obj, rapidjson::Value* json_valu
 
 			json_value->AddMember("quantile", stats_quantile, allocator);
 		}
+*/
 	}
 }
 
@@ -81,7 +82,7 @@ inline void write_to_json_buffer(metrics::gauge* obj, StringBuffer* buffer, Allo
 }
 
 inline std::string write_to_json_string(metrics::gauge* obj) {
-	rapidjson::StringBuffer buffer(&crtAllocator);
+	rapidjson::StringBuffer buffer;
 	write_to_json_buffer(obj, &buffer, memoryPoolAllocator);
 
 	return std::string(buffer.GetString(), buffer.GetSize());

@@ -30,15 +30,15 @@ public:
 				boost::accumulators::tag::sum,
 				boost::accumulators::tag::count,
 				boost::accumulators::tag::mean,
-				boost::accumulators::tag::moving_average,
-				boost::accumulators::tag::extended_p_square_quantile
+				boost::accumulators::tag::moving_average//,
+//				boost::accumulators::tag::extended_p_square_quantile
 			> value_features;
 
 		boost::accumulators::accumulator_set<value_type, value_features> values;
 
 		internal_stats()
 			: values(
-					boost::accumulators::tag::extended_p_square::probabilities = default_parameters::quantile_probs,
+//					boost::accumulators::tag::extended_p_square::probabilities = default_parameters::quantile_probs,
 					boost::accumulators::tag::moving_average::alpha = default_parameters::moving_average_alpha
 					)
 		{

@@ -38,7 +38,7 @@ struct internal_timer
 	metrics::gauge aggregator;
 	time_point timestamp;
 
-	const time_duration TIMEOUT = std::chrono::duration_cast<time_duration>(std::chrono::seconds(5));
+	static const time_duration TIMEOUT;
 	time_point check_timestamp;
 
 	internal_timer()

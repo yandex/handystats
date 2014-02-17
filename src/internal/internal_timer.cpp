@@ -3,6 +3,8 @@
 
 namespace handystats { namespace internal {
 
+const internal_timer::time_duration internal_timer::TIMEOUT = std::chrono::duration_cast<internal_timer::time_duration>(std::chrono::seconds(5));
+
 void internal_timer::check_on_timeout(time_point timestamp) {
 	for (auto instance_iter = instances.begin(); instance_iter != instances.end();) {
 		if ((timestamp - instance_iter->second.timestamp) > TIMEOUT) {

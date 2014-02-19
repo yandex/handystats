@@ -5,5 +5,8 @@
 #include <boost/accumulators/statistics.hpp>
 
 #include <handystats/accumulators/moving_average.hpp>
+#include <handystats/accumulators/interval_count.hpp>
+#include <handystats/accumulators/interval_sum.hpp>
+#include <handystats/accumulators/interval_mean.hpp>
 
 #endif // HANDYSTATS_ACCUMULATORS_H_

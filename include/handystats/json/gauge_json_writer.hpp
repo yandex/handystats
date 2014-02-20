@@ -41,30 +41,11 @@ inline void write_to_json_value(metrics::gauge* obj, rapidjson::Value* json_valu
 		json_value->AddMember("max", boost::accumulators::max(gauge_stats), allocator);
 		json_value->AddMember("sum", boost::accumulators::sum(gauge_stats), allocator);
 		json_value->AddMember("count", boost::accumulators::count(gauge_stats), allocator);
-		json_value->AddMember("mean", boost::accumulators::mean(gauge_stats), allocator);
+		json_value->AddMember("mean", boost::accumulators::count(gauge_stats) == 0 ? 0.0 : boost::accumulators::mean(gauge_stats), allocator);
 		json_value->AddMember("moving-avg", boost::accumulators::moving_average(gauge_stats), allocator);
-/*
-		{
-			rapidjson::Value stats_quantile(rapidjson::kObjectType);
-
-			for (size_t quantile_index = 0; quantile_index < metrics::default_parameters::quantile_percents.size(); ++quantile_index) {
-				double quantile_value = boost::accumulators::quantile(
-						gauge_stats,
-						boost::accumulators::quantile_probability = metrics::default_parameters::quantile_probs[quantile_index]
-				);
-
-				rapidjson::Value quantile(quantile_value);
-
-				stats_quantile.AddMember(
-						metrics::default_parameters::quantile_percents[quantile_index].c_str(),
-						quantile,
-						allocator
-				);
-			}
-
-			json_value->AddMember("quantile", stats_quantile, allocator);
-		}
-*/
+		json_value->AddMember("interval-count", boost::accumulators::interval_count(gauge_stats), allocator);
+		json_value->AddMember("interval-sum", boost::accumulators::interval_sum(gauge_stats), allocator);
+		json_value->AddMember("interval-mean", boost::accumulators::interval_mean(gauge_stats), allocator);
 	}
 }
 

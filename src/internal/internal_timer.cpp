@@ -7,7 +7,7 @@ const internal_timer::time_duration internal_timer::TIMEOUT = std::chrono::durat
 
 void internal_timer::check_on_timeout(time_point timestamp) {
 	for (auto instance_iter = instances.begin(); instance_iter != instances.end();) {
-		if ((timestamp - instance_iter->second.timestamp) > TIMEOUT) {
+		if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - instance_iter->second.timestamp) > TIMEOUT) {
 			instance_iter = instances.erase(instance_iter);
 		}
 		else {
@@ -49,7 +49,7 @@ void internal_timer::process_event_message(events::event_message* message) {
 
 	timestamp = message->timestamp;
 
-	if ((timestamp - check_timestamp) > TIMEOUT) {
+	if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - check_timestamp) > TIMEOUT) {
 		check_on_timeout(timestamp);
 	}
 }

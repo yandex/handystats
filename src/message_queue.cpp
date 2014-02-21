@@ -19,13 +19,13 @@ void push_event_message(events::event_message* message) {
 		auto push_start_time = chrono::default_clock::now();
 		event_message_queue->push(message);
 		auto push_end_time = chrono::default_clock::now();
-		message_push_time.set((push_end_time - push_start_time).count(), push_end_time);
+		message_push_time.set(std::chrono::duration_cast<chrono::default_duration>(push_end_time - push_start_time).count(), push_end_time);
 	}
 	else {
 		auto delete_start_time = chrono::default_clock::now();
 		events::delete_event_message(message);
 		auto delete_end_time = chrono::default_clock::now();
-		message_delete_time.set((delete_end_time - delete_start_time).count(), delete_end_time);
+		message_delete_time.set(std::chrono::duration_cast<chrono::default_duration>(delete_end_time - delete_start_time).count(), delete_end_time);
 	}
 }
 
@@ -36,7 +36,7 @@ events::event_message* pop_event_message() {
 		auto pop_start_time = chrono::default_clock::now();
 		event_message_queue->try_pop(message);
 		auto pop_end_time = chrono::default_clock::now();
-		message_pop_time.set((pop_end_time - pop_start_time).count(), pop_end_time);
+		message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
 	}
 
 	return message;

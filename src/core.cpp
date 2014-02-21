@@ -42,9 +42,9 @@ void process_message_queue() {
 	if (message) {
 		auto timestamp = chrono::default_clock::now();
 
-		message_processing_time.set((processing_end_time - processing_start_time).count(), timestamp);
-		message_pop_time.set((pop_end_time - processing_start_time).count(), timestamp);
-		message_delete_time.set((processing_end_time - delete_start_time).count(), timestamp);
+		message_processing_time.set(std::chrono::duration_cast<chrono::default_duration>(processing_end_time - processing_start_time).count(), timestamp);
+		message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - processing_start_time).count(), timestamp);
+		message_delete_time.set(std::chrono::duration_cast<chrono::default_duration>(processing_end_time - delete_start_time).count(), timestamp);
 		event_message_queue_size.set(message_queue::event_message_queue->unsafe_size(), timestamp);
 		monitors_size.set(internal::monitors.size(), timestamp);
 	}

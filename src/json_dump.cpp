@@ -92,7 +92,7 @@ std::shared_ptr<const std::string> create_json_dump() {
 }
 
 void update_json_dump() {
-	if ((chrono::default_clock::now() - dump_timestamp) > DUMP_INTERVAL) {
+	if (std::chrono::duration_cast<chrono::default_duration>(chrono::default_clock::now() - dump_timestamp) > DUMP_INTERVAL) {
 		auto new_json_dump = create_json_dump();
 		{
 			std::lock_guard<std::mutex> lock(json_dump_mutex);

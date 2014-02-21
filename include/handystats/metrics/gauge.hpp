@@ -20,8 +20,8 @@ public:
 
 	typedef double value_type;
 	typedef chrono::default_duration time_duration;
-	typedef typename chrono::steady_clock<time_duration> clock;
-	typedef typename clock::time_point time_point;
+	typedef typename chrono::default_clock clock;
+	typedef typename chrono::default_time_point time_point;
 
 	struct internal_stats {
 		typedef boost::accumulators::features <

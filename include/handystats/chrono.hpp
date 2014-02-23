@@ -1,10 +1,39 @@
 #ifndef HANDYSTATS_CHRONO_H_
 #define HANDYSTATS_CHRONO_H_
 
+#include <cstdint>
+#include <cstdlib>
 #include <chrono>
+#include <cassert>
 
 namespace handystats { namespace chrono {
 
+/*
+ * Concept 'clock'.
+ *
+ * Type names:
+ * - clock::time_point - represents time point from clock's epoch
+ * - clock::duration - represents duration between time points
+ *
+ * Member functions:
+ * - static time_point now() noexcept - gets current time point
+ *
+ * Notes:
+ * - time_point and duration can have no connection to std::chrono
+ *   but there should be std::chrono::duration_cast specialization for clock::duration
+ */
+
+
+extern long double cycles_per_nanosec;
+
+class tsc_clock {
+public:
+	typedef uint64_t time_point;
+	typedef uint64_t duration;
+
+	static time_point now() noexcept;
+	static std::chrono::nanoseconds to_nanoseconds(const duration&) noexcept;
+};
 
 template<class time_duration>
 class steady_clock {
@@ -22,8 +51,9 @@ public:
 	}
 };
 
+
 typedef std::chrono::microseconds default_duration;
-typedef steady_clock<default_duration> default_clock;
+typedef tsc_clock default_clock;
 typedef default_clock::time_point default_time_point;
 
 
@@ -58,5 +88,14 @@ std::chrono::hours to_hours(const time_duration& duration) {
 }
 
 }} // namespace handystats::chrono
+
+namespace std { namespace chrono {
+
+template <typename ToDuration>
+ToDuration duration_cast(handystats::chrono::tsc_clock::duration duration) {
+	return duration_cast<ToDuration>(handystats::chrono::tsc_clock::to_nanoseconds(duration));
+}
+
+}} // namespace std::chrono
 
 #endif // HANDYSTATS_CHRONO_H_

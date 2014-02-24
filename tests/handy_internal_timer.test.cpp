@@ -9,7 +9,7 @@
 
 #include "handystats/handystats.hpp"
 
-#include <handystats/json/internal_timer_json_writer.hpp>
+#include <handystats/json_dump.hpp>
 
 class HandyTimerTest : public ::testing::Test {
 protected:
@@ -53,12 +53,7 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 	ASSERT_EQ(boost::accumulators::count(agg_stats), COUNT);
 	ASSERT_GE(boost::accumulators::min(agg_stats), sleep_time.count());
 
-	auto timer = boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"]);
-	std::cout << handystats::json::write_to_json_string(timer) << std::endl;
-
-	std::cout << "message-queue-size: " << handystats::json::write_to_json_string(&handystats::event_message_queue_size) << std::endl;
-	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
-	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
+	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
 
 TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
@@ -91,12 +86,7 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 	ASSERT_EQ(boost::accumulators::count(agg_stats), COUNT);
 	ASSERT_GE(boost::accumulators::min(agg_stats), sleep_time.count());
 
-	auto timer = boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"]);
-	std::cout << handystats::json::write_to_json_string(timer) << std::endl;
-
-	std::cout << "message-queue-size: " << handystats::json::write_to_json_string(&handystats::event_message_queue_size) << std::endl;
-	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
-	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
+	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
 
 TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
@@ -133,10 +123,5 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 	ASSERT_EQ(boost::accumulators::count(agg_stats), COUNT);
 	ASSERT_GE(boost::accumulators::min(agg_stats), sleep_time.count());
 
-	auto timer = boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"]);
-	std::cout << handystats::json::write_to_json_string(timer) << std::endl;
-
-	std::cout << "message-queue-size: " << handystats::json::write_to_json_string(&handystats::event_message_queue_size) << std::endl;
-	std::cout << "monitors-size: " << handystats::json::write_to_json_string(&handystats::monitors_size) << std::endl;
-	std::cout << "event-processing-time: " << handystats::json::write_to_json_string(&handystats::message_processing_time) << std::endl;
+	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }

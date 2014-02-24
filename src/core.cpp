@@ -1,5 +1,10 @@
 #include "handystats/core.hpp"
 
+#include <handystats/metrics/gauge.hpp>
+#include <handystats/message_queue_impl.hpp>
+#include <handystats/internal_impl.hpp>
+#include <handystats/json_dump_impl.hpp>
+
 namespace handystats {
 
 metrics::gauge event_message_queue_size;
@@ -10,19 +15,6 @@ metrics::gauge message_pop_time;
 metrics::gauge message_delete_time;
 
 bool handy_enabled = false;
-
-void enable_handy() {
-	handy_enabled = true;
-
-	initialize();
-}
-
-void disable_handy() {
-	handy_enabled = false;
-
-	clean_up();
-}
-
 
 std::thread* processor_thread = nullptr;
 
@@ -60,7 +52,7 @@ void initialize() {
 	processor_thread =
 		new std::thread([]
 				() {
-					while (is_handy_enabled()) {
+					while (handy_enabled) {
 						process_message_queue();
 					}
 				}
@@ -83,5 +75,31 @@ void clean_up() {
 	message_queue::clean_up();
 }
 
+
+void enable_handy() {
+	handy_enabled = true;
+
+	initialize();
+}
+
+void disable_handy() {
+	handy_enabled = false;
+
+	clean_up();
+}
+
 } // namespace handystats
+
+
+void HANDY_ENABLE() {
+	if (!handystats::handy_enabled) {
+		handystats::enable_handy();
+	}
+}
+
+void HANDY_DISABLE() {
+	if (handystats::handy_enabled) {
+		handystats::disable_handy();
+	}
+}
 

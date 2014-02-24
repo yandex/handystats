@@ -1,14 +1,6 @@
 #include <handystats/message_queue_impl.hpp>
 
-#include <handystats/metrics/gauge.hpp>
-
-namespace handystats {
-
-extern metrics::gauge message_push_time;
-extern metrics::gauge message_pop_time;
-extern metrics::gauge message_delete_time;
-
-}
+#include <handystats/internal_statistics_impl.hpp>
 
 namespace handystats { namespace message_queue {
 
@@ -19,13 +11,12 @@ void push_event_message(events::event_message* message) {
 		auto push_start_time = chrono::default_clock::now();
 		event_message_queue->push(message);
 		auto push_end_time = chrono::default_clock::now();
-		message_push_time.set(std::chrono::duration_cast<chrono::default_duration>(push_end_time - push_start_time).count(), push_end_time);
+
+		internal::message_push_time.set(std::chrono::duration_cast<chrono::default_duration>(push_end_time - push_start_time).count(), push_end_time);
+		internal::event_message_queue_size.set(message_queue::event_message_queue->unsafe_size(), push_end_time);
 	}
 	else {
-		auto delete_start_time = chrono::default_clock::now();
 		events::delete_event_message(message);
-		auto delete_end_time = chrono::default_clock::now();
-		message_delete_time.set(std::chrono::duration_cast<chrono::default_duration>(delete_end_time - delete_start_time).count(), delete_end_time);
 	}
 }
 
@@ -36,7 +27,9 @@ events::event_message* pop_event_message() {
 		auto pop_start_time = chrono::default_clock::now();
 		event_message_queue->try_pop(message);
 		auto pop_end_time = chrono::default_clock::now();
-		message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
+
+		internal::message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
+		internal::event_message_queue_size.set(message_queue::event_message_queue->unsafe_size(), pop_end_time);
 	}
 
 	return message;

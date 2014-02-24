@@ -4,17 +4,7 @@
 #include <handystats/chrono_impl.hpp>
 #include <handystats/json_impl.hpp>
 #include <handystats/internal_metrics_impl.hpp>
-
-namespace handystats {
-
-extern metrics::gauge event_message_queue_size;
-extern metrics::gauge internal_metrics_size;
-extern metrics::gauge message_processing_time;
-extern metrics::gauge message_push_time;
-extern metrics::gauge message_pop_time;
-extern metrics::gauge message_delete_time;
-
-}
+#include <handystats/internal_statistics_impl.hpp>
 
 namespace handystats { namespace json {
 
@@ -56,33 +46,28 @@ std::shared_ptr<const std::string> create_json_dump() {
 
 	{
 		rapidjson::Value queue_size_value;
-		write_to_json_value(&event_message_queue_size, &queue_size_value, memoryPoolAllocator);
-		dump_value.AddMember("message-queue-size", queue_size_value, memoryPoolAllocator);
+		write_to_json_value(&internal::event_message_queue_size, &queue_size_value, memoryPoolAllocator);
+		dump_value.AddMember("__message-queue-size", queue_size_value, memoryPoolAllocator);
 	}
 	{
 		rapidjson::Value internal_metrics_size_value;
-		write_to_json_value(&internal_metrics_size, &internal_metrics_size_value, memoryPoolAllocator);
-		dump_value.AddMember("internal-metrics-size", internal_metrics_size_value, memoryPoolAllocator);
+		write_to_json_value(&internal::internal_metrics_size, &internal_metrics_size_value, memoryPoolAllocator);
+		dump_value.AddMember("__internal-metrics-size", internal_metrics_size_value, memoryPoolAllocator);
 	}
 	{
 		rapidjson::Value processing_time_value;
-		write_to_json_value(&message_processing_time, &processing_time_value, memoryPoolAllocator);
-		dump_value.AddMember("message-processing-time", processing_time_value, memoryPoolAllocator);
+		write_to_json_value(&internal::message_processing_time, &processing_time_value, memoryPoolAllocator);
+		dump_value.AddMember("__message-processing-time", processing_time_value, memoryPoolAllocator);
 	}
 	{
 		rapidjson::Value push_time_value;
-		write_to_json_value(&message_push_time, &push_time_value, memoryPoolAllocator);
-		dump_value.AddMember("message-push-time", push_time_value, memoryPoolAllocator);
+		write_to_json_value(&internal::message_push_time, &push_time_value, memoryPoolAllocator);
+		dump_value.AddMember("__message-push-time", push_time_value, memoryPoolAllocator);
 	}
 	{
 		rapidjson::Value pop_time_value;
-		write_to_json_value(&message_pop_time, &pop_time_value, memoryPoolAllocator);
-		dump_value.AddMember("message-pop-time", pop_time_value, memoryPoolAllocator);
-	}
-	{
-		rapidjson::Value delete_time_value;
-		write_to_json_value(&message_delete_time, &delete_time_value, memoryPoolAllocator);
-		dump_value.AddMember("message-delete-time", delete_time_value, memoryPoolAllocator);
+		write_to_json_value(&internal::message_pop_time, &pop_time_value, memoryPoolAllocator);
+		dump_value.AddMember("__message-pop-time", pop_time_value, memoryPoolAllocator);
 	}
 
 	rapidjson::StringBuffer buffer;

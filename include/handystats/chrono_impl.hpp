@@ -1,5 +1,5 @@
-#ifndef HANDYSTATS_CHRONO_H_
-#define HANDYSTATS_CHRONO_H_
+#ifndef HANDYSTATS_CHRONO_IMPL_H_
+#define HANDYSTATS_CHRONO_IMPL_H_
 
 #include <cstdint>
 #include <cstdlib>
@@ -98,4 +98,4 @@ ToDuration duration_cast(handystats::chrono::tsc_clock::duration duration) {
 
 }} // namespace std::chrono
 
-#endif // HANDYSTATS_CHRONO_H_
+#endif // HANDYSTATS_CHRONO_IMPL_H_

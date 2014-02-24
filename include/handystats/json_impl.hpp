@@ -1,5 +1,5 @@
-#ifndef HANDYSTATS_JSON_WRITERS_H_
-#define HANDYSTATS_JSON_WRITERS_H_
+#ifndef HANDYSTATS_JSON_IMPL_H_
+#define HANDYSTATS_JSON_IMPL_H_
 
 #include <handystats/rapidjson/document.h>
 
@@ -14,4 +14,4 @@
 #include <handystats/json/internal_counter_json_writer.hpp>
 #include <handystats/json/internal_timer_json_writer.hpp>
 
-#endif // HANDYSTATS_JSON_WRITERS_H_
+#endif // HANDYSTATS_JSON_IMPL_H_

@@ -1,7 +1,7 @@
 #ifndef HANDYSTATS_GAUGE_EVENT_MESSAGE_H_
 #define HANDYSTATS_GAUGE_EVENT_MESSAGE_H_
 
-#include "handystats/message_queue.hpp"
+#include "handystats/message_queue_impl.hpp"
 #include "handystats/events/gauge_events.hpp"
 
 inline void HANDY_GAUGE_INIT(

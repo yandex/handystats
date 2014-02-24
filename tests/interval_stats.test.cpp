@@ -2,8 +2,8 @@
 
 #include <gtest/gtest.h>
 
-#include <handystats/accumulators.hpp>
-#include <handystats/chrono.hpp>
+#include <handystats/accumulators_impl.hpp>
+#include <handystats/chrono_impl.hpp>
 
 using namespace boost::accumulators;
 

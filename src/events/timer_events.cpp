@@ -1,4 +1,4 @@
-#include "handystats/internal.hpp"
+#include "handystats/internal_impl.hpp"
 #include "handystats/events/timer_events.hpp"
 
 namespace handystats { namespace events {

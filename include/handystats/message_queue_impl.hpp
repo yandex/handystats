@@ -1,5 +1,5 @@
-#ifndef HANDYSTATS_MESSAGE_QUEUE_H_
-#define HANDYSTATS_MESSAGE_QUEUE_H_
+#ifndef HANDYSTATS_MESSAGE_QUEUE_IMPL_H_
+#define HANDYSTATS_MESSAGE_QUEUE_IMPL_H_
 
 #include <tbb/concurrent_queue.h>
 

@@ -5,7 +5,7 @@
 #include <memory>
 #include <mutex>
 
-#include <handystats/chrono.hpp>
+#include <handystats/chrono_impl.hpp>
 
 namespace handystats { namespace json {
 

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <handystats/math_utils.hpp>
+#include <handystats/math_utils_impl.hpp>
 
 TEST(MathUtils, TestIntComparison) {
 	ASSERT_LT(handystats::math_utils::cmp<int>(10, 11), 0);

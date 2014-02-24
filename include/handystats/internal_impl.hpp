@@ -1,5 +1,5 @@
-#ifndef HANDYSTATS_INTERNAL_H_
-#define HANDYSTATS_INTERNAL_H_
+#ifndef HANDYSTATS_INTERNAL_IMPL_H_
+#define HANDYSTATS_INTERNAL_IMPL_H_
 
 #include <string>
 #include <unordered_map>
@@ -35,4 +35,4 @@ void clean_up();
 
 }} // namespace handystats::internal
 
-#endif // HANDYSTATS_INTERNAL_H_
+#endif // HANDYSTATS_INTERNAL_IMPL_H_

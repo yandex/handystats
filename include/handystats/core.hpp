@@ -3,9 +3,9 @@
 
 #include <thread>
 
-#include "handystats/chrono.hpp"
-#include "handystats/message_queue.hpp"
-#include "handystats/internal.hpp"
+#include "handystats/chrono_impl.hpp"
+#include "handystats/message_queue_impl.hpp"
+#include "handystats/internal_impl.hpp"
 #include "handystats/json_dump.hpp"
 
 namespace handystats {

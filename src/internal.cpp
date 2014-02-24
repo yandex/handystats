@@ -1,4 +1,4 @@
-#include "handystats/internal.hpp"
+#include "handystats/internal_impl.hpp"
 
 namespace handystats { namespace internal {
 

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <handystats/accumulators.hpp>
+#include <handystats/accumulators_impl.hpp>
 
 using namespace boost::accumulators;
 

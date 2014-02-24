@@ -6,7 +6,7 @@
 #include <utility>
 #include <unordered_map>
 
-#include <handystats/chrono.hpp>
+#include <handystats/chrono_impl.hpp>
 #include <handystats/metrics/timer.hpp>
 #include <handystats/metrics/gauge.hpp>
 #include <handystats/events/event_message.hpp>

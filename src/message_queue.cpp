@@ -1,4 +1,4 @@
-#include "handystats/message_queue.hpp"
+#include <handystats/message_queue_impl.hpp>
 
 #include <handystats/metrics/gauge.hpp>
 

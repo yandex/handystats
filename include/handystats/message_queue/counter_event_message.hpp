@@ -1,7 +1,7 @@
 #ifndef HANDY_COUNTER_EVENT_MESSAGE_H_
 #define HANDY_COUNTER_EVENT_MESSAGE_H_
 
-#include "handystats/message_queue.hpp"
+#include "handystats/message_queue_impl.hpp"
 #include "handystats/events/counter_events.hpp"
 
 inline void HANDY_COUNTER_INIT(

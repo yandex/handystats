@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <handystats/chrono.hpp>
+#include <handystats/chrono_impl.hpp>
 #include <handystats/metrics/timer.hpp>
 
 #include <handystats/json/timer_json_writer.hpp>

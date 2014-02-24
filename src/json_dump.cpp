@@ -1,7 +1,7 @@
 #include <handystats/json_dump.hpp>
 
-#include <handystats/internal.hpp>
-#include <handystats/json.hpp>
+#include <handystats/internal_impl.hpp>
+#include <handystats/json_impl.hpp>
 
 namespace handystats {
 

@@ -28,7 +28,6 @@ enum internal_monitor_index {
 extern std::unordered_map<std::string, internal_monitor> monitors;
 
 void process_event_message(events::event_message* message);
-void process_event_message(events::event_message* message, internal_monitor& monitor);
 
 void initialize();
 void clean_up();

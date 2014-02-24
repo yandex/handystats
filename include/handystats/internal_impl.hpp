@@ -8,7 +8,7 @@ namespace handystats { namespace internal {
 void process_event_message(events::event_message* message);
 
 void initialize();
-void clean_up();
+void finalize();
 
 }} // namespace handystats::internal
 

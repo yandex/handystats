@@ -13,7 +13,7 @@ void push_event_message(events::event_message* message);
 events::event_message* pop_event_message();
 
 void initialize();
-void clean_up();
+void finalize();
 
 }} // namespace handystats::message_queue
 

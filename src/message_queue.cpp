@@ -41,7 +41,7 @@ void initialize() {
 	}
 }
 
-void clean_up() {
+void finalize() {
 	if (event_message_queue) {
 		while (!event_message_queue->empty()) {
 			events::event_message* message = pop_event_message();

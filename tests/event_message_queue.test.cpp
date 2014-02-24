@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 
 #include <handystats/measuring_points.hpp>
+#include <handystats/message_queue_impl.hpp>
 
 TEST(EventMessageQueue, SinglePushCorrectlyAddsMessage) {
 	handystats::message_queue::initialize();
@@ -17,7 +18,7 @@ TEST(EventMessageQueue, SinglePushCorrectlyAddsMessage) {
 	HANDY_COUNTER_DECREMENT("counter.name", 11);
 	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 3);
 
-	handystats::message_queue::clean_up();
+	handystats::message_queue::finalize();
 }
 
 TEST(EventMessageQueue, MultiplePushesCorrectlyAddMessages) {
@@ -29,7 +30,7 @@ TEST(EventMessageQueue, MultiplePushesCorrectlyAddMessages) {
 
 	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 3);
 
-	handystats::message_queue::clean_up();
+	handystats::message_queue::finalize();
 }
 
 TEST(EventMessageQueue, PushDifferentMessages) {
@@ -41,6 +42,6 @@ TEST(EventMessageQueue, PushDifferentMessages) {
 
 	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 3);
 
-	handystats::message_queue::clean_up();
+	handystats::message_queue::finalize();
 }
 

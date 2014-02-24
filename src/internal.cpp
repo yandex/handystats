@@ -50,7 +50,7 @@ void process_event_message(events::event_message* message) {
 void initialize() {
 }
 
-void clean_up() {
+void finalize() {
 	for (auto metric_entry : internal_metrics) {
 		switch (metric_entry.second.which()) {
 			case internal_metric_index::INTERNAL_COUNTER:

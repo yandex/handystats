@@ -7,9 +7,11 @@
 
 #include <gtest/gtest.h>
 
-#include "handystats/handystats.hpp"
-
+#include <handystats/core.hpp>
+#include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>
+
+#include <handystats/internal_impl.hpp>
 
 TEST(HandyCounterTest, HandyBubbleSortMonitoring) {
 	HANDY_ENABLE();
@@ -49,9 +51,6 @@ TEST(HandyCounterTest, HandyBubbleSortMonitoring) {
 		->get().first;
 
 	ASSERT_EQ(handy_count, swaps_count);
-
-	auto counter = boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["swaps.count"]);
-	std::cout << handystats::json::write_to_json_string(counter) << std::endl;
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 
@@ -95,9 +94,6 @@ TEST(HandyGaugeTest, HandyQueueSizeMonitoring) {
 		);
 
 	ASSERT_EQ(handy_max_size, max_queue_size);
-
-	auto gauge = boost::get<handystats::internal::internal_gauge*>(handystats::internal::monitors["queue.size"]);
-	std::cout << handystats::json::write_to_json_string(gauge) << std::endl;
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 

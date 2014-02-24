@@ -7,9 +7,11 @@
 
 #include <gtest/gtest.h>
 
-#include "handystats/handystats.hpp"
-
+#include <handystats/core.hpp>
+#include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>
+
+#include <handystats/internal_impl.hpp>
 
 class HandyTimerTest : public ::testing::Test {
 protected:

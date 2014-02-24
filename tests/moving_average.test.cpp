@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
-#include <handystats/accumulators_impl.hpp>
+#include <boost/accumulators/accumulators.hpp>
+
+#include <handystats/accumulators/moving_average.hpp>
 
 using namespace boost::accumulators;
 

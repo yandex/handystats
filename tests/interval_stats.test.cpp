@@ -2,7 +2,13 @@
 
 #include <gtest/gtest.h>
 
-#include <handystats/accumulators_impl.hpp>
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+
+#include <handystats/accumulators/interval_count.hpp>
+#include <handystats/accumulators/interval_sum.hpp>
+#include <handystats/accumulators/interval_mean.hpp>
+
 #include <handystats/chrono_impl.hpp>
 
 using namespace boost::accumulators;

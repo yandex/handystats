@@ -1,10 +1,9 @@
 #ifndef HANDYSTATS_INTERVAL_COUNT_H_
 #define HANDYSTATS_INTERVAL_COUNT_H_
 
-#include <iostream>
-
 #include <boost/accumulators/framework/accumulator_base.hpp>
 #include <boost/accumulators/framework/parameters/sample.hpp>
+#include <boost/accumulators/statistics/count.hpp>
 
 #include <handystats/chrono_impl.hpp>
 #include <handystats/math_utils_impl.hpp>
@@ -17,8 +16,8 @@ template <typename value_type>
 struct interval_count_impl : accumulator_base {
 
 	typedef double result_type;
-	typedef handystats::chrono::default_duration duration;
-	typedef handystats::chrono::default_time_point time_point;
+	typedef typename handystats::chrono::default_duration duration;
+	typedef typename handystats::chrono::default_time_point time_point;
 
 	template <typename Args>
 	interval_count_impl(Args const& args)

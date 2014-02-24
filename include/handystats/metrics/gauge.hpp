@@ -3,6 +3,9 @@
 
 #include <utility>
 
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics.hpp>
+
 #include <handystats/chrono_impl.hpp>
 #include <handystats/accumulators_impl.hpp>
 

@@ -4,7 +4,6 @@
 #include <utility>
 
 #include <handystats/chrono_impl.hpp>
-#include <handystats/accumulators_impl.hpp>
 
 #include <handystats/metrics/gauge.hpp>
 

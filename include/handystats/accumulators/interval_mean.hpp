@@ -2,12 +2,8 @@
 #define HANDYSTATS_INTERVAL_MEAN_H_
 
 #include <boost/accumulators/framework/accumulator_base.hpp>
-#include <boost/accumulators/framework/parameters/sample.hpp>
+#include <boost/accumulators/statistics/count.hpp>
 
-#include <handystats/chrono_impl.hpp>
-#include <handystats/math_utils_impl.hpp>
-#include <handystats/accumulators/parameters/time_interval.hpp>
-#include <handystats/accumulators/parameters/timestamp.hpp>
 #include <handystats/accumulators/interval_count.hpp>
 #include <handystats/accumulators/interval_sum.hpp>
 

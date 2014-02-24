@@ -3,6 +3,7 @@
 
 #include <boost/accumulators/framework/accumulator_base.hpp>
 #include <boost/accumulators/framework/parameters/sample.hpp>
+#include <boost/accumulators/statistics/count.hpp>
 
 #include <handystats/chrono_impl.hpp>
 #include <handystats/math_utils_impl.hpp>

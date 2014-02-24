@@ -1,4 +1,4 @@
-#include <handystats/internal/internal_gauge.hpp>
+#include <handystats/internal_metrics/internal_gauge.hpp>
 #include <handystats/events/gauge_events.hpp>
 
 namespace handystats { namespace internal {

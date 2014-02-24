@@ -7,11 +7,11 @@
 
 #include <gtest/gtest.h>
 
-#include <handystats/core.hpp>
+#include <handystats/operation.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>
 
-#include <handystats/internal_impl.hpp>
+#include <handystats/internal_metrics_impl.hpp>
 
 class HandyCounterTest : public ::testing::Test {
 protected:
@@ -64,7 +64,7 @@ TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_count =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["swaps.count"])
+		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["swaps.count"])
 		->base_counter
 		->get().first;
 
@@ -101,7 +101,7 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_max_size =
 		boost::accumulators::max(
-			boost::get<handystats::internal::internal_gauge*>(handystats::internal::monitors["queue.size"])
+			boost::get<handystats::internal::internal_gauge*>(handystats::internal::internal_metrics["queue.size"])
 			->base_gauge
 			->get_stats()
 			.values
@@ -124,7 +124,7 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_value_1 =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["test.counter"])
+		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
 		->base_counter
 		->get().first;
 
@@ -143,7 +143,7 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_value_2 =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["test.counter"])
+		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
 		->base_counter
 		->get().first;
 
@@ -166,7 +166,7 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_value_1 =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::monitors["test.metric"])
+		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.metric"])
 		->base_counter
 		->get().first;
 
@@ -185,7 +185,7 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_value_2 =
-		boost::get<handystats::internal::internal_gauge*>(handystats::internal::monitors["test.metric"])
+		boost::get<handystats::internal::internal_gauge*>(handystats::internal::internal_metrics["test.metric"])
 		->base_gauge
 		->get().first;
 

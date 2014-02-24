@@ -1,14 +1,17 @@
-#include "handystats/core.hpp"
+#include <thread>
+
+#include <handystats/operation.hpp>
 
 #include <handystats/metrics/gauge.hpp>
 #include <handystats/message_queue_impl.hpp>
+#include <handystats/internal_metrics_impl.hpp>
 #include <handystats/internal_impl.hpp>
 #include <handystats/json_dump_impl.hpp>
 
 namespace handystats {
 
 metrics::gauge event_message_queue_size;
-metrics::gauge monitors_size;
+metrics::gauge internal_metrics_size;
 metrics::gauge message_processing_time;
 metrics::gauge message_push_time;
 metrics::gauge message_pop_time;
@@ -38,7 +41,7 @@ void process_message_queue() {
 		message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - processing_start_time).count(), timestamp);
 		message_delete_time.set(std::chrono::duration_cast<chrono::default_duration>(processing_end_time - delete_start_time).count(), timestamp);
 		event_message_queue_size.set(message_queue::event_message_queue->unsafe_size(), timestamp);
-		monitors_size.set(internal::monitors.size(), timestamp);
+		internal_metrics_size.set(internal::internal_metrics.size(), timestamp);
 	}
 
 	json::update_json_dump();

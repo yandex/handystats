@@ -3,12 +3,12 @@
 
 #include <handystats/chrono_impl.hpp>
 #include <handystats/json_impl.hpp>
-#include <handystats/internal_impl.hpp>
+#include <handystats/internal_metrics_impl.hpp>
 
 namespace handystats {
 
 extern metrics::gauge event_message_queue_size;
-extern metrics::gauge monitors_size;
+extern metrics::gauge internal_metrics_size;
 extern metrics::gauge message_processing_time;
 extern metrics::gauge message_push_time;
 extern metrics::gauge message_pop_time;
@@ -37,21 +37,21 @@ std::shared_ptr<const std::string> create_json_dump() {
 	write_to_json_value(dump_timestamp, &timestamp_value);
 	dump_value.AddMember("dump-timestamp", timestamp_value, memoryPoolAllocator);
 
-	for (auto monitor_entry : internal::monitors) {
-		rapidjson::Value monitor_value;
-		switch (monitor_entry.second.which()) {
-			case internal::internal_monitor_index::INTERNAL_GAUGE:
-				write_to_json_value(boost::get<internal::internal_gauge*>(monitor_entry.second), &monitor_value, memoryPoolAllocator);
+	for (auto metric_entry : internal::internal_metrics) {
+		rapidjson::Value metric_value;
+		switch (metric_entry.second.which()) {
+			case internal::internal_metric_index::INTERNAL_GAUGE:
+				write_to_json_value(boost::get<internal::internal_gauge*>(metric_entry.second), &metric_value, memoryPoolAllocator);
 				break;
-			case internal::internal_monitor_index::INTERNAL_COUNTER:
-				write_to_json_value(boost::get<internal::internal_counter*>(monitor_entry.second), &monitor_value, memoryPoolAllocator);
+			case internal::internal_metric_index::INTERNAL_COUNTER:
+				write_to_json_value(boost::get<internal::internal_counter*>(metric_entry.second), &metric_value, memoryPoolAllocator);
 				break;
-			case internal::internal_monitor_index::INTERNAL_TIMER:
-				write_to_json_value(boost::get<internal::internal_timer*>(monitor_entry.second), &monitor_value, memoryPoolAllocator);
+			case internal::internal_metric_index::INTERNAL_TIMER:
+				write_to_json_value(boost::get<internal::internal_timer*>(metric_entry.second), &metric_value, memoryPoolAllocator);
 				break;
 		}
 
-		dump_value.AddMember(monitor_entry.first.c_str(), memoryPoolAllocator, monitor_value, memoryPoolAllocator);
+		dump_value.AddMember(metric_entry.first.c_str(), memoryPoolAllocator, metric_value, memoryPoolAllocator);
 	}
 
 	{
@@ -60,9 +60,9 @@ std::shared_ptr<const std::string> create_json_dump() {
 		dump_value.AddMember("message-queue-size", queue_size_value, memoryPoolAllocator);
 	}
 	{
-		rapidjson::Value monitors_size_value;
-		write_to_json_value(&monitors_size, &monitors_size_value, memoryPoolAllocator);
-		dump_value.AddMember("monitors-size", monitors_size_value, memoryPoolAllocator);
+		rapidjson::Value internal_metrics_size_value;
+		write_to_json_value(&internal_metrics_size, &internal_metrics_size_value, memoryPoolAllocator);
+		dump_value.AddMember("internal-metrics-size", internal_metrics_size_value, memoryPoolAllocator);
 	}
 	{
 		rapidjson::Value processing_time_value;

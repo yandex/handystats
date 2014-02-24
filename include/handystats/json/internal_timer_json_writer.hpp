@@ -10,7 +10,7 @@
 #include <handystats/json/timer_json_writer.hpp>
 #include <handystats/json/gauge_json_writer.hpp>
 
-#include <handystats/internal/internal_timer.hpp>
+#include <handystats/internal_metrics/internal_timer.hpp>
 
 namespace handystats { namespace json {
 

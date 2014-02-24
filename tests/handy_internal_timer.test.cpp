@@ -7,11 +7,11 @@
 
 #include <gtest/gtest.h>
 
-#include <handystats/core.hpp>
+#include <handystats/operation.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>
 
-#include <handystats/internal_impl.hpp>
+#include <handystats/internal_metrics_impl.hpp>
 
 class HandyTimerTest : public ::testing::Test {
 protected:
@@ -42,12 +42,12 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	ASSERT_TRUE(
-			boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"])
+			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
 			->instances.empty()
 			);
 
 	auto agg_stats =
-		boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"])
+		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
 		->aggregator
 		.get_stats()
 		.values;
@@ -75,12 +75,12 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	ASSERT_TRUE(
-			boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"])
+			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
 			->instances.empty()
 			);
 
 	auto agg_stats =
-		boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"])
+		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
 		->aggregator
 		.get_stats()
 		.values;
@@ -112,12 +112,12 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	ASSERT_TRUE(
-			boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"])
+			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
 			->instances.empty()
 			);
 
 	auto agg_stats =
-		boost::get<handystats::internal::internal_timer*>(handystats::internal::monitors["sleep.time"])
+		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
 		->aggregator
 		.get_stats()
 		.values;

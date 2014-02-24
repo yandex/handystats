@@ -9,7 +9,7 @@
 
 #include <handystats/json/gauge_json_writer.hpp>
 
-#include <handystats/internal/internal_gauge.hpp>
+#include <handystats/internal_metrics/internal_gauge.hpp>
 
 namespace handystats { namespace json {
 

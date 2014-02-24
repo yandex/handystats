@@ -1,4 +1,4 @@
-#include <handystats/internal/internal_timer.hpp>
+#include <handystats/internal_metrics/internal_timer.hpp>
 #include <handystats/events/timer_events.hpp>
 
 namespace handystats { namespace internal {

@@ -26,11 +26,11 @@ struct internal_counter
 		}
 	}
 
-	void process_event_message(events::event_message* message);
+	void process_event_message(const events::event_message& message);
 
-	void process_init_event(events::event_message* message);
-	void process_increment_event(events::event_message* message);
-	void process_decrement_event(events::event_message* message);
+	void process_init_event(const events::event_message& message);
+	void process_increment_event(const events::event_message& message);
+	void process_decrement_event(const events::event_message& message);
 
 	std::string to_string() const;
 };

@@ -1,9 +1,8 @@
-#include "handystats/internal_impl.hpp"
 #include "handystats/events/timer_events.hpp"
 
 namespace handystats { namespace events {
 
-event_message* timer_init_event(
+std::shared_ptr<event_message> timer_init_event(
 		const std::string timer_name,
 		const uint64_t instance_id,
 		metrics::timer::time_point timestamp
@@ -19,7 +18,7 @@ event_message* timer_init_event(
 	message->event_type = new timer_event(timer_event::INIT);
 	message->event_data.push_back(new uint64_t(instance_id));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_init_event(event_message* message) {
@@ -30,7 +29,7 @@ void delete_timer_init_event(event_message* message) {
 }
 
 
-event_message* timer_start_event(
+std::shared_ptr<event_message> timer_start_event(
 		const std::string timer_name,
 		const uint64_t instance_id,
 		metrics::timer::time_point timestamp
@@ -46,7 +45,7 @@ event_message* timer_start_event(
 	message->event_type = new timer_event(timer_event::START);
 	message->event_data.push_back(new uint64_t(instance_id));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_start_event(event_message* message) {
@@ -57,7 +56,7 @@ void delete_timer_start_event(event_message* message) {
 }
 
 
-event_message* timer_stop_event(
+std::shared_ptr<event_message> timer_stop_event(
 		const std::string timer_name,
 		const uint64_t instance_id,
 		metrics::timer::time_point timestamp
@@ -73,7 +72,7 @@ event_message* timer_stop_event(
 	message->event_type = new timer_event(timer_event::STOP);
 	message->event_data.push_back(new uint64_t(instance_id));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_stop_event(event_message* message) {
@@ -84,7 +83,7 @@ void delete_timer_stop_event(event_message* message) {
 }
 
 
-event_message* timer_discard_event(
+std::shared_ptr<event_message> timer_discard_event(
 		const std::string timer_name,
 		const uint64_t instance_id,
 		metrics::timer::time_point timestamp
@@ -100,7 +99,7 @@ event_message* timer_discard_event(
 	message->event_type = new timer_event(timer_event::DISCARD);
 	message->event_data.push_back(new uint64_t(instance_id));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_discard_event(event_message* message) {
@@ -111,7 +110,7 @@ void delete_timer_discard_event(event_message* message) {
 }
 
 
-event_message* timer_heartbeat_event(
+std::shared_ptr<event_message> timer_heartbeat_event(
 		const std::string timer_name,
 		const uint64_t instance_id,
 		metrics::timer::time_point timestamp
@@ -127,7 +126,7 @@ event_message* timer_heartbeat_event(
 	message->event_type = new timer_event(timer_event::HEARTBEAT);
 	message->event_data.push_back(new uint64_t(instance_id));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_heartbeat_event(event_message* message) {

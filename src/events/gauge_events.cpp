@@ -1,9 +1,8 @@
-#include "handystats/internal_impl.hpp"
 #include "handystats/events/gauge_events.hpp"
 
 namespace handystats { namespace events {
 
-event_message* gauge_init_event(
+std::shared_ptr<event_message> gauge_init_event(
 		const std::string gauge_name,
 		metrics::gauge::value_type init_value,
 		metrics::gauge::time_point timestamp
@@ -19,7 +18,7 @@ event_message* gauge_init_event(
 	message->event_type = new gauge_event(gauge_event::INIT);
 	message->event_data.push_back(new metrics::gauge::value_type(init_value));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_gauge_init_event(event_message* message) {
@@ -30,7 +29,7 @@ void delete_gauge_init_event(event_message* message) {
 }
 
 
-event_message* gauge_set_event(
+std::shared_ptr<event_message> gauge_set_event(
 		const std::string gauge_name,
 		metrics::gauge::value_type value,
 		metrics::gauge::time_point timestamp
@@ -46,7 +45,7 @@ event_message* gauge_set_event(
 	message->event_type = new gauge_event(gauge_event::SET);
 	message->event_data.push_back(new metrics::gauge::value_type(value));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_gauge_set_event(event_message* message) {

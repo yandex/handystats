@@ -1,6 +1,8 @@
 #ifndef HANDYSTATS_COUNTER_EVENT_H_
 #define HANDYSTATS_COUNTER_EVENT_H_
 
+#include <memory>
+
 #include "handystats/metrics/counter.hpp"
 #include "handystats/events/event_message.hpp"
 
@@ -13,19 +15,19 @@ enum class counter_event {
 };
 
 
-event_message* counter_init_event(
+std::shared_ptr<event_message> counter_init_event(
 		const std::string counter_name,
 		metrics::counter::value_type init_value,
 		metrics::counter::time_point timestamp = metrics::counter::clock::now()
 		);
 
-event_message* counter_increment_event(
+std::shared_ptr<event_message> counter_increment_event(
 		const std::string counter_name,
 		metrics::counter::value_type value,
 		metrics::counter::time_point timestamp = metrics::counter::clock::now()
 		);
 
-event_message* counter_decrement_event(
+std::shared_ptr<event_message> counter_decrement_event(
 		const std::string counter_name,
 		metrics::counter::value_type value,
 		metrics::counter::time_point timestamp = metrics::counter::clock::now()

@@ -5,7 +5,7 @@
 
 namespace handystats { namespace internal {
 
-void process_event_message(events::event_message* message);
+void process_event_message(const events::event_message& message);
 
 void initialize();
 void finalize();

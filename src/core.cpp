@@ -22,14 +22,12 @@ void process_message_queue() {
 	}
 
 	auto processing_start_time = chrono::default_clock::now();
-
-	events::event_message* message = message_queue::pop_event_message();
-	internal::process_event_message(message);
-	events::delete_event_message(message);
-
-	auto processing_end_time = chrono::default_clock::now();
+	auto message = message_queue::pop_event_message();
 
 	if (message) {
+		internal::process_event_message(*message);
+		auto processing_end_time = chrono::default_clock::now();
+
 		internal::message_processing_time.set(std::chrono::duration_cast<chrono::default_duration>(processing_end_time - processing_start_time).count(), processing_end_time);
 		internal::internal_metrics_size.set(internal::internal_metrics.size(), processing_end_time);
 	}

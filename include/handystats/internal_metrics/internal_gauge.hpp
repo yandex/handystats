@@ -26,10 +26,10 @@ struct internal_gauge
 		}
 	}
 
-	void process_event_message(events::event_message* message);
+	void process_event_message(const events::event_message& message);
 
-	void process_init_event(events::event_message* message);
-	void process_set_event(events::event_message* message);
+	void process_init_event(const events::event_message& message);
+	void process_set_event(const events::event_message& message);
 
 	std::string to_string() const;
 };

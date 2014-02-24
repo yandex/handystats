@@ -49,13 +49,13 @@ struct internal_timer
 
 	void check_on_timeout(time_point timestamp);
 
-	void process_event_message(events::event_message* message);
+	void process_event_message(const events::event_message& message);
 
-	void process_init_event(events::event_message* message);
-	void process_start_event(events::event_message* message);
-	void process_stop_event(events::event_message* message);
-	void process_discard_event(events::event_message* message);
-	void process_heartbeat_event(events::event_message* message);
+	void process_init_event(const events::event_message& message);
+	void process_start_event(const events::event_message& message);
+	void process_stop_event(const events::event_message& message);
+	void process_discard_event(const events::event_message& message);
+	void process_heartbeat_event(const events::event_message& message);
 
 	std::string to_string() const;
 };

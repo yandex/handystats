@@ -1,9 +1,8 @@
-#include "handystats/internal_impl.hpp"
 #include "handystats/events/counter_events.hpp"
 
 namespace handystats { namespace events {
 
-event_message* counter_init_event(
+std::shared_ptr<event_message> counter_init_event(
 		const std::string counter_name,
 		metrics::counter::value_type init_value,
 		metrics::counter::time_point timestamp
@@ -19,7 +18,7 @@ event_message* counter_init_event(
 	message->event_type = new counter_event(counter_event::INIT);
 	message->event_data.push_back(new metrics::counter::value_type(init_value));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_counter_init_event(event_message* message) {
@@ -30,7 +29,7 @@ void delete_counter_init_event(event_message* message) {
 }
 
 
-event_message* counter_increment_event(
+std::shared_ptr<event_message> counter_increment_event(
 		const std::string counter_name,
 		metrics::counter::value_type value,
 		metrics::counter::time_point timestamp
@@ -46,7 +45,7 @@ event_message* counter_increment_event(
 	message->event_type = new counter_event(counter_event::INCREMENT);
 	message->event_data.push_back(new metrics::counter::value_type(value));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_counter_increment_event(event_message* message) {
@@ -57,7 +56,7 @@ void delete_counter_increment_event(event_message* message) {
 }
 
 
-event_message* counter_decrement_event(
+std::shared_ptr<event_message> counter_decrement_event(
 		const std::string counter_name,
 		metrics::counter::value_type value,
 		metrics::counter::time_point timestamp
@@ -73,7 +72,7 @@ event_message* counter_decrement_event(
 	message->event_type = new counter_event(counter_event::DECREMENT);
 	message->event_data.push_back(new metrics::counter::value_type(value));
 
-	return message;
+	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_counter_decrement_event(event_message* message) {

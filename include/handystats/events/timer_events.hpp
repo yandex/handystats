@@ -2,6 +2,7 @@
 #define HANDYSTATS_TIMER_EVENT_H_
 
 #include <cstdint>
+#include <memory>
 
 #include "handystats/events/event_message.hpp"
 #include "handystats/metrics/timer.hpp"
@@ -17,31 +18,31 @@ enum class timer_event {
 };
 
 
-event_message* timer_init_event(
+std::shared_ptr<event_message> timer_init_event(
 		const std::string timer_name,
 		const uint64_t instance_id = -1,
 		metrics::timer::time_point timestamp = metrics::timer::clock::now()
 		);
 
-event_message* timer_start_event(
+std::shared_ptr<event_message> timer_start_event(
 		const std::string timer_name,
 		const uint64_t instance_id = -1,
 		metrics::timer::time_point timestamp = metrics::timer::clock::now()
 		);
 
-event_message* timer_stop_event(
+std::shared_ptr<event_message> timer_stop_event(
 		const std::string timer_name,
 		const uint64_t instance_id = -1,
 		metrics::timer::time_point timestamp = metrics::timer::clock::now()
 		);
 
-event_message* timer_discard_event(
+std::shared_ptr<event_message> timer_discard_event(
 		const std::string timer_name,
 		const uint64_t instance_id = -1,
 		metrics::timer::time_point timestamp = metrics::timer::clock::now()
 		);
 
-event_message* timer_heartbeat_event(
+std::shared_ptr<event_message> timer_heartbeat_event(
 		const std::string timer_name,
 		const uint64_t instance_id = -1,
 		metrics::timer::time_point timestamp = metrics::timer::clock::now()

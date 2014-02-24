@@ -1,5 +1,5 @@
-#ifndef HANDYSTATS_GAUGE_EVENT_MESSAGE_H_
-#define HANDYSTATS_GAUGE_EVENT_MESSAGE_H_
+#ifndef HANDYSTATS_GAUGE_MEASURING_POINTS_H_
+#define HANDYSTATS_GAUGE_MEASURING_POINTS_H_
 
 #include "handystats/message_queue_impl.hpp"
 #include "handystats/events/gauge_events.hpp"
@@ -25,4 +25,4 @@ inline void HANDY_GAUGE_SET(
 }
 
 
-#endif // HANDYSTATS_GAUGE_EVENT_MESSAGE_H_
+#endif // HANDYSTATS_GAUGE_MEASURING_POINTS_H_

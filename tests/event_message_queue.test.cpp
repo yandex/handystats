@@ -3,9 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "handystats/message_queue/counter_event_message.hpp"
-#include "handystats/message_queue/gauge_event_message.hpp"
-#include "handystats/message_queue/timer_event_message.hpp"
+#include <handystats/measuring_points.hpp>
 
 TEST(EventMessageQueue, SinglePushCorrectlyAddsMessage) {
 	handystats::message_queue::initialize();

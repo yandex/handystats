@@ -1,5 +1,5 @@
-#ifndef HANDYSTATS_TIMER_EVENT_MESSAGE_H_
-#define HANDYSTATS_TIMER_EVENT_MESSAGE_H_
+#ifndef HANDYSTATS_TIMER_MEASURING_POINTS_H_
+#define HANDYSTATS_TIMER_MEASURING_POINTS_H_
 
 #include "handystats/message_queue_impl.hpp"
 #include "handystats/events/timer_events.hpp"
@@ -54,5 +54,5 @@ inline void HANDY_TIMER_HEARTBEAT(
 	handystats::message_queue::push_event_message(message);
 }
 
-#endif // HANDYSTATS_TIMER_EVENT_MESSAGE_H_
+#endif // HANDYSTATS_TIMER_MEASURING_POINTS_H_
 

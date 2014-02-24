@@ -1,5 +1,5 @@
-#ifndef HANDY_COUNTER_EVENT_MESSAGE_H_
-#define HANDY_COUNTER_EVENT_MESSAGE_H_
+#ifndef HANDY_COUNTER_MEASURING_POINTS_H_
+#define HANDY_COUNTER_MEASURING_POINTS_H_
 
 #include "handystats/message_queue_impl.hpp"
 #include "handystats/events/counter_events.hpp"
@@ -34,4 +34,4 @@ inline void HANDY_COUNTER_DECREMENT(
 	handystats::message_queue::push_event_message(message);
 }
 
-#endif // HANDYSTATS_COUNTER_EVENT_MESSAGE_H_
+#endif // HANDYSTATS_COUNTER_MEASURING_POINTS_H_

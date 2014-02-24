@@ -6,7 +6,7 @@
 #include "handystats/chrono_impl.hpp"
 #include "handystats/message_queue_impl.hpp"
 #include "handystats/internal_impl.hpp"
-#include "handystats/json_dump.hpp"
+#include <handystats/json_dump_impl.hpp>
 
 namespace handystats {
 

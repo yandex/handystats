@@ -1,7 +1,9 @@
 #include <handystats/json_dump.hpp>
+#include <handystats/json_dump_impl.hpp>
 
-#include <handystats/internal_impl.hpp>
+#include <handystats/chrono_impl.hpp>
 #include <handystats/json_impl.hpp>
+#include <handystats/internal_impl.hpp>
 
 namespace handystats {
 
@@ -102,4 +104,9 @@ void update_json_dump() {
 }
 
 }} // namespace handystats::json
+
+
+std::shared_ptr<const std::string> HANDY_JSON_DUMP() {
+	return handystats::json::get_json_dump();
+}
 

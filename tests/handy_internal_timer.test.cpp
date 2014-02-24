@@ -16,10 +16,10 @@
 class HandyTimerTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
-		HANDY_ENABLE();
+		HANDY_INIT();
 	}
 	virtual void TearDown() {
-		HANDY_DISABLE();
+		HANDY_FINALIZE();
 	}
 };
 

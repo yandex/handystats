@@ -13,9 +13,27 @@
 
 #include <handystats/internal_impl.hpp>
 
-TEST(HandyCounterTest, HandyBubbleSortMonitoring) {
-	HANDY_ENABLE();
+class HandyCounterTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		HANDY_INIT();
+	}
+	virtual void TearDown() {
+		HANDY_FINALIZE();
+	}
+};
 
+class HandyGaugeTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		HANDY_INIT();
+	}
+	virtual void TearDown() {
+		HANDY_FINALIZE();
+	}
+};
+
+TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 	const int SIZE = 50;
 	std::vector<int> data(SIZE);
 	for (auto& element : data) {
@@ -53,13 +71,9 @@ TEST(HandyCounterTest, HandyBubbleSortMonitoring) {
 	ASSERT_EQ(handy_count, swaps_count);
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
-
-	HANDY_DISABLE();
 }
 
-TEST(HandyGaugeTest, HandyQueueSizeMonitoring) {
-	HANDY_ENABLE();
-
+TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 	const int OPER_COUNT = 5000;
 	std::queue<int> data;
 
@@ -96,12 +110,10 @@ TEST(HandyGaugeTest, HandyQueueSizeMonitoring) {
 	ASSERT_EQ(handy_max_size, max_queue_size);
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
-
-	HANDY_DISABLE();
 }
 
 TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
-	HANDY_ENABLE();
+	HANDY_INIT();
 
 	const int value_1 = 10;
 	HANDY_COUNTER_INCREMENT("test.counter", value_1);
@@ -118,9 +130,9 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 
 	ASSERT_EQ(handy_value_1, value_1);
 
-	HANDY_DISABLE();
+	HANDY_FINALIZE();
 
-	HANDY_ENABLE();
+	HANDY_INIT();
 
 	const int value_2 = 100;
 	HANDY_COUNTER_INCREMENT("test.counter", value_2);
@@ -139,11 +151,11 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 
-	HANDY_DISABLE();
+	HANDY_FINALIZE();
 }
 
 TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
-	HANDY_ENABLE();
+	HANDY_INIT();
 
 	const int value_1 = 10;
 	HANDY_COUNTER_INCREMENT("test.metric", value_1);
@@ -160,9 +172,9 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 
 	ASSERT_EQ(handy_value_1, value_1);
 
-	HANDY_DISABLE();
+	HANDY_FINALIZE();
 
-	HANDY_ENABLE();
+	HANDY_INIT();
 
 	const int value_2 = 100;
 	HANDY_GAUGE_SET("test.metric", value_2);
@@ -181,5 +193,5 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 
-	HANDY_DISABLE();
+	HANDY_FINALIZE();
 }

@@ -3,7 +3,7 @@
 
 #include <thread>
 
-void HANDY_ENABLE();
-void HANDY_DISABLE();
+void HANDY_INIT();
+void HANDY_FINALIZE();
 
 #endif // HANDYSTATS_CORE_H_

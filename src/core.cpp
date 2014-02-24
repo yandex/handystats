@@ -91,13 +91,13 @@ void disable_handy() {
 } // namespace handystats
 
 
-void HANDY_ENABLE() {
+void HANDY_INIT() {
 	if (!handystats::handy_enabled) {
 		handystats::enable_handy();
 	}
 }
 
-void HANDY_DISABLE() {
+void HANDY_FINALIZE() {
 	if (handystats::handy_enabled) {
 		handystats::disable_handy();
 	}

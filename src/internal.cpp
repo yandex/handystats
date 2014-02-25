@@ -1,5 +1,5 @@
+#include <handystats/events/event_message.hpp>
 #include <handystats/internal_metrics_impl.hpp>
-#include "handystats/internal_impl.hpp"
 
 namespace handystats { namespace internal {
 

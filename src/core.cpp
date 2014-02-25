@@ -3,9 +3,9 @@
 
 #include <handystats/operation.hpp>
 
+#include <handystats/events/event_message.hpp>
 #include <handystats/message_queue_impl.hpp>
 #include <handystats/internal_metrics_impl.hpp>
-#include <handystats/internal_impl.hpp>
 #include <handystats/internal_statistics_impl.hpp>
 
 namespace handystats { namespace json {
@@ -13,6 +13,17 @@ namespace handystats { namespace json {
 void update_json_dump();
 
 }} // namespace handystats::json
+
+
+namespace handystats { namespace internal {
+
+void process_event_message(const events::event_message&);
+
+void initialize();
+void finalize();
+
+}} // namespace handystats::internal
+
 
 namespace handystats {
 

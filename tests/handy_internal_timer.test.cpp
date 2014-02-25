@@ -12,6 +12,7 @@
 #include <handystats/json_dump.hpp>
 
 #include <handystats/internal_metrics_impl.hpp>
+#include <handystats/message_queue_impl.hpp>
 
 class HandyTimerTest : public ::testing::Test {
 protected:

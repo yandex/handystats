@@ -1,10 +1,14 @@
 #ifndef HANDYSTATS_INTERNAL_COUNTER_H_
 #define HANDYSTATS_INTERNAL_COUNTER_H_
 
-#include <string>
-
 #include <handystats/metrics/counter.hpp>
-#include <handystats/events/event_message.hpp>
+
+namespace handystats { namespace events {
+
+struct event_message;
+
+}} // namespace handystats::events
+
 
 namespace handystats { namespace internal {
 
@@ -31,8 +35,6 @@ struct internal_counter
 	void process_init_event(const events::event_message& message);
 	void process_increment_event(const events::event_message& message);
 	void process_decrement_event(const events::event_message& message);
-
-	std::string to_string() const;
 };
 
 }} // namespace handystats::internal

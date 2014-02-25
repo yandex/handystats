@@ -1,11 +1,11 @@
 #include "handystats/events/event_message.hpp"
 
-#include "handystats/events/counter_events.hpp"
 #include "handystats/events/timer_events.hpp"
 
 namespace handystats { namespace events {
 
 void delete_gauge_event(event_message*);
+void delete_counter_event(event_message*);
 
 }} // namespace handystats::events
 

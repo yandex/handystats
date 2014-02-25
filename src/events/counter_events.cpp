@@ -1,4 +1,9 @@
-#include "handystats/events/counter_events.hpp"
+#include <memory>
+
+#include <handystats/metrics/counter.hpp>
+#include <handystats/events/event_message.hpp>
+#include <handystats/events/counter_events.hpp>
+
 
 namespace handystats { namespace events {
 

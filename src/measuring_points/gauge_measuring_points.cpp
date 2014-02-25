@@ -1,7 +1,15 @@
+#include <memory>
+
+#include <handystats/message_queue_impl.hpp>
 #include <handystats/measuring_points/gauge_measuring_points.hpp>
 
-#include <handystats/events/gauge_events.hpp>
-#include <handystats/message_queue_impl.hpp>
+namespace handystats { namespace events {
+
+std::shared_ptr<event_message> gauge_init_event(const std::string, metrics::gauge::value_type, metrics::gauge::time_point);
+std::shared_ptr<event_message> gauge_set_event(const std::string, metrics::gauge::value_type, metrics::gauge::time_point);
+
+}} // namespace handystats::events
+
 
 void HANDY_GAUGE_INIT(
 		const std::string gauge_name,

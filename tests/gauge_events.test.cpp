@@ -1,13 +1,25 @@
+#include <memory>
+
 #include <gtest/gtest.h>
 
-#include "handystats/events/gauge_events.hpp"
+#include <handystats/metrics/gauge.hpp>
+#include <handystats/events/event_message.hpp>
+#include <handystats/events/gauge_events.hpp>
+
+namespace handystats { namespace events {
+
+std::shared_ptr<event_message> gauge_init_event(const std::string, metrics::gauge::value_type, metrics::gauge::time_point);
+std::shared_ptr<event_message> gauge_set_event(const std::string, metrics::gauge::value_type, metrics::gauge::time_point);
+
+}} // namespace handystats::events
+
 
 using namespace handystats::events;
 
 TEST(GaugeEventsTest, TestGaugeInitEvent) {
 	const std::string gauge_name = "proc.load";
 	const double init_value = 0.75;
-	auto message = gauge_init_event(gauge_name, init_value);
+	auto message = gauge_init_event(gauge_name, init_value, handystats::metrics::gauge::clock::now());
 
 	ASSERT_EQ(message->destination_name, gauge_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::GAUGE);
@@ -19,7 +31,7 @@ TEST(GaugeEventsTest, TestGaugeInitEvent) {
 TEST(GaugeEventsTest, TestGaugeSetEvent) {
 	const std::string gauge_name = "proc.load";
 	const double value = 1.5;
-	auto message = gauge_set_event(gauge_name, value);
+	auto message = gauge_set_event(gauge_name, value, handystats::metrics::gauge::clock::now());
 
 	ASSERT_EQ(message->destination_name, gauge_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::GAUGE);

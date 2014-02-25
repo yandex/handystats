@@ -1,5 +1,7 @@
 #include <thread>
 #include <mutex>
+#include <string>
+#include <unordered_map>
 
 #include <handystats/operation.hpp>
 
@@ -16,6 +18,8 @@ void update_json_dump();
 
 
 namespace handystats { namespace internal {
+
+extern std::unordered_map<std::string, internal_metric> internal_metrics;
 
 void process_event_message(const events::event_message&);
 

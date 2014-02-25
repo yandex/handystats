@@ -4,6 +4,8 @@
 #include <thread>
 #include <chrono>
 #include <queue>
+#include <string>
+#include <unordered_map>
 
 #include <gtest/gtest.h>
 
@@ -11,8 +13,17 @@
 #include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>
 
-#include <handystats/internal_metrics_impl.hpp>
 #include <handystats/message_queue_impl.hpp>
+#include <handystats/internal_metrics_impl.hpp>
+#include <handystats/internal_metrics/internal_gauge.hpp>
+#include <handystats/internal_metrics/internal_counter.hpp>
+
+namespace handystats { namespace internal {
+
+extern std::unordered_map<std::string, internal_metric> internal_metrics;
+
+}} // namespace handystats::internal
+
 
 class HandyCounterTest : public ::testing::Test {
 protected:

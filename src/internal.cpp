@@ -1,5 +1,14 @@
+#include <string>
+#include <unordered_map>
+
 #include <handystats/events/event_message.hpp>
+
+#include <handystats/internal_metrics/internal_gauge.hpp>
+#include <handystats/internal_metrics/internal_counter.hpp>
+#include <handystats/internal_metrics/internal_timer.hpp>
+
 #include <handystats/internal_metrics_impl.hpp>
+
 
 namespace handystats { namespace internal {
 

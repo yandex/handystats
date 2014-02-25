@@ -13,6 +13,13 @@
 #include "json/internal_counter_json_writer.hpp"
 #include "json/internal_timer_json_writer.hpp"
 
+namespace handystats { namespace internal {
+
+extern std::unordered_map<std::string, internal_metric> internal_metrics;
+
+}} // namespace handystats::internal
+
+
 namespace handystats { namespace json {
 
 chrono::default_time_point dump_timestamp;

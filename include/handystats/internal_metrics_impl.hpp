@@ -1,14 +1,16 @@
 #ifndef HANDYSTATS_INTERNAL_METRICS_IMPL_H_
 #define HANDYSTATS_INTERNAL_METRICS_IMPL_H_
 
-#include <string>
-#include <unordered_map>
-
 #include <boost/variant.hpp>
 
-#include <handystats/internal_metrics/internal_counter.hpp>
-#include <handystats/internal_metrics/internal_gauge.hpp>
-#include <handystats/internal_metrics/internal_timer.hpp>
+namespace handystats { namespace internal {
+
+struct internal_gauge;
+struct internal_counter;
+struct internal_timer;
+
+}} // namespace handystats::internal
+
 
 namespace handystats { namespace internal {
 
@@ -23,8 +25,6 @@ enum internal_metric_index {
 	INTERNAL_GAUGE,
 	INTERNAL_TIMER
 };
-
-extern std::unordered_map<std::string, internal_metric> internal_metrics;
 
 }} // namespace handystats::internal
 

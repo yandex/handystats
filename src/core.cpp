@@ -6,8 +6,13 @@
 #include <handystats/message_queue_impl.hpp>
 #include <handystats/internal_metrics_impl.hpp>
 #include <handystats/internal_impl.hpp>
-#include <handystats/json_dump_impl.hpp>
 #include <handystats/internal_statistics_impl.hpp>
+
+namespace handystats { namespace json {
+
+void update_json_dump();
+
+}} // namespace handystats::json
 
 namespace handystats {
 

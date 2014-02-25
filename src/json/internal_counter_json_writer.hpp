@@ -3,13 +3,13 @@
 
 #include <string>
 
+#include <handystats/internal_metrics/internal_counter.hpp>
+
 #include <handystats/rapidjson/document.h>
 #include <handystats/rapidjson/stringbuffer.h>
 #include <handystats/rapidjson/prettywriter.h>
 
 #include <handystats/json/counter_json_writer.hpp>
-
-#include <handystats/internal_metrics/internal_counter.hpp>
 
 namespace handystats { namespace json {
 

@@ -1,10 +1,17 @@
-#include <handystats/json_dump.hpp>
-#include <handystats/json_dump_impl.hpp>
-
 #include <handystats/chrono_impl.hpp>
-#include <handystats/json_impl.hpp>
 #include <handystats/internal_metrics_impl.hpp>
 #include <handystats/internal_statistics_impl.hpp>
+#include <handystats/json_dump.hpp>
+
+#include <handystats/rapidjson/document.h>
+
+#include <handystats/json/allocators.hpp>
+#include <handystats/json/timestamp.hpp>
+#include <handystats/json/gauge_json_writer.hpp>
+
+#include "json/internal_gauge_json_writer.hpp"
+#include "json/internal_counter_json_writer.hpp"
+#include "json/internal_timer_json_writer.hpp"
 
 namespace handystats { namespace json {
 

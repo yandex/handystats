@@ -1,4 +1,9 @@
-#include "handystats/events/timer_events.hpp"
+#include <memory>
+
+#include <handystats/metrics/timer.hpp>
+#include <handystats/events/event_message.hpp>
+#include <handystats/events/timer_events.hpp>
+
 
 namespace handystats { namespace events {
 

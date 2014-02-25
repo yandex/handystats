@@ -2,14 +2,17 @@
 #define HANDYSTATS_INTERNAL_TIMER_H_
 
 #include <cstdint>
-#include <string>
-#include <utility>
 #include <unordered_map>
 
-#include <handystats/chrono_impl.hpp>
 #include <handystats/metrics/timer.hpp>
 #include <handystats/metrics/gauge.hpp>
-#include <handystats/events/event_message.hpp>
+
+namespace handystats { namespace events {
+
+struct event_message;
+
+}} // namespace handystats::events
+
 
 namespace handystats { namespace internal {
 
@@ -56,8 +59,6 @@ struct internal_timer
 	void process_stop_event(const events::event_message& message);
 	void process_discard_event(const events::event_message& message);
 	void process_heartbeat_event(const events::event_message& message);
-
-	std::string to_string() const;
 };
 
 }} // namespace handystats::internal

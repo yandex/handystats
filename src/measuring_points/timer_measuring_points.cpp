@@ -1,7 +1,18 @@
+#include <memory>
+
+#include <handystats/message_queue_impl.hpp>
 #include <handystats/measuring_points/timer_measuring_points.hpp>
 
-#include <handystats/events/timer_events.hpp>
-#include <handystats/message_queue_impl.hpp>
+namespace handystats { namespace events {
+
+std::shared_ptr<event_message> timer_init_event(const std::string, const uint64_t, metrics::timer::time_point);
+std::shared_ptr<event_message> timer_start_event(const std::string, const uint64_t, metrics::timer::time_point);
+std::shared_ptr<event_message> timer_stop_event(const std::string, const uint64_t, metrics::timer::time_point);
+std::shared_ptr<event_message> timer_discard_event(const std::string, const uint64_t, metrics::timer::time_point);
+std::shared_ptr<event_message> timer_heartbeat_event(const std::string, const uint64_t, metrics::timer::time_point);
+
+}} // namespace handystats::events
+
 
 void HANDY_TIMER_INIT(
 		const std::string timer_name,

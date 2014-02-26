@@ -1,3 +1,5 @@
+#include <mutex>
+
 #include <handystats/chrono.hpp>
 #include <handystats/json_dump.hpp>
 

@@ -3,7 +3,6 @@
 
 #include <string>
 #include <memory>
-#include <mutex>
 
 std::shared_ptr<const std::string> HANDY_JSON_DUMP();
 

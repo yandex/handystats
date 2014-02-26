@@ -3,13 +3,14 @@
 
 #include <string>
 
-#include <handystats/internal_metrics/internal_timer.hpp>
-
 #include <handystats/rapidjson/document.h>
 #include <handystats/rapidjson/stringbuffer.h>
 #include <handystats/rapidjson/prettywriter.h>
 
 #include <handystats/json/gauge_json_writer.hpp>
+
+#include "internal_metrics/internal_timer_impl.hpp"
+
 
 namespace handystats { namespace json {
 

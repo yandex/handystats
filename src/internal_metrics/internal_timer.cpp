@@ -1,6 +1,7 @@
 #include <handystats/events/event_message.hpp>
 #include <handystats/events/timer_events.hpp>
-#include <handystats/internal_metrics/internal_timer.hpp>
+
+#include "internal_metrics/internal_timer_impl.hpp"
 
 
 namespace handystats { namespace internal {

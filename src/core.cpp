@@ -5,11 +5,12 @@
 
 #include <handystats/operation.hpp>
 
+#include <handystats/metrics/gauge.hpp>
 #include <handystats/events/event_message.hpp>
 #include <handystats/message_queue_impl.hpp>
-#include <handystats/internal_metrics_impl.hpp>
 
-#include <handystats/metrics/gauge.hpp>
+#include "internal_metrics_impl.hpp"
+
 
 namespace handystats { namespace json {
 

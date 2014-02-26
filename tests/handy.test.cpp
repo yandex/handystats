@@ -14,9 +14,10 @@
 #include <handystats/json_dump.hpp>
 
 #include <handystats/message_queue_impl.hpp>
-#include <handystats/internal_metrics_impl.hpp>
-#include <handystats/internal_metrics/internal_gauge.hpp>
-#include <handystats/internal_metrics/internal_counter.hpp>
+
+#include "internal_metrics_impl.hpp"
+#include "internal_metrics/internal_gauge_impl.hpp"
+#include "internal_metrics/internal_counter_impl.hpp"
 
 namespace handystats { namespace internal {
 

@@ -1,6 +1,7 @@
 #include <handystats/chrono_impl.hpp>
-#include <handystats/internal_metrics_impl.hpp>
 #include <handystats/json_dump.hpp>
+
+#include "internal_metrics_impl.hpp"
 
 #include <handystats/metrics/gauge.hpp>
 
@@ -13,6 +14,7 @@
 #include "json/internal_gauge_json_writer.hpp"
 #include "json/internal_counter_json_writer.hpp"
 #include "json/internal_timer_json_writer.hpp"
+
 
 namespace handystats { namespace internal {
 

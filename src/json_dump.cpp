@@ -11,9 +11,9 @@
 #include <handystats/json/timestamp.hpp>
 #include <handystats/json/gauge_json_writer.hpp>
 
-#include "json/internal_gauge_json_writer.hpp"
-#include "json/internal_counter_json_writer.hpp"
-#include "json/internal_timer_json_writer.hpp"
+#include "json/internal_gauge_json_writer_impl.hpp"
+#include "json/internal_counter_json_writer_impl.hpp"
+#include "json/internal_timer_json_writer_impl.hpp"
 
 
 namespace handystats { namespace internal {

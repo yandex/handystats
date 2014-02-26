@@ -6,7 +6,7 @@
 #include <boost/accumulators/statistics/count.hpp>
 
 #include <handystats/chrono.hpp>
-#include <handystats/math_utils_impl.hpp>
+#include <handystats/math_utils.hpp>
 #include <handystats/accumulators/parameters/time_interval.hpp>
 #include <handystats/accumulators/parameters/timestamp.hpp>
 

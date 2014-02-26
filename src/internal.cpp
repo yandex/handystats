@@ -1,7 +1,7 @@
 #include <string>
 #include <unordered_map>
 
-#include <handystats/events/event_message.hpp>
+#include "events/event_message_impl.hpp"
 
 #include "internal_metrics/internal_gauge_impl.hpp"
 #include "internal_metrics/internal_counter_impl.hpp"

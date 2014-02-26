@@ -1,4 +1,5 @@
-#include "handystats/events/event_message.hpp"
+#include "events/event_message_impl.hpp"
+
 
 namespace handystats { namespace events {
 

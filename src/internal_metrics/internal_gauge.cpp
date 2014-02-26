@@ -1,7 +1,8 @@
-#include <handystats/events/event_message.hpp>
-#include <handystats/events/gauge_events.hpp>
+#include "events/event_message_impl.hpp"
+#include "events/gauge_events_impl.hpp"
 
 #include "internal_metrics/internal_gauge_impl.hpp"
+
 
 namespace handystats { namespace internal {
 

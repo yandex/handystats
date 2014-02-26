@@ -6,7 +6,8 @@
 
 #include <tbb/concurrent_queue.h>
 
-#include <handystats/events/event_message.hpp>
+#include "events/event_message_impl.hpp"
+
 #include <handystats/measuring_points.hpp>
 
 

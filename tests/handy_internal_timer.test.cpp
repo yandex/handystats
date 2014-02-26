@@ -16,8 +16,7 @@
 #include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>
 
-#include <handystats/events/event_message.hpp>
-
+#include "events/event_message_impl.hpp"
 #include "internal_metrics_impl.hpp"
 #include "internal_metrics/internal_timer_impl.hpp"
 

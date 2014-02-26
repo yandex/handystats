@@ -3,7 +3,9 @@
 #include <tbb/concurrent_queue.h>
 
 #include <handystats/metrics/gauge.hpp>
-#include <handystats/events/event_message.hpp>
+
+#include "events/event_message_impl.hpp"
+
 
 namespace handystats { namespace internal {
 

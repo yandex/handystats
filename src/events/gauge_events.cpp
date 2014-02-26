@@ -1,8 +1,10 @@
 #include <memory>
 
 #include <handystats/metrics/gauge.hpp>
-#include <handystats/events/event_message.hpp>
-#include <handystats/events/gauge_events.hpp>
+
+#include "events/event_message_impl.hpp"
+#include "events/gauge_events_impl.hpp"
+
 
 namespace handystats { namespace events {
 

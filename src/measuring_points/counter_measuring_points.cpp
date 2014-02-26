@@ -1,6 +1,7 @@
 #include <memory>
 
-#include <handystats/events/event_message.hpp>
+#include "events/event_message_impl.hpp"
+
 #include <handystats/measuring_points/counter_measuring_points.hpp>
 
 

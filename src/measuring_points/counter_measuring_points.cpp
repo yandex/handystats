@@ -1,7 +1,15 @@
 #include <memory>
 
-#include <handystats/message_queue_impl.hpp>
+#include <handystats/events/event_message.hpp>
 #include <handystats/measuring_points/counter_measuring_points.hpp>
+
+
+namespace handystats { namespace message_queue {
+
+void push_event_message(std::shared_ptr<events::event_message> message);
+
+}} // namespace handystats::message_queue
+
 
 namespace handystats { namespace events {
 

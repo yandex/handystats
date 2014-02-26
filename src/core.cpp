@@ -1,15 +1,29 @@
 #include <thread>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <unordered_map>
+
+#include <tbb/concurrent_queue.h>
 
 #include <handystats/operation.hpp>
 
 #include <handystats/metrics/gauge.hpp>
 #include <handystats/events/event_message.hpp>
-#include <handystats/message_queue_impl.hpp>
 
 #include "internal_metrics_impl.hpp"
+
+
+namespace handystats { namespace message_queue {
+
+extern tbb::concurrent_queue<std::shared_ptr<events::event_message>>* event_message_queue;
+
+std::shared_ptr<events::event_message> pop_event_message();
+
+void initialize();
+void finalize();
+
+}} // namespace handystats::message_queue
 
 
 namespace handystats { namespace json {
@@ -18,12 +32,14 @@ void update_json_dump();
 
 }} // namespace handystats::json
 
+
 namespace handystats { namespace internal {
 
 extern metrics::gauge message_processing_time;
 extern metrics::gauge internal_metrics_size;
 
 }} // namespace handystats::internal
+
 
 namespace handystats { namespace internal {
 

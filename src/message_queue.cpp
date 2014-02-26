@@ -1,5 +1,9 @@
+#include <memory>
+
+#include <tbb/concurrent_queue.h>
+
 #include <handystats/metrics/gauge.hpp>
-#include <handystats/message_queue_impl.hpp>
+#include <handystats/events/event_message.hpp>
 
 namespace handystats { namespace internal {
 

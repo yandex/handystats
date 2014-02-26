@@ -6,17 +6,28 @@
 #include <queue>
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 #include <gtest/gtest.h>
+
+#include <tbb/concurrent_queue.h>
 
 #include <handystats/operation.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>
 
-#include <handystats/message_queue_impl.hpp>
+#include <handystats/events/event_message.hpp>
 
 #include "internal_metrics_impl.hpp"
 #include "internal_metrics/internal_timer_impl.hpp"
+
+
+namespace handystats { namespace message_queue {
+
+extern tbb::concurrent_queue<std::shared_ptr<events::event_message>>* event_message_queue;
+
+}} // namespace handystats::message_queue
+
 
 namespace handystats { namespace internal {
 

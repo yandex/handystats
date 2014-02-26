@@ -5,8 +5,14 @@
 
 #include <handystats/chrono.hpp>
 
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics.hpp>
+#include <boost/accumulators/framework/accumulator_set.hpp>
+#include <boost/accumulators/framework/features.hpp>
+
+#include <boost/accumulators/statistics/min.hpp>
+#include <boost/accumulators/statistics/max.hpp>
+#include <boost/accumulators/statistics/sum.hpp>
+#include <boost/accumulators/statistics/count.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
 
 #include <handystats/accumulators/moving_average.hpp>
 #include <handystats/accumulators/interval_count.hpp>
@@ -20,14 +26,12 @@ namespace default_parameters {
 	extern double moving_average_alpha;
 }
 
-class gauge
+struct gauge
 {
-public:
-
 	typedef double value_type;
 	typedef chrono::default_duration time_duration;
-	typedef typename chrono::default_clock clock;
-	typedef typename chrono::default_time_point time_point;
+	typedef chrono::default_clock clock;
+	typedef chrono::default_time_point time_point;
 
 	struct internal_stats {
 		typedef boost::accumulators::features <
@@ -59,18 +63,15 @@ public:
 	gauge(value_type value, time_point timestamp);
 
 	void set(value_type value, time_point timestamp);
-	std::pair<value_type, time_point> get() const;
 
-	internal_stats get_stats() const;
-
-private:
 	value_type value;
 	time_point timestamp;
 
 	internal_stats stats;
 
-}; // class gauge
+}; // struct gauge
 
 }} // namespace handystats::metrics
+
 
 #endif // HANDYSTATS_METRICS_GAUGE_H_

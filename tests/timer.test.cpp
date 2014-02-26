@@ -17,7 +17,7 @@ TEST(TimerTest, CheckTimerCountsRunningTimeCorrectly) {
 
 	inter.stop(timer::clock::now());
 
-	ASSERT_GT(inter.get().first.count(), 100);
+	ASSERT_GT(std::chrono::duration_cast<handystats::chrono::default_duration>(inter.value).count(), 100);
 
 	std::cout << handystats::json::write_to_json_string(&inter) << std::endl;
 }
@@ -27,7 +27,7 @@ TEST(Timer, CheckNotStartedTimerHasNoDuration) {
 
 	std::this_thread::sleep_for(handystats::chrono::default_duration(100));
 
-	ASSERT_EQ(inter.get().first.count(), 0);
+	ASSERT_EQ(std::chrono::duration_cast<handystats::chrono::default_duration>(inter.value).count(), 0);
 
 	std::cout << handystats::json::write_to_json_string(&inter) << std::endl;
 }
@@ -38,7 +38,7 @@ TEST(TimerTest, CheckNotStoppedTimerHasNoDuration) {
 
 	std::this_thread::sleep_for(handystats::chrono::default_duration(100));
 
-	ASSERT_EQ(inter.get().first.count(), 0);
+	ASSERT_EQ(std::chrono::duration_cast<handystats::chrono::default_duration>(inter.value).count(), 0);
 
 	std::cout << handystats::json::write_to_json_string(&inter) << std::endl;
 }

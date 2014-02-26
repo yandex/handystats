@@ -5,16 +5,14 @@
 
 #include <handystats/chrono.hpp>
 
+
 namespace handystats { namespace metrics {
 
-class timer
+struct timer
 {
-public:
-
-	typedef chrono::default_duration value_type;
-	typedef chrono::default_duration time_duration;
-	typedef typename chrono::default_clock clock;
-	typedef typename chrono::default_time_point time_point;
+	typedef chrono::default_clock clock;
+	typedef typename clock::duration value_type;
+	typedef chrono::default_time_point time_point;
 
 	timer();
 	timer(time_point start_timestamp);
@@ -22,14 +20,12 @@ public:
 	void start(time_point timestamp);
 	void stop(time_point timestamp);
 
-	std::pair<value_type, time_point> get() const;
-
-private:
 	time_point timestamp;
 	value_type value;
 
-}; // class timer
+}; // struct timer
 
 }} // namespace handystats::metrics
+
 
 #endif // HANDYSTATS_METRICS_TIMER_H_

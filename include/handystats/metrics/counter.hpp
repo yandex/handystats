@@ -6,16 +6,15 @@
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/gauge.hpp>
 
+
 namespace handystats { namespace metrics {
 
-class counter
+struct counter
 {
-public:
-
 	typedef int64_t value_type;
-	typedef typename chrono::default_duration time_duration;
-	typedef typename chrono::default_clock clock;
-	typedef typename chrono::default_time_point time_point;
+	typedef chrono::default_duration time_duration;
+	typedef chrono::default_clock clock;
+	typedef chrono::default_time_point time_point;
 
 	struct internal_stats {
 		gauge values;
@@ -38,18 +37,14 @@ public:
 	void increment(value_type value, time_point timestamp);
 	void decrement(value_type value, time_point timestamp);
 
-	std::pair<value_type, time_point> get() const;
-
-	internal_stats get_stats() const;
-
-private:
 	value_type value;
 	time_point timestamp;
 
 	internal_stats stats;
 
-}; // class counter
+}; // struct counter
 
 }} // namespace handystats::metrics
+
 
 #endif // HANDYSTATS_METRICS_COUNTER_H_

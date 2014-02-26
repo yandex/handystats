@@ -3,17 +3,10 @@
 #include <tbb/concurrent_queue.h>
 
 #include <handystats/metrics/gauge.hpp>
+#include <handystats/metrics/counter.hpp>
 
 #include "events/event_message_impl.hpp"
-
-
-namespace handystats { namespace internal {
-
-extern metrics::gauge message_push_time;
-extern metrics::gauge message_pop_time;
-extern metrics::gauge event_message_queue_size;
-
-}} // namespace handystats::internal
+#include "system_stats_impl.hpp"
 
 
 namespace handystats { namespace message_queue {
@@ -26,8 +19,8 @@ void push_event_message(std::shared_ptr<events::event_message> message) {
 		event_message_queue->push(message);
 		auto push_end_time = chrono::default_clock::now();
 
-		internal::message_push_time.set(std::chrono::duration_cast<chrono::default_duration>(push_end_time - push_start_time).count(), push_end_time);
-		internal::event_message_queue_size.set(message_queue::event_message_queue->unsafe_size(), push_end_time);
+		message_push_time.set(std::chrono::duration_cast<chrono::default_duration>(push_end_time - push_start_time).count(), push_end_time);
+		message_queue_size.increment(1, push_end_time);
 	}
 }
 
@@ -39,8 +32,8 @@ std::shared_ptr<events::event_message> pop_event_message() {
 		event_message_queue->try_pop(message);
 		auto pop_end_time = chrono::default_clock::now();
 
-		internal::message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
-		internal::event_message_queue_size.set(message_queue::event_message_queue->unsafe_size(), pop_end_time);
+		message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
+		message_queue_size.decrement(1, pop_end_time);
 	}
 
 	return message;

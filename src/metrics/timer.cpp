@@ -1,5 +1,6 @@
 #include <handystats/metrics/timer.hpp>
 
+
 namespace handystats { namespace metrics {
 
 timer::timer() {
@@ -18,17 +19,10 @@ void timer::start(time_point timestamp) {
 }
 
 void timer::stop(time_point timestamp) {
-	auto duration = std::chrono::duration_cast<value_type>(timestamp - this->timestamp);
-	if (duration.count() > 0) {
-		this->value += duration;
+	if (timestamp >= this->timestamp) {
+		this->value += timestamp - this->timestamp;
+		this->timestamp = timestamp;
 	}
-
-	this->timestamp = timestamp;
-}
-
-
-std::pair<timer::value_type, timer::time_point> timer::get() const {
-	return std::make_pair(this->value, this->timestamp);
 }
 
 }} // namespace handystats::metrics

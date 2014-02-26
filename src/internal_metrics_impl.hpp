@@ -3,6 +3,7 @@
 
 #include <boost/variant.hpp>
 
+
 namespace handystats { namespace internal {
 
 struct internal_gauge;
@@ -27,5 +28,6 @@ enum internal_metric_index {
 };
 
 }} // namespace handystats::internal
+
 
 #endif // HANDYSTATS_INTERNAL_METRICS_IMPL_H_

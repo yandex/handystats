@@ -1,5 +1,3 @@
-#include <memory>
-
 #include <handystats/metrics/timer.hpp>
 
 #include "events/event_message_impl.hpp"

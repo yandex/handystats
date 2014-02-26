@@ -28,10 +28,10 @@ inline void write_to_json_value(metrics::timer* obj, rapidjson::Value* json_valu
 	}
 
 	json_value->AddMember("type", "timer", allocator);
-	json_value->AddMember("value", obj->get().first.count(), allocator);
+	json_value->AddMember("value", std::chrono::duration_cast<chrono::default_duration>(obj->value).count(), allocator);
 
 	rapidjson::Value timestamp;
-	write_to_json_value(obj->get().second, &timestamp);
+	write_to_json_value(obj->timestamp, &timestamp);
 	json_value->AddMember("timestamp", timestamp, allocator);
 }
 

@@ -33,6 +33,7 @@ public:
 
 	static time_point now() noexcept;
 	static std::chrono::nanoseconds to_nanoseconds(const duration&) noexcept;
+	static duration from_nanoseconds(const std::chrono::nanoseconds&) noexcept;
 };
 
 template<class time_duration>
@@ -94,6 +95,11 @@ namespace std { namespace chrono {
 template <typename ToDuration>
 ToDuration duration_cast(handystats::chrono::tsc_clock::duration duration) {
 	return duration_cast<ToDuration>(handystats::chrono::tsc_clock::to_nanoseconds(duration));
+}
+
+template <typename, typename FromDuration>
+handystats::chrono::tsc_clock::duration duration_cast(FromDuration duration) {
+	return handystats::chrono::tsc_clock::from_nanoseconds(std::chrono::duration_cast<std::chrono::nanoseconds>(duration));
 }
 
 }} // namespace std::chrono

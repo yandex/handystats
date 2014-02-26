@@ -28,14 +28,14 @@ inline void write_to_json_value(metrics::gauge* obj, rapidjson::Value* json_valu
 	}
 
 	json_value->AddMember("type", "gauge", allocator);
-	json_value->AddMember("value", obj->get().first, allocator);
+	json_value->AddMember("value", obj->value, allocator);
 
 	rapidjson::Value timestamp;
-	write_to_json_value(obj->get().second, &timestamp);
+	write_to_json_value(obj->timestamp, &timestamp);
 	json_value->AddMember("timestamp", timestamp, allocator);
 
 	{
-		const auto& gauge_stats = obj->get_stats().values;
+		const auto& gauge_stats = obj->stats.values;
 
 		json_value->AddMember("min", boost::accumulators::min(gauge_stats), allocator);
 		json_value->AddMember("max", boost::accumulators::max(gauge_stats), allocator);

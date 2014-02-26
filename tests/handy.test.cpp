@@ -89,7 +89,7 @@ TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 	int handy_count =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["swaps.count"])
 		->base_counter
-		->get().first;
+		->value;
 
 	ASSERT_EQ(handy_count, swaps_count);
 
@@ -126,7 +126,7 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 		boost::accumulators::max(
 			boost::get<handystats::internal::internal_gauge*>(handystats::internal::internal_metrics["queue.size"])
 			->base_gauge
-			->get_stats()
+			->stats
 			.values
 		);
 
@@ -149,7 +149,7 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 	int handy_value_1 =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
 		->base_counter
-		->get().first;
+		->value;
 
 	ASSERT_EQ(handy_value_1, value_1);
 
@@ -168,7 +168,7 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 	int handy_value_2 =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
 		->base_counter
-		->get().first;
+		->value;
 
 	ASSERT_EQ(handy_value_2, value_2);
 
@@ -191,7 +191,7 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 	int handy_value_1 =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.metric"])
 		->base_counter
-		->get().first;
+		->value;
 
 	ASSERT_EQ(handy_value_1, value_1);
 
@@ -210,7 +210,7 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 	int handy_value_2 =
 		boost::get<handystats::internal::internal_gauge*>(handystats::internal::internal_metrics["test.metric"])
 		->base_gauge
-		->get().first;
+		->value;
 
 	ASSERT_EQ(handy_value_2, value_2);
 

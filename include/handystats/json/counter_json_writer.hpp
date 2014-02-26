@@ -12,6 +12,7 @@
 #include <handystats/json/gauge_json_writer.hpp>
 #include <handystats/metrics/counter.hpp>
 
+
 namespace handystats { namespace json {
 
 template<typename Allocator>
@@ -29,30 +30,30 @@ inline void write_to_json_value(metrics::counter* obj, rapidjson::Value* json_va
 	}
 
 	json_value->AddMember("type", "counter", allocator);
-	json_value->AddMember("value", obj->get().first, allocator);
+	json_value->AddMember("value", obj->value, allocator);
 
 	rapidjson::Value timestamp;
-	write_to_json_value(obj->get().second, &timestamp);
+	write_to_json_value(obj->timestamp, &timestamp);
 	json_value->AddMember("timestamp", timestamp, allocator);
 
 	{
 		rapidjson::Value values;
-		auto values_stats = obj->get_stats().values;
+		auto values_stats = obj->stats.values;
 		write_to_json_value(&values_stats, &values, allocator);
 		json_value->AddMember("values", values, allocator);
 
 		rapidjson::Value incr_deltas;
-		auto incr_deltas_stats = obj->get_stats().incr_deltas;
+		auto incr_deltas_stats = obj->stats.incr_deltas;
 		write_to_json_value(&incr_deltas_stats, &incr_deltas, allocator);
 		json_value->AddMember("incr-deltas", incr_deltas, allocator);
 
 		rapidjson::Value decr_deltas;
-		auto decr_deltas_stats = obj->get_stats().decr_deltas;
+		auto decr_deltas_stats = obj->stats.decr_deltas;
 		write_to_json_value(&decr_deltas_stats, &decr_deltas, allocator);
 		json_value->AddMember("decr-deltas", decr_deltas, allocator);
 
 		rapidjson::Value deltas;
-		auto deltas_stats = obj->get_stats().deltas;
+		auto deltas_stats = obj->stats.deltas;
 		write_to_json_value(&deltas_stats, &deltas, allocator);
 		json_value->AddMember("deltas", deltas, allocator);
 	}

@@ -8,8 +8,8 @@ src/events/counter_events.cpp
 src/events/event_message.cpp
 src/events/gauge_events.cpp
 src/events/timer_events.cpp
+src/system_stats.cpp
 src/internal.cpp
-src/internal_statistics.cpp
 src/internal_metrics/internal_counter.cpp
 src/internal_metrics/internal_gauge.cpp
 src/internal_metrics/internal_timer.cpp

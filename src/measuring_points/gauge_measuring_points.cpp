@@ -1,23 +1,9 @@
 #include <memory>
 
-#include "events/event_message_impl.hpp"
+#include "events/gauge_events_impl.hpp"
+#include "message_queue_impl.hpp"
 
 #include <handystats/measuring_points/gauge_measuring_points.hpp>
-
-
-namespace handystats { namespace message_queue {
-
-void push_event_message(std::shared_ptr<events::event_message> message);
-
-}} // namespace handystats::message_queue
-
-
-namespace handystats { namespace events {
-
-std::shared_ptr<event_message> gauge_init_event(const std::string, metrics::gauge::value_type, metrics::gauge::time_point);
-std::shared_ptr<event_message> gauge_set_event(const std::string, metrics::gauge::value_type, metrics::gauge::time_point);
-
-}} // namespace handystats::events
 
 
 void HANDY_GAUGE_INIT(

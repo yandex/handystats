@@ -1,5 +1,6 @@
 #include <handystats/metrics/gauge.hpp>
 
+
 namespace handystats { namespace metrics {
 
 namespace default_parameters {
@@ -27,14 +28,6 @@ void gauge::set(value_type value, time_point timestamp) {
 	this->timestamp = timestamp;
 
 	stats.update_value(this->value, this->timestamp);
-}
-
-std::pair<gauge::value_type, gauge::time_point> gauge::get() const {
-	return std::make_pair(value, timestamp);
-}
-
-gauge::internal_stats gauge::get_stats() const {
-	return stats;
 }
 
 }} // namespace handystats::metrics

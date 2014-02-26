@@ -18,8 +18,9 @@ namespace handystats { namespace internal {
 
 struct internal_timer
 {
-	typedef typename metrics::timer::time_duration time_duration;
+	typedef typename metrics::timer::value_type value_type;
 	typedef typename metrics::timer::clock clock;
+	typedef typename clock::duration time_duration;
 	typedef typename clock::time_point time_point;
 
 	struct timer_instance {

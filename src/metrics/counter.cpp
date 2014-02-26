@@ -1,4 +1,6 @@
+#include <handystats/metrics/gauge.hpp>
 #include <handystats/metrics/counter.hpp>
+
 
 namespace handystats { namespace metrics {
 
@@ -45,15 +47,6 @@ void counter::decrement(value_type decr_value, time_point timestamp) {
 
 	stats.update_value(this->value, this->timestamp);
 	stats.update_decrement(decr_value, this->timestamp);
-}
-
-
-std::pair<counter::value_type, counter::time_point> counter::get() const {
-	return std::make_pair(value, timestamp);
-}
-
-counter::internal_stats counter::get_stats() const {
-	return stats;
 }
 
 }} // namespace handystats::metrics

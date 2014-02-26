@@ -86,4 +86,8 @@ std::chrono::nanoseconds tsc_clock::to_nanoseconds(const duration& cycles_count)
 	return std::chrono::nanoseconds(uint64_t(cycles_count / cycles_per_nanosec));
 }
 
+tsc_clock::duration tsc_clock::from_nanoseconds(const std::chrono::nanoseconds& nanoseconds) noexcept {
+	return tsc_clock::duration(uint64_t(nanoseconds.count() * cycles_per_nanosec));
+}
+
 }} // namespace handystats::chrono

@@ -10,7 +10,7 @@ using namespace handystats::metrics;
 TEST(GaugeTest, TestGaugeConstruction) {
 	gauge sample_gauge(-10, handystats::chrono::default_clock::now());
 
-	ASSERT_NEAR(sample_gauge.get().first, -10, 1E-9);
+	ASSERT_NEAR(sample_gauge.value, -10, 1E-9);
 
 	std::cout << handystats::json::write_to_json_string(&sample_gauge) << std::endl;
 }
@@ -21,7 +21,7 @@ TEST(GaugeTest, TestGaugeSetMethod) {
 	for (int test_value = -1E3; test_value < 1E3; ++test_value) {
 		sample_gauge.set(test_value, handystats::chrono::default_clock::now());
 
-		ASSERT_NEAR(sample_gauge.get().first, test_value, 1E-9);
+		ASSERT_NEAR(sample_gauge.value, test_value, 1E-9);
 	}
 
 	std::cout << handystats::json::write_to_json_string(&sample_gauge) << std::endl;
@@ -40,7 +40,7 @@ TEST(GaugeTest, TestGaugeInternalStats) {
 	}
 
 
-	auto stats = sample_gauge.get_stats().values;
+	auto stats = sample_gauge.stats.values;
 	ASSERT_NEAR(min(stats), min_test_value, 1E-9);
 	ASSERT_NEAR(max(stats), max_test_value, 1E-9);
 

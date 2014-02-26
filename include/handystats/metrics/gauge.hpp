@@ -3,17 +3,20 @@
 
 #include <utility>
 
+#include <handystats/chrono.hpp>
+
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics.hpp>
 
-#include <handystats/chrono.hpp>
-#include <handystats/accumulators_impl.hpp>
+#include <handystats/accumulators/moving_average.hpp>
+#include <handystats/accumulators/interval_count.hpp>
+#include <handystats/accumulators/interval_sum.hpp>
+#include <handystats/accumulators/interval_mean.hpp>
+
 
 namespace handystats { namespace metrics {
 
 namespace default_parameters {
-	extern std::vector<double> quantile_probs;
-	extern std::vector<std::string> quantile_percents;
 	extern double moving_average_alpha;
 }
 

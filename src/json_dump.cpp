@@ -1,7 +1,8 @@
 #include <handystats/chrono_impl.hpp>
 #include <handystats/internal_metrics_impl.hpp>
-#include <handystats/internal_statistics_impl.hpp>
 #include <handystats/json_dump.hpp>
+
+#include <handystats/metrics/gauge.hpp>
 
 #include <handystats/rapidjson/document.h>
 
@@ -12,6 +13,16 @@
 #include "json/internal_gauge_json_writer.hpp"
 #include "json/internal_counter_json_writer.hpp"
 #include "json/internal_timer_json_writer.hpp"
+
+namespace handystats { namespace internal {
+
+extern metrics::gauge event_message_queue_size;
+extern metrics::gauge internal_metrics_size;
+extern metrics::gauge message_processing_time;
+extern metrics::gauge message_push_time;
+extern metrics::gauge message_pop_time;
+
+}} // namespace handystats::internal
 
 namespace handystats { namespace internal {
 

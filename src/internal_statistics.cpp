@@ -1,4 +1,5 @@
-#include <handystats/internal_statistics_impl.hpp>
+#include <handystats/metrics/gauge.hpp>
+
 
 namespace handystats { namespace internal {
 

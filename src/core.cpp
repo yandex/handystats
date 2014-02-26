@@ -8,7 +8,8 @@
 #include <handystats/events/event_message.hpp>
 #include <handystats/message_queue_impl.hpp>
 #include <handystats/internal_metrics_impl.hpp>
-#include <handystats/internal_statistics_impl.hpp>
+
+#include <handystats/metrics/gauge.hpp>
 
 namespace handystats { namespace json {
 
@@ -16,6 +17,12 @@ void update_json_dump();
 
 }} // namespace handystats::json
 
+namespace handystats { namespace internal {
+
+extern metrics::gauge message_processing_time;
+extern metrics::gauge internal_metrics_size;
+
+}} // namespace handystats::internal
 
 namespace handystats { namespace internal {
 

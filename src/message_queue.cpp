@@ -1,6 +1,14 @@
+#include <handystats/metrics/gauge.hpp>
 #include <handystats/message_queue_impl.hpp>
 
-#include <handystats/internal_statistics_impl.hpp>
+namespace handystats { namespace internal {
+
+extern metrics::gauge message_push_time;
+extern metrics::gauge message_pop_time;
+extern metrics::gauge event_message_queue_size;
+
+}} // namespace handystats::internal
+
 
 namespace handystats { namespace message_queue {
 

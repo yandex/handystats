@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <handystats/chrono_impl.hpp>
+#include <handystats/chrono.hpp>
 #include <handystats/metrics/counter.hpp>
 
 #include <handystats/json/counter_json_writer.hpp>

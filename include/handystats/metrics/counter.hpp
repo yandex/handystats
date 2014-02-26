@@ -3,8 +3,7 @@
 
 #include <utility>
 
-#include <handystats/chrono_impl.hpp>
-
+#include <handystats/chrono.hpp>
 #include <handystats/metrics/gauge.hpp>
 
 namespace handystats { namespace metrics {

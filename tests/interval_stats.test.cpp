@@ -9,7 +9,7 @@
 #include <handystats/accumulators/interval_sum.hpp>
 #include <handystats/accumulators/interval_mean.hpp>
 
-#include <handystats/chrono_impl.hpp>
+#include <handystats/chrono.hpp>
 
 using namespace boost::accumulators;
 

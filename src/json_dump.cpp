@@ -1,4 +1,4 @@
-#include <handystats/chrono_impl.hpp>
+#include <handystats/chrono.hpp>
 #include <handystats/json_dump.hpp>
 
 #include "internal_metrics_impl.hpp"
@@ -25,6 +25,7 @@ extern metrics::gauge message_push_time;
 extern metrics::gauge message_pop_time;
 
 }} // namespace handystats::internal
+
 
 namespace handystats { namespace internal {
 

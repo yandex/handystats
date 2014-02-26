@@ -3,7 +3,7 @@
 
 #include <utility>
 
-#include <handystats/chrono_impl.hpp>
+#include <handystats/chrono.hpp>
 
 namespace handystats { namespace metrics {
 

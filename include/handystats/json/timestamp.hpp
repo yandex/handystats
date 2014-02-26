@@ -1,7 +1,7 @@
 #ifndef HANDYSTATS_JSON_TIMESTAMP_H_
 #define HANDYSTATS_JSON_TIMESTAMP_H_
 
-#include <handystats/chrono_impl.hpp>
+#include <handystats/chrono.hpp>
 #include <handystats/rapidjson/document.h>
 
 namespace handystats { namespace json {

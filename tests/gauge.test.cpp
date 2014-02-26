@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <handystats/chrono_impl.hpp>
+#include <handystats/chrono.hpp>
 #include <handystats/metrics/gauge.hpp>
 
 #include <handystats/json/gauge_json_writer.hpp>

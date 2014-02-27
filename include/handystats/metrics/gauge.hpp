@@ -22,10 +22,6 @@
 
 namespace handystats { namespace metrics {
 
-namespace default_parameters {
-	extern double moving_average_alpha;
-}
-
 struct gauge
 {
 	typedef double value_type;
@@ -50,7 +46,7 @@ struct gauge
 
 		internal_stats()
 			: values(
-					boost::accumulators::tag::moving_average::alpha = default_parameters::moving_average_alpha,
+					boost::accumulators::tag::moving_average::alpha = 2.0 / 16,
 					boost::accumulators::time_interval = std::chrono::seconds(1)
 					)
 		{

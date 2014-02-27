@@ -6,7 +6,6 @@
 
 #include <handystats/chrono.hpp>
 #include <handystats/operation.hpp>
-#include <handystats/metrics/gauge.hpp>
 
 #include "message_queue_impl.hpp"
 #include "internal_impl.hpp"

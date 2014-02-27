@@ -1,13 +1,8 @@
 #ifndef HANDYSTATS_SYSTEM_STATS_IMPL_H_
 #define HANDYSTATS_SYSTEM_STATS_IMPL_H_
 
-
-namespace handystats { namespace metrics {
-
-struct gauge;
-struct counter;
-
-}} // namespace handystats::metrics
+#include <handystats/metrics/gauge.hpp>
+#include <handystats/metrics/counter.hpp>
 
 
 namespace handystats {

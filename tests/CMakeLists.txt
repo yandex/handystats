@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+
 FIND_PACKAGE (Threads REQUIRED)
 INCLUDE_DIRECTORIES (${Threads_INCLUDE_DIR})
 
@@ -36,8 +38,7 @@ FILE (GLOB_RECURSE test_src_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.test.c
 FOREACH (test_src_file IN LISTS test_src_files)
 	STRING (REGEX REPLACE "[.]test[.]cpp$" "_test" test_exec_file ${test_src_file})
 	ADD_EXECUTABLE (${test_exec_file} EXCLUDE_FROM_ALL ${CMAKE_CURRENT_SOURCE_DIR}/${test_src_file})
-	TARGET_LINK_LIBRARIES (${test_exec_file} ${CMAKE_THREAD_LIBS_INIT} ${GTEST_BOTH_LIBRARIES}
-		handy tbb rt)
+	TARGET_LINK_LIBRARIES (${test_exec_file} ${CMAKE_THREAD_LIBS_INIT} ${GTEST_BOTH_LIBRARIES} handystats)
 	ADD_TEST (${test_exec_file} ${test_exec_file})
 	ADD_DEPENDENCIES (check ${test_exec_file})
 ENDFOREACH (test_src_file)

@@ -1,3 +1,11 @@
+handystats (1.0.1) UNRELEASED; urgency=low
+
+  * CMake: test part fixup (gtest targets have been added as dependencies)
+  * message_queue: update system pop statistics only if message has been really popped
+  * json: dump timestamp has been prefixed with double underscore "__" like other system statistics
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 28 Feb 2014 18:54:37 +0400
+
 handystats (1.0.0) UNRELEASED; urgency=low
 
   * Initial release.

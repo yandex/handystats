@@ -1,0 +1,29 @@
+# Maintainer: Danil Osherov <shindo@yandex-team.ru>
+pkgname=handystats
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="C++ Framework for collecting runtime in-process statistics"
+arch=('any')
+url=('https://github.com/shindo/handystats')
+license=('unknown')
+depends=('intel-tbb' 'boost>=1.46')
+checkdepends=('gtest')
+makedepends=('git' 'cmake')
+source=("$pkgname"::"git://github.com/shindo/handystats.git#tag=$pkgver")
+md5sums=('SKIP')
+
+build() {
+	cd "$srcdir/$pkgname"
+	cmake -DCMAKE_INSTALL_PREFIX=${pkgdir}/usr
+	make
+}
+
+check() {
+	cd "$srcdir/$pkgname"
+	make -k check
+}
+
+package() {
+	cd "$srcdir/$pkgname"
+	make install
+}

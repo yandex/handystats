@@ -40,11 +40,6 @@ std::shared_ptr<const std::string> get_json_dump() {
 std::shared_ptr<const std::string> create_json_dump() {
 	rapidjson::Value dump_value(rapidjson::kObjectType);
 
-	dump_timestamp = chrono::default_clock::now();
-	rapidjson::Value timestamp_value;
-	write_to_json_value(dump_timestamp, &timestamp_value);
-	dump_value.AddMember("dump-timestamp", timestamp_value, memoryPoolAllocator);
-
 	for (auto metric_entry : internal::internal_metrics) {
 		rapidjson::Value metric_value;
 		switch (metric_entry.second.which()) {
@@ -86,6 +81,12 @@ std::shared_ptr<const std::string> create_json_dump() {
 		rapidjson::Value pop_time_value;
 		write_to_json_value(&message_pop_time, &pop_time_value, memoryPoolAllocator);
 		dump_value.AddMember("__message-pop-time", pop_time_value, memoryPoolAllocator);
+	}
+	{
+		dump_timestamp = chrono::default_clock::now();
+		rapidjson::Value timestamp_value;
+		write_to_json_value(dump_timestamp, &timestamp_value);
+		dump_value.AddMember("__dump-timestamp", timestamp_value, memoryPoolAllocator);
 	}
 
 	rapidjson::StringBuffer buffer;

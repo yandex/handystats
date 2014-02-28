@@ -29,8 +29,10 @@ std::shared_ptr<events::event_message> pop_event_message() {
 		event_message_queue->try_pop(message);
 		auto pop_end_time = chrono::default_clock::now();
 
-		message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
-		message_queue_size.decrement(1, pop_end_time);
+		if (message) {
+			message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
+			message_queue_size.decrement(1, pop_end_time);
+		}
 	}
 
 	return message;

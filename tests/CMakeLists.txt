@@ -47,6 +47,7 @@ FOREACH (test_src_file IN LISTS test_src_files)
 	SET_TARGET_PROPERTIES (${test_exec_file} ${TEST_PROPERTIES})
 	TARGET_LINK_LIBRARIES (${test_exec_file} ${TEST_LIBRARIES})
 	ADD_TEST (${test_exec_file} ${test_exec_file})
+	ADD_DEPENDENCIES (${test_exec_file} ${GTEST_TARGETS})
 	ADD_DEPENDENCIES (check ${test_exec_file})
 ENDFOREACH (test_src_file)
 

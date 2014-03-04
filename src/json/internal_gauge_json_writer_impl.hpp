@@ -37,9 +37,10 @@ inline void write_to_json_buffer(internal::internal_gauge* obj, StringBuffer* bu
 	json_value.Accept(writer);
 }
 
-inline std::string write_to_json_string(internal::internal_gauge* obj) {
-	rapidjson::StringBuffer buffer;
-	write_to_json_buffer(obj, &buffer, memoryPoolAllocator);
+template<typename Allocator>
+inline std::string write_to_json_string(internal::internal_gauge* obj, Allocator&& allocator = Allocator()) {
+	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator> buffer(&allocator);
+	write_to_json_buffer(obj, &buffer, allocator);
 
 	return std::string(buffer.GetString(), buffer.GetSize());
 }

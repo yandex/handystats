@@ -2,6 +2,8 @@
 
 #include <gtest/gtest.h>
 
+#include <handystats/rapidjson/allocators.h>
+
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/timer.hpp>
 
@@ -19,7 +21,7 @@ TEST(TimerTest, CheckTimerCountsRunningTimeCorrectly) {
 
 	ASSERT_GT(std::chrono::duration_cast<handystats::chrono::default_duration>(inter.value).count(), 100);
 
-	std::cout << handystats::json::write_to_json_string(&inter) << std::endl;
+	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&inter) << std::endl;
 }
 
 TEST(Timer, CheckNotStartedTimerHasNoDuration) {
@@ -29,7 +31,7 @@ TEST(Timer, CheckNotStartedTimerHasNoDuration) {
 
 	ASSERT_EQ(std::chrono::duration_cast<handystats::chrono::default_duration>(inter.value).count(), 0);
 
-	std::cout << handystats::json::write_to_json_string(&inter) << std::endl;
+	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&inter) << std::endl;
 }
 
 TEST(TimerTest, CheckNotStoppedTimerHasNoDuration) {
@@ -40,6 +42,6 @@ TEST(TimerTest, CheckNotStoppedTimerHasNoDuration) {
 
 	ASSERT_EQ(std::chrono::duration_cast<handystats::chrono::default_duration>(inter.value).count(), 0);
 
-	std::cout << handystats::json::write_to_json_string(&inter) << std::endl;
+	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&inter) << std::endl;
 }
 

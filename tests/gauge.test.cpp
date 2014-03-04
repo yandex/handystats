@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <handystats/rapidjson/allocators.h>
+
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/gauge.hpp>
 
@@ -12,7 +14,7 @@ TEST(GaugeTest, TestGaugeConstruction) {
 
 	ASSERT_NEAR(sample_gauge.value, -10, 1E-9);
 
-	std::cout << handystats::json::write_to_json_string(&sample_gauge) << std::endl;
+	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&sample_gauge) << std::endl;
 }
 
 TEST(GaugeTest, TestGaugeSetMethod) {
@@ -24,7 +26,7 @@ TEST(GaugeTest, TestGaugeSetMethod) {
 		ASSERT_NEAR(sample_gauge.value, test_value, 1E-9);
 	}
 
-	std::cout << handystats::json::write_to_json_string(&sample_gauge) << std::endl;
+	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&sample_gauge) << std::endl;
 }
 
 TEST(GaugeTest, TestGaugeInternalStats) {
@@ -48,5 +50,5 @@ TEST(GaugeTest, TestGaugeInternalStats) {
 	ASSERT_NEAR(sum(stats), 0, 1E-9);
 	ASSERT_NEAR(mean(stats), 0, 1E-9);
 
-	std::cout << handystats::json::write_to_json_string(&sample_gauge) << std::endl;
+	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&sample_gauge) << std::endl;
 }

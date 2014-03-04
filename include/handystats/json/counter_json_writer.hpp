@@ -7,7 +7,6 @@
 #include <handystats/rapidjson/stringbuffer.h>
 #include <handystats/rapidjson/prettywriter.h>
 
-#include <handystats/json/allocators.hpp>
 #include <handystats/json/timestamp.hpp>
 #include <handystats/json/gauge_json_writer.hpp>
 #include <handystats/metrics/counter.hpp>
@@ -72,9 +71,10 @@ inline void write_to_json_buffer(metrics::counter* obj, StringBuffer* buffer, Al
 	json_value.Accept(writer);
 }
 
-inline std::string write_to_json_string(metrics::counter* obj) {
-	rapidjson::StringBuffer buffer;
-	write_to_json_buffer(obj, &buffer, memoryPoolAllocator);
+template<typename Allocator>
+inline std::string write_to_json_string(metrics::counter* obj, Allocator&& allocator = Allocator()) {
+	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator> buffer(&allocator);
+	write_to_json_buffer(obj, &buffer, allocator);
 
 	return std::string(buffer.GetString(), buffer.GetSize());
 }

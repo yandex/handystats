@@ -7,7 +7,6 @@
 #include <handystats/rapidjson/stringbuffer.h>
 #include <handystats/rapidjson/prettywriter.h>
 
-#include <handystats/json/allocators.hpp>
 #include <handystats/json/timestamp.hpp>
 #include <handystats/metrics/timer.hpp>
 
@@ -48,9 +47,10 @@ inline void write_to_json_buffer(metrics::timer* obj, StringBuffer* buffer, Allo
 	json_value.Accept(writer);
 }
 
-inline std::string write_to_json_string(metrics::timer* obj) {
-	rapidjson::StringBuffer buffer;
-	write_to_json_buffer(obj, &buffer, memoryPoolAllocator);
+template<typename Allocator>
+inline std::string write_to_json_string(metrics::timer* obj, Allocator&& allocator = Allocator()) {
+	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator> buffer(&allocator);
+	write_to_json_buffer(obj, &buffer, allocator);
 
 	return std::string(buffer.GetString(), buffer.GetSize());
 }

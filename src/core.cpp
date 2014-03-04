@@ -11,12 +11,17 @@
 #include "internal_impl.hpp"
 #include "json_dump_impl.hpp"
 #include "system_stats_impl.hpp"
-
+#include "core_impl.hpp"
 
 namespace handystats {
 
 std::mutex operation_mutex;
 bool enabled = false;
+
+bool is_enabled() {
+	return enabled;
+}
+
 
 std::thread* processor_thread = nullptr;
 

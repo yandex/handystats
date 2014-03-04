@@ -11,6 +11,13 @@
 #include <handystats/measuring_points.hpp>
 
 
+namespace handystats {
+
+extern bool enabled;
+
+} // namespace handystats
+
+
 namespace handystats { namespace message_queue {
 
 extern tbb::concurrent_queue<std::shared_ptr<events::event_message>>* event_message_queue;
@@ -25,9 +32,11 @@ class EventMessageQueueTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
 		handystats::message_queue::initialize();
+		handystats::enabled = true;
 	}
 	virtual void TearDown() {
 		handystats::message_queue::finalize();
+		handystats::enabled = false;
 	}
 };
 

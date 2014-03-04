@@ -2,6 +2,7 @@
 
 #include "events/timer_events_impl.hpp"
 #include "message_queue_impl.hpp"
+#include "core_impl.hpp"
 
 #include <handystats/measuring_points/timer_measuring_points.hpp>
 
@@ -12,8 +13,10 @@ void HANDY_TIMER_INIT(
 		handystats::metrics::timer::time_point timestamp
 		)
 {
-	auto message = handystats::events::timer_init_event(timer_name, instance_id, timestamp);
-	handystats::message_queue::push_event_message(message);
+	if (handystats::is_enabled()) {
+		auto message = handystats::events::timer_init_event(timer_name, instance_id, timestamp);
+		handystats::message_queue::push_event_message(message);
+	}
 }
 
 void HANDY_TIMER_START(
@@ -22,8 +25,10 @@ void HANDY_TIMER_START(
 		handystats::metrics::timer::time_point timestamp
 		)
 {
-	auto message = handystats::events::timer_start_event(timer_name, instance_id, timestamp);
-	handystats::message_queue::push_event_message(message);
+	if (handystats::is_enabled()) {
+		auto message = handystats::events::timer_start_event(timer_name, instance_id, timestamp);
+		handystats::message_queue::push_event_message(message);
+	}
 }
 
 void HANDY_TIMER_STOP(
@@ -32,8 +37,10 @@ void HANDY_TIMER_STOP(
 		handystats::metrics::timer::time_point timestamp
 		)
 {
-	auto message = handystats::events::timer_stop_event(timer_name, instance_id, timestamp);
-	handystats::message_queue::push_event_message(message);
+	if (handystats::is_enabled()) {
+		auto message = handystats::events::timer_stop_event(timer_name, instance_id, timestamp);
+		handystats::message_queue::push_event_message(message);
+	}
 }
 
 void HANDY_TIMER_DISCARD(
@@ -42,8 +49,10 @@ void HANDY_TIMER_DISCARD(
 		handystats::metrics::timer::time_point timestamp
 		)
 {
-	auto message = handystats::events::timer_discard_event(timer_name, instance_id, timestamp);
-	handystats::message_queue::push_event_message(message);
+	if (handystats::is_enabled()) {
+		auto message = handystats::events::timer_discard_event(timer_name, instance_id, timestamp);
+		handystats::message_queue::push_event_message(message);
+	}
 }
 
 void HANDY_TIMER_HEARTBEAT(
@@ -52,8 +61,10 @@ void HANDY_TIMER_HEARTBEAT(
 		handystats::metrics::timer::time_point timestamp
 		)
 {
-	auto message = handystats::events::timer_heartbeat_event(timer_name, instance_id, timestamp);
-	handystats::message_queue::push_event_message(message);
+	if (handystats::is_enabled()) {
+		auto message = handystats::events::timer_heartbeat_event(timer_name, instance_id, timestamp);
+		handystats::message_queue::push_event_message(message);
+	}
 }
 
 

@@ -1,3 +1,12 @@
+handystats (1.1.0) UNRELEASED; urgency=low
+
+  * core: enabled flag has been added (measuring points are processed now only if this flag is set)
+  * json: memory allocation has been improved (global rapidjson::MemoryPoolAllocator has been replaced with local ones)
+  * counter: default values for measuring points has been added (increment +1, decrement -1) counter: new measuring point 'HANDY_COUNTER_CHANGE' has been added (if you don't want to work with increment/decrement measuring points, positive delta values will be treated as increment and negative as decrement)
+  * core: sleeping policy has been added in case of empty message queue (sleep interval changes gradually from 1 to 1000 usecs)
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Tue, 04 Mar 2014 18:59:06 +0400
+
 handystats (1.0.1) UNRELEASED; urgency=low
 
   * CMake: test part fixup (gtest targets have been added as dependencies)

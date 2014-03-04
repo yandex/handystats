@@ -25,6 +25,11 @@ bool is_enabled() {
 
 std::thread* processor_thread = nullptr;
 
+std::chrono::microseconds EMPTY_QUEUE_SLEEP_INTERVAL_MAX(1000);
+std::chrono::microseconds EMPTY_QUEUE_SLEEP_INTERVAL_MIN(1);
+
+std::chrono::microseconds empty_queue_sleep_interval = EMPTY_QUEUE_SLEEP_INTERVAL_MIN;
+
 void process_message_queue() {
 	auto processing_start_time = chrono::default_clock::now();
 	auto message = message_queue::pop_event_message();
@@ -35,14 +40,12 @@ void process_message_queue() {
 
 		message_processing_time.set(std::chrono::duration_cast<chrono::default_duration>(processing_end_time - processing_start_time).count(), processing_end_time);
 	}
-
-	json::update_json_dump();
 }
 
 
 void initialize() {
 	std::lock_guard<std::mutex> lock(operation_mutex);
-	if (enabled) {
+	if (is_enabled()) {
 		return;
 	}
 	enabled = true;
@@ -53,8 +56,18 @@ void initialize() {
 	processor_thread =
 		new std::thread([]
 				() {
-					while (enabled) {
-						process_message_queue();
+					while (is_enabled()) {
+						if (!message_queue::empty()) {
+							process_message_queue();
+							empty_queue_sleep_interval = EMPTY_QUEUE_SLEEP_INTERVAL_MIN;
+						}
+						else {
+							std::this_thread::sleep_for(empty_queue_sleep_interval);
+							if (empty_queue_sleep_interval < EMPTY_QUEUE_SLEEP_INTERVAL_MAX) {
+								empty_queue_sleep_interval *= 2;
+							}
+						}
+						json::update_json_dump();
 					}
 				}
 		);
@@ -62,7 +75,7 @@ void initialize() {
 
 void finalize() {
 	std::lock_guard<std::mutex> lock(operation_mutex);
-	if (!enabled) {
+	if (!is_enabled()) {
 		return;
 	}
 	enabled = false;

@@ -16,6 +16,8 @@ namespace handystats { namespace message_queue {
 void push_event_message(std::shared_ptr<events::event_message>);
 std::shared_ptr<events::event_message> pop_event_message();
 
+bool empty();
+
 void initialize();
 void finalize();
 

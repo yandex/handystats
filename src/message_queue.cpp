@@ -38,6 +38,14 @@ std::shared_ptr<events::event_message> pop_event_message() {
 	return message;
 }
 
+bool empty() {
+	if (!event_message_queue) {
+		return true;
+	}
+
+	return event_message_queue->empty();
+}
+
 void initialize() {
 	if (!event_message_queue) {
 		event_message_queue = new tbb::concurrent_queue<std::shared_ptr<events::event_message>>();

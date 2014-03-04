@@ -50,14 +50,18 @@ TEST_F(EventMessageQueueTest, SinglePushCorrectlyAddsMessage) {
 
 	HANDY_COUNTER_DECREMENT("counter.name", 11);
 	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 3);
+
+	HANDY_COUNTER_CHANGE("counter.name", -10);
+	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 4);
 }
 
 TEST_F(EventMessageQueueTest, MultiplePushesCorrectlyAddMessages) {
 	HANDY_COUNTER_INIT("counter.name", 10);
 	HANDY_COUNTER_INCREMENT("counter.name", 1);
 	HANDY_COUNTER_DECREMENT("counter.name", 11);
+	HANDY_COUNTER_CHANGE("counter.name", 13);
 
-	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 3);
+	ASSERT_EQ(handystats::message_queue::event_message_queue->unsafe_size(), 4);
 }
 
 TEST_F(EventMessageQueueTest, PushDifferentMessages) {

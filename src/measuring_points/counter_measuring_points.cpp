@@ -43,3 +43,18 @@ void HANDY_COUNTER_DECREMENT(
 	}
 }
 
+void HANDY_COUNTER_CHANGE(
+		const std::string counter_name,
+		handystats::metrics::counter::value_type value,
+		handystats::metrics::counter::time_point timestamp
+		)
+{
+	if (handystats::is_enabled()) {
+		if (value >= 0) {
+			HANDY_COUNTER_INCREMENT(counter_name, value, timestamp);
+		}
+		else {
+			HANDY_COUNTER_DECREMENT(counter_name, -value, timestamp);
+		}
+	}
+}

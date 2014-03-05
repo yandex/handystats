@@ -9,19 +9,21 @@
 
 namespace handystats { namespace events {
 
-enum class event_destination_type {
+namespace event_destination_type {
+enum {
 	COUNTER,
 	GAUGE,
 	TIMER
 };
+}
 
 struct event_message {
 	std::string destination_name;
-	event_destination_type destination_type;
+	int destination_type;
 
 	chrono::default_time_point timestamp;
 
-	void* event_type;
+	int event_type;
 	std::vector<void*> event_data;
 };
 

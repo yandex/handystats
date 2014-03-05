@@ -11,7 +11,7 @@ void internal_counter::process_event_message(const events::event_message& messag
 		return;
 	}
 
-	switch (*static_cast<events::counter_event*>(message.event_type)) {
+	switch (message.event_type) {
 		case events::counter_event::INIT:
 			process_init_event(message);
 			break;

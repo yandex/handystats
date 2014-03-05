@@ -12,13 +12,15 @@
 
 namespace handystats { namespace events {
 
-enum class timer_event {
+namespace timer_event {
+enum {
 	INIT,
 	START,
 	STOP,
 	DISCARD,
 	HEARTBEAT
 };
+}
 
 
 std::shared_ptr<event_message> timer_init_event(

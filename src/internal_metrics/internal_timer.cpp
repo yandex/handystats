@@ -26,7 +26,7 @@ void internal_timer::process_event_message(const events::event_message& message)
 		return;
 	}
 
-	switch (*static_cast<events::timer_event*>(message.event_type)) {
+	switch (message.event_type) {
 		case events::timer_event::INIT:
 			process_init_event(message);
 			break;

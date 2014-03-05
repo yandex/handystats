@@ -29,7 +29,7 @@ TEST(TimerEventsTest, TestTimerInitEventWithDefaultInstance) {
 	ASSERT_EQ(message->destination_name, timer_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::TIMER);
 
-	ASSERT_EQ(*static_cast<timer_event*>(message->event_type), timer_event::INIT);
+	ASSERT_EQ(message->event_type, timer_event::INIT);
 	ASSERT_EQ(*static_cast<uint64_t*>(message->event_data[0]), uint64_t(-1));
 }
 
@@ -41,7 +41,7 @@ TEST(TimerEventsTest, TestTimerInitEventWithSpecificInstance) {
 	ASSERT_EQ(message->destination_name, timer_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::TIMER);
 
-	ASSERT_EQ(*static_cast<timer_event*>(message->event_type), timer_event::INIT);
+	ASSERT_EQ(message->event_type, timer_event::INIT);
 	ASSERT_EQ(*static_cast<uint64_t*>(message->event_data[0]), instance_id);
 }
 
@@ -53,7 +53,7 @@ TEST(TimerEventsTest, TestTimerStartEvent) {
 	ASSERT_EQ(message->destination_name, timer_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::TIMER);
 
-	ASSERT_EQ(*static_cast<timer_event*>(message->event_type), timer_event::START);
+	ASSERT_EQ(message->event_type, timer_event::START);
 	ASSERT_EQ(*static_cast<uint64_t*>(message->event_data[0]), instance_id);
 }
 
@@ -65,7 +65,7 @@ TEST(TimerEventsTest, TestTimerStopEvent) {
 	ASSERT_EQ(message->destination_name, timer_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::TIMER);
 
-	ASSERT_EQ(*static_cast<timer_event*>(message->event_type), timer_event::STOP);
+	ASSERT_EQ(message->event_type, timer_event::STOP);
 	ASSERT_EQ(*static_cast<uint64_t*>(message->event_data[0]), instance_id);
 }
 
@@ -77,7 +77,7 @@ TEST(TimerEventsTest, TestTimerDiscardEvent) {
 	ASSERT_EQ(message->destination_name, timer_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::TIMER);
 
-	ASSERT_EQ(*static_cast<timer_event*>(message->event_type), timer_event::DISCARD);
+	ASSERT_EQ(message->event_type, timer_event::DISCARD);
 	ASSERT_EQ(*static_cast<uint64_t*>(message->event_data[0]), instance_id);
 }
 
@@ -89,7 +89,7 @@ TEST(TimerEventsTest, TestTimerHeartbeatEvent) {
 	ASSERT_EQ(message->destination_name, timer_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::TIMER);
 
-	ASSERT_EQ(*static_cast<timer_event*>(message->event_type), timer_event::HEARTBEAT);
+	ASSERT_EQ(message->event_type, timer_event::HEARTBEAT);
 	ASSERT_EQ(*static_cast<uint64_t*>(message->event_data[0]), instance_id);
 }
 

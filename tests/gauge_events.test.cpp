@@ -26,7 +26,7 @@ TEST(GaugeEventsTest, TestGaugeInitEvent) {
 	ASSERT_EQ(message->destination_name, gauge_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::GAUGE);
 
-	ASSERT_EQ(*static_cast<gauge_event*>(message->event_type), gauge_event::INIT);
+	ASSERT_EQ(message->event_type, gauge_event::INIT);
 	ASSERT_NEAR(*static_cast<handystats::metrics::gauge::value_type*>(message->event_data[0]), init_value, 1E-6);
 }
 
@@ -38,7 +38,7 @@ TEST(GaugeEventsTest, TestGaugeSetEvent) {
 	ASSERT_EQ(message->destination_name, gauge_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::GAUGE);
 
-	ASSERT_EQ(*static_cast<gauge_event*>(message->event_type), gauge_event::SET);
+	ASSERT_EQ(message->event_type, gauge_event::SET);
 	ASSERT_NEAR(*static_cast<handystats::metrics::gauge::value_type*>(message->event_data[0]), value, 1E-6);
 }
 

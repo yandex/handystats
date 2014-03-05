@@ -16,11 +16,13 @@ struct event_message;
 
 namespace handystats { namespace events {
 
-enum class counter_event {
+namespace counter_event {
+enum {
 	INIT,
 	INCREMENT,
 	DECREMENT
 };
+}
 
 
 std::shared_ptr<event_message> counter_init_event(

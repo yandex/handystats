@@ -11,10 +11,12 @@
 
 namespace handystats { namespace events {
 
-enum class gauge_event {
+namespace gauge_event {
+enum {
 	INIT,
 	SET
 };
+}
 
 
 std::shared_ptr<event_message> gauge_init_event(

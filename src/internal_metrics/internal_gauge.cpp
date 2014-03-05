@@ -11,7 +11,7 @@ void internal_gauge::process_event_message(const events::event_message& message)
 		return;
 	}
 
-	switch (*static_cast<events::gauge_event*>(message.event_type)) {
+	switch (message.event_type) {
 		case events::gauge_event::INIT:
 			process_init_event(message);
 			break;

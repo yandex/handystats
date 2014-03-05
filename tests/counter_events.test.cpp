@@ -27,7 +27,7 @@ TEST(CounterEventsTest, TestCounterInitEvent) {
 	ASSERT_EQ(message->destination_name, counter_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::COUNTER);
 
-	ASSERT_EQ(*static_cast<counter_event*>(message->event_type), counter_event::INIT);
+	ASSERT_EQ(message->event_type, counter_event::INIT);
 	ASSERT_EQ(*static_cast<handystats::metrics::counter::value_type*>(message->event_data[0]), init_value);
 }
 
@@ -39,7 +39,7 @@ TEST(CounterEventsTest, TestCounterIncrementEvent) {
 	ASSERT_EQ(message->destination_name, counter_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::COUNTER);
 
-	ASSERT_EQ(*static_cast<counter_event*>(message->event_type), counter_event::INCREMENT);
+	ASSERT_EQ(message->event_type, counter_event::INCREMENT);
 	ASSERT_EQ(*static_cast<handystats::metrics::counter::value_type*>(message->event_data[0]), value);
 }
 
@@ -51,7 +51,7 @@ TEST(CounterEventsTest, TestCounterDecrementEvent) {
 	ASSERT_EQ(message->destination_name, counter_name);
 	ASSERT_EQ(message->destination_type, event_destination_type::COUNTER);
 
-	ASSERT_EQ(*static_cast<counter_event*>(message->event_type), counter_event::DECREMENT);
+	ASSERT_EQ(message->event_type, counter_event::DECREMENT);
 	ASSERT_EQ(*static_cast<handystats::metrics::counter::value_type*>(message->event_data[0]), value);
 }
 

@@ -19,14 +19,13 @@ std::shared_ptr<event_message> gauge_init_event(
 
 	message->timestamp = timestamp;
 
-	message->event_type = new gauge_event(gauge_event::INIT);
+	message->event_type = gauge_event::INIT;
 	message->event_data.push_back(new metrics::gauge::value_type(init_value));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_gauge_init_event(event_message* message) {
-	delete static_cast<gauge_event*>(message->event_type);
 	delete static_cast<metrics::gauge::value_type*>(message->event_data[0]);
 
 	delete message;
@@ -46,14 +45,13 @@ std::shared_ptr<event_message> gauge_set_event(
 
 	message->timestamp = timestamp;
 
-	message->event_type = new gauge_event(gauge_event::SET);
+	message->event_type = gauge_event::SET;
 	message->event_data.push_back(new metrics::gauge::value_type(value));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_gauge_set_event(event_message* message) {
-	delete static_cast<gauge_event*>(message->event_type);
 	delete static_cast<metrics::gauge::value_type*>(message->event_data[0]);
 
 	delete message;
@@ -61,7 +59,7 @@ void delete_gauge_set_event(event_message* message) {
 
 
 void delete_gauge_event(event_message* message) {
-	switch (*static_cast<gauge_event*>(message->event_type)) {
+	switch (message->event_type) {
 		case gauge_event::INIT:
 			delete_gauge_init_event(message);
 			break;

@@ -17,14 +17,13 @@ std::shared_ptr<event_message> counter_init_event(
 
 	message->timestamp = timestamp;
 
-	message->event_type = new counter_event(counter_event::INIT);
+	message->event_type = counter_event::INIT;
 	message->event_data.push_back(new metrics::counter::value_type(init_value));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_counter_init_event(event_message* message) {
-	delete static_cast<counter_event*>(message->event_type);
 	delete static_cast<metrics::counter::value_type*>(message->event_data[0]);
 
 	delete message;
@@ -44,14 +43,13 @@ std::shared_ptr<event_message> counter_increment_event(
 
 	message->timestamp = timestamp;
 
-	message->event_type = new counter_event(counter_event::INCREMENT);
+	message->event_type = counter_event::INCREMENT;
 	message->event_data.push_back(new metrics::counter::value_type(value));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_counter_increment_event(event_message* message) {
-	delete static_cast<counter_event*>(message->event_type);
 	delete static_cast<metrics::counter::value_type*>(message->event_data[0]);
 
 	delete message;
@@ -71,14 +69,13 @@ std::shared_ptr<event_message> counter_decrement_event(
 
 	message->timestamp = timestamp;
 
-	message->event_type = new counter_event(counter_event::DECREMENT);
+	message->event_type = counter_event::DECREMENT;
 	message->event_data.push_back(new metrics::counter::value_type(value));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_counter_decrement_event(event_message* message) {
-	delete static_cast<counter_event*>(message->event_type);
 	delete static_cast<metrics::counter::value_type*>(message->event_data[0]);
 
 	delete message;
@@ -86,7 +83,7 @@ void delete_counter_decrement_event(event_message* message) {
 
 
 void delete_counter_event(event_message* message) {
-	switch (*static_cast<counter_event*>(message->event_type)) {
+	switch (message->event_type) {
 		case counter_event::INIT:
 			delete_counter_init_event(message);
 			break;

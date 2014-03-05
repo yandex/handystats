@@ -2,7 +2,6 @@ src/metrics/timer.cpp
 src/metrics/counter.cpp
 src/metrics/gauge.cpp
 src/message_queue.cpp
-src/json/allocators.cpp
 src/chrono.cpp
 src/events/counter_events.cpp
 src/events/event_message.cpp

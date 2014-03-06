@@ -5,7 +5,7 @@
 #include <chrono>
 #include <queue>
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <memory>
 
 #include <gtest/gtest.h>
@@ -31,7 +31,7 @@ extern tbb::concurrent_queue<std::shared_ptr<events::event_message>>* event_mess
 
 namespace handystats { namespace internal {
 
-extern std::unordered_map<std::string, internal_metric> internal_metrics;
+extern std::map<std::string, internal_metric> internal_metrics;
 
 }} // namespace handystats::internal
 

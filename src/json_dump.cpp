@@ -1,4 +1,7 @@
 #include <mutex>
+#include <memory>
+#include <string>
+#include <map>
 
 #include <handystats/chrono.hpp>
 #include <handystats/json_dump.hpp>
@@ -18,7 +21,7 @@
 
 namespace handystats { namespace internal {
 
-extern std::unordered_map<std::string, internal_metric> internal_metrics;
+extern std::map<std::string, internal_metric> internal_metrics;
 
 }} // namespace handystats::internal
 

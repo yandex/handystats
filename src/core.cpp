@@ -1,8 +1,5 @@
 #include <thread>
-#include <memory>
 #include <mutex>
-#include <string>
-#include <unordered_map>
 
 #include <handystats/chrono.hpp>
 #include <handystats/operation.hpp>

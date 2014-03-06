@@ -1,5 +1,5 @@
 #include <string>
-#include <unordered_map>
+#include <map>
 
 #include "events/event_message_impl.hpp"
 
@@ -12,7 +12,7 @@
 
 namespace handystats { namespace internal {
 
-std::unordered_map<std::string, internal_metric> internal_metrics;
+std::map<std::string, internal_metric> internal_metrics;
 
 
 void process_event_message(const events::event_message& message, internal_metric& metric) {

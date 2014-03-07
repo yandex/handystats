@@ -1,3 +1,11 @@
+handystats (1.1.2.waitfree) UNRELEASED; urgency=low
+
+  * message queue: use message queue interface (message_queue_impl.hpp) internally
+  * message queue: message queue implementation has been replaced with waitfree queue (taken from Boost's Atomic usage examples)
+  * Completely remove Intel TBB dependency.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Sat, 08 Mar 2014 00:24:34 +0400
+
 handystats (1.1.1) UNRELEASED; urgency=low
 
   * json: global allocators removal fixup

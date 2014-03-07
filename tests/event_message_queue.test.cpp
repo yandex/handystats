@@ -4,8 +4,6 @@
 
 #include <gtest/gtest.h>
 
-#include <tbb/concurrent_queue.h>
-
 #include "events/event_message_impl.hpp"
 #include "message_queue_impl.hpp"
 

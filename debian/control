@@ -5,7 +5,6 @@ Maintainer: Danil Osherov <shindo@yandex-team.ru>
 Build-Depends: debhelper (>= 7),
 		cmake,
 		libboost-dev,
-		libtbb-dev,
 		libgtest-dev,
 Standards-Version: 3.8.0
 Homepage: https://github.com/shindo/handystats
@@ -14,5 +13,5 @@ Vcs-Browser: https://github.com/shindo/handystats
 
 Package: handystats
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libtbb2
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: C++ Framework for collecting runtime in-process statistics

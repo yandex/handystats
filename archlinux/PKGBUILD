@@ -6,7 +6,7 @@ pkgdesc="C++ Framework for collecting runtime in-process statistics"
 arch=('any')
 url=('https://github.com/shindo/handystats')
 license=('unknown')
-depends=('intel-tbb' 'boost>=1.46')
+depends=('boost>=1.46')
 checkdepends=('gtest')
 makedepends=('git' 'cmake')
 source=("$pkgname"::"git://github.com/shindo/handystats.git#tag=$pkgver")

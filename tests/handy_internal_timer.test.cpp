@@ -10,8 +10,6 @@
 
 #include <gtest/gtest.h>
 
-#include <tbb/concurrent_queue.h>
-
 #include <handystats/operation.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>

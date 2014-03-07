@@ -76,11 +76,6 @@ std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allo
 		dump_value.AddMember("__message-processing-time", processing_time_value, allocator);
 	}
 	{
-		rapidjson::Value push_time_value;
-		write_to_json_value(&message_push_time, &push_time_value, allocator);
-		dump_value.AddMember("__message-push-time", push_time_value, allocator);
-	}
-	{
 		rapidjson::Value pop_time_value;
 		write_to_json_value(&message_pop_time, &pop_time_value, allocator);
 		dump_value.AddMember("__message-pop-time", pop_time_value, allocator);

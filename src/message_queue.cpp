@@ -12,12 +12,7 @@ tbb::concurrent_queue<std::shared_ptr<events::event_message>>* event_message_que
 
 void push_event_message(std::shared_ptr<events::event_message> message) {
 	if (event_message_queue) {
-		auto push_start_time = chrono::default_clock::now();
 		event_message_queue->push(message);
-		auto push_end_time = chrono::default_clock::now();
-
-		message_push_time.set(std::chrono::duration_cast<chrono::default_duration>(push_end_time - push_start_time).count(), push_end_time);
-		message_queue_size.increment(1, push_end_time);
 	}
 }
 
@@ -31,7 +26,7 @@ std::shared_ptr<events::event_message> pop_event_message() {
 
 		if (message) {
 			message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
-			message_queue_size.decrement(1, pop_end_time);
+			message_queue_size.set(event_message_queue->unsafe_size(), pop_end_time);
 		}
 	}
 

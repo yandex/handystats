@@ -28,10 +28,10 @@ std::chrono::microseconds EMPTY_QUEUE_SLEEP_INTERVAL_MIN(1);
 std::chrono::microseconds empty_queue_sleep_interval = EMPTY_QUEUE_SLEEP_INTERVAL_MIN;
 
 void process_message_queue() {
-	auto processing_start_time = chrono::default_clock::now();
 	auto message = message_queue::pop_event_message();
 
 	if (message) {
+		auto processing_start_time = chrono::default_clock::now();
 		internal::process_event_message(*message);
 		auto processing_end_time = chrono::default_clock::now();
 

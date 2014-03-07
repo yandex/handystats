@@ -1,3 +1,13 @@
+handystats (1.1.1) UNRELEASED; urgency=low
+
+  * json: global allocators removal fixup
+  * event_message: message format has been changed (event types are "old style" enums)
+  * internal: data struct for internal metrics has been changed to std::map from std::unordered_map (because of std::string key)
+  * system stats: system stats have been reworked because previous version was not thread-safe
+  * chrono: system's cycles frequency estimation fixup (duration delta between system's clock and tsc clock measurements has been increased)
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 07 Mar 2014 17:35:10 +0400
+
 handystats (1.1.0) UNRELEASED; urgency=low
 
   * core: enabled flag has been added (measuring points are processed now only if this flag is set)

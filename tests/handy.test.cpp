@@ -17,16 +17,10 @@
 #include <handystats/json_dump.hpp>
 
 #include "events/event_message_impl.hpp"
+#include "message_queue_impl.hpp"
 #include "internal_metrics_impl.hpp"
 #include "internal_metrics/internal_gauge_impl.hpp"
 #include "internal_metrics/internal_counter_impl.hpp"
-
-
-namespace handystats { namespace message_queue {
-
-extern tbb::concurrent_queue<std::shared_ptr<events::event_message>>* event_message_queue;
-
-}} // namespace handystats::message_queue
 
 
 namespace handystats { namespace internal {
@@ -81,7 +75,7 @@ TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 		}
 	}
 
-	while (!handystats::message_queue::event_message_queue->empty()) {
+	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(10));
 	}
 
@@ -117,7 +111,7 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 		}
 	}
 
-	while (!handystats::message_queue::event_message_queue->empty()) {
+	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(10));
 	}
 
@@ -141,7 +135,7 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 	const int value_1 = 10;
 	HANDY_COUNTER_INCREMENT("test.counter", value_1);
 
-	while (!handystats::message_queue::event_message_queue->empty()) {
+	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(10));
 	}
 
@@ -160,7 +154,7 @@ TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
 	const int value_2 = 100;
 	HANDY_COUNTER_INCREMENT("test.counter", value_2);
 
-	while (!handystats::message_queue::event_message_queue->empty()) {
+	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(10));
 	}
 
@@ -183,7 +177,7 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 	const int value_1 = 10;
 	HANDY_COUNTER_INCREMENT("test.metric", value_1);
 
-	while (!handystats::message_queue::event_message_queue->empty()) {
+	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(10));
 	}
 
@@ -202,7 +196,7 @@ TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
 	const int value_2 = 100;
 	HANDY_GAUGE_SET("test.metric", value_2);
 
-	while (!handystats::message_queue::event_message_queue->empty()) {
+	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(10));
 	}
 

@@ -41,6 +41,13 @@ bool empty() {
 	return event_message_queue->empty();
 }
 
+size_t size() {
+	if (!event_message_queue) {
+		return 0;
+	}
+	return event_message_queue->size();
+}
+
 void initialize() {
 	if (!event_message_queue) {
 		event_message_queue = new tbb::concurrent_queue<std::shared_ptr<events::event_message>>();

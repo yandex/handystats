@@ -17,6 +17,7 @@ void push_event_message(std::shared_ptr<events::event_message>);
 std::shared_ptr<events::event_message> pop_event_message();
 
 bool empty();
+size_t size();
 
 void initialize();
 void finalize();

@@ -17,15 +17,9 @@
 #include <handystats/json_dump.hpp>
 
 #include "events/event_message_impl.hpp"
+#include "message_queue_impl.hpp"
 #include "internal_metrics_impl.hpp"
 #include "internal_metrics/internal_timer_impl.hpp"
-
-
-namespace handystats { namespace message_queue {
-
-extern tbb::concurrent_queue<std::shared_ptr<events::event_message>>* event_message_queue;
-
-}} // namespace handystats::message_queue
 
 
 namespace handystats { namespace internal {
@@ -57,7 +51,7 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 		HANDY_TIMER_STOP("sleep.time");
 	}
 
-	while (!handystats::message_queue::event_message_queue->empty()) {
+	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
 
@@ -91,7 +85,7 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 		HANDY_TIMER_STOP("sleep.time", step);
 	}
 
-	while (!handystats::message_queue::event_message_queue->empty()) {
+	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
 
@@ -129,7 +123,7 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 		HANDY_TIMER_STOP("sleep.time", step);
 	}
 
-	while (!handystats::message_queue::event_message_queue->empty()) {
+	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
 	}
 

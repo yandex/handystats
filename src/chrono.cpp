@@ -26,7 +26,7 @@ static inline uint64_t get_nanoseconds() noexcept {
 	return (uint64_t)tm.tv_sec * (uint64_t)1E9 + tm.tv_nsec;
 }
 
-const uint64_t NANOSEC_DELTA = 100;
+const uint64_t NANOSEC_DELTA = 5000;
 
 long double get_cycles_frequency(const timespec& sleep_interval) {
 	uint64_t cycles_start;

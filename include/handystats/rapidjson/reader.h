@@ -602,8 +602,14 @@ private:
 				exp = s.Take() - '0';
 				while (s.Peek() >= '0' && s.Peek() <= '9') {
 					exp = exp * 10 + (s.Take() - '0');
-					if (exp > 308)
-						RAPIDJSON_PARSE_ERROR("Number too big to store in double", is.Tell());
+					if (!expMinus) {
+						if (exp > 308)
+							RAPIDJSON_PARSE_ERROR("Number too big to store in double", is.Tell());
+					}
+					else {
+						if (exp > 324)
+							RAPIDJSON_PARSE_ERROR("Number too small to store in double", is.Tell());
+					}
 				}
 			}
 			else

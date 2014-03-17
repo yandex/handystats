@@ -1,3 +1,11 @@
+handystats (1.2.0) UNRELEASED; urgency=low
+
+  * overload macro has been added (copy-pasted from Boost Library) to support older Boost Library versions which don't have BOOST_PP_OVERLOAD macro.
+  * measuring_points: HANDY_TIMER_SCOPE measuring point has been added. 
+  * measuring_points: HANDY_COUNTER_SCOPE measuring point has been added. 
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Tue, 18 Mar 2014 00:33:18 +0400
+
 handystats (1.1.3.waitfree) UNRELEASED; urgency=low
 
   * rapidjson: json reader fixup (double exponent can be in [-324; 308] range)

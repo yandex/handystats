@@ -5,9 +5,9 @@
 #include <cstdint>
 
 #include <boost/preprocessor/list/cat.hpp>
-#include <boost/preprocessor/facilities/overload.hpp>
 
 #include <handystats/metrics/timer.hpp>
+#include <handystats/macro_overload.hpp>
 
 void HANDY_TIMER_INIT(
 		const std::string timer_name,
@@ -78,6 +78,6 @@ struct scoped_timer_helper {
 /*
  * HANDY_TIMER_SCOPE event constructs scoped_timer_helper named variable.
  */
-#define HANDY_TIMER_SCOPE(...) BOOST_PP_OVERLOAD(HANDY_TIMER_SCOPE_,__VA_ARGS__)(__VA_ARGS__)
+#define HANDY_TIMER_SCOPE(...) HANDY_PP_OVERLOAD(HANDY_TIMER_SCOPE_,__VA_ARGS__)(__VA_ARGS__)
 
 #endif // HANDYSTATS_TIMER_MEASURING_POINTS_H_

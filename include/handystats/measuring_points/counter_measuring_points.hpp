@@ -4,9 +4,9 @@
 #include <string>
 
 #include <boost/preprocessor/list/cat.hpp>
-#include <boost/preprocessor/facilities/overload.hpp>
 
 #include <handystats/metrics/counter.hpp>
+#include <handystats/macro_overload.hpp>
 
 void HANDY_COUNTER_INIT(
 		const std::string counter_name,
@@ -71,6 +71,6 @@ struct scoped_counter_helper {
 /*
  * HANDY_COUNTER_SCOPE event constructs scoped_counter_helper named variable.
  */
-#define HANDY_COUNTER_SCOPE(...) BOOST_PP_OVERLOAD(HANDY_COUNTER_SCOPE_,__VA_ARGS__)(__VA_ARGS__)
+#define HANDY_COUNTER_SCOPE(...) HANDY_PP_OVERLOAD(HANDY_COUNTER_SCOPE_,__VA_ARGS__)(__VA_ARGS__)
 
 #endif // HANDYSTATS_COUNTER_MEASURING_POINTS_H_

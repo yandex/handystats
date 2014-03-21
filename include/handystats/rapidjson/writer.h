@@ -6,6 +6,7 @@
 #include "internal/strfunc.h"
 #include <cstdio>	// snprintf() or _sprintf_s()
 #include <new>		// placement new
+#include <cmath>	// isnan(double)
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -20,7 +21,7 @@ namespace rapidjson {
 
 	User may programmatically calls the functions of a writer to generate JSON text.
 
-	On the other side, a writer can also be passed to objects that generates events, 
+	On the other side, a writer can also be passed to objects that generates events,
 
 	for example Reader::Parse() and Document::Accept().
 
@@ -34,7 +35,7 @@ class Writer {
 public:
 	typedef typename SourceEncoding::Ch Ch;
 
-	Writer(OutputStream& os, Allocator* allocator = 0, size_t levelDepth = kDefaultLevelDepth) : 
+	Writer(OutputStream& os, Allocator* allocator = 0, size_t levelDepth = kDefaultLevelDepth) :
 		os_(os), level_stack_(allocator, levelDepth * sizeof(Level)) {}
 
 	//@name Implementation of Handler
@@ -163,6 +164,9 @@ protected:
 
 	//! \todo Optimization with custom double-to-string converter.
 	void WriteDouble(double d) {
+		if (isnan(d)) {
+			d = 0;
+		}
 		char buffer[100];
 #if _MSC_VER
 		int ret = sprintf_s(buffer, sizeof(buffer), "%g", d);
@@ -219,7 +223,7 @@ protected:
 		if (level_stack_.GetSize() != 0) { // this value is not at root
 			Level* level = level_stack_.template Top<Level>();
 			if (level->valueCount > 0) {
-				if (level->inArray) 
+				if (level->inArray)
 					os_.Put(','); // add comma if it is not the first element in array
 				else  // in object
 					os_.Put((level->valueCount % 2 == 0) ? ',' : ':');

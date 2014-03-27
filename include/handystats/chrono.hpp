@@ -28,8 +28,8 @@ extern long double cycles_per_nanosec;
 
 class tsc_clock {
 public:
-	typedef uint64_t time_point;
-	typedef uint64_t duration;
+	typedef int64_t time_point;
+	typedef int64_t duration;
 
 	static time_point now() noexcept;
 	static std::chrono::nanoseconds to_nanoseconds(const duration&) noexcept;

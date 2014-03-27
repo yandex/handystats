@@ -1,3 +1,11 @@
+handystats (1.2.1) UNRELEASED; urgency=low
+
+  * rapidjson: check double on isnan() before writing (replace with 0 if double value is nan)
+  * chrono: tsc_clock duration and time_point base types should be signed to represent negative durations.
+  * accumulators: interval metrics have been changed to handle disordered events properly.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Thu, 27 Mar 2014 12:32:24 +0400
+
 handystats (1.2.0) UNRELEASED; urgency=low
 
   * overload macro has been added (copy-pasted from Boost Library) to support older Boost Library versions which don't have BOOST_PP_OVERLOAD macro.

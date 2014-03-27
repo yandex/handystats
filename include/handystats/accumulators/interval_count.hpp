@@ -37,15 +37,19 @@ struct interval_count_impl : accumulator_base {
 			if (handystats::math_utils::cmp(elapsed, 1.0) > 0) {
 				this->count = (1.0 / elapsed);
 			}
-			else if (handystats::math_utils::cmp(elapsed, 0.0) <= 0) {
+			else if (handystats::math_utils::cmp(elapsed, 0.0) <= 0 &&
+					handystats::math_utils::cmp(elapsed, -1.0) >= 0)
+			{
 				this->count = this->count + 1.0;
 			}
-			else {
+			else if (handystats::math_utils::cmp(elapsed, 0.0) > 0) {
 				this->count = this->count * (1.0 - elapsed) + 1.0;
 			}
 		}
 
-		this->last_timestamp = args[timestamp];
+		if (this->last_timestamp < args[timestamp]) {
+			this->last_timestamp = args[timestamp];
+		}
 	}
 
 	result_type result(dont_care) const {

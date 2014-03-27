@@ -37,15 +37,19 @@ struct interval_sum_impl : accumulator_base {
 			if (handystats::math_utils::cmp(elapsed, 1.0) > 0) {
 				this->sum = (args[sample] / elapsed);
 			}
-			else if (handystats::math_utils::cmp(elapsed, 0.0) <= 0) {
+			else if (handystats::math_utils::cmp(elapsed, 0.0) <= 0 &&
+					handystats::math_utils::cmp(elapsed, -1.0) >= 0)
+			{
 				this->sum = this->sum + args[sample];
 			}
-			else {
+			else if (handystats::math_utils::cmp(elapsed, 0.0) > 0) {
 				this->sum = this->sum * (1.0 - elapsed) + args[sample];
 			}
 		}
 
-		this->last_timestamp = args[timestamp];
+		if (this->last_timestamp < args[timestamp]) {
+			this->last_timestamp = args[timestamp];
+		}
 	}
 
 	result_type result(dont_care) const {

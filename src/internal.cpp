@@ -71,7 +71,7 @@ void finalize() {
 				delete boost::get<internal_timer*>(metric_entry.second);
 				break;
 			default:
-				return;
+				break;
 		}
 	}
 

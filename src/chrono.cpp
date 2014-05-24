@@ -82,6 +82,14 @@ void estimate_cycles_frequency() {
 
 namespace handystats { namespace chrono {
 
+template<class time_duration>
+typename steady_clock<time_duration>::time_point steady_clock<time_duration>::now() noexcept {
+	timespec ts;
+	clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+	return time_point(std::chrono::duration_cast<duration>(std::chrono::seconds(ts.tv_sec) + std::chrono::nanoseconds(ts.tv_nsec)));
+}
+
+
 tsc_clock::time_point tsc_clock::now() noexcept {
 	return rdtsc();
 }

@@ -42,11 +42,7 @@ public:
 	typedef typename std::chrono::time_point<steady_clock> time_point;
 	static const bool is_steady = true;
 
-	static time_point now() noexcept {
-		timespec ts;
-		clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
-		return time_point(std::chrono::duration_cast<duration>(std::chrono::seconds(ts.tv_sec) + std::chrono::nanoseconds(ts.tv_nsec)));
-	}
+	static time_point now() noexcept;
 };
 
 

@@ -38,8 +38,6 @@ protected:
 };
 
 TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
-	std::cout << "Cycles per nanosec: " << handystats::chrono::cycles_per_nanosec << std::endl;
-
 	const int COUNT = 5;
 	auto sleep_time = std::chrono::milliseconds(10);
 

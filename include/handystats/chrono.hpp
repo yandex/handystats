@@ -23,8 +23,6 @@ namespace handystats { namespace chrono {
  */
 
 
-extern long double cycles_per_nanosec;
-
 class tsc_clock {
 public:
 	typedef int64_t time_point;

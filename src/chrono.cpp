@@ -5,9 +5,7 @@
 #include <handystats/chrono.hpp>
 
 
-namespace handystats { namespace chrono {
-
-long double cycles_per_nanosec;
+namespace {
 
 static inline uint64_t rdtsc() {
 	uint64_t tsc;
@@ -59,6 +57,7 @@ long double get_cycles_frequency(const timespec& sleep_interval) {
 	return (long double)(cycles_end - cycles_start) / (nanoseconds_end - nanoseconds_start);
 }
 
+long double cycles_per_nanosec;
 
 /*
  * Cycles frequency = num. of cycles / 1ns
@@ -78,6 +77,10 @@ void estimate_cycles_frequency() {
 	cycles_per_nanosec = cycles_tests[TESTS_COUNT / 2];
 }
 
+} // unnamed namespace
+
+
+namespace handystats { namespace chrono {
 
 tsc_clock::time_point tsc_clock::now() noexcept {
 	return rdtsc();

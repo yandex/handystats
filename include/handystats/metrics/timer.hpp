@@ -19,6 +19,7 @@ struct timer
 
 	void start(time_point timestamp);
 	void stop(time_point timestamp);
+	void reset();
 
 	time_point timestamp;
 	value_type value;

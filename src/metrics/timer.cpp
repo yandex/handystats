@@ -25,4 +25,8 @@ void timer::stop(time_point timestamp) {
 	}
 }
 
+void timer::reset() {
+	*this = timer();
+}
+
 }} // namespace handystats::metrics

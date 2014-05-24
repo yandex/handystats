@@ -1,5 +1,6 @@
 #include <ctime>
 #include <algorithm>
+#include <cassert>
 
 #include <handystats/chrono.hpp>
 

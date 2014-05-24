@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <chrono>
-#include <cassert>
 
 namespace handystats { namespace chrono {
 

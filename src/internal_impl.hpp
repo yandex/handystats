@@ -12,6 +12,7 @@ struct event_message;
 namespace handystats { namespace internal {
 
 void process_event_message(const events::event_message&);
+size_t size();
 
 void initialize();
 void finalize();

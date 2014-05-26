@@ -8,13 +8,16 @@
 #include "internal_metrics/internal_timer_impl.hpp"
 
 #include "internal_metrics_impl.hpp"
-#include "system_stats_impl.hpp"
 
 
 namespace handystats { namespace internal {
 
 std::map<std::string, internal_metric> internal_metrics;
 
+
+size_t size() {
+	return internal_metrics.size();
+}
 
 void process_event_message(const events::event_message& message, internal_metric& metric) {
 	switch (metric.which()) {
@@ -50,8 +53,6 @@ void process_event_message(const events::event_message& message) {
 	}
 	auto& metric = internal_metrics[message.destination_name];
 	process_event_message(message, metric);
-
-	internal_metrics_size.set(internal_metrics.size(), chrono::default_clock::now());
 }
 
 

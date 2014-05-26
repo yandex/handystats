@@ -2,7 +2,6 @@
 #include <atomic>
 
 #include "events/event_message_impl.hpp"
-#include "system_stats_impl.hpp"
 
 
 namespace handystats { namespace message_queue {

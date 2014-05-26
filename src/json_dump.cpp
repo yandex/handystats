@@ -18,7 +18,6 @@
 
 #include "system_stats_impl.hpp"
 
-
 namespace handystats { namespace internal {
 
 extern std::map<std::string, internal_metric> internal_metrics;
@@ -71,9 +70,9 @@ std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allo
 		dump_value.AddMember("__internal-metrics-size", internal_metrics_size_value, allocator);
 	}
 	{
-		rapidjson::Value processing_time_value;
-		write_to_json_value(&message_processing_time, &processing_time_value, allocator);
-		dump_value.AddMember("__message-processing-time", processing_time_value, allocator);
+		rapidjson::Value process_time_value;
+		write_to_json_value(&message_process_time, &process_time_value, allocator);
+		dump_value.AddMember("__message-process-time", process_time_value, allocator);
 	}
 	{
 		rapidjson::Value pop_time_value;

@@ -61,22 +61,22 @@ std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allo
 
 	{
 		rapidjson::Value queue_size_value;
-		write_to_json_value(&message_queue_size, &queue_size_value, allocator);
+		write_to_json_value(&system_stats::message_queue_size, &queue_size_value, allocator);
 		dump_value.AddMember("__message-queue-size", queue_size_value, allocator);
 	}
 	{
 		rapidjson::Value internal_metrics_size_value;
-		write_to_json_value(&internal_metrics_size, &internal_metrics_size_value, allocator);
+		write_to_json_value(&system_stats::internal_metrics_size, &internal_metrics_size_value, allocator);
 		dump_value.AddMember("__internal-metrics-size", internal_metrics_size_value, allocator);
 	}
 	{
 		rapidjson::Value process_time_value;
-		write_to_json_value(&message_process_time, &process_time_value, allocator);
+		write_to_json_value(&system_stats::message_process_time, &process_time_value, allocator);
 		dump_value.AddMember("__message-process-time", process_time_value, allocator);
 	}
 	{
 		rapidjson::Value pop_time_value;
-		write_to_json_value(&message_pop_time, &pop_time_value, allocator);
+		write_to_json_value(&system_stats::message_pop_time, &pop_time_value, allocator);
 		dump_value.AddMember("__message-pop-time", pop_time_value, allocator);
 	}
 	{

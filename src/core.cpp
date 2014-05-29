@@ -32,16 +32,17 @@ void process_message_queue() {
 	auto message = message_queue::pop_event_message();
 	auto pop_end_time = chrono::default_clock::now();
 
-	message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
-	message_queue_size.set(message_queue::size(), pop_end_time);
+	system_stats::message_pop_time.set(std::chrono::duration_cast<chrono::default_duration>(pop_end_time - pop_start_time).count(), pop_end_time);
+	system_stats::message_queue_size.set(message_queue::size(), pop_end_time);
 
 	if (message) {
 		auto processing_start_time = chrono::default_clock::now();
 		internal::process_event_message(*message);
 		auto processing_end_time = chrono::default_clock::now();
 
-		message_process_time.set(std::chrono::duration_cast<chrono::default_duration>(processing_end_time - processing_start_time).count(), processing_end_time);
-		internal_metrics_size.set(internal::size(), processing_end_time);
+		system_stats::message_process_time.set(std::chrono::duration_cast<chrono::default_duration>(processing_end_time - processing_start_time).count(),
+				processing_end_time);
+		system_stats::internal_metrics_size.set(internal::size(), processing_end_time);
 	}
 }
 

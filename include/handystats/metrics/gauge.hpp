@@ -53,6 +53,16 @@ struct gauge
 		}
 
 		void update_value(value_type value, time_point timestamp);
+
+		value_type min() const;
+		value_type max() const;
+		value_type sum() const;
+		value_type count() const;
+		value_type mean() const;
+		value_type moving_average() const;
+		value_type interval_count() const;
+		value_type interval_sum() const;
+		value_type interval_mean() const;
 	};
 
 	gauge();

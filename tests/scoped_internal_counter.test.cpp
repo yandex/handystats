@@ -55,12 +55,11 @@ TEST_F(HandyScopedCounterTest, TestSingleScope) {
 		->base_counter
 		->stats
 		.values
-		.stats
-		.values;
+		.stats;
 
-	ASSERT_EQ(boost::accumulators::count(agg_stats), 2 * COUNT + 1);
-	ASSERT_EQ(boost::accumulators::min(agg_stats), 0);
-	ASSERT_EQ(boost::accumulators::max(agg_stats), 1);
+	ASSERT_EQ(agg_stats.count(), 2 * COUNT + 1);
+	ASSERT_EQ(agg_stats.min(), 0);
+	ASSERT_EQ(agg_stats.max(), 1);
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
@@ -86,12 +85,11 @@ TEST_F(HandyScopedCounterTest, TestDoubleNestedScope) {
 		->base_counter
 		->stats
 		.values
-		.stats
-		.values;
+		.stats;
 
-	ASSERT_EQ(boost::accumulators::count(agg_stats), 4 * COUNT + 1);
-	ASSERT_EQ(boost::accumulators::min(agg_stats), 0);
-	ASSERT_EQ(boost::accumulators::max(agg_stats), 1);
+	ASSERT_EQ(agg_stats.count(), 4 * COUNT + 1);
+	ASSERT_EQ(agg_stats.min(), 0);
+	ASSERT_EQ(agg_stats.max(), 1);
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }

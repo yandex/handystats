@@ -30,8 +30,6 @@ TEST(GaugeTest, TestGaugeSetMethod) {
 }
 
 TEST(GaugeTest, TestGaugeInternalStats) {
-	using namespace boost::accumulators;
-
 	gauge sample_gauge;
 
 	const int min_test_value = -1E3;
@@ -42,13 +40,13 @@ TEST(GaugeTest, TestGaugeInternalStats) {
 	}
 
 
-	auto stats = sample_gauge.stats.values;
-	ASSERT_NEAR(min(stats), min_test_value, 1E-9);
-	ASSERT_NEAR(max(stats), max_test_value, 1E-9);
+	auto stats = sample_gauge.stats;
+	ASSERT_NEAR(stats.min(), min_test_value, 1E-9);
+	ASSERT_NEAR(stats.max(), max_test_value, 1E-9);
 
-	ASSERT_EQ(count(stats), max_test_value - min_test_value + 1);
-	ASSERT_NEAR(sum(stats), 0, 1E-9);
-	ASSERT_NEAR(mean(stats), 0, 1E-9);
+	ASSERT_EQ(stats.count(), max_test_value - min_test_value + 1);
+	ASSERT_NEAR(stats.sum(), 0, 1E-9);
+	ASSERT_NEAR(stats.mean(), 0, 1E-9);
 
 	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&sample_gauge) << std::endl;
 }

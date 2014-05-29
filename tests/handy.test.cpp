@@ -115,12 +115,10 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	int handy_max_size =
-		boost::accumulators::max(
 			boost::get<handystats::internal::internal_gauge*>(handystats::internal::internal_metrics["queue.size"])
 			->base_gauge
 			->stats
-			.values
-		);
+			.max();
 
 	ASSERT_EQ(handy_max_size, max_queue_size);
 

@@ -34,17 +34,17 @@ inline void write_to_json_value(metrics::gauge* obj, rapidjson::Value* json_valu
 	json_value->AddMember("timestamp", timestamp, allocator);
 
 	{
-		const auto& gauge_stats = obj->stats.values;
+		const auto& gauge_stats = obj->stats;
 
-		json_value->AddMember("min", boost::accumulators::min(gauge_stats), allocator);
-		json_value->AddMember("max", boost::accumulators::max(gauge_stats), allocator);
-		json_value->AddMember("sum", boost::accumulators::sum(gauge_stats), allocator);
-		json_value->AddMember("count", boost::accumulators::count(gauge_stats), allocator);
-		json_value->AddMember("mean", boost::accumulators::count(gauge_stats) == 0 ? 0.0 : boost::accumulators::mean(gauge_stats), allocator);
-		json_value->AddMember("moving-avg", boost::accumulators::moving_average(gauge_stats), allocator);
-		json_value->AddMember("interval-count", boost::accumulators::interval_count(gauge_stats), allocator);
-		json_value->AddMember("interval-sum", boost::accumulators::interval_sum(gauge_stats), allocator);
-		json_value->AddMember("interval-mean", boost::accumulators::interval_mean(gauge_stats), allocator);
+		json_value->AddMember("min", gauge_stats.min(), allocator);
+		json_value->AddMember("max", gauge_stats.max(), allocator);
+		json_value->AddMember("sum", gauge_stats.sum(), allocator);
+		json_value->AddMember("count", gauge_stats.count(), allocator);
+		json_value->AddMember("mean", gauge_stats.count() == 0 ? 0.0 : gauge_stats.mean(), allocator);
+		json_value->AddMember("moving-avg", gauge_stats.moving_average(), allocator);
+		json_value->AddMember("interval-count", gauge_stats.interval_count(), allocator);
+		json_value->AddMember("interval-sum", gauge_stats.interval_sum(), allocator);
+		json_value->AddMember("interval-mean", gauge_stats.interval_mean(), allocator);
 	}
 }
 

@@ -60,12 +60,10 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
 		->aggregator
-		.stats
-		.values;
+		.stats;
 
-	ASSERT_EQ(boost::accumulators::count(agg_stats), COUNT);
-	ASSERT_GE(boost::accumulators::min(agg_stats),
-			std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
+	ASSERT_EQ(agg_stats.count(), COUNT);
+	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
@@ -93,12 +91,10 @@ TEST_F(HandyScopedTimerTest, TestMultiInstanceScopedTimer) {
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
 		->aggregator
-		.stats
-		.values;
+		.stats;
 
-	ASSERT_EQ(boost::accumulators::count(agg_stats), COUNT);
-	ASSERT_GE(boost::accumulators::min(agg_stats),
-			std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
+	ASSERT_EQ(agg_stats.count(), COUNT);
+	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
@@ -133,22 +129,18 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
 		->aggregator
-		.stats
-		.values;
+		.stats;
 
-	ASSERT_EQ(boost::accumulators::count(agg_stats), COUNT);
-	ASSERT_GE(boost::accumulators::min(agg_stats),
-			std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
+	ASSERT_EQ(agg_stats.count(), COUNT);
+	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
 
 	auto double_agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["double.sleep.time"])
 		->aggregator
-		.stats
-		.values;
+		.stats;
 
-	ASSERT_EQ(boost::accumulators::count(double_agg_stats), COUNT);
-	ASSERT_GE(boost::accumulators::min(double_agg_stats),
-			std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count() * 2);
+	ASSERT_EQ(double_agg_stats.count(), COUNT);
+	ASSERT_GE(double_agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count() * 2);
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }

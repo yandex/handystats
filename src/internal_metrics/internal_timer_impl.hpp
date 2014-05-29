@@ -29,6 +29,7 @@ struct internal_timer
 
 		timer_instance() {
 			timer = nullptr;
+			timestamp = time_point();
 		}
 
 		~timer_instance() {
@@ -45,8 +46,10 @@ struct internal_timer
 	static const time_duration TIMEOUT;
 	time_point check_timestamp;
 
-	internal_timer()
-	{}
+	internal_timer() {
+		timestamp = time_point();
+		check_timestamp = time_point();
+	}
 
 	~internal_timer()
 	{}

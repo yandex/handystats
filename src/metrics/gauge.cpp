@@ -1,7 +1,17 @@
+#include "configuration_impl.hpp"
+
 #include <handystats/metrics/gauge.hpp>
 
 
 namespace handystats { namespace metrics {
+
+gauge::internal_stats::internal_stats()
+	: values(
+		boost::accumulators::tag::moving_average::alpha = config::gauge.moving_average_alpha,
+		boost::accumulators::time_interval = config::gauge.moving_interval
+	)
+{
+}
 
 void gauge::internal_stats::update_value(value_type value, time_point timestamp) {
 	values(value, boost::accumulators::timestamp = timestamp);

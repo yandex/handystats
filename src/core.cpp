@@ -8,6 +8,7 @@
 #include "internal_impl.hpp"
 #include "json_dump_impl.hpp"
 #include "system_stats_impl.hpp"
+#include "configuration_impl.hpp"
 #include "core_impl.hpp"
 
 namespace handystats {
@@ -21,11 +22,6 @@ bool is_enabled() {
 
 
 std::thread* processor_thread = nullptr;
-
-std::chrono::microseconds EMPTY_QUEUE_SLEEP_INTERVAL_MAX(1000);
-std::chrono::microseconds EMPTY_QUEUE_SLEEP_INTERVAL_MIN(1);
-
-std::chrono::microseconds empty_queue_sleep_interval = EMPTY_QUEUE_SLEEP_INTERVAL_MIN;
 
 void process_message_queue() {
 	auto pop_start_time = chrono::default_clock::now();
@@ -54,6 +50,7 @@ void initialize() {
 	}
 	enabled = true;
 
+	config::initialize();
 	internal::initialize();
 	message_queue::initialize();
 	system_stats::initialize();
@@ -61,15 +58,16 @@ void initialize() {
 	processor_thread =
 		new std::thread([]
 				() {
+					size_t sleep_interval_index = 0;
 					while (is_enabled()) {
 						if (!message_queue::empty()) {
 							process_message_queue();
-							empty_queue_sleep_interval = EMPTY_QUEUE_SLEEP_INTERVAL_MIN;
+							sleep_interval_index = 0;
 						}
 						else {
-							std::this_thread::sleep_for(empty_queue_sleep_interval);
-							if (empty_queue_sleep_interval < EMPTY_QUEUE_SLEEP_INTERVAL_MAX) {
-								empty_queue_sleep_interval *= 2;
+							std::this_thread::sleep_for(config::message_queue.sleep_on_empty[sleep_interval_index]);
+							if (sleep_interval_index + 1 < config::message_queue.sleep_on_empty.size()) {
+								++sleep_interval_index;
 							}
 						}
 						json::update_json_dump();
@@ -94,6 +92,7 @@ void finalize() {
 	internal::finalize();
 	message_queue::finalize();
 	system_stats::finalize();
+	config::finalize();
 }
 
 } // namespace handystats

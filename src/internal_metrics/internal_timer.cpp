@@ -1,16 +1,24 @@
 #include "events/event_message_impl.hpp"
 #include "events/timer_events_impl.hpp"
 
+#include "configuration_impl.hpp"
+
 #include "internal_metrics/internal_timer_impl.hpp"
 
 
 namespace handystats { namespace internal {
 
-const internal_timer::time_duration internal_timer::TIMEOUT = std::chrono::duration_cast<internal_timer::time_duration>(std::chrono::seconds(5));
-
 void internal_timer::check_on_timeout(time_point timestamp) {
+	if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - check_timestamp) <
+			std::chrono::duration_cast<internal_timer::time_duration>(config::timer.idle_timeout))
+	{
+		return;
+	}
+
 	for (auto instance_iter = instances.begin(); instance_iter != instances.end();) {
-		if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - instance_iter->second.timestamp) > TIMEOUT) {
+		if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - instance_iter->second.timestamp) >
+				std::chrono::duration_cast<internal_timer::time_duration>(config::timer.idle_timeout))
+		{
 			instance_iter = instances.erase(instance_iter);
 		}
 		else {
@@ -25,6 +33,8 @@ void internal_timer::process_event_message(const events::event_message& message)
 	if (message.destination_type != events::event_destination_type::TIMER) {
 		return;
 	}
+
+	check_on_timeout(message.timestamp);
 
 	switch (message.event_type) {
 		case events::timer_event::INIT:
@@ -47,10 +57,6 @@ void internal_timer::process_event_message(const events::event_message& message)
 	}
 
 	timestamp = message.timestamp;
-
-	if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - check_timestamp) > TIMEOUT) {
-		check_on_timeout(timestamp);
-	}
 }
 
 void internal_timer::process_init_event(const events::event_message& message) {

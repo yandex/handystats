@@ -43,7 +43,6 @@ struct internal_timer
 	metrics::gauge aggregator;
 	time_point timestamp;
 
-	static const time_duration TIMEOUT;
 	time_point check_timestamp;
 
 	internal_timer() {

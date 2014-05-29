@@ -18,6 +18,8 @@
 
 #include "system_stats_impl.hpp"
 
+#include "configuration_impl.hpp"
+
 namespace handystats { namespace internal {
 
 extern std::map<std::string, internal_metric> internal_metrics;
@@ -28,7 +30,6 @@ extern std::map<std::string, internal_metric> internal_metrics;
 namespace handystats { namespace json {
 
 chrono::default_time_point dump_timestamp;
-chrono::default_duration DUMP_INTERVAL = std::chrono::duration_cast<chrono::default_duration>(std::chrono::milliseconds(500));
 
 std::mutex json_dump_mutex;
 std::shared_ptr<const std::string> json_dump(new std::string());
@@ -94,7 +95,7 @@ std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allo
 }
 
 void update_json_dump() {
-	if (std::chrono::duration_cast<chrono::default_duration>(chrono::default_clock::now() - dump_timestamp) > DUMP_INTERVAL) {
+	if (std::chrono::duration_cast<chrono::default_duration>(chrono::default_clock::now() - dump_timestamp) > config::json_dump.interval) {
 		auto new_json_dump = create_json_dump<rapidjson::MemoryPoolAllocator<>>();
 		{
 			std::lock_guard<std::mutex> lock(json_dump_mutex);

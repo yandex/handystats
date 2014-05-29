@@ -19,7 +19,6 @@
 #include <handystats/accumulators/interval_sum.hpp>
 #include <handystats/accumulators/interval_mean.hpp>
 
-
 namespace handystats { namespace metrics {
 
 struct gauge
@@ -44,13 +43,7 @@ struct gauge
 
 		boost::accumulators::accumulator_set<value_type, value_features> values;
 
-		internal_stats()
-			: values(
-					boost::accumulators::tag::moving_average::alpha = 2.0 / 16,
-					boost::accumulators::time_interval = std::chrono::seconds(1)
-					)
-		{
-		}
+		internal_stats();
 
 		void update_value(value_type value, time_point timestamp);
 

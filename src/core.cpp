@@ -78,9 +78,6 @@ void initialize() {
 
 void finalize() {
 	std::lock_guard<std::mutex> lock(operation_mutex);
-	if (!is_enabled()) {
-		return;
-	}
 	enabled = false;
 
 	if (processor_thread) {

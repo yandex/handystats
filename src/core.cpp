@@ -56,6 +56,7 @@ void initialize() {
 
 	internal::initialize();
 	message_queue::initialize();
+	system_stats::initialize();
 
 	processor_thread =
 		new std::thread([]
@@ -92,6 +93,7 @@ void finalize() {
 
 	internal::finalize();
 	message_queue::finalize();
+	system_stats::finalize();
 }
 
 } // namespace handystats

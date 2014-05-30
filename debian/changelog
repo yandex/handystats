@@ -1,3 +1,17 @@
+handystats (1.4.0) UNRELEASED; urgency=low
+
+  * metrics: convenient extraction methods for gauge internal statistics have been added.
+  * core: don't return from finalize() if enabled flag is unset.
+  * system_stats: system internal statistics are declared within its own namespace handystats::system_stats now.
+  * system_stats: initialize() and finalize() methods have been added.
+  * internal_metrics: internal_timer constructors have been fixed.
+  * configuration: external handystats configuration has been added.
+  * internal: check internal_timer on timeout before processing event message.
+  * json: write_to_json_... functions have been added for system statistics.
+  * json: system statistics' json_dump format has been changed.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 30 May 2014 19:36:36 +0400
+
 handystats (1.3.0) UNRELEASED; urgency=low
 
   * internal: finalize() bug fixup. Just skip unknown internal metric type while finalizing.

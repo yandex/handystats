@@ -1,6 +1,6 @@
 # Maintainer: Danil Osherov <shindo@yandex-team.ru>
 pkgname=handystats
-pkgver=1.3.0
+pkgver=1.4.0
 pkgrel=1
 pkgdesc="C++ Framework for collecting runtime in-process statistics"
 arch=('any')

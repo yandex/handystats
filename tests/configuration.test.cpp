@@ -65,14 +65,12 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 
 	ASSERT_EQ(
 			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["dead-timer"])
-			->aggregator
-			.stats
+			->values
 			.count(),
 			0);
 	ASSERT_EQ(
 			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["alive-timer"])
-			->aggregator
-			.stats
+			->values
 			.count(),
 			1);
 }
@@ -118,8 +116,8 @@ TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
 				}\
 			}"
 		);
-	ASSERT_EQ(handystats::config::gauge.moving_average_alpha, handystats::config::gauge_parameters().moving_average_alpha);
-	ASSERT_EQ(handystats::config::gauge.moving_interval, handystats::config::gauge_parameters().moving_interval);
+	ASSERT_EQ(handystats::config::incremental_statistics.moving_average_alpha, handystats::config::incremental_statistics_parameters().moving_average_alpha);
+	ASSERT_EQ(handystats::config::incremental_statistics.moving_interval, handystats::config::incremental_statistics_parameters().moving_interval);
 	ASSERT_EQ(handystats::config::timer.idle_timeout, handystats::config::timer_parameters().idle_timeout);
 	ASSERT_EQ(handystats::config::json_dump.interval, handystats::config::json_dump_parameters().interval);
 	ASSERT_EQ(handystats::config::message_queue.sleep_on_empty, handystats::config::message_queue_parameters().sleep_on_empty);

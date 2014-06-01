@@ -7,7 +7,7 @@
 #include <handystats/rapidjson/stringbuffer.h>
 #include <handystats/rapidjson/prettywriter.h>
 
-#include <handystats/json/gauge_json_writer.hpp>
+#include <handystats/json/incremental_statistics_json_writer.hpp>
 
 #include "internal_metrics/internal_timer_impl.hpp"
 
@@ -36,9 +36,9 @@ inline void write_to_json_value(internal::internal_timer* obj, rapidjson::Value*
 
 	json_value->AddMember("active-instances", obj->instances.size(), allocator);
 
-	rapidjson::Value aggregator;
-	write_to_json_value(&obj->aggregator, &aggregator, allocator);
-	json_value->AddMember("aggregator", aggregator, allocator);
+	rapidjson::Value values;
+	write_to_json_value(&obj->values, &values, allocator);
+	json_value->AddMember("values", values, allocator);
 }
 
 template<typename StringBuffer, typename Allocator>

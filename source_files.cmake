@@ -18,3 +18,4 @@ src/measuring_points/gauge_measuring_points.cpp
 src/measuring_points/counter_measuring_points.cpp
 src/json_dump.cpp
 src/configuration.cpp
+src/incremental_statistics.cpp

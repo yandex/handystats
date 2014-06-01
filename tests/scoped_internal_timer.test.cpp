@@ -59,8 +59,7 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
-		->aggregator
-		.stats;
+		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
 	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
@@ -90,8 +89,7 @@ TEST_F(HandyScopedTimerTest, TestMultiInstanceScopedTimer) {
 
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
-		->aggregator
-		.stats;
+		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
 	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
@@ -128,16 +126,14 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
-		->aggregator
-		.stats;
+		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
 	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
 
 	auto double_agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["double.sleep.time"])
-		->aggregator
-		.stats;
+		->values;
 
 	ASSERT_EQ(double_agg_stats.count(), COUNT);
 	ASSERT_GE(double_agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count() * 2);

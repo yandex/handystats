@@ -53,9 +53,7 @@ TEST_F(HandyScopedCounterTest, TestSingleScope) {
 	auto agg_stats =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
 		->base_counter
-		->stats
-		.values
-		.stats;
+		->values;
 
 	ASSERT_EQ(agg_stats.count(), 2 * COUNT + 1);
 	ASSERT_EQ(agg_stats.min(), 0);
@@ -83,9 +81,7 @@ TEST_F(HandyScopedCounterTest, TestDoubleNestedScope) {
 	auto agg_stats =
 		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
 		->base_counter
-		->stats
-		.values
-		.stats;
+		->values;
 
 	ASSERT_EQ(agg_stats.count(), 4 * COUNT + 1);
 	ASSERT_EQ(agg_stats.min(), 0);

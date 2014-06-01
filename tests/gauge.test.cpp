@@ -40,7 +40,7 @@ TEST(GaugeTest, TestGaugeInternalStats) {
 	}
 
 
-	auto stats = sample_gauge.stats;
+	auto stats = sample_gauge.values;
 	ASSERT_NEAR(stats.min(), min_test_value, 1E-9);
 	ASSERT_NEAR(stats.max(), max_test_value, 1E-9);
 

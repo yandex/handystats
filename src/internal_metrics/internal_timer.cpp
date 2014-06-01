@@ -98,7 +98,7 @@ void internal_timer::process_stop_event(const events::event_message& message) {
 	instance.timer->stop(message.timestamp);
 
 	double timer_duration = std::chrono::duration_cast<chrono::default_duration>(instance.timer->value).count();
-	aggregator.set(timer_duration, message.timestamp);
+	values(timer_duration, message.timestamp);
 
 	instances.erase(instance_iter);
 }

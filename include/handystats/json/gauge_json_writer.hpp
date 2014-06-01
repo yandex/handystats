@@ -10,6 +10,8 @@
 #include <handystats/json/timestamp.hpp>
 #include <handystats/metrics/gauge.hpp>
 
+#include <handystats/json/incremental_statistics_json_writer.hpp>
+
 namespace handystats { namespace json {
 
 template<typename Allocator>
@@ -33,19 +35,9 @@ inline void write_to_json_value(metrics::gauge* obj, rapidjson::Value* json_valu
 	write_to_json_value(obj->timestamp, &timestamp);
 	json_value->AddMember("timestamp", timestamp, allocator);
 
-	{
-		const auto& gauge_stats = obj->stats;
-
-		json_value->AddMember("min", gauge_stats.min(), allocator);
-		json_value->AddMember("max", gauge_stats.max(), allocator);
-		json_value->AddMember("sum", gauge_stats.sum(), allocator);
-		json_value->AddMember("count", gauge_stats.count(), allocator);
-		json_value->AddMember("mean", gauge_stats.count() == 0 ? 0.0 : gauge_stats.mean(), allocator);
-		json_value->AddMember("moving-avg", gauge_stats.moving_average(), allocator);
-		json_value->AddMember("interval-count", gauge_stats.interval_count(), allocator);
-		json_value->AddMember("interval-sum", gauge_stats.interval_sum(), allocator);
-		json_value->AddMember("interval-mean", gauge_stats.interval_mean(), allocator);
-	}
+	rapidjson::Value values;
+	write_to_json_value(&obj->values, &values, allocator);
+	json_value->AddMember("values", values, allocator);
 }
 
 template<typename StringBuffer, typename Allocator>

@@ -6,7 +6,7 @@
 /*
  * {
  *    "handystats": {
- *        "gauge": {
+ *        "incremental-statistics": {
  *            "moving-average-alpha": <double value>,
  *            "moving-interval": <value in msec>
  *        },

@@ -35,27 +35,21 @@ inline void write_to_json_value(metrics::counter* obj, rapidjson::Value* json_va
 	write_to_json_value(obj->timestamp, &timestamp);
 	json_value->AddMember("timestamp", timestamp, allocator);
 
-	{
-		rapidjson::Value values;
-		auto values_stats = obj->stats.values;
-		write_to_json_value(&values_stats, &values, allocator);
-		json_value->AddMember("values", values, allocator);
+	rapidjson::Value values;
+	write_to_json_value(&obj->values, &values, allocator);
+	json_value->AddMember("values", values, allocator);
 
-		rapidjson::Value incr_deltas;
-		auto incr_deltas_stats = obj->stats.incr_deltas;
-		write_to_json_value(&incr_deltas_stats, &incr_deltas, allocator);
-		json_value->AddMember("incr-deltas", incr_deltas, allocator);
+	rapidjson::Value incr_deltas;
+	write_to_json_value(&obj->incr_deltas, &incr_deltas, allocator);
+	json_value->AddMember("incr-deltas", incr_deltas, allocator);
 
-		rapidjson::Value decr_deltas;
-		auto decr_deltas_stats = obj->stats.decr_deltas;
-		write_to_json_value(&decr_deltas_stats, &decr_deltas, allocator);
-		json_value->AddMember("decr-deltas", decr_deltas, allocator);
+	rapidjson::Value decr_deltas;
+	write_to_json_value(&obj->decr_deltas, &decr_deltas, allocator);
+	json_value->AddMember("decr-deltas", decr_deltas, allocator);
 
-		rapidjson::Value deltas;
-		auto deltas_stats = obj->stats.deltas;
-		write_to_json_value(&deltas_stats, &deltas, allocator);
-		json_value->AddMember("deltas", deltas, allocator);
-	}
+	rapidjson::Value deltas;
+	write_to_json_value(&obj->deltas, &deltas, allocator);
+	json_value->AddMember("deltas", deltas, allocator);
 }
 
 template<typename StringBuffer, typename Allocator>

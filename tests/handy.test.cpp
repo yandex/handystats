@@ -117,7 +117,7 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 	int handy_max_size =
 			boost::get<handystats::internal::internal_gauge*>(handystats::internal::internal_metrics["queue.size"])
 			->base_gauge
-			->stats
+			->values
 			.max();
 
 	ASSERT_EQ(handy_max_size, max_queue_size);

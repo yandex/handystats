@@ -8,12 +8,12 @@
 
 namespace handystats { namespace config {
 
-struct gauge_parameters {
+struct incremental_statistics_parameters {
 	double moving_average_alpha;
 	std::chrono::milliseconds moving_interval;
 
-	gauge_parameters();
-	void configure(const rapidjson::Value& gauge_config);
+	incremental_statistics_parameters();
+	void configure(const rapidjson::Value& incremental_statistics_config);
 };
 
 struct timer_parameters {
@@ -37,7 +37,7 @@ struct message_queue_parameters {
 	void configure(const rapidjson::Value& message_queue_config);
 };
 
-extern gauge_parameters gauge;
+extern incremental_statistics_parameters incremental_statistics;
 extern timer_parameters timer;
 extern json_dump_parameters json_dump;
 extern message_queue_parameters message_queue;

@@ -60,8 +60,7 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
-		->aggregator
-		.stats;
+		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
 	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
@@ -92,8 +91,7 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
-		->aggregator
-		.stats;
+		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
 	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
@@ -128,8 +126,7 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
-		->aggregator
-		.stats;
+		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
 	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());

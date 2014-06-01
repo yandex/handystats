@@ -10,20 +10,20 @@
 
 namespace handystats { namespace config {
 
-gauge_parameters::gauge_parameters() {
+incremental_statistics_parameters::incremental_statistics_parameters() {
 	moving_average_alpha = 2.0 / 16;
 	moving_interval = std::chrono::seconds(1);
 }
 
-void gauge_parameters::configure(const rapidjson::Value& gauge_config) {
-	if (gauge_config.HasMember("moving-average-alpha")) {
-		const rapidjson::Value& moving_average_alpha = gauge_config["moving-average-alpha"];
+void incremental_statistics_parameters::configure(const rapidjson::Value& incremental_statistics_config) {
+	if (incremental_statistics_config.HasMember("moving-average-alpha")) {
+		const rapidjson::Value& moving_average_alpha = incremental_statistics_config["moving-average-alpha"];
 		if (moving_average_alpha.IsNumber()) {
 			this->moving_average_alpha = moving_average_alpha.GetDouble();
 		}
 	}
-	if (gauge_config.HasMember("moving-interval")) {
-		const rapidjson::Value& moving_interval = gauge_config["moving-interval"];
+	if (incremental_statistics_config.HasMember("moving-interval")) {
+		const rapidjson::Value& moving_interval = incremental_statistics_config["moving-interval"];
 		if (moving_interval.IsUint64()) {
 			this->moving_interval = std::chrono::milliseconds(moving_interval.GetUint64());
 		}
@@ -94,7 +94,7 @@ void message_queue_parameters::configure(const rapidjson::Value& message_queue_c
 }
 
 
-gauge_parameters gauge;
+incremental_statistics_parameters incremental_statistics;
 timer_parameters timer;
 json_dump_parameters json_dump;
 message_queue_parameters message_queue;
@@ -103,7 +103,7 @@ void initialize() {
 }
 
 void finalize() {
-	gauge = gauge_parameters();
+	incremental_statistics = incremental_statistics_parameters();
 	timer = timer_parameters();
 	json_dump = json_dump_parameters();
 	message_queue = message_queue_parameters();
@@ -163,9 +163,9 @@ void HANDY_CONFIGURATION_JSON(const rapidjson::Value& config) {
 
 	const rapidjson::Value& handystats_config = config["handystats"];
 
-	if (handystats_config.HasMember("gauge")) {
-		const rapidjson::Value& gauge_config = handystats_config["gauge"];
-		handystats::config::gauge.configure(gauge_config);
+	if (handystats_config.HasMember("incremental-statistics")) {
+		const rapidjson::Value& incremental_statistics_config = handystats_config["incremental-statistics"];
+		handystats::config::incremental_statistics.configure(incremental_statistics_config);
 	}
 
 	if (handystats_config.HasMember("timer")) {

@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 #include <handystats/metrics/timer.hpp>
-#include <handystats/metrics/gauge.hpp>
+#include <handystats/incremental_statistics.hpp>
 
 namespace handystats { namespace events {
 
@@ -40,7 +40,7 @@ struct internal_timer
 	};
 
 	std::unordered_map<uint64_t, timer_instance> instances;
-	metrics::gauge aggregator;
+	incremental_statistics values;
 	time_point timestamp;
 
 	time_point check_timestamp;

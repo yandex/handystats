@@ -4,7 +4,7 @@
 #include <utility>
 
 #include <handystats/chrono.hpp>
-#include <handystats/metrics/gauge.hpp>
+#include <handystats/incremental_statistics.hpp>
 
 
 namespace handystats { namespace metrics {
@@ -16,21 +16,6 @@ struct counter
 	typedef chrono::default_clock clock;
 	typedef chrono::default_time_point time_point;
 
-	struct internal_stats {
-		gauge values;
-
-		gauge incr_deltas;
-		gauge decr_deltas;
-		gauge deltas;
-
-		internal_stats()
-		{}
-
-		void update_value(value_type value, time_point timestamp);
-		void update_increment(value_type delta, time_point timestamp);
-		void update_decrement(value_type delta, time_point timestamp);
-	};
-
 	counter();
 	counter(value_type value, time_point timestamp);
 
@@ -40,7 +25,10 @@ struct counter
 	value_type value;
 	time_point timestamp;
 
-	internal_stats stats;
+	incremental_statistics values;
+	incremental_statistics deltas;
+	incremental_statistics incr_deltas;
+	incremental_statistics decr_deltas;
 
 }; // struct counter
 

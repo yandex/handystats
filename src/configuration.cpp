@@ -6,13 +6,55 @@
 #include <handystats/operation.hpp>
 
 #include <handystats/configuration.hpp>
+#include <handystats/configuration/defaults.hpp>
 #include "configuration_impl.hpp"
+
+namespace handystats { namespace config { namespace defaults {
+
+namespace incremental_statistics {
+
+const double moving_average_alpha = 2.0 / 16;
+const std::chrono::milliseconds moving_interval = std::chrono::seconds(1);
+
+}
+
+namespace timer {
+
+const std::chrono::milliseconds idle_timeout = std::chrono::seconds(10);
+
+}
+
+namespace json_dump {
+
+const std::chrono::milliseconds interval = std::chrono::milliseconds(500);
+
+}
+
+namespace message_queue {
+
+const std::vector<std::chrono::microseconds> sleep_on_empty =
+			std::vector<std::chrono::microseconds>({
+				std::chrono::microseconds(1),
+				std::chrono::microseconds(5),
+				std::chrono::microseconds(10),
+				std::chrono::microseconds(50),
+				std::chrono::microseconds(100),
+				std::chrono::microseconds(500),
+				std::chrono::microseconds(1000),
+				std::chrono::microseconds(5000),
+				std::chrono::microseconds(10000)
+			});
+
+}
+
+}}} // namespace handystats::config::defaults
+
 
 namespace handystats { namespace config {
 
 incremental_statistics_parameters::incremental_statistics_parameters() {
-	moving_average_alpha = 2.0 / 16;
-	moving_interval = std::chrono::seconds(1);
+	moving_average_alpha = defaults::incremental_statistics::moving_average_alpha;
+	moving_interval = defaults::incremental_statistics::moving_interval;
 }
 
 void incremental_statistics_parameters::configure(const rapidjson::Value& incremental_statistics_config) {
@@ -32,7 +74,7 @@ void incremental_statistics_parameters::configure(const rapidjson::Value& increm
 
 
 timer_parameters::timer_parameters() {
-	idle_timeout = std::chrono::milliseconds(10000);
+	idle_timeout = defaults::timer::idle_timeout;
 }
 
 void timer_parameters::configure(const rapidjson::Value& timer_config) {
@@ -46,7 +88,7 @@ void timer_parameters::configure(const rapidjson::Value& timer_config) {
 
 
 json_dump_parameters::json_dump_parameters() {
-	interval = std::chrono::milliseconds(500);
+	interval = defaults::json_dump::interval;
 }
 
 void json_dump_parameters::configure(const rapidjson::Value& json_dump_config) {
@@ -60,17 +102,7 @@ void json_dump_parameters::configure(const rapidjson::Value& json_dump_config) {
 
 
 message_queue_parameters::message_queue_parameters() {
-	sleep_on_empty = std::vector<std::chrono::microseconds>({
-				std::chrono::microseconds(1),
-				std::chrono::microseconds(5),
-				std::chrono::microseconds(10),
-				std::chrono::microseconds(50),
-				std::chrono::microseconds(100),
-				std::chrono::microseconds(500),
-				std::chrono::microseconds(1000),
-				std::chrono::microseconds(5000),
-				std::chrono::microseconds(10000)
-			});
+	sleep_on_empty = defaults::message_queue::sleep_on_empty;
 }
 
 void message_queue_parameters::configure(const rapidjson::Value& message_queue_config) {

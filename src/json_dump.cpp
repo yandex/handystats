@@ -30,7 +30,7 @@ extern std::map<std::string, internal_metric> internal_metrics;
 
 namespace handystats { namespace json {
 
-chrono::default_time_point dump_timestamp;
+chrono::default_time_point json_dump_timestamp;
 
 std::mutex json_dump_mutex;
 std::shared_ptr<const std::string> json_dump(new std::string());
@@ -68,9 +68,9 @@ std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allo
 	}
 
 	{
-		dump_timestamp = chrono::default_clock::now();
+		json_dump_timestamp = chrono::default_clock::now();
 		rapidjson::Value timestamp_value;
-		write_to_json_value(dump_timestamp, &timestamp_value);
+		write_to_json_value(json_dump_timestamp, &timestamp_value);
 		dump_value.AddMember("__dump-timestamp", timestamp_value, allocator);
 	}
 
@@ -82,7 +82,7 @@ std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allo
 }
 
 void update_json_dump() {
-	if (std::chrono::duration_cast<chrono::default_duration>(chrono::default_clock::now() - dump_timestamp) > config::json_dump.interval) {
+	if (std::chrono::duration_cast<chrono::default_duration>(chrono::default_clock::now() - json_dump_timestamp) > config::json_dump.interval) {
 		auto new_json_dump = create_json_dump<rapidjson::MemoryPoolAllocator<>>();
 		{
 			std::lock_guard<std::mutex> lock(json_dump_mutex);

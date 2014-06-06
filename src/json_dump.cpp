@@ -94,7 +94,7 @@ void update_json_dump() {
 }} // namespace handystats::json
 
 
-std::shared_ptr<const std::string> HANDY_JSON_DUMP() {
+const std::shared_ptr<const std::string> HANDY_JSON_DUMP() {
 	return handystats::json::get_json_dump();
 }
 

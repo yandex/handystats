@@ -1,8 +1,7 @@
 #ifndef HANDYSTATS_INTERNAL_TIMER_H_
 #define HANDYSTATS_INTERNAL_TIMER_H_
 
-#include <cstdint>
-#include <unordered_map>
+#include <chrono>
 
 #include <handystats/metrics/timer.hpp>
 #include <handystats/incremental_statistics.hpp>
@@ -23,37 +22,24 @@ struct internal_timer
 	typedef typename clock::duration time_duration;
 	typedef typename clock::time_point time_point;
 
-	struct timer_instance {
-		metrics::timer* timer;
-		time_point timestamp;
-
-		timer_instance() {
-			timer = nullptr;
-			timestamp = time_point();
-		}
-
-		~timer_instance() {
-			if (timer) {
-				delete timer;
-			}
-		}
-	};
-
-	std::unordered_map<uint64_t, timer_instance> instances;
-	incremental_statistics values;
+	metrics::timer* base_timer;
 	time_point timestamp;
-
-	time_point check_timestamp;
+	time_point check_timeout_timestamp;
 
 	internal_timer() {
+		base_timer = nullptr;
+
 		timestamp = time_point();
-		check_timestamp = time_point();
+		check_timeout_timestamp = time_point();
 	}
 
 	~internal_timer()
 	{}
 
-	void check_on_timeout(time_point timestamp);
+	void check_timeout(
+			time_point timestamp = clock::now(),
+			clock::duration idle_timeout = std::chrono::duration_cast<clock::duration>(config::defaults::timer::idle_timeout)
+			);
 
 	void process_event_message(const events::event_message& message);
 

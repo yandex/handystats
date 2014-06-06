@@ -7,7 +7,7 @@
 #include <handystats/rapidjson/stringbuffer.h>
 #include <handystats/rapidjson/prettywriter.h>
 
-#include <handystats/json/incremental_statistics_json_writer.hpp>
+#include <handystats/json/timer_json_writer.hpp>
 
 #include "internal_metrics/internal_timer_impl.hpp"
 
@@ -21,24 +21,7 @@ inline void write_to_json_value(internal::internal_timer* obj, rapidjson::Value*
 		return;
 	}
 
-	if (!json_value) {
-		json_value = new rapidjson::Value(rapidjson::kObjectType);
-	}
-	else {
-		json_value->SetObject();
-	}
-
-	json_value->AddMember("type", "internal-timer", allocator);
-
-	rapidjson::Value timestamp;
-	write_to_json_value(obj->timestamp, &timestamp);
-	json_value->AddMember("timestamp", timestamp, allocator);
-
-	json_value->AddMember("active-instances", obj->instances.size(), allocator);
-
-	rapidjson::Value values;
-	write_to_json_value(&obj->values, &values, allocator);
-	json_value->AddMember("values", values, allocator);
+	write_to_json_value(obj->base_timer, json_value, allocator);
 }
 
 template<typename StringBuffer, typename Allocator>

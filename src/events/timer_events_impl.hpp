@@ -25,31 +25,31 @@ enum {
 
 std::shared_ptr<event_message> timer_init_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		);
 
 std::shared_ptr<event_message> timer_start_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		);
 
 std::shared_ptr<event_message> timer_stop_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		);
 
 std::shared_ptr<event_message> timer_discard_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		);
 
 std::shared_ptr<event_message> timer_heartbeat_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		);
 

@@ -55,11 +55,13 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 
 	ASSERT_TRUE(
 			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
+			->base_timer
 			->instances.empty()
 			);
 
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
+		->base_timer
 		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
@@ -86,11 +88,13 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 
 	ASSERT_TRUE(
 			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
+			->base_timer
 			->instances.empty()
 			);
 
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
+		->base_timer
 		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
@@ -121,11 +125,13 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 
 	ASSERT_TRUE(
 			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
+			->base_timer
 			->instances.empty()
 			);
 
 	auto agg_stats =
 		boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["sleep.time"])
+		->base_timer
 		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);

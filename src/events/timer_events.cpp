@@ -8,7 +8,7 @@ namespace handystats { namespace events {
 
 std::shared_ptr<event_message> timer_init_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		)
 {
@@ -20,13 +20,13 @@ std::shared_ptr<event_message> timer_init_event(
 	message->timestamp = timestamp;
 
 	message->event_type = timer_event::INIT;
-	message->event_data.push_back(new uint64_t(instance_id));
+	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_init_event(event_message* message) {
-	delete static_cast<uint64_t*>(message->event_data[0]);
+	delete static_cast<metrics::timer::instance_id_type*>(message->event_data[0]);
 
 	delete message;
 }
@@ -34,7 +34,7 @@ void delete_timer_init_event(event_message* message) {
 
 std::shared_ptr<event_message> timer_start_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		)
 {
@@ -46,13 +46,13 @@ std::shared_ptr<event_message> timer_start_event(
 	message->timestamp = timestamp;
 
 	message->event_type = timer_event::START;
-	message->event_data.push_back(new uint64_t(instance_id));
+	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_start_event(event_message* message) {
-	delete static_cast<uint64_t*>(message->event_data[0]);
+	delete static_cast<metrics::timer::instance_id_type*>(message->event_data[0]);
 
 	delete message;
 }
@@ -60,7 +60,7 @@ void delete_timer_start_event(event_message* message) {
 
 std::shared_ptr<event_message> timer_stop_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		)
 {
@@ -72,13 +72,13 @@ std::shared_ptr<event_message> timer_stop_event(
 	message->timestamp = timestamp;
 
 	message->event_type = timer_event::STOP;
-	message->event_data.push_back(new uint64_t(instance_id));
+	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_stop_event(event_message* message) {
-	delete static_cast<uint64_t*>(message->event_data[0]);
+	delete static_cast<metrics::timer::instance_id_type*>(message->event_data[0]);
 
 	delete message;
 }
@@ -86,7 +86,7 @@ void delete_timer_stop_event(event_message* message) {
 
 std::shared_ptr<event_message> timer_discard_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		)
 {
@@ -98,13 +98,13 @@ std::shared_ptr<event_message> timer_discard_event(
 	message->timestamp = timestamp;
 
 	message->event_type = timer_event::DISCARD;
-	message->event_data.push_back(new uint64_t(instance_id));
+	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_discard_event(event_message* message) {
-	delete static_cast<uint64_t*>(message->event_data[0]);
+	delete static_cast<metrics::timer::instance_id_type*>(message->event_data[0]);
 
 	delete message;
 }
@@ -112,7 +112,7 @@ void delete_timer_discard_event(event_message* message) {
 
 std::shared_ptr<event_message> timer_heartbeat_event(
 		const std::string timer_name,
-		const uint64_t instance_id,
+		const metrics::timer::instance_id_type instance_id,
 		metrics::timer::time_point timestamp
 		)
 {
@@ -124,13 +124,13 @@ std::shared_ptr<event_message> timer_heartbeat_event(
 	message->timestamp = timestamp;
 
 	message->event_type = timer_event::HEARTBEAT;
-	message->event_data.push_back(new uint64_t(instance_id));
+	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
 	return std::shared_ptr<event_message>(message, delete_event_message);
 }
 
 void delete_timer_heartbeat_event(event_message* message) {
-	delete static_cast<uint64_t*>(message->event_data[0]);
+	delete static_cast<metrics::timer::instance_id_type*>(message->event_data[0]);
 
 	delete message;
 }

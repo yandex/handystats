@@ -8,6 +8,7 @@
 #include <handystats/rapidjson/prettywriter.h>
 
 #include <handystats/json/timestamp.hpp>
+#include <handystats/json/incremental_statistics_json_writer.hpp>
 #include <handystats/metrics/timer.hpp>
 
 namespace handystats { namespace json {
@@ -27,7 +28,14 @@ inline void write_to_json_value(metrics::timer* obj, rapidjson::Value* json_valu
 	}
 
 	json_value->AddMember("type", "timer", allocator);
-	json_value->AddMember("value", std::chrono::duration_cast<chrono::default_duration>(obj->value).count(), allocator);
+
+	json_value->AddMember("instances", obj->instances.size(), allocator);
+
+	json_value->AddMember("value", obj->value.count(), allocator);
+
+	rapidjson::Value values;
+	write_to_json_value(&obj->values, &values, allocator);
+	json_value->AddMember("values", values, allocator);
 
 	rapidjson::Value timestamp;
 	write_to_json_value(obj->timestamp, &timestamp);

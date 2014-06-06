@@ -65,11 +65,13 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 
 	ASSERT_EQ(
 			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["dead-timer"])
+			->base_timer
 			->values
 			.count(),
 			0);
 	ASSERT_EQ(
 			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["alive-timer"])
+			->base_timer
 			->values
 			.count(),
 			1);

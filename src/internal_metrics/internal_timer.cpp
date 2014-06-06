@@ -8,25 +8,20 @@
 
 namespace handystats { namespace internal {
 
-void internal_timer::check_on_timeout(time_point timestamp) {
-	if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - check_timestamp) <
-			std::chrono::duration_cast<internal_timer::time_duration>(config::timer.idle_timeout))
+void internal_timer::check_timeout(time_point timestamp, clock::duration idle_timeout) {
+	if (!base_timer) {
+		return;
+	}
+
+	if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - check_timeout_timestamp) <
+			std::chrono::duration_cast<internal_timer::time_duration>(idle_timeout))
 	{
 		return;
 	}
 
-	for (auto instance_iter = instances.begin(); instance_iter != instances.end();) {
-		if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - instance_iter->second.timestamp) >
-				std::chrono::duration_cast<internal_timer::time_duration>(config::timer.idle_timeout))
-		{
-			instance_iter = instances.erase(instance_iter);
-		}
-		else {
-			++instance_iter;
-		}
-	}
+	base_timer->check_timeout(timestamp, idle_timeout);
 
-	check_timestamp = timestamp;
+	check_timeout_timestamp = timestamp;
 }
 
 void internal_timer::process_event_message(const events::event_message& message) {
@@ -34,7 +29,7 @@ void internal_timer::process_event_message(const events::event_message& message)
 		return;
 	}
 
-	check_on_timeout(message.timestamp);
+	check_timeout(message.timestamp, std::chrono::duration_cast<clock::duration>(config::timer.idle_timeout));
 
 	switch (message.event_type) {
 		case events::timer_event::INIT:
@@ -60,66 +55,49 @@ void internal_timer::process_event_message(const events::event_message& message)
 }
 
 void internal_timer::process_init_event(const events::event_message& message) {
-	uint64_t instance_id = *static_cast<uint64_t*>(message.event_data[0]);
-
-	auto& instance = instances[instance_id];
-	if (!instance.timer) {
-		instance.timer = new metrics::timer();
-		instance.timestamp = message.timestamp;
+	if (base_timer) {
+		return;
 	}
+
+	base_timer = new metrics::timer();
 }
 
 void internal_timer::process_start_event(const events::event_message& message) {
-	uint64_t instance_id = *static_cast<uint64_t*>(message.event_data[0]);
+	if (!base_timer) {
+		base_timer = new metrics::timer();
+	}
 
-	auto& instance = instances[instance_id];
-	if (!instance.timer) {
-		instance.timer = new metrics::timer(message.timestamp);
-		instance.timestamp = message.timestamp;
-	}
-	else {
-		instance.timer->start(message.timestamp);
-		instance.timestamp = message.timestamp;
-	}
+	metrics::timer::instance_id_type instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data[0]);
+	base_timer->start(message.timestamp, instance_id);
+
 }
 
 void internal_timer::process_stop_event(const events::event_message& message) {
-	uint64_t instance_id = *static_cast<uint64_t*>(message.event_data[0]);
-
-	auto instance_iter = instances.find(instance_id);
-	if (instance_iter == instances.end()) {
-		return;
-	}
-	if (!instance_iter->second.timer) {
+	if (!base_timer) {
 		return;
 	}
 
-	auto& instance = instance_iter->second;
-	instance.timer->stop(message.timestamp);
-
-	double timer_duration = std::chrono::duration_cast<chrono::default_duration>(instance.timer->value).count();
-	values(timer_duration, message.timestamp);
-
-	instances.erase(instance_iter);
+	metrics::timer::instance_id_type instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data[0]);
+	base_timer->stop(message.timestamp, instance_id);
 }
 
 void internal_timer::process_discard_event(const events::event_message& message) {
-	uint64_t instance_id = *static_cast<uint64_t*>(message.event_data[0]);
-	instances.erase(instance_id);
+	if (!base_timer) {
+		return;
+	}
+
+	metrics::timer::instance_id_type instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data[0]);
+	base_timer->discard(message.timestamp, instance_id);
 }
 
 void internal_timer::process_heartbeat_event(const events::event_message& message) {
-	uint64_t instance_id = *static_cast<uint64_t*>(message.event_data[0]);
-
-	auto instance_iter = instances.find(instance_id);
-	if (instance_iter == instances.end()) {
+	if (!base_timer) {
 		return;
 	}
-	else {
-		instance_iter->second.timestamp = message.timestamp;
-	}
-}
 
+	metrics::timer::instance_id_type instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data[0]);
+	base_timer->heartbeat(message.timestamp, instance_id);
+}
 
 }} // namespace handystats::internal
 

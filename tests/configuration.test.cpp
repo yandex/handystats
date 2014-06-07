@@ -122,6 +122,7 @@ TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
 	ASSERT_EQ(handystats::config::incremental_statistics.moving_interval, handystats::config::incremental_statistics_parameters().moving_interval);
 	ASSERT_EQ(handystats::config::timer.idle_timeout, handystats::config::timer_parameters().idle_timeout);
 	ASSERT_EQ(handystats::config::json_dump.interval, handystats::config::json_dump_parameters().interval);
+	ASSERT_EQ(handystats::config::metrics_dump.interval, handystats::config::metrics_dump_parameters().interval);
 	ASSERT_EQ(handystats::config::message_queue.sleep_on_empty, handystats::config::message_queue_parameters().sleep_on_empty);
 
 	HANDY_INIT();
@@ -133,11 +134,15 @@ TEST_F(HandyConfigurationTest, JsonDumpIntervalConfiguration) {
 				\"handystats\": {\
 					\"json-dump\": {\
 						\"interval\": 100000\
+					},\
+					\"metrics-dump\": {\
+						\"interval\": 500000\
 					}\
 				}\
 			}"
 		);
 	ASSERT_EQ(handystats::config::json_dump.interval, std::chrono::milliseconds(100000));
+	ASSERT_EQ(handystats::config::metrics_dump.interval, std::chrono::milliseconds(500000));
 
 	HANDY_INIT();
 

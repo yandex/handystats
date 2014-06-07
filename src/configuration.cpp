@@ -30,6 +30,12 @@ const std::chrono::milliseconds interval = std::chrono::milliseconds(500);
 
 }
 
+namespace metrics_dump {
+
+const std::chrono::milliseconds interval = std::chrono::milliseconds(500);
+
+}
+
 namespace message_queue {
 
 const std::vector<std::chrono::microseconds> sleep_on_empty =
@@ -101,6 +107,20 @@ void json_dump_parameters::configure(const rapidjson::Value& json_dump_config) {
 }
 
 
+metrics_dump_parameters::metrics_dump_parameters() {
+	interval = defaults::metrics_dump::interval;
+}
+
+void metrics_dump_parameters::configure(const rapidjson::Value& metrics_dump_config) {
+	if (metrics_dump_config.HasMember("interval")) {
+		const rapidjson::Value& interval = metrics_dump_config["interval"];
+		if (interval.IsUint64()) {
+			this->interval = std::chrono::milliseconds(interval.GetUint64());
+		}
+	}
+}
+
+
 message_queue_parameters::message_queue_parameters() {
 	sleep_on_empty = defaults::message_queue::sleep_on_empty;
 }
@@ -129,6 +149,7 @@ void message_queue_parameters::configure(const rapidjson::Value& message_queue_c
 incremental_statistics_parameters incremental_statistics;
 timer_parameters timer;
 json_dump_parameters json_dump;
+metrics_dump_parameters metrics_dump;
 message_queue_parameters message_queue;
 
 void initialize() {
@@ -138,6 +159,7 @@ void finalize() {
 	incremental_statistics = incremental_statistics_parameters();
 	timer = timer_parameters();
 	json_dump = json_dump_parameters();
+	metrics_dump = metrics_dump_parameters();
 	message_queue = message_queue_parameters();
 }
 
@@ -208,6 +230,11 @@ void HANDY_CONFIGURATION_JSON(const rapidjson::Value& config) {
 	if (handystats_config.HasMember("json-dump")) {
 		const rapidjson::Value& json_dump_config = handystats_config["json-dump"];
 		handystats::config::json_dump.configure(json_dump_config);
+	}
+
+	if (handystats_config.HasMember("metrics-dump")) {
+		const rapidjson::Value& metrics_dump_config = handystats_config["metrics-dump"];
+		handystats::config::metrics_dump.configure(metrics_dump_config);
 	}
 
 	if (handystats_config.HasMember("message-queue")) {

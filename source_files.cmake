@@ -19,3 +19,4 @@ src/measuring_points/counter_measuring_points.cpp
 src/json_dump.cpp
 src/configuration.cpp
 src/incremental_statistics.cpp
+src/metrics_dump.cpp

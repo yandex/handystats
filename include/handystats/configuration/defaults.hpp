@@ -25,6 +25,12 @@ extern const std::chrono::milliseconds interval;
 
 }
 
+namespace metrics_dump {
+
+extern const std::chrono::milliseconds interval;
+
+}
+
 namespace message_queue {
 
 extern const std::vector<std::chrono::microseconds> sleep_on_empty;

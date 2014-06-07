@@ -30,6 +30,13 @@ struct json_dump_parameters {
 	void configure(const rapidjson::Value& json_dump_config);
 };
 
+struct metrics_dump_parameters {
+	std::chrono::milliseconds interval;
+
+	metrics_dump_parameters();
+	void configure(const rapidjson::Value& metrics_dump_config);
+};
+
 struct message_queue_parameters {
 	std::vector<std::chrono::microseconds> sleep_on_empty;
 
@@ -40,6 +47,7 @@ struct message_queue_parameters {
 extern incremental_statistics_parameters incremental_statistics;
 extern timer_parameters timer;
 extern json_dump_parameters json_dump;
+extern metrics_dump_parameters metrics_dump;
 extern message_queue_parameters message_queue;
 
 void initialize();

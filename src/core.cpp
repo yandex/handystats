@@ -7,6 +7,7 @@
 #include "message_queue_impl.hpp"
 #include "internal_impl.hpp"
 #include "json_dump_impl.hpp"
+#include "metrics_dump_impl.hpp"
 #include "system_stats_impl.hpp"
 #include "configuration_impl.hpp"
 #include "core_impl.hpp"
@@ -71,6 +72,7 @@ void initialize() {
 							}
 						}
 						json::update_json_dump();
+						metrics::update_metrics_dump();
 					}
 				}
 		);

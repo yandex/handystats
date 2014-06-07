@@ -82,6 +82,9 @@ std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allo
 }
 
 void update_json_dump() {
+	if (config::json_dump.interval.count() == 0) {
+		return;
+	}
 	if (std::chrono::duration_cast<chrono::default_duration>(chrono::default_clock::now() - json_dump_timestamp) > config::json_dump.interval) {
 		auto new_json_dump = create_json_dump<rapidjson::MemoryPoolAllocator<>>();
 		{

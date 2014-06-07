@@ -69,6 +69,9 @@ std::shared_ptr<const const_metrics_dump> create_metrics_dump() {
 }
 
 void update_metrics_dump() {
+	if (config::metrics_dump.interval.count() == 0) {
+		return;
+	}
 	if (std::chrono::duration_cast<chrono::default_duration>(chrono::default_clock::now() - metrics_dump_timestamp) > config::metrics_dump.interval) {
 		auto new_metrics_dump = create_metrics_dump();
 		{

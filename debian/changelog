@@ -1,3 +1,18 @@
+handystats (1.5.0) UNRELEASED; urgency=low
+
+  * incremental_statistics: internal stats from gauge have been moved out to separate class.
+  * metrics: internal stats have been replaced with incremental_statistics (were gauges).
+  * configuration: "gauge" section has been renamed to "incremental-statistics".
+  * configuration: handystats::config::defaults namespace with default configuration parameters has been added.
+  * timer: now metrics::timer is multi-instance timer (it supports multiple simultaneously active instances).
+  * json_dump: HANDY_JSON_DUMP() returns const shared_ptr now to forbid user to modify shared_ptr.
+  * metrics_dump: metrics dump has been added. This dump is similar to json dump but is in form of std::map data structure with const metrics.
+  * configuration: "metrics-dump" section has been added.
+  * json_dump: zero json dump interval configuration disables json dump creation.
+  * metrics_dump: zero metrics dump interval configuration disables metrics dump creation.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Mon, 09 Jun 2014 20:17:49 +0400
+
 handystats (1.4.0) UNRELEASED; urgency=low
 
   * metrics: convenient extraction methods for gauge internal statistics have been added.

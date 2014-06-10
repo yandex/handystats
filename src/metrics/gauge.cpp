@@ -5,6 +5,8 @@ namespace handystats { namespace metrics {
 
 gauge::gauge()
 {
+	value = value_type();
+	timestamp = time_point();
 }
 
 gauge::gauge(value_type value, time_point timestamp)

@@ -16,9 +16,9 @@ struct gauge
 	typedef chrono::default_time_point time_point;
 
 	gauge();
-	gauge(value_type value, time_point timestamp);
+	gauge(value_type value, time_point timestamp = clock::now());
 
-	void set(value_type value, time_point timestamp);
+	void set(value_type value, time_point timestamp = clock::now());
 
 	value_type value;
 	time_point timestamp;

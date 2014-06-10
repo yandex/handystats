@@ -3,13 +3,6 @@
 
 namespace handystats { namespace metrics {
 
-counter::counter()
-	: value()
-	, timestamp(chrono::default_clock::now())
-{
-	values(this->value, this->timestamp);
-}
-
 counter::counter(value_type value, time_point timestamp)
 	: value(value)
 	, timestamp(timestamp)

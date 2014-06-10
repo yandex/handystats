@@ -16,11 +16,10 @@ struct counter
 	typedef chrono::default_clock clock;
 	typedef chrono::default_time_point time_point;
 
-	counter();
-	counter(value_type value, time_point timestamp);
+	counter(value_type value = value_type(), time_point timestamp = clock::now());
 
-	void increment(value_type value, time_point timestamp);
-	void decrement(value_type value, time_point timestamp);
+	void increment(value_type value = 1, time_point timestamp = clock::now());
+	void decrement(value_type value = 1, time_point timestamp = clock::now());
 
 	value_type value;
 	time_point timestamp;

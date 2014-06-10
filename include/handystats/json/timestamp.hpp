@@ -8,7 +8,7 @@ namespace handystats { namespace json {
 
 typedef std::chrono::milliseconds time_duration;
 
-inline void write_to_json_value(chrono::default_time_point timestamp, rapidjson::Value* json_value) {
+inline void write_to_json_value(const chrono::default_time_point& timestamp, rapidjson::Value* json_value) {
 	if (!json_value) {
 		json_value = new rapidjson::Value();
 	}

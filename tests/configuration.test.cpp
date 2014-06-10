@@ -148,3 +148,21 @@ TEST_F(HandyConfigurationTest, JsonDumpIntervalConfiguration) {
 
 	// TODO: test json-dump-interval configuration in action
 }
+
+TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
+	HANDY_CONFIGURATION_JSON(
+			"{\
+				\"handystats\": {\
+					\"incremental-statistics\": {\
+						\"moving-interval\": 1234,\
+						\"moving-average-alpha\": 1.5\
+					}\
+				}\
+			}"
+		);
+
+	ASSERT_EQ(handystats::config::incremental_statistics.moving_interval, std::chrono::milliseconds(1234));
+	ASSERT_EQ(handystats::config::incremental_statistics.moving_average_alpha, 1.5);
+
+	HANDY_INIT();
+}

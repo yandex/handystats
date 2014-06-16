@@ -20,7 +20,7 @@
  *            "interval": <value in msec>
  *        },
  *        "message-queue": {
- *           "sleep_on_empty": [<first sleep interval in usec>, <second sleep interval in usec>, ...]
+ *           "sleep-on-empty": [<first sleep interval in usec>, <second sleep interval in usec>, ...]
  *        }
  *    }
  * }

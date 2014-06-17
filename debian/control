@@ -14,4 +14,4 @@ Vcs-Browser: https://github.com/shindo/handystats
 Package: handystats
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: C++ Framework for collecting runtime in-process statistics
+Description: C++ library for collecting user-defined in-process runtime statistics

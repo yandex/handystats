@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_INTERVAL_MEAN_H_
 #define HANDYSTATS_INTERVAL_MEAN_H_
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDY_COUNTER_MEASURING_POINTS_H_
 #define HANDY_COUNTER_MEASURING_POINTS_H_
 

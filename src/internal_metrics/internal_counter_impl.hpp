@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_INTERNAL_COUNTER_H_
 #define HANDYSTATS_INTERNAL_COUNTER_H_
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_TIMESTAMP_PARAMETER_H_
 #define HANDYSTATS_TIMESTAMP_PARAMETER_H_
 

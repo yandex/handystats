@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_METRICS_TIMER_H_
 #define HANDYSTATS_METRICS_TIMER_H_
 

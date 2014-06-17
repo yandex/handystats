@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_INCREMENTAL_STATISTICS_H_
 #define HANDYSTATS_INCREMENTAL_STATISTICS_H_
 

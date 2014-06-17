@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_MESSAGE_QUEUE_IMPL_H_
 #define HANDYSTATS_MESSAGE_QUEUE_IMPL_H_
 

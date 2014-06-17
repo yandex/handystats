@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_TIMER_MEASURING_POINTS_H_
 #define HANDYSTATS_TIMER_MEASURING_POINTS_H_
 

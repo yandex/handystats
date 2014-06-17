@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #include <memory>
 
 #include "events/counter_events_impl.hpp"

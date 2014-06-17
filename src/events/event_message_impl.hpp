@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_EVENT_MESSAGE_H_
 #define HANDYSTATS_EVENT_MESSAGE_H_
 

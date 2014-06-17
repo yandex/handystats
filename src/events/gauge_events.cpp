@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #include <handystats/metrics/gauge.hpp>
 
 #include "events/event_message_impl.hpp"

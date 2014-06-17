@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #include <memory>
 
 #include "events/gauge_events_impl.hpp"

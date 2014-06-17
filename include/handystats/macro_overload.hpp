@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_MACRO_OVERLOAD_H_
 #define HANDYSTATS_MACRO_OVERLOAD_H_
 

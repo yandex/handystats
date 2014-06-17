@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #include <mutex>
 #include <memory>
 #include <string>

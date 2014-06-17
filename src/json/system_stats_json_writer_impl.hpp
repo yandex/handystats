@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_SYSTEM_STATS_JSON_WRITER_IMPL_H_
 #define HANDYSTATS_SYSTEM_STATS_JSON_WRITER_IMPL_H_
 

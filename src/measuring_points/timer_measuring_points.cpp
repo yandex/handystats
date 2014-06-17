@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #include <memory>
 
 #include "events/timer_events_impl.hpp"

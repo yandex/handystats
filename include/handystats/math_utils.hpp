@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #ifndef HANDYSTATS_MATH_UTILS_IMPL_H_
 #define HANDYSTATS_MATH_UTILS_IMPL_H_
 

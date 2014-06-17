@@ -1,3 +1,5 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
 #include "configuration_impl.hpp"
 
 #include <handystats/incremental_statistics.hpp>

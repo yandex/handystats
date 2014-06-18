@@ -2,7 +2,7 @@
 pkgname=handystats
 pkgver=1.5.0
 pkgrel=1
-pkgdesc="C++ library for collecting user-defined in-process runtime statistics"
+pkgdesc="C++ library for collecting user-defined in-process runtime statistics with low overhead"
 arch=('any')
 url=('https://github.com/shindo/handystats')
 license=('unknown')

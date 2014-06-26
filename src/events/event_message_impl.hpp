@@ -23,7 +23,7 @@ struct event_message {
 	std::string destination_name;
 	int destination_type;
 
-	chrono::default_time_point timestamp;
+	chrono::clock::time_point timestamp;
 
 	int event_type;
 	std::vector<void*> event_data;

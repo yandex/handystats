@@ -26,7 +26,7 @@ TEST(IntervalStatsTest, TestIntervalCount) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 		for (int step = 0; step < STEP_COUNT; ++step) {
-			acc(step, timestamp = handystats::chrono::default_clock::now());
+			acc(step, timestamp = handystats::chrono::clock::now());
 		}
 
 		ASSERT_NEAR(interval_count(acc), STEP_COUNT, 0.05 * STEP_COUNT);
@@ -46,7 +46,7 @@ TEST(IntervalStatsTest, TestIntervalSum) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 		for (int step = 0; step < STEP_COUNT; ++step) {
-			acc(1, timestamp = handystats::chrono::default_clock::now());
+			acc(1, timestamp = handystats::chrono::clock::now());
 		}
 
 		ASSERT_NEAR(interval_sum(acc), STEP_COUNT, 0.05 * STEP_COUNT);
@@ -69,7 +69,7 @@ TEST(IntervalStatsTest, TestIntervalMean) {
 
 		for (int step = 0; step < STEP_COUNT; ++step) {
 			auto value = rand() % 1000;
-			acc(value, timestamp = handystats::chrono::default_clock::now());
+			acc(value, timestamp = handystats::chrono::clock::now());
 			mean_acc(value);
 		}
 

@@ -15,8 +15,8 @@ void internal_timer::check_timeout(time_point timestamp, clock::duration idle_ti
 		return;
 	}
 
-	if (std::chrono::duration_cast<internal_timer::time_duration>(timestamp - check_timeout_timestamp) <
-			std::chrono::duration_cast<internal_timer::time_duration>(idle_timeout))
+	if (chrono::duration_cast<internal_timer::time_duration>(timestamp - check_timeout_timestamp) <
+			chrono::duration_cast<internal_timer::time_duration>(idle_timeout))
 	{
 		return;
 	}
@@ -31,7 +31,7 @@ void internal_timer::process_event_message(const events::event_message& message)
 		return;
 	}
 
-	check_timeout(message.timestamp, std::chrono::duration_cast<clock::duration>(config::timer.idle_timeout));
+	check_timeout(message.timestamp, chrono::duration_cast<clock::duration>(config::timer.idle_timeout));
 
 	switch (message.event_type) {
 		case events::timer_event::INIT:

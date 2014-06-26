@@ -14,9 +14,11 @@ namespace handystats { namespace metrics {
 
 struct timer
 {
-	typedef chrono::default_clock clock;
-	typedef typename chrono::default_duration value_type;
-	typedef chrono::default_time_point time_point;
+	typedef chrono::time_duration value_type;
+	typedef chrono::time_duration time_duration;
+	typedef chrono::clock clock;
+	typedef clock::time_point time_point;
+
 	typedef uint64_t instance_id_type;
 
 	static const instance_id_type DEFAULT_INSTANCE_ID = -1;
@@ -41,7 +43,7 @@ struct timer
 
 	void check_timeout(
 			time_point timestamp = clock::now(),
-			clock::duration idle_timeout = std::chrono::duration_cast<clock::duration>(config::defaults::timer::idle_timeout)
+			clock::duration idle_timeout = chrono::duration_cast<clock::duration>(config::defaults::timer::idle_timeout)
 			);
 
 	time_point timestamp;

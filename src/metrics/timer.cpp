@@ -24,7 +24,7 @@ void timer::stop(time_point timestamp, instance_id_type instance_id) {
 	auto instance_value = timestamp - instance->second.start_timestamp;
 
 	this->timestamp = timestamp;
-	value = std::chrono::duration_cast<value_type>(instance_value);
+	value = chrono::duration_cast<value_type>(instance_value);
 
 	values(value.count(), timestamp);
 

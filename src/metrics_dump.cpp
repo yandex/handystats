@@ -23,7 +23,7 @@ extern std::map<std::string, internal_metric> internal_metrics;
 
 namespace handystats { namespace metrics {
 
-chrono::default_time_point metrics_dump_timestamp;
+chrono::clock::time_point metrics_dump_timestamp;
 std::mutex metrics_dump_mutex;
 
 std::shared_ptr<const const_metrics_dump> metrics_dump(new const_metrics_dump());
@@ -65,7 +65,7 @@ std::shared_ptr<const const_metrics_dump> create_metrics_dump() {
 		}
 	}
 
-	metrics_dump_timestamp = chrono::default_clock::now();
+	metrics_dump_timestamp = chrono::clock::now();
 
 	return std::const_pointer_cast<const const_metrics_dump>(dump);
 }
@@ -74,7 +74,7 @@ void update_metrics_dump() {
 	if (config::metrics_dump.interval.count() == 0) {
 		return;
 	}
-	if (std::chrono::duration_cast<chrono::default_duration>(chrono::default_clock::now() - metrics_dump_timestamp) > config::metrics_dump.interval) {
+	if (chrono::duration_cast<std::chrono::nanoseconds>(chrono::clock::now() - metrics_dump_timestamp) > config::metrics_dump.interval) {
 		auto new_metrics_dump = create_metrics_dump();
 		{
 			std::lock_guard<std::mutex> lock(metrics_dump_mutex);

@@ -24,7 +24,9 @@ namespace handystats {
 class incremental_statistics {
 public:
 	typedef double value_type;
-	typedef chrono::default_time_point time_point;
+	typedef chrono::time_duration time_duration;
+	typedef chrono::clock clock;
+	typedef clock::time_point time_point;
 
 	typedef boost::accumulators::features <
 			boost::accumulators::tag::min,
@@ -40,7 +42,7 @@ public:
 
 	incremental_statistics();
 
-	void operator() (value_type value, time_point timestamp = chrono::default_clock::now());
+	void operator() (value_type value, time_point timestamp = clock::now());
 
 	value_type min() const;
 	value_type max() const;

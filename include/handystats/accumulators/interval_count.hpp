@@ -8,6 +8,7 @@
 #include <boost/accumulators/statistics/count.hpp>
 
 #include <handystats/chrono.hpp>
+#include <handystats/configuration/defaults.hpp>
 #include <handystats/math_utils.hpp>
 #include <handystats/accumulators/parameters/time_interval.hpp>
 #include <handystats/accumulators/parameters/timestamp.hpp>
@@ -18,14 +19,18 @@ template <typename value_type>
 struct interval_count_impl : accumulator_base {
 
 	typedef double result_type;
-	typedef typename handystats::chrono::default_duration duration;
-	typedef typename handystats::chrono::default_time_point time_point;
+	typedef typename handystats::chrono::time_duration time_duration;
+	typedef typename handystats::chrono::clock::time_point time_point;
 
 	template <typename Args>
 	interval_count_impl(Args const& args)
 		: count(0)
 		, last_timestamp(args[parameter::keyword<tag::timestamp>::get() | time_point()])
-		, time_interval(args[parameter::keyword<tag::time_interval>::get() | std::chrono::duration_cast<duration>(std::chrono::seconds(1))])
+		, time_interval(args[parameter::keyword<tag::time_interval>::get() |
+				handystats::chrono::duration_cast<time_duration>(
+					handystats::config::defaults::incremental_statistics::moving_interval
+					)
+				])
 	{
 	}
 
@@ -35,7 +40,7 @@ struct interval_count_impl : accumulator_base {
 			this->count = 1.0;
 		}
 		else {
-			double elapsed = double(std::chrono::duration_cast<duration>(args[timestamp] - last_timestamp).count()) / this->time_interval.count();
+			double elapsed = double(handystats::chrono::duration_cast<time_duration>(args[timestamp] - last_timestamp).count()) / this->time_interval.count();
 			if (handystats::math_utils::cmp(elapsed, 1.0) > 0) {
 				this->count = (1.0 / elapsed);
 			}
@@ -62,7 +67,7 @@ private:
 	double count;
 	time_point last_timestamp;
 
-	duration time_interval;
+	time_duration time_interval;
 };
 
 } // namespace boost::accumulators::impl

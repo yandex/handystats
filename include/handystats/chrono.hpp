@@ -1,102 +1,113 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CHRONO_IMPL_H_
-#define HANDYSTATS_CHRONO_IMPL_H_
+#ifndef HANDYSTATS_CHRONO_H_
+#define HANDYSTATS_CHRONO_H_
 
 #include <cstdint>
 #include <cstdlib>
 #include <chrono>
 
+#include <handystats/chrono/tsc_clock.hpp>
+
 namespace handystats { namespace chrono {
 
 /*
- * Concept 'clock'.
+ * Concept 'clock' (follows std::chrono::clock).
  *
- * Type names:
- * - clock::time_point - represents time point from clock's epoch
- * - clock::duration - represents duration between time points
+ * Types:
+ * - clock::time_point - represents time point from clock's epoch (follows std::chrono::time_point)
+ * - clock::duration - represents duration between time points (follows std::chrono::duration)
  *
  * Member functions:
- * - static time_point now() noexcept - gets current time point
+ * - static time_point now() noexcept
+ *       Gets current time point
+ *
+ * Non-member functions:
+ * - std::chrono::system_clock::time_point to_system_time(const clock::time_point&)
+ *       Converts clock's time_point to system-wide clock's time represented by std::chrono::system_clock
+ *
+ * - duration_cast from and to clock::duration
+ *   'clock' class should provide handystats::chrono::duration_cast specializations between clock::duration and std::chrono::nanoseconds
  *
  * Notes:
  * - time_point and duration can have no connection to std::chrono
- *   but there should be std::chrono::duration_cast specialization for clock::duration
+ *   but overall public interface is aimed to follow std::chrono's one.
+ *
+ * - duration_cast in handystats::chrono namespace is not specialization for std::chrono::duration_cast
+ *   but overload for clock::duration parameter.
+ *
+ *   Also, if handystats::chrono::duration_cast is called without clock::duration as parameter (from or to duration)
+ *   call falls back to std::chrono::duration_cast.
  */
 
+/*
+ * Library-wide internal clock
+ */
+typedef tsc_clock clock;
 
-class tsc_clock {
-public:
-	typedef int64_t time_point;
-	typedef int64_t duration;
-
-	static time_point now() noexcept;
-	static std::chrono::nanoseconds to_nanoseconds(const duration&) noexcept;
-	static duration from_nanoseconds(const std::chrono::nanoseconds&) noexcept;
-};
-
-template<class time_duration>
-class steady_clock {
-public:
-	typedef time_duration duration;
-	typedef typename duration::rep rep;
-	typedef typename duration::period period;
-	typedef typename std::chrono::time_point<steady_clock> time_point;
-	static const bool is_steady = true;
-
-	static time_point now() noexcept;
-};
+/*
+ * Library-wide time duration.
+ * Also determines interval time measurement precision
+ */
+typedef std::chrono::microseconds time_duration;
 
 
-typedef std::chrono::microseconds default_duration;
-typedef tsc_clock default_clock;
-typedef default_clock::time_point default_time_point;
+// Convert from handystats internal clock's time_point to standard system_clock's time_point
+std::chrono::system_clock::time_point to_system_time(const clock::time_point&);
 
 
-template<class time_duration>
-std::chrono::nanoseconds to_nanoseconds(const time_duration& duration) {
-	return std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
+// Fall back to std::chrono::duration_cast if not from and not to clock::duration
+template <typename ToDuration, typename FromDuration,
+			typename std::enable_if<
+						!std::is_same<ToDuration, clock::duration>::value &&
+						!std::is_same<FromDuration, clock::duration>::value,
+					int>::type = 0
+		>
+ToDuration duration_cast(const FromDuration& d) {
+	return std::chrono::duration_cast<ToDuration>(d);
 }
 
-template<class time_duration>
-std::chrono::microseconds to_microseconds(const time_duration& duration) {
-	return std::chrono::duration_cast<std::chrono::microseconds>(duration);
+// Cast from clock::duration through std::chrono::nanoseconds
+template <typename ToDuration, typename FromDuration,
+			typename std::enable_if<
+						!std::is_same<ToDuration, clock::duration>::value &&
+						std::is_same<FromDuration, clock::duration>::value,
+					int>::type = 0
+		>
+ToDuration duration_cast(const FromDuration& d) {
+	return std::chrono::duration_cast<ToDuration>(duration_cast<std::chrono::nanoseconds>(d));
 }
 
-template<class time_duration>
-std::chrono::milliseconds to_milliseconds(const time_duration& duration) {
-	return std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+// Cast to clock::duration through std::chrono::nanoseconds
+template <typename ToDuration, typename FromDuration,
+			typename std::enable_if<
+						std::is_same<ToDuration, clock::duration>::value &&
+						!std::is_same<FromDuration, clock::duration>::value,
+					int>::type = 0
+		>
+ToDuration duration_cast(const FromDuration& d) {
+	return duration_cast<clock::duration>(std::chrono::duration_cast<std::chrono::nanoseconds>(d));
 }
 
-template<class time_duration>
-std::chrono::seconds to_seconds(const time_duration& duration) {
-	return std::chrono::duration_cast<std::chrono::seconds>(duration);
+// Trivial cast with the same clock::duration
+template <typename ToDuration, typename FromDuration,
+			typename std::enable_if<
+						std::is_same<ToDuration, clock::duration>::value &&
+						std::is_same<FromDuration, clock::duration>::value,
+					int>::type = 0
+		>
+FromDuration duration_cast(const FromDuration& d) {
+	return d;
 }
 
-template<class time_duration>
-std::chrono::minutes to_minutes(const time_duration& duration) {
-	return std::chrono::duration_cast<std::chrono::minutes>(duration);
-}
 
-template<class time_duration>
-std::chrono::hours to_hours(const time_duration& duration) {
-	return std::chrono::duration_cast<std::chrono::hours>(duration);
-}
+// duration_cast specializations through std::chrono::nanoseconds that should support clock::duration
+template <>
+clock::duration duration_cast<clock::duration, std::chrono::nanoseconds>(const std::chrono::nanoseconds&);
+
+template <>
+std::chrono::nanoseconds duration_cast<std::chrono::nanoseconds, clock::duration>(const clock::duration&);
 
 }} // namespace handystats::chrono
 
-namespace std { namespace chrono {
-
-template <typename ToDuration>
-ToDuration duration_cast(handystats::chrono::tsc_clock::duration duration) {
-	return duration_cast<ToDuration>(handystats::chrono::tsc_clock::to_nanoseconds(duration));
-}
-
-template <typename, typename FromDuration>
-handystats::chrono::tsc_clock::duration duration_cast(FromDuration duration) {
-	return handystats::chrono::tsc_clock::from_nanoseconds(std::chrono::duration_cast<std::chrono::nanoseconds>(duration));
-}
-
-}} // namespace std::chrono
-
-#endif // HANDYSTATS_CHRONO_IMPL_H_
+#endif // HANDYSTATS_CHRONO_H_

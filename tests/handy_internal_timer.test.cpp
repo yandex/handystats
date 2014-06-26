@@ -2,7 +2,6 @@
 #include <utility>
 #include <cstdlib>
 #include <thread>
-#include <chrono>
 #include <queue>
 #include <string>
 #include <map>
@@ -10,6 +9,7 @@
 
 #include <gtest/gtest.h>
 
+#include <handystats/chrono.hpp>
 #include <handystats/operation.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>
@@ -65,7 +65,7 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
-	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
+	ASSERT_GE(agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count());
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
@@ -98,7 +98,7 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
-	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
+	ASSERT_GE(agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count());
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
@@ -135,7 +135,7 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 		->values;
 
 	ASSERT_EQ(agg_stats.count(), COUNT);
-	ASSERT_GE(agg_stats.min(), std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_time).count());
+	ASSERT_GE(agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count());
 
 	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }

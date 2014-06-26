@@ -2,7 +2,6 @@
 #include <utility>
 #include <cstdlib>
 #include <thread>
-#include <chrono>
 #include <queue>
 #include <string>
 #include <map>
@@ -10,6 +9,7 @@
 
 #include <gtest/gtest.h>
 
+#include <handystats/chrono.hpp>
 #include <handystats/operation.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
@@ -91,7 +91,7 @@ TEST_F(MetricsDumpTest, SampleTimer) {
 
 	auto& timer = boost::get<handystats::metrics::const_timer>(metrics_dump->find("timer")->second);
 	ASSERT_EQ(timer.values.count(), TIMER_INSTANCES);
-	ASSERT_TRUE(timer.values.min() >= std::chrono::duration_cast<handystats::chrono::default_duration>(sleep_interval).count());
+	ASSERT_TRUE(timer.values.min() >= handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count());
 }
 
 TEST_F(MetricsDumpTest, SampleGauge) {

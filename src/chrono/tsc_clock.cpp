@@ -248,6 +248,7 @@ tsc_clock::time_point tsc_clock::now() noexcept {
 std::chrono::system_clock::time_point to_system_time(const tsc_clock::time_point& t) {
 	static std::atomic<int64_t> ns_offset(0);
 	static std::atomic<tsc_clock::time_point::rep> offset_timestamp(0);
+	static std::atomic_flag lock = ATOMIC_FLAG_INIT;
 
 	static const tsc_clock::duration OFFSET_TIMEOUT (15 * (int64_t)1E9);
 	static const tsc_clock::duration CLOSE_DISTANCE (15 * (int64_t)1E3);
@@ -258,29 +259,32 @@ std::chrono::system_clock::time_point to_system_time(const tsc_clock::time_point
 	tsc_clock::time_point::rep offset_ts = offset_timestamp.load(std::memory_order_acquire);
 
 	if (offset_ts == 0 || (current_tsc_time.time_since_epoch() - tsc_clock::duration(offset_ts)) > OFFSET_TIMEOUT) {
-		tsc_clock::time_point cycles_start, cycles_end;
-		std::chrono::system_clock::time_point current_time;
+		if (!lock.test_and_set(std::memory_order_acquire)) {
+			tsc_clock::time_point cycles_start, cycles_end;
+			std::chrono::system_clock::time_point current_time;
 
-		for (uint64_t update_try = 0; update_try < MAX_UPDATE_TRIES; ++update_try) {
-			cycles_start = tsc_clock::now();
-			current_time = std::chrono::system_clock::now();
-			cycles_end = tsc_clock::now();
+			for (uint64_t update_try = 0; update_try < MAX_UPDATE_TRIES; ++update_try) {
+				cycles_start = tsc_clock::now();
+				current_time = std::chrono::system_clock::now();
+				cycles_end = tsc_clock::now();
 
-			if (cycles_end - cycles_start < CLOSE_DISTANCE) {
-				break;
+				if (cycles_end - cycles_start < CLOSE_DISTANCE) {
+					break;
+				}
 			}
+
+			tsc_clock::time_point cycles_middle = cycles_start + (cycles_end - cycles_start) / 2;
+			int64_t new_offset =
+				std::chrono::nanoseconds(
+						duration_cast<std::chrono::nanoseconds>(current_time.time_since_epoch()) -
+						duration_cast<std::chrono::nanoseconds>(cycles_middle.time_since_epoch())
+						)
+				.count();
+
+			ns_offset.store(new_offset, std::memory_order_release);
+			offset_timestamp.store(cycles_middle.time_since_epoch().count(), std::memory_order_release);
+			lock.clear(std::memory_order_release);
 		}
-
-		tsc_clock::time_point cycles_middle = cycles_start + (cycles_end - cycles_start) / 2;
-		int64_t new_offset =
-			std::chrono::nanoseconds(
-					duration_cast<std::chrono::nanoseconds>(current_time.time_since_epoch()) -
-					duration_cast<std::chrono::nanoseconds>(cycles_middle.time_since_epoch())
-				)
-			.count();
-
-		ns_offset.store(new_offset, std::memory_order_release);
-		offset_timestamp.store(cycles_middle.time_since_epoch().count(), std::memory_order_release);
 	}
 
 	return std::chrono::system_clock::time_point() +

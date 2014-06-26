@@ -70,7 +70,7 @@ void internal_timer::process_start_event(const events::event_message& message) {
 	}
 
 	metrics::timer::instance_id_type instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data[0]);
-	base_timer->start(message.timestamp, instance_id);
+	base_timer->start(instance_id, message.timestamp);
 
 }
 
@@ -80,7 +80,7 @@ void internal_timer::process_stop_event(const events::event_message& message) {
 	}
 
 	metrics::timer::instance_id_type instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data[0]);
-	base_timer->stop(message.timestamp, instance_id);
+	base_timer->stop(instance_id, message.timestamp);
 }
 
 void internal_timer::process_discard_event(const events::event_message& message) {
@@ -89,7 +89,7 @@ void internal_timer::process_discard_event(const events::event_message& message)
 	}
 
 	metrics::timer::instance_id_type instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data[0]);
-	base_timer->discard(message.timestamp, instance_id);
+	base_timer->discard(instance_id, message.timestamp);
 }
 
 void internal_timer::process_heartbeat_event(const events::event_message& message) {
@@ -98,7 +98,7 @@ void internal_timer::process_heartbeat_event(const events::event_message& messag
 	}
 
 	metrics::timer::instance_id_type instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data[0]);
-	base_timer->heartbeat(message.timestamp, instance_id);
+	base_timer->heartbeat(instance_id, message.timestamp);
 }
 
 }} // namespace handystats::internal

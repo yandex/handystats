@@ -36,10 +36,10 @@ struct timer
 
 	timer();
 
-	void start(time_point timestamp = clock::now(), instance_id_type instance_id = DEFAULT_INSTANCE_ID);
-	void stop(time_point timestamp = clock::now(), instance_id_type instance_id = DEFAULT_INSTANCE_ID);
-	void heartbeat(time_point timestamp = clock::now(), instance_id_type instance_id = DEFAULT_INSTANCE_ID);
-	void discard(time_point timestamp = clock::now(), instance_id_type instance_id = DEFAULT_INSTANCE_ID);
+	void start(instance_id_type instance_id = DEFAULT_INSTANCE_ID, time_point timestamp = clock::now());
+	void stop(instance_id_type instance_id = DEFAULT_INSTANCE_ID, time_point timestamp = clock::now());
+	void heartbeat(instance_id_type instance_id = DEFAULT_INSTANCE_ID, time_point timestamp = clock::now());
+	void discard(instance_id_type instance_id = DEFAULT_INSTANCE_ID, time_point timestamp = clock::now());
 
 	void check_timeout(
 			time_point timestamp = clock::now(),

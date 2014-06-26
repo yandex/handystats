@@ -9,13 +9,13 @@ timer::timer() {
 	this->value = value_type();
 }
 
-void timer::start(time_point timestamp, instance_id_type instance_id) {
+void timer::start(instance_id_type instance_id, time_point timestamp) {
 	auto& instance = instances[instance_id];
 	instance.start_timestamp = timestamp;
 	instance.heartbeat_timestamp = timestamp;
 }
 
-void timer::stop(time_point timestamp, instance_id_type instance_id) {
+void timer::stop(instance_id_type instance_id, time_point timestamp) {
 	auto instance = instances.find(instance_id);
 	if (instance == instances.end()) {
 		return;
@@ -31,7 +31,7 @@ void timer::stop(time_point timestamp, instance_id_type instance_id) {
 	instances.erase(instance);
 }
 
-void timer::heartbeat(time_point timestamp, instance_id_type instance_id) {
+void timer::heartbeat(instance_id_type instance_id, time_point timestamp) {
 	auto instance = instances.find(instance_id);
 	if (instance == instances.end()) {
 		return;
@@ -40,7 +40,7 @@ void timer::heartbeat(time_point timestamp, instance_id_type instance_id) {
 	instance->second.heartbeat_timestamp = timestamp;
 }
 
-void timer::discard(time_point /* timestamp */, instance_id_type instance_id) {
+void timer::discard(instance_id_type instance_id, time_point timestamp) {
 	instances.erase(instance_id);
 }
 

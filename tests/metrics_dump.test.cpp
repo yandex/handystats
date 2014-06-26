@@ -15,6 +15,8 @@
 #include <handystats/metrics_dump.hpp>
 #include <handystats/configuration.hpp>
 
+#include "message_queue_helper.hpp"
+
 class MetricsDumpTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
@@ -30,6 +32,9 @@ TEST_F(MetricsDumpTest, SampleCounter) {
 				\"handystats\": {\
 					\"metrics-dump\": {\
 						\"interval\": 10\
+					},\
+					\"message-queue\": {\
+						\"sleep-on-empty\": [1]\
 					}\
 				}\
 			}"
@@ -44,7 +49,8 @@ TEST_F(MetricsDumpTest, SampleCounter) {
 		HANDY_COUNTER_INCREMENT("counter", INCR_VALUE);
 	}
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
@@ -63,6 +69,9 @@ TEST_F(MetricsDumpTest, SampleTimer) {
 				\"handystats\": {\
 					\"metrics-dump\": {\
 						\"interval\": 10\
+					},\
+					\"message-queue\": {\
+						\"sleep-on-empty\": [1]\
 					}\
 				}\
 			}"
@@ -83,7 +92,8 @@ TEST_F(MetricsDumpTest, SampleTimer) {
 		HANDY_TIMER_STOP("timer", i);
 	}
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(30));
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
@@ -100,6 +110,9 @@ TEST_F(MetricsDumpTest, SampleGauge) {
 				\"handystats\": {\
 					\"metrics-dump\": {\
 						\"interval\": 10\
+					},\
+					\"message-queue\": {\
+						\"sleep-on-empty\": [1]\
 					}\
 				}\
 			}"
@@ -114,7 +127,8 @@ TEST_F(MetricsDumpTest, SampleGauge) {
 		HANDY_GAUGE_SET("gauge", value);
 	}
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(30));
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 

@@ -14,6 +14,8 @@
 
 #include "configuration_impl.hpp"
 
+#include "message_queue_helper.hpp"
+
 class ZeroDumpIntervalTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
@@ -46,7 +48,8 @@ TEST_F(ZeroDumpIntervalTest, ZeroDumpIntervalsConfiguration) {
 		HANDY_COUNTER_INCREMENT("counter" + std::to_string(i));
 	}
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	ASSERT_TRUE(HANDY_JSON_DUMP()->empty());
 	ASSERT_TRUE(HANDY_METRICS_DUMP()->empty());

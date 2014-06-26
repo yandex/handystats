@@ -11,14 +11,13 @@
 #include <handystats/json_dump.hpp>
 #include <handystats/rapidjson/document.h>
 
-#include "events/event_message_impl.hpp"
-#include "message_queue_impl.hpp"
 #include "internal_metrics_impl.hpp"
 #include "internal_metrics/internal_gauge_impl.hpp"
 #include "internal_metrics/internal_counter_impl.hpp"
 #include "internal_metrics/internal_timer_impl.hpp"
 #include "configuration_impl.hpp"
 
+#include "message_queue_helper.hpp"
 
 namespace handystats { namespace internal {
 
@@ -61,6 +60,7 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 	HANDY_TIMER_STOP("dead-timer");
 	HANDY_TIMER_STOP("alive-timer");
 
+	handystats::message_queue::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	ASSERT_EQ(

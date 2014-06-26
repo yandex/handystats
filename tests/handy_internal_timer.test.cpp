@@ -19,6 +19,7 @@
 #include "internal_metrics_impl.hpp"
 #include "internal_metrics/internal_timer_impl.hpp"
 
+#include "message_queue_helper.hpp"
 
 namespace handystats { namespace internal {
 
@@ -47,10 +48,7 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 		HANDY_TIMER_STOP("sleep.time");
 	}
 
-	while (!handystats::message_queue::empty()) {
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
-	}
-
+	handystats::message_queue::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	ASSERT_TRUE(
@@ -80,10 +78,7 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 		HANDY_TIMER_STOP("sleep.time", step);
 	}
 
-	while (!handystats::message_queue::empty()) {
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
-	}
-
+	handystats::message_queue::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	ASSERT_TRUE(
@@ -117,10 +112,7 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 		HANDY_TIMER_STOP("sleep.time", step);
 	}
 
-	while (!handystats::message_queue::empty()) {
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
-	}
-
+	handystats::message_queue::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	ASSERT_TRUE(

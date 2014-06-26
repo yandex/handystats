@@ -19,6 +19,7 @@
 #include "internal_metrics_impl.hpp"
 #include "internal_metrics/internal_counter_impl.hpp"
 
+#include "message_queue_helper.hpp"
 
 namespace handystats { namespace internal {
 
@@ -44,10 +45,7 @@ TEST_F(HandyScopedCounterTest, TestSingleScope) {
 		HANDY_COUNTER_SCOPE("test.counter", 1);
 	}
 
-	while (!handystats::message_queue::empty()) {
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
-	}
-
+	handystats::message_queue::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	auto agg_stats =
@@ -72,10 +70,7 @@ TEST_F(HandyScopedCounterTest, TestDoubleNestedScope) {
 		}
 	}
 
-	while (!handystats::message_queue::empty()) {
-		std::this_thread::sleep_for(std::chrono::microseconds(100));
-	}
-
+	handystats::message_queue::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	auto agg_stats =

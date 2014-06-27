@@ -263,26 +263,31 @@ std::chrono::system_clock::time_point to_system_time(const tsc_clock::time_point
 			tsc_clock::time_point cycles_start, cycles_end;
 			std::chrono::system_clock::time_point current_time;
 
+			bool close_pair_found = false;
 			for (uint64_t update_try = 0; update_try < MAX_UPDATE_TRIES; ++update_try) {
 				cycles_start = tsc_clock::now();
 				current_time = std::chrono::system_clock::now();
 				cycles_end = tsc_clock::now();
 
 				if (cycles_end - cycles_start < CLOSE_DISTANCE) {
+					close_pair_found = true;
 					break;
 				}
 			}
 
-			tsc_clock::time_point cycles_middle = cycles_start + (cycles_end - cycles_start) / 2;
-			int64_t new_offset =
-				std::chrono::nanoseconds(
-						duration_cast<std::chrono::nanoseconds>(current_time.time_since_epoch()) -
-						duration_cast<std::chrono::nanoseconds>(cycles_middle.time_since_epoch())
-						)
-				.count();
+			if (close_pair_found) {
+				tsc_clock::time_point cycles_middle = cycles_start + (cycles_end - cycles_start) / 2;
+				int64_t new_offset =
+					std::chrono::nanoseconds(
+							duration_cast<std::chrono::nanoseconds>(current_time.time_since_epoch()) -
+							duration_cast<std::chrono::nanoseconds>(cycles_middle.time_since_epoch())
+							)
+					.count();
 
-			ns_offset.store(new_offset, std::memory_order_release);
-			offset_timestamp.store(cycles_middle.time_since_epoch().count(), std::memory_order_release);
+				ns_offset.store(new_offset, std::memory_order_release);
+				offset_timestamp.store(cycles_middle.time_since_epoch().count(), std::memory_order_release);
+			}
+
 			lock.clear(std::memory_order_release);
 		}
 	}

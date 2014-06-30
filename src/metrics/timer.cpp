@@ -11,13 +11,13 @@ timer::timer() {
 	this->value = value_type();
 }
 
-void timer::start(instance_id_type instance_id, time_point timestamp) {
+void timer::start(const instance_id_type& instance_id, const time_point& timestamp) {
 	auto& instance = instances[instance_id];
 	instance.start_timestamp = timestamp;
 	instance.heartbeat_timestamp = timestamp;
 }
 
-void timer::stop(instance_id_type instance_id, time_point timestamp) {
+void timer::stop(const instance_id_type& instance_id, const time_point& timestamp) {
 	auto instance = instances.find(instance_id);
 	if (instance == instances.end()) {
 		return;
@@ -33,7 +33,7 @@ void timer::stop(instance_id_type instance_id, time_point timestamp) {
 	instances.erase(instance);
 }
 
-void timer::heartbeat(instance_id_type instance_id, time_point timestamp) {
+void timer::heartbeat(const instance_id_type& instance_id, const time_point& timestamp) {
 	auto instance = instances.find(instance_id);
 	if (instance == instances.end()) {
 		return;
@@ -42,11 +42,11 @@ void timer::heartbeat(instance_id_type instance_id, time_point timestamp) {
 	instance->second.heartbeat_timestamp = timestamp;
 }
 
-void timer::discard(instance_id_type instance_id, time_point timestamp) {
+void timer::discard(const instance_id_type& instance_id, const time_point& timestamp) {
 	instances.erase(instance_id);
 }
 
-void timer::check_timeout(time_point timestamp, clock::duration idle_timeout) {
+void timer::check_timeout(const time_point& timestamp, const clock::duration& idle_timeout) {
 	for (auto instance = instances.begin(); instance != instances.end();) {
 		if (instance->second.heartbeat_timestamp == time_point()) {
 			++instance;

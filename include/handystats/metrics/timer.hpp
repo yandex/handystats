@@ -36,15 +36,30 @@ struct timer
 
 	timer();
 
-	void start(instance_id_type instance_id = DEFAULT_INSTANCE_ID, time_point timestamp = clock::now());
-	void stop(instance_id_type instance_id = DEFAULT_INSTANCE_ID, time_point timestamp = clock::now());
-	void heartbeat(instance_id_type instance_id = DEFAULT_INSTANCE_ID, time_point timestamp = clock::now());
-	void discard(instance_id_type instance_id = DEFAULT_INSTANCE_ID, time_point timestamp = clock::now());
+	void start(
+			const instance_id_type& instance_id = DEFAULT_INSTANCE_ID,
+			const time_point& timestamp = clock::now()
+		);
+
+	void stop(
+			const instance_id_type& instance_id = DEFAULT_INSTANCE_ID,
+			const time_point& timestamp = clock::now()
+		);
+
+	void heartbeat(
+			const instance_id_type& instance_id = DEFAULT_INSTANCE_ID,
+			const time_point& timestamp = clock::now()
+		);
+
+	void discard(
+			const instance_id_type& instance_id = DEFAULT_INSTANCE_ID,
+			const time_point& timestamp = clock::now()
+		);
 
 	void check_timeout(
-			time_point timestamp = clock::now(),
-			clock::duration idle_timeout = chrono::duration_cast<clock::duration>(config::defaults::timer::idle_timeout)
-			);
+			const time_point& timestamp = clock::now(),
+			const clock::duration& idle_timeout = chrono::duration_cast<clock::duration>(config::defaults::timer::idle_timeout)
+		);
 
 	time_point timestamp;
 	value_type value;

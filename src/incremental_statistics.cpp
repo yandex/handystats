@@ -14,7 +14,7 @@ incremental_statistics::incremental_statistics()
 {
 }
 
-void incremental_statistics::operator() (value_type value, time_point timestamp) {
+void incremental_statistics::operator() (const value_type& value, const time_point& timestamp) {
 	values(value, boost::accumulators::timestamp = timestamp);
 }
 

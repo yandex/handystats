@@ -42,7 +42,7 @@ public:
 
 	incremental_statistics();
 
-	void operator() (value_type value, time_point timestamp = clock::now());
+	void operator() (const value_type& value, const time_point& timestamp = clock::now());
 
 	value_type min() const;
 	value_type max() const;

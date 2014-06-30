@@ -5,7 +5,7 @@
 
 namespace handystats { namespace metrics {
 
-counter::counter(value_type value, time_point timestamp)
+counter::counter(const value_type& value, const time_point& timestamp)
 	: value(value)
 	, timestamp(timestamp)
 {
@@ -13,7 +13,7 @@ counter::counter(value_type value, time_point timestamp)
 }
 
 
-void counter::increment(value_type incr_value, time_point timestamp) {
+void counter::increment(const value_type& incr_value, const time_point& timestamp) {
 	this->value += incr_value;
 	this->timestamp = timestamp;
 
@@ -22,7 +22,7 @@ void counter::increment(value_type incr_value, time_point timestamp) {
 	incr_deltas(incr_value, this->timestamp);
 }
 
-void counter::decrement(value_type decr_value, time_point timestamp) {
+void counter::decrement(const value_type& decr_value, const time_point& timestamp) {
 	this->value -= decr_value;
 	this->timestamp = timestamp;
 

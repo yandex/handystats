@@ -11,27 +11,27 @@
 #include <handystats/macro_overload.hpp>
 
 void HANDY_COUNTER_INIT(
-		const std::string counter_name,
-		handystats::metrics::counter::value_type init_value = 0,
-		handystats::metrics::counter::time_point timestamp = handystats::metrics::counter::clock::now()
+		const std::string& counter_name,
+		const handystats::metrics::counter::value_type& init_value = handystats::metrics::counter::value_type(),
+		const handystats::metrics::counter::time_point& timestamp = handystats::metrics::counter::clock::now()
 		);
 
 void HANDY_COUNTER_INCREMENT(
-		const std::string counter_name,
-		handystats::metrics::counter::value_type value = 1,
-		handystats::metrics::counter::time_point timestamp = handystats::metrics::counter::clock::now()
+		const std::string& counter_name,
+		const handystats::metrics::counter::value_type& value = 1,
+		const handystats::metrics::counter::time_point& timestamp = handystats::metrics::counter::clock::now()
 		);
 
 void HANDY_COUNTER_DECREMENT(
-		const std::string counter_name,
-		handystats::metrics::counter::value_type value = 1,
-		handystats::metrics::counter::time_point timestamp = handystats::metrics::counter::clock::now()
+		const std::string& counter_name,
+		const handystats::metrics::counter::value_type& value = 1,
+		const handystats::metrics::counter::time_point& timestamp = handystats::metrics::counter::clock::now()
 		);
 
 void HANDY_COUNTER_CHANGE(
-		const std::string counter_name,
-		handystats::metrics::counter::value_type value,
-		handystats::metrics::counter::time_point timestamp = handystats::metrics::counter::clock::now()
+		const std::string& counter_name,
+		const handystats::metrics::counter::value_type& value,
+		const handystats::metrics::counter::time_point& timestamp = handystats::metrics::counter::clock::now()
 		);
 
 
@@ -46,7 +46,7 @@ struct scoped_counter_helper {
 	const std::string counter_name;
 	const handystats::metrics::counter::value_type delta_value;
 
-	scoped_counter_helper(const std::string& counter_name, const handystats::metrics::counter::value_type delta_value)
+	scoped_counter_helper(const std::string& counter_name, const handystats::metrics::counter::value_type& delta_value)
 		: counter_name(counter_name), delta_value(delta_value)
 	{
 		HANDY_COUNTER_CHANGE(counter_name, delta_value);

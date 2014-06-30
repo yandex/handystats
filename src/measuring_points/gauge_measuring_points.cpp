@@ -10,10 +10,10 @@
 
 
 void HANDY_GAUGE_INIT(
-		const std::string gauge_name,
-		handystats::metrics::gauge::value_type init_value,
-		handystats::metrics::gauge::time_point timestamp
-		)
+		const std::string& gauge_name,
+		const handystats::metrics::gauge::value_type& init_value,
+		const handystats::metrics::gauge::time_point& timestamp
+	)
 {
 	if (handystats::is_enabled()) {
 		auto message = handystats::events::gauge_init_event(gauge_name, init_value, timestamp);
@@ -22,10 +22,10 @@ void HANDY_GAUGE_INIT(
 }
 
 void HANDY_GAUGE_SET(
-		const std::string gauge_name,
-		handystats::metrics::gauge::value_type value,
-		handystats::metrics::gauge::time_point timestamp
-		)
+		const std::string& gauge_name,
+		const handystats::metrics::gauge::value_type& value,
+		const handystats::metrics::gauge::time_point& timestamp
+	)
 {
 	if (handystats::is_enabled()) {
 		auto message = handystats::events::gauge_set_event(gauge_name, value, timestamp);

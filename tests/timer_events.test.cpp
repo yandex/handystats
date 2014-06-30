@@ -9,17 +9,6 @@
 #include "events/timer_events_impl.hpp"
 
 
-namespace handystats { namespace events {
-
-std::shared_ptr<event_message> timer_init_event(const std::string, const handystats::metrics::timer::instance_id_type, metrics::timer::time_point);
-std::shared_ptr<event_message> timer_start_event(const std::string, const handystats::metrics::timer::instance_id_type, metrics::timer::time_point);
-std::shared_ptr<event_message> timer_stop_event(const std::string, const handystats::metrics::timer::instance_id_type, metrics::timer::time_point);
-std::shared_ptr<event_message> timer_discard_event(const std::string, const handystats::metrics::timer::instance_id_type, metrics::timer::time_point);
-std::shared_ptr<event_message> timer_heartbeat_event(const std::string, const handystats::metrics::timer::instance_id_type, metrics::timer::time_point);
-
-}} // namespace handystats::events
-
-
 using namespace handystats::events;
 
 TEST(TimerEventsTest, TestTimerInitEventWithDefaultInstance) {

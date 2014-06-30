@@ -21,7 +21,7 @@ struct timer
 
 	typedef uint64_t instance_id_type;
 
-	static const instance_id_type DEFAULT_INSTANCE_ID = -1;
+	static const instance_id_type DEFAULT_INSTANCE_ID;
 
 	struct instance_state {
 		time_point start_timestamp;

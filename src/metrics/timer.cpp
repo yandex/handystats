@@ -4,6 +4,8 @@
 
 namespace handystats { namespace metrics {
 
+const timer::instance_id_type timer::DEFAULT_INSTANCE_ID = -1;
+
 timer::timer() {
 	this->timestamp = time_point();
 	this->value = value_type();

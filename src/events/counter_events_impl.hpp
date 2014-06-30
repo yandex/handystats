@@ -28,21 +28,21 @@ enum {
 
 
 std::shared_ptr<event_message> counter_init_event(
-		const std::string counter_name,
-		metrics::counter::value_type init_value,
-		metrics::counter::time_point timestamp
+		const std::string& counter_name,
+		const metrics::counter::value_type& init_value,
+		const metrics::counter::time_point& timestamp
 		);
 
 std::shared_ptr<event_message> counter_increment_event(
-		const std::string counter_name,
-		metrics::counter::value_type value,
-		metrics::counter::time_point timestamp
+		const std::string& counter_name,
+		const metrics::counter::value_type& value,
+		const metrics::counter::time_point& timestamp
 		);
 
 std::shared_ptr<event_message> counter_decrement_event(
-		const std::string counter_name,
-		metrics::counter::value_type value,
-		metrics::counter::time_point timestamp
+		const std::string& counter_name,
+		const metrics::counter::value_type& value,
+		const metrics::counter::time_point& timestamp
 		);
 
 

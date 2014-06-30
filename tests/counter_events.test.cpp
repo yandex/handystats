@@ -8,15 +8,6 @@
 #include "events/counter_events_impl.hpp"
 
 
-namespace handystats { namespace events {
-
-std::shared_ptr<event_message> counter_init_event(const std::string, metrics::counter::value_type, metrics::counter::time_point);
-std::shared_ptr<event_message> counter_increment_event(const std::string, metrics::counter::value_type, metrics::counter::time_point);
-std::shared_ptr<event_message> counter_decrement_event(const std::string, metrics::counter::value_type, metrics::counter::time_point);
-
-}} // namespace handystats::events
-
-
 using namespace handystats::events;
 
 TEST(CounterEventsTest, TestCounterInitEvent) {

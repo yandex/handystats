@@ -7,9 +7,9 @@
 namespace handystats { namespace events {
 
 std::shared_ptr<event_message> counter_init_event(
-		const std::string counter_name,
-		metrics::counter::value_type init_value,
-		metrics::counter::time_point timestamp
+		const std::string& counter_name,
+		const metrics::counter::value_type& init_value,
+		const metrics::counter::time_point& timestamp
 		)
 {
 	event_message* message = new event_message;
@@ -33,9 +33,9 @@ void delete_counter_init_event(event_message* message) {
 
 
 std::shared_ptr<event_message> counter_increment_event(
-		const std::string counter_name,
-		metrics::counter::value_type value,
-		metrics::counter::time_point timestamp
+		const std::string& counter_name,
+		const metrics::counter::value_type& value,
+		const metrics::counter::time_point& timestamp
 		)
 {
 	event_message* message = new event_message;
@@ -59,9 +59,9 @@ void delete_counter_increment_event(event_message* message) {
 
 
 std::shared_ptr<event_message> counter_decrement_event(
-		const std::string counter_name,
-		metrics::counter::value_type value,
-		metrics::counter::time_point timestamp
+		const std::string& counter_name,
+		const metrics::counter::value_type& value,
+		const metrics::counter::time_point& timestamp
 		)
 {
 	event_message* message = new event_message;

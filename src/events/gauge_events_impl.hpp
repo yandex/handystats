@@ -22,16 +22,16 @@ enum {
 
 
 std::shared_ptr<event_message> gauge_init_event(
-		const std::string gauge_name,
-		metrics::gauge::value_type init_value,
-		metrics::gauge::time_point timestamp
-		);
+		const std::string& gauge_name,
+		const metrics::gauge::value_type& init_value,
+		const metrics::gauge::time_point& timestamp
+	);
 
 std::shared_ptr<event_message> gauge_set_event(
-		const std::string gauge_name,
-		metrics::gauge::value_type value,
-		metrics::gauge::time_point timestamp
-		);
+		const std::string& gauge_name,
+		const metrics::gauge::value_type& value,
+		const metrics::gauge::time_point& timestamp
+	);
 
 
 void delete_gauge_event(event_message* message);

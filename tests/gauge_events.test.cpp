@@ -8,14 +8,6 @@
 #include "events/gauge_events_impl.hpp"
 
 
-namespace handystats { namespace events {
-
-std::shared_ptr<event_message> gauge_init_event(const std::string, metrics::gauge::value_type, metrics::gauge::time_point);
-std::shared_ptr<event_message> gauge_set_event(const std::string, metrics::gauge::value_type, metrics::gauge::time_point);
-
-}} // namespace handystats::events
-
-
 using namespace handystats::events;
 
 TEST(GaugeEventsTest, TestGaugeInitEvent) {

@@ -27,7 +27,7 @@ void counter::decrement(value_type decr_value, time_point timestamp) {
 	this->timestamp = timestamp;
 
 	values(this->value, this->timestamp);
-	deltas(decr_value, this->timestamp);
+	deltas(-decr_value, this->timestamp);
 	decr_deltas(decr_value, this->timestamp);
 }
 

@@ -10,10 +10,10 @@
 
 
 void HANDY_TIMER_INIT(
-		const std::string timer_name,
-		const uint64_t instance_id,
-		handystats::metrics::timer::time_point timestamp
-		)
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id,
+		const handystats::metrics::timer::time_point& timestamp
+	)
 {
 	if (handystats::is_enabled()) {
 		auto message = handystats::events::timer_init_event(timer_name, instance_id, timestamp);
@@ -22,10 +22,10 @@ void HANDY_TIMER_INIT(
 }
 
 void HANDY_TIMER_START(
-		const std::string timer_name,
-		const uint64_t instance_id,
-		handystats::metrics::timer::time_point timestamp
-		)
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id,
+		const handystats::metrics::timer::time_point& timestamp
+	)
 {
 	if (handystats::is_enabled()) {
 		auto message = handystats::events::timer_start_event(timer_name, instance_id, timestamp);
@@ -34,10 +34,10 @@ void HANDY_TIMER_START(
 }
 
 void HANDY_TIMER_STOP(
-		const std::string timer_name,
-		const uint64_t instance_id,
-		handystats::metrics::timer::time_point timestamp
-		)
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id,
+		const handystats::metrics::timer::time_point& timestamp
+	)
 {
 	if (handystats::is_enabled()) {
 		auto message = handystats::events::timer_stop_event(timer_name, instance_id, timestamp);
@@ -46,10 +46,10 @@ void HANDY_TIMER_STOP(
 }
 
 void HANDY_TIMER_DISCARD(
-		const std::string timer_name,
-		const uint64_t instance_id,
-		handystats::metrics::timer::time_point timestamp
-		)
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id,
+		const handystats::metrics::timer::time_point& timestamp
+	)
 {
 	if (handystats::is_enabled()) {
 		auto message = handystats::events::timer_discard_event(timer_name, instance_id, timestamp);
@@ -58,10 +58,10 @@ void HANDY_TIMER_DISCARD(
 }
 
 void HANDY_TIMER_HEARTBEAT(
-		const std::string timer_name,
-		const uint64_t instance_id,
-		handystats::metrics::timer::time_point timestamp
-		)
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id,
+		const handystats::metrics::timer::time_point& timestamp
+	)
 {
 	if (handystats::is_enabled()) {
 		auto message = handystats::events::timer_heartbeat_event(timer_name, instance_id, timestamp);

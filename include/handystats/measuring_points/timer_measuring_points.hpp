@@ -12,34 +12,34 @@
 #include <handystats/macro_overload.hpp>
 
 void HANDY_TIMER_INIT(
-		const std::string timer_name,
-		const handystats::metrics::timer::instance_id_type instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		handystats::metrics::timer::time_point timestamp = handystats::metrics::timer::clock::now()
-		);
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
 
 void HANDY_TIMER_START(
-		const std::string timer_name,
-		const handystats::metrics::timer::instance_id_type instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		handystats::metrics::timer::time_point timestamp = handystats::metrics::timer::clock::now()
-		);
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
 
 void HANDY_TIMER_STOP(
-		const std::string timer_name,
-		const handystats::metrics::timer::instance_id_type instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		handystats::metrics::timer::time_point timestamp = handystats::metrics::timer::clock::now()
-		);
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
 
 void HANDY_TIMER_DISCARD(
-		const std::string timer_name,
-		const handystats::metrics::timer::instance_id_type instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		handystats::metrics::timer::time_point timestamp = handystats::metrics::timer::clock::now()
-		);
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
 
 void HANDY_TIMER_HEARTBEAT(
-		const std::string timer_name,
-		const handystats::metrics::timer::instance_id_type instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		handystats::metrics::timer::time_point timestamp = handystats::metrics::timer::clock::now()
-		);
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
 
 
 namespace handystats { namespace measuring_points {
@@ -53,7 +53,7 @@ struct scoped_timer_helper {
 	const std::string timer_name;
 	const handystats::metrics::timer::instance_id_type instance_id;
 
-	scoped_timer_helper(const std::string& timer_name, const handystats::metrics::timer::instance_id_type instance_id)
+	scoped_timer_helper(const std::string& timer_name, const handystats::metrics::timer::instance_id_type& instance_id)
 		: timer_name(timer_name), instance_id(instance_id)
 	{
 		HANDY_TIMER_START(timer_name, instance_id);

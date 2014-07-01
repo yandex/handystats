@@ -5,18 +5,12 @@
 
 #include <memory>
 
-
-namespace handystats { namespace events {
-
-struct event_message;
-
-}} // namespace handystats::events
-
+#include "events/event_message_impl.hpp"
 
 namespace handystats { namespace message_queue {
 
-void push_event_message(std::shared_ptr<events::event_message>);
-std::shared_ptr<events::event_message> pop_event_message();
+void push_event_message(events::event_message_ptr&&);
+events::event_message_ptr pop_event_message();
 
 bool empty();
 size_t size();

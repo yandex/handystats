@@ -16,8 +16,9 @@ void HANDY_GAUGE_INIT(
 	)
 {
 	if (handystats::is_enabled()) {
-		auto message = handystats::events::gauge_init_event(gauge_name, init_value, timestamp);
-		handystats::message_queue::push_event_message(message);
+		handystats::message_queue::push_event_message(
+				handystats::events::gauge_init_event(gauge_name, init_value, timestamp)
+			);
 	}
 }
 
@@ -28,8 +29,9 @@ void HANDY_GAUGE_SET(
 	)
 {
 	if (handystats::is_enabled()) {
-		auto message = handystats::events::gauge_set_event(gauge_name, value, timestamp);
-		handystats::message_queue::push_event_message(message);
+		handystats::message_queue::push_event_message(
+				handystats::events::gauge_set_event(gauge_name, value, timestamp)
+			);
 	}
 }
 

@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <handystats/chrono.hpp>
 
@@ -30,6 +31,14 @@ struct event_message {
 };
 
 void delete_event_message(event_message* message);
+
+struct event_message_deleter {
+	void operator() (event_message* message) const {
+		delete_event_message(message);
+	}
+};
+
+typedef std::unique_ptr<event_message, event_message_deleter> event_message_ptr;
 
 }} // namespace handystats::events
 

@@ -5,25 +5,19 @@
 
 #include <gtest/gtest.h>
 
+#include <handystats/rapidjson/document.h>
+
 #include <handystats/operation.hpp>
 #include <handystats/configuration.hpp>
 #include <handystats/measuring_points.hpp>
+#include <handystats/configuration.hpp>
+#include <handystats/metrics_dump.hpp>
 #include <handystats/json_dump.hpp>
-#include <handystats/rapidjson/document.h>
 
-#include "internal_metrics_impl.hpp"
-#include "internal_metrics/internal_gauge_impl.hpp"
-#include "internal_metrics/internal_counter_impl.hpp"
-#include "internal_metrics/internal_timer_impl.hpp"
 #include "configuration_impl.hpp"
+#include "metrics_dump_impl.hpp"
 
 #include "message_queue_helper.hpp"
-
-namespace handystats { namespace internal {
-
-extern std::map<std::string, internal_metric> internal_metrics;
-
-}} // namespace handystats::internal
 
 
 class HandyConfigurationTest : public ::testing::Test {
@@ -35,6 +29,114 @@ protected:
 	}
 };
 
+TEST_F(HandyConfigurationTest, MetricsDumpConfiguration) {
+	HANDY_CONFIGURATION_JSON(
+			"{\
+				\"handystats\": {\
+					\"metrics-dump\": {\
+						\"interval\": 750,\
+						\"to-json\": false\
+					}\
+				}\
+			}"
+		);
+
+	ASSERT_EQ(handystats::config::metrics_dump.interval, std::chrono::milliseconds(750));
+	ASSERT_EQ(handystats::config::metrics_dump.to_json, false);
+}
+
+TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
+	HANDY_CONFIGURATION_JSON(
+			"{\
+				\"handystats\": {\
+					\"metrics-dump\": {\
+						\"interval\": 2,\
+						\"to-json\": true\
+					}\
+				}\
+			}"
+		);
+
+	ASSERT_EQ(handystats::config::metrics_dump.interval, std::chrono::milliseconds(2));
+	ASSERT_EQ(handystats::config::metrics_dump.to_json, true);
+
+	HANDY_INIT();
+
+	HANDY_GAUGE_SET("gauge.test", 15);
+
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	ASSERT_TRUE(metrics_dump->find("gauge.test") != metrics_dump->end());
+
+	auto json_dump = HANDY_JSON_DUMP();
+
+	ASSERT_FALSE(json_dump->empty());
+}
+
+TEST_F(HandyConfigurationTest, MetricsDumpToJsonFalseCheck) {
+	HANDY_CONFIGURATION_JSON(
+			"{\
+				\"handystats\": {\
+					\"metrics-dump\": {\
+						\"interval\": 2,\
+						\"to-json\": false\
+					}\
+				}\
+			}"
+		);
+
+	ASSERT_EQ(handystats::config::metrics_dump.interval, std::chrono::milliseconds(2));
+	ASSERT_EQ(handystats::config::metrics_dump.to_json, false);
+
+	HANDY_INIT();
+
+	HANDY_GAUGE_SET("gauge.test", 15);
+
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	ASSERT_TRUE(metrics_dump->find("gauge.test") != metrics_dump->end());
+
+	auto json_dump = HANDY_JSON_DUMP();
+
+	ASSERT_TRUE(json_dump->empty());
+}
+
+TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
+	HANDY_CONFIGURATION_JSON(
+			"{\
+				\"handystats\": {\
+					\"metrics-dump\": {\
+						\"interval\": 0,\
+						\"to-json\": true\
+					}\
+				}\
+			}"
+		);
+
+	ASSERT_EQ(handystats::config::metrics_dump.interval, std::chrono::milliseconds(0));
+	ASSERT_EQ(handystats::config::metrics_dump.to_json, true);
+
+	HANDY_INIT();
+
+	HANDY_GAUGE_SET("gauge.test", 15);
+
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	ASSERT_TRUE(metrics_dump->empty());
+
+	auto json_dump = HANDY_JSON_DUMP();
+
+	ASSERT_TRUE(json_dump->empty());
+}
 
 TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 	HANDY_CONFIGURATION_JSON(
@@ -42,11 +144,16 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 				\"handystats\": {\
 					\"timer\": {\
 						\"idle-timeout\": 10\
+					},\
+					\"metrics-dump\": {\
+						\"interval\": 2\
 					}\
 				}\
 			}"
 		);
+
 	ASSERT_EQ(handystats::config::timer.idle_timeout, std::chrono::milliseconds(10));
+
 	HANDY_INIT();
 
 	HANDY_TIMER_START("dead-timer");
@@ -63,52 +170,19 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 	handystats::message_queue::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
+	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_EQ(
-			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["dead-timer"])
-			->base_timer
-			->values
+			boost::get<handystats::metrics::timer>(metrics_dump->at("dead-timer"))
+			.values
 			.count(),
-			0);
+			0
+		);
 	ASSERT_EQ(
-			boost::get<handystats::internal::internal_timer*>(handystats::internal::internal_metrics["alive-timer"])
-			->base_timer
-			->values
+			boost::get<handystats::metrics::timer>(metrics_dump->at("alive-timer"))
+			.values
 			.count(),
-			1);
-}
-
-TEST_F(HandyConfigurationTest, MessageQueueCorrectConfiguration) {
-	HANDY_CONFIGURATION_JSON(
-			"{\
-				\"handystats\": {\
-					\"message-queue\": {\
-						\"sleep-on-empty\": [1, 10, 15, 20]\
-					}\
-				}\
-			}"
+			1
 		);
-	ASSERT_EQ(handystats::config::message_queue.sleep_on_empty.size(), 4);
-	ASSERT_EQ(handystats::config::message_queue.sleep_on_empty[0], std::chrono::microseconds(1));
-	ASSERT_EQ(handystats::config::message_queue.sleep_on_empty[1], std::chrono::microseconds(10));
-	ASSERT_EQ(handystats::config::message_queue.sleep_on_empty[2], std::chrono::microseconds(15));
-	ASSERT_EQ(handystats::config::message_queue.sleep_on_empty[3], std::chrono::microseconds(20));
-
-	HANDY_INIT();
-}
-
-TEST_F(HandyConfigurationTest, MessageQueueIncorrectConfiguration) {
-	HANDY_CONFIGURATION_JSON(
-			"{\
-				\"handystats\": {\
-					\"message-queue\": {\
-						\"sleep-on-empty\": [1, -10, 15, 20]\
-					}\
-				}\
-			}"
-		);
-	ASSERT_EQ(handystats::config::message_queue.sleep_on_empty, handystats::config::message_queue_parameters().sleep_on_empty);
-
-	HANDY_INIT();
 }
 
 TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
@@ -121,32 +195,8 @@ TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
 	ASSERT_EQ(handystats::config::incremental_statistics.moving_average_alpha, handystats::config::incremental_statistics_parameters().moving_average_alpha);
 	ASSERT_EQ(handystats::config::incremental_statistics.moving_interval, handystats::config::incremental_statistics_parameters().moving_interval);
 	ASSERT_EQ(handystats::config::timer.idle_timeout, handystats::config::timer_parameters().idle_timeout);
-	ASSERT_EQ(handystats::config::json_dump.interval, handystats::config::json_dump_parameters().interval);
 	ASSERT_EQ(handystats::config::metrics_dump.interval, handystats::config::metrics_dump_parameters().interval);
-	ASSERT_EQ(handystats::config::message_queue.sleep_on_empty, handystats::config::message_queue_parameters().sleep_on_empty);
-
-	HANDY_INIT();
-}
-
-TEST_F(HandyConfigurationTest, JsonDumpIntervalConfiguration) {
-	HANDY_CONFIGURATION_JSON(
-			"{\
-				\"handystats\": {\
-					\"json-dump\": {\
-						\"interval\": 100000\
-					},\
-					\"metrics-dump\": {\
-						\"interval\": 500000\
-					}\
-				}\
-			}"
-		);
-	ASSERT_EQ(handystats::config::json_dump.interval, std::chrono::milliseconds(100000));
-	ASSERT_EQ(handystats::config::metrics_dump.interval, std::chrono::milliseconds(500000));
-
-	HANDY_INIT();
-
-	// TODO: test json-dump-interval configuration in action
+	ASSERT_EQ(handystats::config::metrics_dump.to_json, handystats::config::metrics_dump_parameters().to_json);
 }
 
 TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
@@ -163,6 +213,4 @@ TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
 
 	ASSERT_EQ(handystats::config::incremental_statistics.moving_interval, std::chrono::milliseconds(1234));
 	ASSERT_EQ(handystats::config::incremental_statistics.moving_average_alpha, 1.5);
-
-	HANDY_INIT();
 }

@@ -12,25 +12,24 @@
 
 #include <handystats/operation.hpp>
 #include <handystats/measuring_points.hpp>
-#include <handystats/json_dump.hpp>
-
-#include "events/event_message_impl.hpp"
-#include "message_queue_impl.hpp"
-#include "internal_metrics_impl.hpp"
-#include "internal_metrics/internal_counter_impl.hpp"
+#include <handystats/metrics_dump.hpp>
+#include <handystats/configuration.hpp>
 
 #include "message_queue_helper.hpp"
-
-namespace handystats { namespace internal {
-
-extern std::map<std::string, internal_metric> internal_metrics;
-
-}} // namespace handystats::internal
-
 
 class HandyScopedCounterTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
+		HANDY_CONFIGURATION_JSON(
+				"{\
+					\"handystats\": {\
+						\"metrics-dump\": {\
+							\"interval\": 10\
+						}\
+					}\
+				}"
+			);
+
 		HANDY_INIT();
 	}
 	virtual void TearDown() {
@@ -46,18 +45,19 @@ TEST_F(HandyScopedCounterTest, TestSingleScope) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	ASSERT_TRUE(metrics_dump->find("test.counter") != metrics_dump->end());
 
 	auto agg_stats =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
-		->base_counter
-		->values;
+		boost::get<handystats::metrics::counter>(metrics_dump->at("test.counter"))
+		.values;
 
 	ASSERT_EQ(agg_stats.count(), 2 * COUNT + 1);
 	ASSERT_EQ(agg_stats.min(), 0);
 	ASSERT_EQ(agg_stats.max(), 1);
-
-	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
 
 TEST_F(HandyScopedCounterTest, TestDoubleNestedScope) {
@@ -71,16 +71,17 @@ TEST_F(HandyScopedCounterTest, TestDoubleNestedScope) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	ASSERT_TRUE(metrics_dump->find("test.counter") != metrics_dump->end());
 
 	auto agg_stats =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
-		->base_counter
-		->values;
+		boost::get<handystats::metrics::counter>(metrics_dump->at("test.counter"))
+		.values;
 
 	ASSERT_EQ(agg_stats.count(), 4 * COUNT + 1);
 	ASSERT_EQ(agg_stats.min(), 0);
 	ASSERT_EQ(agg_stats.max(), 1);
-
-	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }

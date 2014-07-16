@@ -17,7 +17,7 @@ void HANDY_GAUGE_INIT(
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push_event_message(
-				handystats::events::gauge_init_event(gauge_name, init_value, timestamp)
+				handystats::events::gauge::create_init_event(gauge_name, init_value, timestamp)
 			);
 	}
 }
@@ -30,7 +30,7 @@ void HANDY_GAUGE_SET(
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push_event_message(
-				handystats::events::gauge_set_event(gauge_name, value, timestamp)
+				handystats::events::gauge::create_set_event(gauge_name, value, timestamp)
 			);
 	}
 }

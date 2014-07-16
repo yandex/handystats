@@ -3,34 +3,56 @@
 #include <string>
 #include <map>
 
+#include <handystats/chrono.hpp>
+#include <handystats/metrics.hpp>
+
 #include "events/event_message_impl.hpp"
-
-#include "internal_metrics/internal_gauge_impl.hpp"
-#include "internal_metrics/internal_counter_impl.hpp"
-#include "internal_metrics/internal_timer_impl.hpp"
-
-#include "internal_metrics_impl.hpp"
-
+#include "events/counter_events_impl.hpp"
+#include "events/gauge_events_impl.hpp"
+#include "events/timer_events_impl.hpp"
 
 namespace handystats { namespace internal {
 
-std::map<std::string, internal_metric> internal_metrics;
+
+namespace stats {
+
+metrics::gauge size;
+metrics::gauge process_time;
+
+void initialize() {
+	size = metrics::gauge();
+	size.set(0);
+
+	process_time = metrics::gauge();
+}
+
+void finalize() {
+	size = metrics::gauge();
+	size.set(0);
+
+	process_time = metrics::gauge();
+}
+
+} // namespace stats
+
+
+std::map<std::string, metrics::metric_ptr_variant> metrics_map;
 
 
 size_t size() {
-	return internal_metrics.size();
+	return metrics_map.size();
 }
 
-void process_event_message(const events::event_message& message, internal_metric& metric) {
-	switch (metric.which()) {
-		case internal_metric_index::INTERNAL_COUNTER:
-			boost::get<internal_counter*>(metric)->process_event_message(message);
+void process_event_message(metrics::metric_ptr_variant& metric_ptr, const events::event_message& message) {
+	switch (metric_ptr.which()) {
+		case metrics::metric_index::COUNTER:
+			events::counter::process_event(*boost::get<metrics::counter*>(metric_ptr), message);
 			break;
-		case internal_metric_index::INTERNAL_GAUGE:
-			boost::get<internal_gauge*>(metric)->process_event_message(message);
+		case metrics::metric_index::GAUGE:
+			events::gauge::process_event(*boost::get<metrics::gauge*>(metric_ptr), message);
 			break;
-		case internal_metric_index::INTERNAL_TIMER:
-			boost::get<internal_timer*>(metric)->process_event_message(message);
+		case metrics::metric_index::TIMER:
+			events::timer::process_event(*boost::get<metrics::timer*>(metric_ptr), message);
 			break;
 		default:
 			return;
@@ -38,47 +60,81 @@ void process_event_message(const events::event_message& message, internal_metric
 }
 
 void process_event_message(const events::event_message& message) {
-	if (internal_metrics.find(message.destination_name) == internal_metrics.end()) {
+	auto process_start_time = chrono::clock::now();
+
+	auto& metric_ptr = metrics_map[message.destination_name];
+
+	bool empty_metric = false;
+
+	switch (metric_ptr.which()) {
+		case metrics::metric_index::COUNTER:
+			if (boost::get<metrics::counter*>(metric_ptr) == 0) {
+				empty_metric = true;
+			}
+			break;
+		case metrics::metric_index::GAUGE:
+			if (boost::get<metrics::gauge*>(metric_ptr) == 0) {
+				empty_metric = true;
+			}
+			break;
+		case metrics::metric_index::TIMER:
+			if (boost::get<metrics::timer*>(metric_ptr) == 0) {
+				empty_metric = true;
+			}
+			break;
+	}
+
+	if (empty_metric) {
 		switch (message.destination_type) {
 			case events::event_destination_type::COUNTER:
-				internal_metrics[message.destination_name] = new internal_counter();
+				metric_ptr = new metrics::counter();
 				break;
 			case events::event_destination_type::GAUGE:
-				internal_metrics[message.destination_name] = new internal_gauge();
+				metric_ptr = new metrics::gauge();
 				break;
 			case events::event_destination_type::TIMER:
-				internal_metrics[message.destination_name] = new internal_timer();
+				metric_ptr = new metrics::timer();
 				break;
-			default:
-				return;
 		}
 	}
-	auto& metric = internal_metrics[message.destination_name];
-	process_event_message(message, metric);
+
+	process_event_message(metric_ptr, message);
+
+	auto process_end_time = chrono::clock::now();
+
+	stats::process_time.set(
+			chrono::duration_cast<chrono::time_duration>(process_end_time - process_start_time).count(),
+			process_end_time
+		);
+
+	stats::size.set(size(), process_end_time);
 }
 
 
 void initialize() {
+	stats::initialize();
 }
 
 void finalize() {
-	for (auto metric_entry : internal_metrics) {
-		switch (metric_entry.second.which()) {
-			case internal_metric_index::INTERNAL_COUNTER:
-				delete boost::get<internal_counter*>(metric_entry.second);
+	for (auto& metric_ptr : metrics_map) {
+		switch (metric_ptr.second.which()) {
+			case metrics::metric_index::COUNTER:
+				delete boost::get<metrics::counter*>(metric_ptr.second);
 				break;
-			case internal_metric_index::INTERNAL_GAUGE:
-				delete boost::get<internal_gauge*>(metric_entry.second);
+			case metrics::metric_index::GAUGE:
+				delete boost::get<metrics::gauge*>(metric_ptr.second);
 				break;
-			case internal_metric_index::INTERNAL_TIMER:
-				delete boost::get<internal_timer*>(metric_entry.second);
+			case metrics::metric_index::TIMER:
+				delete boost::get<metrics::timer*>(metric_ptr.second);
 				break;
 			default:
 				break;
 		}
 	}
 
-	internal_metrics.clear();
+	metrics_map.clear();
+
+	stats::finalize();
 }
 
 }} // namespace handystats::internal

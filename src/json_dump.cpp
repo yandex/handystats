@@ -5,58 +5,66 @@
 #include <string>
 #include <map>
 
+#include <handystats/rapidjson/document.h>
+
 #include <handystats/chrono.hpp>
 #include <handystats/json_dump.hpp>
 
-#include "internal_metrics_impl.hpp"
-
-#include <handystats/rapidjson/document.h>
-
 #include <handystats/json/timestamp.hpp>
-
-#include "json/internal_gauge_json_writer_impl.hpp"
-#include "json/internal_counter_json_writer_impl.hpp"
-#include "json/internal_timer_json_writer_impl.hpp"
-#include "json/system_stats_json_writer_impl.hpp"
-
-#include "system_stats_impl.hpp"
+#include <handystats/json/gauge_json_writer.hpp>
+#include <handystats/json/counter_json_writer.hpp>
+#include <handystats/json/timer_json_writer.hpp>
 
 #include "configuration_impl.hpp"
 
-namespace handystats { namespace internal {
+#include "metrics_dump_impl.hpp"
 
-extern std::map<std::string, internal_metric> internal_metrics;
+#include "json_dump_impl.hpp"
 
-}} // namespace handystats::internal
+namespace handystats { namespace json_dump {
 
 
-namespace handystats { namespace json {
+namespace stats {
 
-chrono::clock::time_point json_dump_timestamp;
+metrics::gauge dump_time;
 
-std::mutex json_dump_mutex;
-std::shared_ptr<const std::string> json_dump(new std::string());
+void initialize() {
+	dump_time = metrics::gauge();
+}
 
-std::shared_ptr<const std::string> get_json_dump() {
-	std::lock_guard<std::mutex> lock(json_dump_mutex);
-	return json_dump;
+void finalize() {
+	dump_time = metrics::gauge();
+}
+
+} // namespace stats
+
+
+std::mutex dump_mutex;
+std::shared_ptr<const std::string> dump(new std::string());
+
+const std::shared_ptr<const std::string>
+get_dump() {
+	std::lock_guard<std::mutex> lock(dump_mutex);
+	return dump;
 }
 
 template<typename Allocator>
-std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allocator()) {
+std::shared_ptr<const std::string> create_dump(Allocator&& allocator = Allocator()) {
 	rapidjson::Value dump_value(rapidjson::kObjectType);
 
-	for (auto metric_entry : internal::internal_metrics) {
+	const auto metrics_dump = metrics_dump::get_dump();
+
+	for (const auto& metric_entry : *metrics_dump) {
 		rapidjson::Value metric_value;
 		switch (metric_entry.second.which()) {
-			case internal::internal_metric_index::INTERNAL_GAUGE:
-				write_to_json_value(boost::get<internal::internal_gauge*>(metric_entry.second), &metric_value, allocator);
+			case metrics::metric_index::GAUGE:
+				json::write_to_json_value(&boost::get<metrics::gauge>(metric_entry.second), &metric_value, allocator);
 				break;
-			case internal::internal_metric_index::INTERNAL_COUNTER:
-				write_to_json_value(boost::get<internal::internal_counter*>(metric_entry.second), &metric_value, allocator);
+			case metrics::metric_index::COUNTER:
+				json::write_to_json_value(&boost::get<metrics::counter>(metric_entry.second), &metric_value, allocator);
 				break;
-			case internal::internal_metric_index::INTERNAL_TIMER:
-				write_to_json_value(boost::get<internal::internal_timer*>(metric_entry.second), &metric_value, allocator);
+			case metrics::metric_index::TIMER:
+				json::write_to_json_value(&boost::get<metrics::timer>(metric_entry.second), &metric_value, allocator);
 				break;
 		}
 
@@ -64,42 +72,64 @@ std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allo
 	}
 
 	{
-		rapidjson::Value system_stats_value;
-		system_stats::write_to_json_value(&system_stats_value, allocator);
-		dump_value.AddMember("__system_stats", system_stats_value, allocator);
-	}
-
-	{
-		json_dump_timestamp = chrono::clock::now();
 		rapidjson::Value timestamp_value;
-		write_to_json_value(json_dump_timestamp, &timestamp_value);
-		dump_value.AddMember("__dump-timestamp", timestamp_value, allocator);
+		json::write_to_json_value(metrics_dump::dump_timestamp, &timestamp_value);
+		dump_value.AddMember("handystats.dump_timestamp", timestamp_value, allocator);
 	}
 
 	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator> buffer(&allocator);
 	rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator>> writer(buffer);
 	dump_value.Accept(writer);
 
+	auto dump_end_time = chrono::clock::now();
+
 	return std::shared_ptr<const std::string>(new std::string(buffer.GetString(), buffer.GetSize()));
 }
 
-void update_json_dump() {
-	if (config::json_dump.interval.count() == 0) {
+void update() {
+	if (!config::metrics_dump.to_json) {
 		return;
 	}
-	if (chrono::duration_cast<std::chrono::nanoseconds>(chrono::clock::now() - json_dump_timestamp) > config::json_dump.interval) {
-		auto new_json_dump = create_json_dump<rapidjson::MemoryPoolAllocator<>>();
-		{
-			std::lock_guard<std::mutex> lock(json_dump_mutex);
-			json_dump = new_json_dump;
-		}
+
+	auto dump_start_time = chrono::clock::now();
+	auto new_dump = create_dump<rapidjson::MemoryPoolAllocator<>>();
+	auto dump_end_time = chrono::clock::now();
+
+	stats::dump_time.set(
+			chrono::duration_cast<chrono::time_duration>(dump_end_time - dump_start_time).count(),
+			dump_end_time
+		);
+
+	{
+		std::lock_guard<std::mutex> lock(dump_mutex);
+		dump = new_dump;
 	}
 }
 
-}} // namespace handystats::json
+void initialize() {
+	stats::initialize();
+
+	{
+		std::lock_guard<std::mutex> lock(dump_mutex);
+
+		dump = std::shared_ptr<const std::string>(new std::string());
+	}
+}
+
+void finalize() {
+	stats::finalize();
+
+	{
+		std::lock_guard<std::mutex> lock(dump_mutex);
+
+		dump = std::shared_ptr<const std::string>(new std::string());
+	}
+}
+
+}} // namespace handystats::json_dump
 
 
 const std::shared_ptr<const std::string> HANDY_JSON_DUMP() {
-	return handystats::json::get_json_dump();
+	return handystats::json_dump::get_dump();
 }
 

@@ -1,90 +1,200 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
 #include <mutex>
+#include <string>
+#include <map>
 
 #include <handystats/chrono.hpp>
 #include <handystats/metrics_dump.hpp>
 
-#include "internal_metrics_impl.hpp"
-#include "internal_metrics/internal_counter_impl.hpp"
-#include "internal_metrics/internal_gauge_impl.hpp"
-#include "internal_metrics/internal_timer_impl.hpp"
+#include "internal_impl.hpp"
+#include "message_queue_impl.hpp"
+#include "json_dump_impl.hpp"
 
 #include "configuration_impl.hpp"
 
 #include "metrics_dump_impl.hpp"
 
-namespace handystats { namespace internal {
 
-extern std::map<std::string, internal_metric> internal_metrics;
-
-}} // namespace handystats::internal
+namespace handystats { namespace metrics_dump {
 
 
-namespace handystats { namespace metrics {
+namespace stats {
 
-chrono::clock::time_point metrics_dump_timestamp;
-std::mutex metrics_dump_mutex;
+metrics::gauge dump_time;
 
-std::shared_ptr<const const_metrics_dump> metrics_dump(new const_metrics_dump());
-
-std::shared_ptr<const const_metrics_dump> get_metrics_dump() {
-	std::lock_guard<std::mutex> lock(metrics_dump_mutex);
-	return metrics_dump;
+void initialize() {
+	dump_time = metrics::gauge();
 }
 
-std::shared_ptr<const const_metrics_dump> create_metrics_dump() {
-	std::shared_ptr<const_metrics_dump> dump(new const_metrics_dump());
+void finalize() {
+	dump_time = metrics::gauge();
+}
 
-	for (auto metric_entry : internal::internal_metrics) {
+} // namespace stats
+
+
+chrono::clock::time_point dump_timestamp;
+std::mutex dump_mutex;
+
+std::shared_ptr<const std::map<std::string, metrics::metric_variant>> dump(new std::map<std::string, metrics::metric_variant>());
+
+const std::shared_ptr<const std::map<std::string, metrics::metric_variant>>
+get_dump()
+{
+	std::lock_guard<std::mutex> lock(dump_mutex);
+	return dump;
+}
+
+std::shared_ptr<const std::map<std::string, metrics::metric_variant>>
+create_dump()
+{
+	auto dump_start_time = chrono::clock::now();
+
+	std::shared_ptr<std::map<std::string, metrics::metric_variant>> new_dump(new std::map<std::string, metrics::metric_variant>());
+
+	for (const auto& metric_entry : internal::metrics_map) {
 		switch (metric_entry.second.which()) {
-			case internal::internal_metric_index::INTERNAL_GAUGE:
-				dump->insert(
-						std::pair<std::string, const_metric>(
+			case metrics::metric_index::GAUGE:
+				new_dump->insert(
+						std::pair<std::string, metrics::metric_variant>(
 							metric_entry.first,
-							(const_gauge)*boost::get<internal::internal_gauge*>(metric_entry.second)->base_gauge
+							*boost::get<metrics::gauge*>(metric_entry.second)
 						)
 					);
 				break;
-			case internal::internal_metric_index::INTERNAL_COUNTER:
-				dump->insert(
-						std::pair<std::string, const_metric>(
+			case metrics::metric_index::COUNTER:
+				new_dump->insert(
+						std::pair<std::string, metrics::metric_variant>(
 							metric_entry.first,
-							(const_counter)*boost::get<internal::internal_counter*>(metric_entry.second)->base_counter
+							*boost::get<metrics::counter*>(metric_entry.second)
 						)
 					);
 				break;
-			case internal::internal_metric_index::INTERNAL_TIMER:
-				dump->insert(
-						std::pair<std::string, const_metric>(
+			case metrics::metric_index::TIMER:
+				new_dump->insert(
+						std::pair<std::string, metrics::metric_variant>(
 							metric_entry.first,
-							(const_timer)*boost::get<internal::internal_timer*>(metric_entry.second)->base_timer
+							*boost::get<metrics::timer*>(metric_entry.second)
 						)
 					);
 				break;
 		}
 	}
 
-	metrics_dump_timestamp = chrono::clock::now();
+	// handystats' statistics
+	{
+		// internal
+		{
+			new_dump->insert(
+					std::pair<std::string, metrics::metric_variant>(
+						"handystats.internal.size",
+						internal::stats::size
+						)
+					);
 
-	return std::const_pointer_cast<const const_metrics_dump>(dump);
+			new_dump->insert(
+					std::pair<std::string, metrics::metric_variant>(
+						"handystats.internal.process_time",
+						internal::stats::process_time
+						)
+					);
+		}
+
+		// message queue
+		{
+			new_dump->insert(
+					std::pair<std::string, metrics::metric_variant>(
+						"handystats.message_queue.size",
+						message_queue::stats::size
+						)
+					);
+
+			new_dump->insert(
+					std::pair<std::string, metrics::metric_variant>(
+						"handystats.message_queue.message_wait_time",
+						message_queue::stats::message_wait_time
+						)
+					);
+
+			new_dump->insert(
+					std::pair<std::string, metrics::metric_variant>(
+						"handystats.message_queue.pop_count",
+						message_queue::stats::pop_count
+						)
+					);
+		}
+
+		// dump
+		{
+			new_dump->insert(
+					std::pair<std::string, metrics::metric_variant>(
+						"handystats.metrics_dump.dump_time",
+						stats::dump_time
+						)
+					);
+
+			new_dump->insert(
+					std::pair<std::string, metrics::metric_variant>(
+						"handystats.json_dump.dump_time",
+						json_dump::stats::dump_time
+						)
+					);
+		}
+	}
+
+	dump_timestamp = chrono::clock::now();
+
+	stats::dump_time.set(chrono::duration_cast<chrono::time_duration>(dump_timestamp - dump_start_time).count(), dump_timestamp);
+
+	return std::const_pointer_cast<const std::map<std::string, metrics::metric_variant>>(new_dump);
 }
 
-void update_metrics_dump() {
+void update() {
 	if (config::metrics_dump.interval.count() == 0) {
 		return;
 	}
-	if (chrono::duration_cast<std::chrono::nanoseconds>(chrono::clock::now() - metrics_dump_timestamp) > config::metrics_dump.interval) {
-		auto new_metrics_dump = create_metrics_dump();
+	if (chrono::duration_cast<std::chrono::nanoseconds>(chrono::clock::now() - dump_timestamp) > config::metrics_dump.interval) {
+		auto new_dump = create_dump();
 		{
-			std::lock_guard<std::mutex> lock(metrics_dump_mutex);
-			metrics_dump = new_metrics_dump;
+			std::lock_guard<std::mutex> lock(dump_mutex);
+			dump = new_dump;
+		}
+
+		if (config::metrics_dump.to_json) {
+			json_dump::update();
 		}
 	}
+}
+
+void initialize() {
+	stats::initialize();
+
+	{
+		std::lock_guard<std::mutex> lock(dump_mutex);
+
+		dump_timestamp = chrono::clock::time_point();
+		dump = std::shared_ptr<const std::map<std::string, metrics::metric_variant>>(new std::map<std::string, metrics::metric_variant>());
+	}
+
+	json_dump::initialize();
+}
+
+void finalize() {
+	stats::finalize();
+
+	{
+		std::lock_guard<std::mutex> lock(dump_mutex);
+
+		dump_timestamp = chrono::clock::time_point();
+		dump = std::shared_ptr<const std::map<std::string, metrics::metric_variant>>(new std::map<std::string, metrics::metric_variant>());
+	}
+
+	json_dump::finalize();
 }
 
 }} // namespace handystats::metrics_dump
 
-const std::shared_ptr<const handystats::metrics::const_metrics_dump> HANDY_METRICS_DUMP() {
-	return handystats::metrics::get_metrics_dump();
+const std::shared_ptr<const std::map<std::string, handystats::metrics::metric_variant>> HANDY_METRICS_DUMP() {
+	return handystats::metrics_dump::get_dump();
 }

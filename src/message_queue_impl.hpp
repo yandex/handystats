@@ -3,7 +3,8 @@
 #ifndef HANDYSTATS_MESSAGE_QUEUE_IMPL_H_
 #define HANDYSTATS_MESSAGE_QUEUE_IMPL_H_
 
-#include <memory>
+#include <handystats/metrics/gauge.hpp>
+#include <handystats/metrics/counter.hpp>
 
 #include "events/event_message_impl.hpp"
 
@@ -17,6 +18,19 @@ size_t size();
 
 void initialize();
 void finalize();
+
+
+namespace stats {
+
+extern metrics::gauge size;
+extern metrics::gauge message_wait_time;
+extern metrics::counter pop_count;
+
+void initialize();
+void finalize();
+
+} // namespace stats
+
 
 }} // namespace handystats::message_queue
 

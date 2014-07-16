@@ -15,14 +15,9 @@
  *        "timer": {
  *           "idle-timeout": <value in msec>
  *        },
- *        "json-dump": {
- *            "interval": <value in msec>
- *        },
  *        "metrics-dump": {
- *            "interval": <value in msec>
- *        },
- *        "message-queue": {
- *           "sleep-on-empty": [<first sleep interval in usec>, <second sleep interval in usec>, ...]
+ *            "interval": <value in msec>,
+ *            "to-json": <boolean value>
  *        }
  *    }
  * }

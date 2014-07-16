@@ -12,26 +12,24 @@
 
 #include <handystats/operation.hpp>
 #include <handystats/measuring_points.hpp>
-#include <handystats/json_dump.hpp>
-
-#include "events/event_message_impl.hpp"
-#include "message_queue_impl.hpp"
-#include "internal_metrics_impl.hpp"
-#include "internal_metrics/internal_gauge_impl.hpp"
-#include "internal_metrics/internal_counter_impl.hpp"
+#include <handystats/metrics_dump.hpp>
+#include <handystats/configuration.hpp>
 
 #include "message_queue_helper.hpp"
-
-namespace handystats { namespace internal {
-
-extern std::map<std::string, internal_metric> internal_metrics;
-
-}} // namespace handystats::internal
-
 
 class HandyCounterTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
+		HANDY_CONFIGURATION_JSON(
+				"{\
+					\"handystats\": {\
+						\"metrics-dump\": {\
+							\"interval\": 10\
+						}\
+					}\
+				}"
+			);
+
 		HANDY_INIT();
 	}
 	virtual void TearDown() {
@@ -42,6 +40,16 @@ protected:
 class HandyGaugeTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
+		HANDY_CONFIGURATION_JSON(
+				"{\
+					\"handystats\": {\
+						\"metrics-dump\": {\
+							\"interval\": 10\
+						}\
+					}\
+				}"
+			);
+
 		HANDY_INIT();
 	}
 	virtual void TearDown() {
@@ -75,16 +83,17 @@ TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	ASSERT_TRUE(metrics_dump->find("swaps.count") != metrics_dump->end());
 
 	int handy_count =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["swaps.count"])
-		->base_counter
-		->value;
+		boost::get<handystats::metrics::counter>(metrics_dump->at("swaps.count"))
+		.value;
 
 	ASSERT_EQ(handy_count, swaps_count);
-
-	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
 
 TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
@@ -109,91 +118,17 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	ASSERT_TRUE(metrics_dump->find("queue.size") != metrics_dump->end());
 
 	int handy_max_size =
-			boost::get<handystats::internal::internal_gauge*>(handystats::internal::internal_metrics["queue.size"])
-			->base_gauge
-			->values
+			boost::get<handystats::metrics::gauge>(metrics_dump->at("queue.size"))
+			.values
 			.max();
 
 	ASSERT_EQ(handy_max_size, max_queue_size);
-
-	std::cout << *HANDY_JSON_DUMP() << std::endl;
 }
 
-TEST(HandyInternalTest, CheckEqualCounterNamesOnRestart) {
-	HANDY_INIT();
-
-	const int value_1 = 10;
-	HANDY_COUNTER_INCREMENT("test.counter", value_1);
-
-	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
-	int handy_value_1 =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
-		->base_counter
-		->value;
-
-	ASSERT_EQ(handy_value_1, value_1);
-
-	HANDY_FINALIZE();
-
-	HANDY_INIT();
-
-	const int value_2 = 100;
-	HANDY_COUNTER_INCREMENT("test.counter", value_2);
-
-	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
-	int handy_value_2 =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.counter"])
-		->base_counter
-		->value;
-
-	ASSERT_EQ(handy_value_2, value_2);
-
-	std::cout << *HANDY_JSON_DUMP() << std::endl;
-
-	HANDY_FINALIZE();
-}
-
-TEST(HandyInternalTest, CheckEqualMetricNamesOnRestart) {
-	HANDY_INIT();
-
-	const int value_1 = 10;
-	HANDY_COUNTER_INCREMENT("test.metric", value_1);
-
-	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
-	int handy_value_1 =
-		boost::get<handystats::internal::internal_counter*>(handystats::internal::internal_metrics["test.metric"])
-		->base_counter
-		->value;
-
-	ASSERT_EQ(handy_value_1, value_1);
-
-	HANDY_FINALIZE();
-
-	HANDY_INIT();
-
-	const int value_2 = 100;
-	HANDY_GAUGE_SET("test.metric", value_2);
-
-	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
-	int handy_value_2 =
-		boost::get<handystats::internal::internal_gauge*>(handystats::internal::internal_metrics["test.metric"])
-		->base_gauge
-		->value;
-
-	ASSERT_EQ(handy_value_2, value_2);
-
-	std::cout << *HANDY_JSON_DUMP() << std::endl;
-
-	HANDY_FINALIZE();
-}

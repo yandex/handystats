@@ -5,23 +5,29 @@
 
 #include <boost/variant.hpp>
 
-namespace handystats { namespace metrics {
-
-struct counter;
-struct gauge;
-struct timer;
-
-}} // namespace handystats::metrics
-
+#include <handystats/metrics/gauge.hpp>
+#include <handystats/metrics/counter.hpp>
+#include <handystats/metrics/timer.hpp>
 
 namespace handystats { namespace metrics {
 
+// Generic metric
+typedef boost::variant <
+		counter,
+		gauge,
+		timer
+	> metric_variant;
+
+
+// Generic metric pointer
 typedef boost::variant <
 		counter*,
 		gauge*,
 		timer*
-	> metric;
+	> metric_ptr_variant;
 
+
+// Generic metrics index
 enum metric_index {
 	COUNTER = 0,
 	GAUGE,

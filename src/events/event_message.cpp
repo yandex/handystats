@@ -16,13 +16,13 @@ void delete_event_message(event_message* message) {
 
 	switch (message->destination_type) {
 		case event_destination_type::COUNTER:
-			delete_counter_event(message);
+			counter::delete_event(message);
 			break;
 		case event_destination_type::GAUGE:
-			delete_gauge_event(message);
+			gauge::delete_event(message);
 			break;
 		case event_destination_type::TIMER:
-			delete_timer_event(message);
+			timer::delete_event(message);
 			break;
 		default:
 			return;

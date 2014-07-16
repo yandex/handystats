@@ -17,7 +17,7 @@ void HANDY_COUNTER_INIT(
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push_event_message(
-				handystats::events::counter_init_event(counter_name, init_value, timestamp)
+				handystats::events::counter::create_init_event(counter_name, init_value, timestamp)
 			);
 	}
 }
@@ -30,7 +30,7 @@ void HANDY_COUNTER_INCREMENT(
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push_event_message(
-				handystats::events::counter_increment_event(counter_name, value, timestamp)
+				handystats::events::counter::create_increment_event(counter_name, value, timestamp)
 			);
 	}
 }
@@ -43,7 +43,7 @@ void HANDY_COUNTER_DECREMENT(
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push_event_message(
-				handystats::events::counter_decrement_event(counter_name, value, timestamp)
+				handystats::events::counter::create_decrement_event(counter_name, value, timestamp)
 			);
 	}
 }

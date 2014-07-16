@@ -26,32 +26,10 @@ const std::chrono::milliseconds idle_timeout = std::chrono::seconds(10);
 
 }
 
-namespace json_dump {
-
-const std::chrono::milliseconds interval = std::chrono::milliseconds(500);
-
-}
-
 namespace metrics_dump {
 
 const std::chrono::milliseconds interval = std::chrono::milliseconds(500);
-
-}
-
-namespace message_queue {
-
-const std::vector<std::chrono::microseconds> sleep_on_empty =
-			std::vector<std::chrono::microseconds>({
-				std::chrono::microseconds(1),
-				std::chrono::microseconds(5),
-				std::chrono::microseconds(10),
-				std::chrono::microseconds(50),
-				std::chrono::microseconds(100),
-				std::chrono::microseconds(500),
-				std::chrono::microseconds(1000),
-				std::chrono::microseconds(5000),
-				std::chrono::microseconds(10000)
-			});
+const bool to_json = true;
 
 }
 
@@ -95,22 +73,9 @@ void timer_parameters::configure(const rapidjson::Value& timer_config) {
 }
 
 
-json_dump_parameters::json_dump_parameters() {
-	interval = defaults::json_dump::interval;
-}
-
-void json_dump_parameters::configure(const rapidjson::Value& json_dump_config) {
-	if (json_dump_config.HasMember("interval")) {
-		const rapidjson::Value& interval = json_dump_config["interval"];
-		if (interval.IsUint64()) {
-			this->interval = std::chrono::milliseconds(interval.GetUint64());
-		}
-	}
-}
-
-
 metrics_dump_parameters::metrics_dump_parameters() {
 	interval = defaults::metrics_dump::interval;
+	to_json = defaults::metrics_dump::to_json;
 }
 
 void metrics_dump_parameters::configure(const rapidjson::Value& metrics_dump_config) {
@@ -120,29 +85,11 @@ void metrics_dump_parameters::configure(const rapidjson::Value& metrics_dump_con
 			this->interval = std::chrono::milliseconds(interval.GetUint64());
 		}
 	}
-}
 
-
-message_queue_parameters::message_queue_parameters() {
-	sleep_on_empty = defaults::message_queue::sleep_on_empty;
-}
-
-void message_queue_parameters::configure(const rapidjson::Value& message_queue_config) {
-	if (message_queue_config.HasMember("sleep-on-empty")) {
-		const rapidjson::Value& sleep_on_empty = message_queue_config["sleep-on-empty"];
-		if (sleep_on_empty.IsArray() && !sleep_on_empty.Empty()) {
-			std::vector<std::chrono::microseconds> sleep_intervals;
-			sleep_intervals.reserve(sleep_on_empty.Size());
-			for (size_t i = 0; i < sleep_on_empty.Size(); ++i) {
-				const rapidjson::Value& sleep_interval = sleep_on_empty[i];
-				if (!sleep_interval.IsUint64()) {
-					break;
-				}
-				sleep_intervals.emplace_back(sleep_interval.GetUint64());
-			}
-			if (sleep_intervals.size() == sleep_on_empty.Size()) {
-				this->sleep_on_empty = sleep_intervals;
-			}
+	if (metrics_dump_config.HasMember("to-json")) {
+		const rapidjson::Value& to_json = metrics_dump_config["to-json"];
+		if (to_json.IsBool()) {
+			this->to_json = to_json.GetBool();
 		}
 	}
 }
@@ -150,9 +97,7 @@ void message_queue_parameters::configure(const rapidjson::Value& message_queue_c
 
 incremental_statistics_parameters incremental_statistics;
 timer_parameters timer;
-json_dump_parameters json_dump;
 metrics_dump_parameters metrics_dump;
-message_queue_parameters message_queue;
 
 void initialize() {
 }
@@ -160,9 +105,7 @@ void initialize() {
 void finalize() {
 	incremental_statistics = incremental_statistics_parameters();
 	timer = timer_parameters();
-	json_dump = json_dump_parameters();
 	metrics_dump = metrics_dump_parameters();
-	message_queue = message_queue_parameters();
 }
 
 }} // namespace handystats::config
@@ -229,18 +172,8 @@ void HANDY_CONFIGURATION_JSON(const rapidjson::Value& config) {
 		handystats::config::timer.configure(timer_config);
 	}
 
-	if (handystats_config.HasMember("json-dump")) {
-		const rapidjson::Value& json_dump_config = handystats_config["json-dump"];
-		handystats::config::json_dump.configure(json_dump_config);
-	}
-
 	if (handystats_config.HasMember("metrics-dump")) {
 		const rapidjson::Value& metrics_dump_config = handystats_config["metrics-dump"];
 		handystats::config::metrics_dump.configure(metrics_dump_config);
-	}
-
-	if (handystats_config.HasMember("message-queue")) {
-		const rapidjson::Value& message_queue_config = handystats_config["message-queue"];
-		handystats::config::message_queue.configure(message_queue_config);
 	}
 }

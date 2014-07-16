@@ -1,14 +1,11 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#include <handystats/metrics/gauge.hpp>
-
-#include "events/event_message_impl.hpp"
 #include "events/gauge_events_impl.hpp"
 
 
-namespace handystats { namespace events {
+namespace handystats { namespace events { namespace gauge {
 
-event_message_ptr gauge_init_event(
+event_message_ptr create_init_event(
 		const std::string& gauge_name,
 		const metrics::gauge::value_type& init_value,
 		const metrics::gauge::time_point& timestamp
@@ -21,20 +18,20 @@ event_message_ptr gauge_init_event(
 
 	message->timestamp = timestamp;
 
-	message->event_type = gauge_event::INIT;
+	message->event_type = event_type::INIT;
 	message->event_data.push_back(new metrics::gauge::value_type(init_value));
 
 	return event_message_ptr(message);
 }
 
-void delete_gauge_init_event(event_message* message) {
+void delete_init_event(event_message* message) {
 	delete static_cast<metrics::gauge::value_type*>(message->event_data[0]);
 
 	delete message;
 }
 
 
-event_message_ptr gauge_set_event(
+event_message_ptr create_set_event(
 		const std::string& gauge_name,
 		const metrics::gauge::value_type& value,
 		const metrics::gauge::time_point& timestamp
@@ -47,30 +44,56 @@ event_message_ptr gauge_set_event(
 
 	message->timestamp = timestamp;
 
-	message->event_type = gauge_event::SET;
+	message->event_type = event_type::SET;
 	message->event_data.push_back(new metrics::gauge::value_type(value));
 
 	return event_message_ptr(message);
 }
 
-void delete_gauge_set_event(event_message* message) {
+void delete_set_event(event_message* message) {
 	delete static_cast<metrics::gauge::value_type*>(message->event_data[0]);
 
 	delete message;
 }
 
 
-void delete_gauge_event(event_message* message) {
+void delete_event(event_message* message) {
 	switch (message->event_type) {
-		case gauge_event::INIT:
-			delete_gauge_init_event(message);
+		case event_type::INIT:
+			delete_init_event(message);
 			break;
-		case gauge_event::SET:
-			delete_gauge_set_event(message);
+		case event_type::SET:
+			delete_set_event(message);
 			break;
 	}
 }
 
 
-}} // namespace handystats::events
+
+void process_init_event(metrics::gauge& gauge, const event_message& message) {
+	auto init_value = *static_cast<metrics::gauge::value_type*>(message.event_data[0]);
+	gauge = metrics::gauge(init_value, message.timestamp);
+}
+
+void process_set_event(metrics::gauge& gauge, const event_message& message) {
+	auto value = *static_cast<metrics::gauge::value_type*>(message.event_data[0]);
+	gauge.set(value, message.timestamp);
+}
+
+
+void process_event(metrics::gauge& gauge, const event_message& message) {
+	switch (message.event_type) {
+		case event_type::INIT:
+			process_init_event(gauge, message);
+			break;
+		case event_type::SET:
+			process_set_event(gauge, message);
+			break;
+		default:
+			return;
+	}
+}
+
+
+}}} // namespace handystats::events::gauge
 

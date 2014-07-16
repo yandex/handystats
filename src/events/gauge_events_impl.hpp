@@ -4,39 +4,49 @@
 #define HANDYSTATS_GAUGE_EVENT_IMPL_H_
 
 #include <string>
-#include <memory>
 
 #include <handystats/metrics/gauge.hpp>
 
 #include "events/event_message_impl.hpp"
 
 
-namespace handystats { namespace events {
+namespace handystats { namespace events { namespace gauge {
 
-namespace gauge_event {
+namespace event_type {
 enum {
-	INIT,
+	INIT = 0,
 	SET
 };
-}
+} // namespace event_type
 
-
-event_message_ptr gauge_init_event(
+/*
+ * Event creation functions
+ */
+event_message_ptr create_init_event(
 		const std::string& gauge_name,
 		const metrics::gauge::value_type& init_value,
 		const metrics::gauge::time_point& timestamp
 	);
 
-event_message_ptr gauge_set_event(
+event_message_ptr create_set_event(
 		const std::string& gauge_name,
 		const metrics::gauge::value_type& value,
 		const metrics::gauge::time_point& timestamp
 	);
 
 
-void delete_gauge_event(event_message* message);
+/*
+ * Event destructor
+ */
+void delete_event(event_message* message);
 
-}} // namespace handystats::events
+
+/*
+ * Event processing function
+ */
+void process_event(metrics::gauge& counter, const event_message& message);
+
+}}} // namespace handystats::events::gauge
 
 
 #endif // HANDYSTATS_GAUGE_EVENT_H_

@@ -4,11 +4,13 @@
 #include <atomic>
 #include <algorithm>
 
+#include <handystats/chrono.hpp>
+
 #include "events/event_message_impl.hpp"
 
+#include "message_queue_impl.hpp"
 
-namespace handystats { namespace message_queue {
-
+namespace {
 
 /*
  * Taken from Boost's Atomic usage examples.
@@ -79,8 +81,41 @@ struct waitfree_queue
 	std::atomic<node*> head_node;
 };
 
-waitfree_queue<events::event_message_ptr>* event_message_queue = nullptr;
-waitfree_queue<events::event_message_ptr>::node* popped_head = nullptr;
+} // unnamed namespace
+
+
+namespace handystats { namespace message_queue {
+
+
+namespace stats {
+
+metrics::gauge size;
+metrics::gauge message_wait_time;
+metrics::counter pop_count;
+
+void initialize() {
+	size = metrics::gauge();
+	size.set(0);
+
+	message_wait_time = metrics::gauge();
+
+	pop_count = metrics::counter();
+}
+
+void finalize() {
+	size = metrics::gauge();
+	size.set(0);
+
+	message_wait_time = metrics::gauge();
+
+	pop_count = metrics::counter();
+}
+
+} // namespace stats
+
+
+waitfree_queue<handystats::events::event_message_ptr>* event_message_queue = nullptr;
+waitfree_queue<handystats::events::event_message_ptr>::node* popped_head = nullptr;
 
 std::atomic<size_t> mq_size(0);
 
@@ -107,6 +142,17 @@ events::event_message_ptr pop_event_message() {
 		delete tmp;
 	}
 
+	if (message) {
+		auto current_time = chrono::clock::now();
+		stats::size.set(size(), current_time);
+		stats::pop_count.increment(1, current_time);
+
+		stats::message_wait_time.set(
+				chrono::duration_cast<chrono::time_duration>(current_time - message->timestamp).count(),
+				current_time
+			);
+	}
+
 	return std::move(message);
 }
 
@@ -123,6 +169,8 @@ void initialize() {
 		event_message_queue = new waitfree_queue<events::event_message_ptr>();
 		mq_size.store(0, std::memory_order_release);
 	}
+
+	stats::initialize();
 }
 
 void finalize() {
@@ -133,6 +181,8 @@ void finalize() {
 
 	delete event_message_queue;
 	event_message_queue = nullptr;
+
+	stats::finalize();
 }
 
 }} // namespace handystats::message_queue

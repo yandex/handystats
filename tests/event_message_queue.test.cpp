@@ -1,6 +1,7 @@
 #include <chrono>
 #include <thread>
 #include <memory>
+#include <atomic>
 
 #include <gtest/gtest.h>
 
@@ -12,7 +13,7 @@
 
 namespace handystats {
 
-extern bool enabled;
+extern std::atomic<bool> enabled_flag;
 
 } // namespace handystats
 
@@ -21,11 +22,11 @@ class EventMessageQueueTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
 		handystats::message_queue::initialize();
-		handystats::enabled = true;
+		handystats::enabled_flag.store(true, std::memory_order_release);
 	}
 	virtual void TearDown() {
 		handystats::message_queue::finalize();
-		handystats::enabled = false;
+		handystats::enabled_flag.store(false, std::memory_order_release);
 	}
 };
 

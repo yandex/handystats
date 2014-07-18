@@ -1,3 +1,9 @@
+handystats (1.2.1+patch.1) UNRELEASED; urgency=low
+
+  * system_stats: message_queue_size statistics works now.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 18 Jul 2014 16:38:55 +0400
+
 handystats (1.2.1+patch.0) UNRELEASED; urgency=low
 
   * system_stats: 'active-events' statistics added.

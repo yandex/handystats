@@ -25,6 +25,9 @@ struct event_message {
 
 	int event_type;
 	std::vector<void*> event_data;
+
+	event_message();
+	~event_message();
 };
 
 void delete_event_message(event_message* message);

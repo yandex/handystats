@@ -81,6 +81,11 @@ std::shared_ptr<const std::string> create_json_dump(Allocator&& allocator = Allo
 		dump_value.AddMember("__message-pop-time", pop_time_value, allocator);
 	}
 	{
+		rapidjson::Value active_events_value;
+		write_to_json_value(&active_events, &active_events_value, allocator);
+		dump_value.AddMember("__active-events", active_events_value, allocator);
+	}
+	{
 		dump_timestamp = chrono::default_clock::now();
 		rapidjson::Value timestamp_value;
 		write_to_json_value(dump_timestamp, &timestamp_value);

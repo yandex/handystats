@@ -1,11 +1,22 @@
+#include <atomic>
+
 #include "events/gauge_events_impl.hpp"
 #include "events/counter_events_impl.hpp"
 #include "events/timer_events_impl.hpp"
 
 #include "events/event_message_impl.hpp"
 
-
 namespace handystats { namespace events {
+
+std::atomic<size_t> active_events(0);
+
+event_message::event_message() {
+	++active_events;
+}
+
+event_message::~event_message() {
+	--active_events;
+}
 
 void delete_event_message(event_message* message) {
 	if (!message) {

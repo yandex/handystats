@@ -1,5 +1,6 @@
 #include <thread>
 #include <mutex>
+#include <atomic>
 
 #include <handystats/chrono.hpp>
 #include <handystats/operation.hpp>
@@ -9,6 +10,13 @@
 #include "json_dump_impl.hpp"
 #include "system_stats_impl.hpp"
 #include "core_impl.hpp"
+
+namespace handystats { namespace events {
+
+extern std::atomic<size_t> active_events;
+
+}} // namespace hadnystats::events
+
 
 namespace handystats {
 
@@ -36,6 +44,8 @@ void process_message_queue() {
 		auto processing_end_time = chrono::default_clock::now();
 
 		message_processing_time.set(std::chrono::duration_cast<chrono::default_duration>(processing_end_time - processing_start_time).count(), processing_end_time);
+
+		active_events.set(events::active_events.load(), processing_end_time);
 	}
 }
 

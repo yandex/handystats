@@ -13,6 +13,8 @@ extern metrics::gauge internal_metrics_size;
 extern metrics::gauge message_processing_time;
 extern metrics::gauge message_pop_time;
 
+extern metrics::gauge active_events;
+
 } // namespace handystats
 
 

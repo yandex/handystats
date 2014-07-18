@@ -1,3 +1,9 @@
+handystats (1.2.1+patch.0) UNRELEASED; urgency=low
+
+  * system_stats: 'active-events' statistics added.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 18 Jul 2014 14:42:28 +0400
+
 handystats (1.2.1) UNRELEASED; urgency=low
 
   * rapidjson: check double on isnan() before writing (replace with 0 if double value is nan)

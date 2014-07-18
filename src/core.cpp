@@ -46,6 +46,8 @@ void process_message_queue() {
 		message_processing_time.set(std::chrono::duration_cast<chrono::default_duration>(processing_end_time - processing_start_time).count(), processing_end_time);
 
 		active_events.set(events::active_events.load(), processing_end_time);
+
+		message_queue_size.set(message_queue::size(), processing_end_time);
 	}
 }
 

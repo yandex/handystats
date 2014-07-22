@@ -1,3 +1,19 @@
+handystats (1.6.0) UNRELEASED; urgency=low
+
+  * json: json writers should take const pointer to const object because writer must not modify it for sure.
+  * json: support for writing to buffer and string has been added to timestamp json writer.
+  * chrono: handystats::chrono interface has been reworked.
+  * metrics: parameters for timer operations have been swapped (timestamp, instance -> instance, timestamp).
+  * measuring_points: metric proxies have been added.
+  * events, message_queue: event messages throughout the library are handled by std::unique_ptr now (instead of std::shared_ptr).
+  * json_dump: json dump is constructed from metrics_dump map (+ dump timestamp)
+  * metrics_dump: by now metrics_dump map doesn't contain dump timestamp
+  * configuration: json_dump is controlled by metrics_dump ("to-json" boolean parameter)
+  * configuration: sleeping on empty message queue parameter removed
+    (by now thread sleeps for some small interval and consumes about 10% of single CPU even if there's nothing to do)
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Tue, 22 Jul 2014 23:19:53 +0400
+
 handystats (1.5.0) UNRELEASED; urgency=low
 
   * incremental_statistics: internal stats from gauge have been moved out to separate class.

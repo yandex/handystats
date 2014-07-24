@@ -9,8 +9,12 @@ namespace handystats { namespace metrics {
 const timer::instance_id_type timer::DEFAULT_INSTANCE_ID = -1;
 
 timer::timer()
-	: timer(chrono::duration_cast<clock::duration>(config::timer.idle_timeout))
-{}
+	: idle_timeout(chrono::duration_cast<clock::duration>(config::timer.idle_timeout))
+{
+	this->timestamp = time_point();
+	this->value = value_type();
+	this->idle_check_timestamp = time_point();
+}
 
 timer::timer(const clock::duration& idle_timeout)
 	: idle_timeout(idle_timeout)

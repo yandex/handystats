@@ -1,3 +1,9 @@
+handystats (1.6.1) UNRELEASED; urgency=low
+
+  * metrics: timer's idle timeout mechanics improved.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Thu, 24 Jul 2014 16:52:17 +0400
+
 handystats (1.6.0) UNRELEASED; urgency=low
 
   * json: json writers should take const pointer to const object because writer must not modify it for sure.

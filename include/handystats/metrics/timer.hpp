@@ -32,9 +32,16 @@ struct timer
 			, heartbeat_timestamp()
 		{
 		}
+
+		bool expired(const clock::duration& idle_timeout, const time_point& timestamp = clock::now()) {
+			return (timestamp > heartbeat_timestamp) && (timestamp - heartbeat_timestamp > idle_timeout);
+		}
 	};
 
+	// This ctor will use timer parameters from config namespace
 	timer();
+
+	timer(const clock::duration& idle_timeout);
 
 	void start(
 			const instance_id_type& instance_id = DEFAULT_INSTANCE_ID,
@@ -56,10 +63,7 @@ struct timer
 			const time_point& timestamp = clock::now()
 		);
 
-	void check_timeout(
-			const time_point& timestamp = clock::now(),
-			const clock::duration& idle_timeout = chrono::duration_cast<clock::duration>(config::defaults::timer::idle_timeout)
-		);
+	clock::duration idle_timeout;
 
 	time_point timestamp;
 	value_type value;
@@ -67,6 +71,14 @@ struct timer
 	incremental_statistics values;
 
 	std::unordered_map<instance_id_type, instance_state> instances;
+
+	time_point idle_check_timestamp;
+
+	void check_idle_timeout(
+			const time_point& timestamp = clock::now(),
+			const bool& force = false
+		);
+
 
 }; // struct timer
 

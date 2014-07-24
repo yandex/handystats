@@ -190,8 +190,6 @@ void process_heartbeat_event(metrics::timer& timer, const event_message& message
 
 
 void process_event(metrics::timer& timer, const event_message& message) {
-	timer.check_timeout(message.timestamp, chrono::duration_cast<metrics::timer::clock::duration>(config::timer.idle_timeout));
-
 	switch (message.event_type) {
 		case event_type::INIT:
 			process_init_event(timer, message);

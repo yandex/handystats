@@ -2,24 +2,42 @@
 
 #include <handystats/metrics/timer.hpp>
 
+#include "configuration_impl.hpp"
+
 namespace handystats { namespace metrics {
 
 const timer::instance_id_type timer::DEFAULT_INSTANCE_ID = -1;
 
-timer::timer() {
+timer::timer()
+	: timer(chrono::duration_cast<clock::duration>(config::timer.idle_timeout))
+{}
+
+timer::timer(const clock::duration& idle_timeout)
+	: idle_timeout(idle_timeout)
+{
 	this->timestamp = time_point();
 	this->value = value_type();
+	this->idle_check_timestamp = time_point();
 }
 
 void timer::start(const instance_id_type& instance_id, const time_point& timestamp) {
+	check_idle_timeout(timestamp);
+
 	auto& instance = instances[instance_id];
 	instance.start_timestamp = timestamp;
 	instance.heartbeat_timestamp = timestamp;
 }
 
 void timer::stop(const instance_id_type& instance_id, const time_point& timestamp) {
+	check_idle_timeout(timestamp);
+
 	auto instance = instances.find(instance_id);
 	if (instance == instances.end()) {
+		return;
+	}
+
+	if (instance->second.expired(idle_timeout, timestamp)) {
+		instances.erase(instance);
 		return;
 	}
 
@@ -34,8 +52,15 @@ void timer::stop(const instance_id_type& instance_id, const time_point& timestam
 }
 
 void timer::heartbeat(const instance_id_type& instance_id, const time_point& timestamp) {
+	check_idle_timeout(timestamp);
+
 	auto instance = instances.find(instance_id);
 	if (instance == instances.end()) {
+		return;
+	}
+
+	if (instance->second.expired(idle_timeout, timestamp)) {
+		instances.erase(instance);
 		return;
 	}
 
@@ -43,22 +68,29 @@ void timer::heartbeat(const instance_id_type& instance_id, const time_point& tim
 }
 
 void timer::discard(const instance_id_type& instance_id, const time_point& timestamp) {
+	check_idle_timeout(timestamp);
+
 	instances.erase(instance_id);
 }
 
-void timer::check_timeout(const time_point& timestamp, const clock::duration& idle_timeout) {
-	for (auto instance = instances.begin(); instance != instances.end();) {
-		if (instance->second.heartbeat_timestamp == time_point()) {
-			++instance;
-			continue;
+void timer::check_idle_timeout(const time_point& timestamp, const bool& force) {
+	if (!force) {
+		if (timestamp < idle_check_timestamp + idle_timeout) {
+			return;
 		}
+	}
 
-		if ((timestamp > instance->second.heartbeat_timestamp) && (timestamp - instance->second.heartbeat_timestamp > idle_timeout)) {
+	for (auto instance = instances.begin(); instance != instances.end();) {
+		if (instance->second.expired(idle_timeout, timestamp)) {
 			instance = instances.erase(instance);
 		}
 		else {
 			++instance;
 		}
+	}
+
+	if (idle_check_timestamp < timestamp) {
+		idle_check_timestamp = timestamp;
 	}
 }
 

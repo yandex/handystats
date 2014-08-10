@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_TESTS_MESSAGE_QUEUE_HELPER_H_
-#define HANDYSTATS_TESTS_MESSAGE_QUEUE_HELPER_H_
+#ifndef HANDYSTATS_TESTS_MESSAGE_QUEUE_HELPER_HPP_
+#define HANDYSTATS_TESTS_MESSAGE_QUEUE_HELPER_HPP_
 
 #include <thread>
 #include <chrono>
@@ -18,4 +18,4 @@ void wait_until_empty() {
 
 }} // namespace handystats::message_queue
 
-#endif // HANDYSTATS_TESTS_MESSAGE_QUEUE_HELPER_H_
+#endif // HANDYSTATS_TESTS_MESSAGE_QUEUE_HELPER_HPP_

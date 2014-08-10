@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_METRICS_H_
-#define HANDYSTATS_METRICS_H_
+#ifndef HANDYSTATS_METRICS_HPP_
+#define HANDYSTATS_METRICS_HPP_
 
 #include <boost/variant.hpp>
 
@@ -36,4 +36,4 @@ enum metric_index {
 
 }} // namespace handystats::metrics
 
-#endif // HANDYSTATS_METRICS_H_
+#endif // HANDYSTATS_METRICS_HPP_

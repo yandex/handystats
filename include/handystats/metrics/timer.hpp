@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_METRICS_TIMER_H_
-#define HANDYSTATS_METRICS_TIMER_H_
+#ifndef HANDYSTATS_METRICS_TIMER_HPP_
+#define HANDYSTATS_METRICS_TIMER_HPP_
 
 #include <utility>
 #include <unordered_map>
@@ -85,4 +85,4 @@ struct timer
 }} // namespace handystats::metrics
 
 
-#endif // HANDYSTATS_METRICS_TIMER_H_
+#endif // HANDYSTATS_METRICS_TIMER_HPP_

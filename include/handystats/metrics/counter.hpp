@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_METRICS_COUNTER_H_
-#define HANDYSTATS_METRICS_COUNTER_H_
+#ifndef HANDYSTATS_METRICS_COUNTER_HPP_
+#define HANDYSTATS_METRICS_COUNTER_HPP_
 
 #include <utility>
 
@@ -36,4 +36,4 @@ struct counter
 }} // namespace handystats::metrics
 
 
-#endif // HANDYSTATS_METRICS_COUNTER_H_
+#endif // HANDYSTATS_METRICS_COUNTER_HPP_

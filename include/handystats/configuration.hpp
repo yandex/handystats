@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CONFIGURATION_H_
-#define HANDYSTATS_CONFIGURATION_H_
+#ifndef HANDYSTATS_CONFIGURATION_HPP_
+#define HANDYSTATS_CONFIGURATION_HPP_
 
 #include <handystats/rapidjson/document.h>
 
@@ -27,4 +27,4 @@ void HANDY_CONFIGURATION_FILE(const char* filename);
 void HANDY_CONFIGURATION_JSON(const char* config);
 void HANDY_CONFIGURATION_JSON(const rapidjson::Value& config);
 
-#endif // HANDYSTATS_CONFIGURATION_H_
+#endif // HANDYSTATS_CONFIGURATION_HPP_

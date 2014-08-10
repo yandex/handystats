@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_MOVING_AVERAGE_H_
-#define HANDYSTATS_MOVING_AVERAGE_H_
+#ifndef HANDYSTATS_MOVING_AVERAGE_HPP_
+#define HANDYSTATS_MOVING_AVERAGE_HPP_
 
 #include <boost/accumulators/framework/accumulator_base.hpp>
 #include <boost/accumulators/framework/parameters/sample.hpp>
@@ -71,4 +71,4 @@ using extract::moving_average;
 }} // namespace boost::accumulators
 
 
-#endif // HANDYSTATS_MOVING_AVERAGE_H_
+#endif // HANDYSTATS_MOVING_AVERAGE_HPP_

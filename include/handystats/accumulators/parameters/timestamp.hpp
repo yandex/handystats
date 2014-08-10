@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_TIMESTAMP_PARAMETER_H_
-#define HANDYSTATS_TIMESTAMP_PARAMETER_H_
+#ifndef HANDYSTATS_TIMESTAMP_PARAMETER_HPP_
+#define HANDYSTATS_TIMESTAMP_PARAMETER_HPP_
 
 #include <boost/parameter/keyword.hpp>
 #include <boost/accumulators/accumulators_fwd.hpp>
@@ -13,4 +13,4 @@ BOOST_ACCUMULATORS_IGNORE_GLOBAL(timestamp)
 
 }} // namespace boost::accumulators
 
-#endif // HANDYSTATS_TIMESTAMP_PARAMETER_H_
+#endif // HANDYSTATS_TIMESTAMP_PARAMETER_HPP_

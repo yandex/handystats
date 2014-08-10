@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_INTERNAL_IMPL_H_
-#define HANDYSTATS_INTERNAL_IMPL_H_
+#ifndef HANDYSTATS_INTERNAL_IMPL_HPP_
+#define HANDYSTATS_INTERNAL_IMPL_HPP_
 
 #include <map>
 #include <string>
@@ -43,4 +43,4 @@ void finalize();
 }} // namespace handystats::internal
 
 
-#endif // HANDYSTATS_INTERNAL_IMPL_H_
+#endif // HANDYSTATS_INTERNAL_IMPL_HPP_

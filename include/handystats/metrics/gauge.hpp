@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_METRICS_GAUGE_H_
-#define HANDYSTATS_METRICS_GAUGE_H_
+#ifndef HANDYSTATS_METRICS_GAUGE_HPP_
+#define HANDYSTATS_METRICS_GAUGE_HPP_
 
 #include <utility>
 
@@ -32,4 +32,4 @@ struct gauge
 }} // namespace handystats::metrics
 
 
-#endif // HANDYSTATS_METRICS_GAUGE_H_
+#endif // HANDYSTATS_METRICS_GAUGE_HPP_

@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_COUNTER_JSON_WRITER_H_
-#define HANDYSTATS_COUNTER_JSON_WRITER_H_
+#ifndef HANDYSTATS_COUNTER_JSON_WRITER_HPP_
+#define HANDYSTATS_COUNTER_JSON_WRITER_HPP_
 
 #include <string>
 
@@ -77,4 +77,4 @@ inline std::string write_to_json_string(const metrics::counter* const obj, Alloc
 
 }} // namespace handystats::json
 
-#endif // HANDYSTATS_COUNTER_JSON_WRITER_H_
+#endif // HANDYSTATS_COUNTER_JSON_WRITER_HPP_

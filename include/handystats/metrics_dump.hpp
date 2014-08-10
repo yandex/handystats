@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_METRICS_DUMP_H_
-#define HANDYSTATS_METRICS_DUMP_H_
+#ifndef HANDYSTATS_METRICS_DUMP_HPP_
+#define HANDYSTATS_METRICS_DUMP_HPP_
 
 #include <memory>
 #include <string>
@@ -16,4 +16,4 @@ const std::shared_ptr <
 	>
 HANDY_METRICS_DUMP();
 
-#endif // HANDYSTATS_METRICS_DUMP_H_
+#endif // HANDYSTATS_METRICS_DUMP_HPP_

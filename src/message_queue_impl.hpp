@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_MESSAGE_QUEUE_IMPL_H_
-#define HANDYSTATS_MESSAGE_QUEUE_IMPL_H_
+#ifndef HANDYSTATS_MESSAGE_QUEUE_IMPL_HPP_
+#define HANDYSTATS_MESSAGE_QUEUE_IMPL_HPP_
 
 #include <handystats/metrics/gauge.hpp>
 #include <handystats/metrics/counter.hpp>
@@ -35,4 +35,4 @@ void finalize();
 }} // namespace handystats::message_queue
 
 
-#endif // HANDYSTATS_MESSAGE_QUEUE_IMPL_H_
+#endif // HANDYSTATS_MESSAGE_QUEUE_IMPL_HPP_

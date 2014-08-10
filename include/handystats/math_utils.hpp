@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_MATH_UTILS_IMPL_H_
-#define HANDYSTATS_MATH_UTILS_IMPL_H_
+#ifndef HANDYSTATS_MATH_UTILS_IMPL_HPP_
+#define HANDYSTATS_MATH_UTILS_IMPL_HPP_
 
 #include <limits>
 #include <cmath>
@@ -36,4 +36,4 @@ public:
 
 } // namespace handystats
 
-#endif // HANDYSTATS_MATH_UTILS_IMPL_H_
+#endif // HANDYSTATS_MATH_UTILS_IMPL_HPP_

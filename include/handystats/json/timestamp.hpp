@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_JSON_TIMESTAMP_H_
-#define HANDYSTATS_JSON_TIMESTAMP_H_
+#ifndef HANDYSTATS_JSON_TIMESTAMP_HPP_
+#define HANDYSTATS_JSON_TIMESTAMP_HPP_
 
 #include <handystats/chrono.hpp>
 #include <handystats/rapidjson/document.h>
@@ -44,4 +44,4 @@ inline std::string write_to_json_string(const chrono::clock::time_point& timesta
 }
 }} // namespace handystats::json
 
-#endif // HANDYSTATS_JSON_TIMESTAMP_H_
+#endif // HANDYSTATS_JSON_TIMESTAMP_HPP_

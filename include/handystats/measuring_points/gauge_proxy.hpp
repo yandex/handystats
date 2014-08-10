@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_MEASURING_POINTS_GAUGE_PROXY_H_
-#define HANDYSTATS_MEASURING_POINTS_GAUGE_PROXY_H_
+#ifndef HANDYSTATS_MEASURING_POINTS_GAUGE_PROXY_HPP_
+#define HANDYSTATS_MEASURING_POINTS_GAUGE_PROXY_HPP_
 
 #include <string>
 
@@ -73,4 +73,4 @@ private:
 
 }} // namespace handystats::measuring_points
 
-#endif // HANDYSTATS_MEASURING_POINTS_GAUGE_PROXY_H_
+#endif // HANDYSTATS_MEASURING_POINTS_GAUGE_PROXY_HPP_

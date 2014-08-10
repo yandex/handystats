@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_TIMER_MEASURING_POINTS_H_
-#define HANDYSTATS_TIMER_MEASURING_POINTS_H_
+#ifndef HANDYSTATS_TIMER_MEASURING_POINTS_HPP_
+#define HANDYSTATS_TIMER_MEASURING_POINTS_HPP_
 
 #include <string>
 #include <cstdint>
@@ -82,4 +82,4 @@ struct scoped_timer_helper {
  */
 #define HANDY_TIMER_SCOPE(...) HANDY_PP_OVERLOAD(HANDY_TIMER_SCOPE_,__VA_ARGS__)(__VA_ARGS__)
 
-#endif // HANDYSTATS_TIMER_MEASURING_POINTS_H_
+#endif // HANDYSTATS_TIMER_MEASURING_POINTS_HPP_

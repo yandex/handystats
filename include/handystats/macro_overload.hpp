@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_MACRO_OVERLOAD_H_
-#define HANDYSTATS_MACRO_OVERLOAD_H_
+#ifndef HANDYSTATS_MACRO_OVERLOAD_HPP_
+#define HANDYSTATS_MACRO_OVERLOAD_HPP_
 
 #include <boost/preprocessor/cat.hpp>
 
@@ -11,4 +11,4 @@
 
 #define HANDY_PP_OVERLOAD(prefix, ...) BOOST_PP_CAT(prefix, HANDY_PP_VARIADIC_SIZE(__VA_ARGS__))
 
-#endif // HANDYSTATS_MACRO_OVERLOAD_H_
+#endif // HANDYSTATS_MACRO_OVERLOAD_HPP_

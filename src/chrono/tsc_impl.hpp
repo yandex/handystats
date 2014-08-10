@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CHRONO_TSC_IMPL_H_
-#define HANDYSTATS_CHRONO_TSC_IMPL_H_
+#ifndef HANDYSTATS_CHRONO_TSC_IMPL_HPP_
+#define HANDYSTATS_CHRONO_TSC_IMPL_HPP_
 
 namespace handystats { namespace chrono {
 
@@ -21,4 +21,4 @@ extern long double cycles_per_nanosec;
 
 }} // namespace handystats::chrono
 
-#endif // HANDYSTATS_CHRONO_TSC_IMPL_H_
+#endif // HANDYSTATS_CHRONO_TSC_IMPL_HPP_

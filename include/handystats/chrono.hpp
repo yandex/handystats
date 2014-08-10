@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CHRONO_H_
-#define HANDYSTATS_CHRONO_H_
+#ifndef HANDYSTATS_CHRONO_HPP_
+#define HANDYSTATS_CHRONO_HPP_
 
 #include <cstdint>
 #include <cstdlib>
@@ -110,4 +110,4 @@ std::chrono::nanoseconds duration_cast<std::chrono::nanoseconds, clock::duration
 
 }} // namespace handystats::chrono
 
-#endif // HANDYSTATS_CHRONO_H_
+#endif // HANDYSTATS_CHRONO_HPP_

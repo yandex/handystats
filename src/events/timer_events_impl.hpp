@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_TIMER_EVENT_H_
-#define HANDYSTATS_TIMER_EVENT_H_
+#ifndef HANDYSTATS_TIMER_EVENT_HPP_
+#define HANDYSTATS_TIMER_EVENT_HPP_
 
 #include <string>
 
@@ -70,4 +70,4 @@ void process_event(metrics::timer& timer, const event_message& message);
 }}} // namespace handystats::events::timer
 
 
-#endif // HANDYSTATS_TIMER_EVENT_H_
+#endif // HANDYSTATS_TIMER_EVENT_HPP_

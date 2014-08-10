@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_COUNTER_EVENT_IMPL_H_
-#define HANDYSTATS_COUNTER_EVENT_IMPL_H_
+#ifndef HANDYSTATS_COUNTER_EVENT_IMPL_HPP_
+#define HANDYSTATS_COUNTER_EVENT_IMPL_HPP_
 
 #include <string>
 
@@ -56,4 +56,4 @@ void process_event(metrics::counter& counter, const event_message& message);
 }}} // namespace handystats::events::counter
 
 
-#endif // HANDYSTATS_COUNTER_EVENT_H_
+#endif // HANDYSTATS_COUNTER_EVENT_HPP_

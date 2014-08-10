@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_INTERVAL_COUNT_H_
-#define HANDYSTATS_INTERVAL_COUNT_H_
+#ifndef HANDYSTATS_INTERVAL_COUNT_HPP_
+#define HANDYSTATS_INTERVAL_COUNT_HPP_
 
 #include <boost/accumulators/framework/accumulator_base.hpp>
 #include <boost/accumulators/framework/parameters/sample.hpp>
@@ -97,4 +97,4 @@ using extract::interval_count;
 }} // namespace boost::accumulators
 
 
-#endif // HANDYSTATS_INTERVAL_COUNT_H_
+#endif // HANDYSTATS_INTERVAL_COUNT_HPP_

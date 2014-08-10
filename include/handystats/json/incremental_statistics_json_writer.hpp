@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_INCREMENTAL_STATISTICS_JSON_WRITER_H_
-#define HANDYSTATS_INCREMENTAL_STATISTICS_JSON_WRITER_H_
+#ifndef HANDYSTATS_INCREMENTAL_STATISTICS_JSON_WRITER_HPP_
+#define HANDYSTATS_INCREMENTAL_STATISTICS_JSON_WRITER_HPP_
 
 #include <string>
 
@@ -61,4 +61,4 @@ inline std::string write_to_json_string(const incremental_statistics* const obj,
 
 }} // namespace handystats::json
 
-#endif // HANDYSTATS_INCREMENTAL_STATISTICS_JSON_WRITER_H_
+#endif // HANDYSTATS_INCREMENTAL_STATISTICS_JSON_WRITER_HPP_

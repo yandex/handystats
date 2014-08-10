@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_INCREMENTAL_STATISTICS_H_
-#define HANDYSTATS_INCREMENTAL_STATISTICS_H_
+#ifndef HANDYSTATS_INCREMENTAL_STATISTICS_HPP_
+#define HANDYSTATS_INCREMENTAL_STATISTICS_HPP_
 
 #include <handystats/chrono.hpp>
 
@@ -60,4 +60,4 @@ private:
 
 } // namespace handystats
 
-#endif // HANDYSTATS_INCREMENTAL_STATISTICS_H_
+#endif // HANDYSTATS_INCREMENTAL_STATISTICS_HPP_

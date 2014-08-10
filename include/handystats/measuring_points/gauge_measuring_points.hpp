@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_GAUGE_MEASURING_POINTS_H_
-#define HANDYSTATS_GAUGE_MEASURING_POINTS_H_
+#ifndef HANDYSTATS_GAUGE_MEASURING_POINTS_HPP_
+#define HANDYSTATS_GAUGE_MEASURING_POINTS_HPP_
 
 #include <string>
 
@@ -19,4 +19,4 @@ void HANDY_GAUGE_SET(
 		const handystats::metrics::gauge::time_point& timestamp = handystats::metrics::gauge::clock::now()
 	);
 
-#endif // HANDYSTATS_GAUGE_MEASURING_POINTS_H_
+#endif // HANDYSTATS_GAUGE_MEASURING_POINTS_HPP_

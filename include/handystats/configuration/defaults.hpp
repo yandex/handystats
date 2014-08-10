@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CONFIGURATION_DEFAULTS_H_
-#define HANDYSTATS_CONFIGURATION_DEFAULTS_H_
+#ifndef HANDYSTATS_CONFIGURATION_DEFAULTS_HPP_
+#define HANDYSTATS_CONFIGURATION_DEFAULTS_HPP_
 
 #include <chrono>
 #include <vector>
@@ -30,4 +30,4 @@ extern const bool to_json;
 
 }}} // namespace handystats::config::defaults
 
-#endif // HANDYSTATS_CONFIGURATION_DEFAULTS_H_
+#endif // HANDYSTATS_CONFIGURATION_DEFAULTS_HPP_

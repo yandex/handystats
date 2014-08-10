@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_EVENT_MESSAGE_H_
-#define HANDYSTATS_EVENT_MESSAGE_H_
+#ifndef HANDYSTATS_EVENT_MESSAGE_HPP_
+#define HANDYSTATS_EVENT_MESSAGE_HPP_
 
 #include <string>
 #include <vector>
@@ -42,4 +42,4 @@ typedef std::unique_ptr<event_message, event_message_deleter> event_message_ptr;
 
 }} // namespace handystats::events
 
-#endif // HANDYSTATS_EVENT_MESSAGE_H_
+#endif // HANDYSTATS_EVENT_MESSAGE_HPP_

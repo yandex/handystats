@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_GAUGE_EVENT_IMPL_H_
-#define HANDYSTATS_GAUGE_EVENT_IMPL_H_
+#ifndef HANDYSTATS_GAUGE_EVENT_IMPL_HPP_
+#define HANDYSTATS_GAUGE_EVENT_IMPL_HPP_
 
 #include <string>
 
@@ -49,5 +49,5 @@ void process_event(metrics::gauge& counter, const event_message& message);
 }}} // namespace handystats::events::gauge
 
 
-#endif // HANDYSTATS_GAUGE_EVENT_H_
+#endif // HANDYSTATS_GAUGE_EVENT_HPP_
 

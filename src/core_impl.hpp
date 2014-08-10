@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CORE_IMPL_H_
-#define HANDYSTATS_CORE_IMPL_H_
+#ifndef HANDYSTATS_CORE_IMPL_HPP_
+#define HANDYSTATS_CORE_IMPL_HPP_
 
 
 namespace handystats {
@@ -11,4 +11,4 @@ bool is_enabled();
 } // namespace handystats
 
 
-#endif // HANDYSTATS_CORE_IMPL_H_
+#endif // HANDYSTATS_CORE_IMPL_HPP_

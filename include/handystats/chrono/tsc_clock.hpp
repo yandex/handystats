@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CHRONO_TSC_CLOCK_H_
-#define HANDYSTATS_CHRONO_TSC_CLOCK_H_
+#ifndef HANDYSTATS_CHRONO_TSC_CLOCK_HPP_
+#define HANDYSTATS_CHRONO_TSC_CLOCK_HPP_
 
 #include <chrono>
 
@@ -128,4 +128,4 @@ std::chrono::system_clock::time_point to_system_time(const tsc_clock::time_point
 
 }} // namespace handystats::chrono
 
-#endif // HANDYSTATS_CHRONO_TSC_CLOCK_H_
+#endif // HANDYSTATS_CHRONO_TSC_CLOCK_HPP_

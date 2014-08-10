@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CONFIGURATION_IMPL_H_
-#define HANDYSTATS_CONFIGURATION_IMPL_H_
+#ifndef HANDYSTATS_CONFIGURATION_IMPL_HPP_
+#define HANDYSTATS_CONFIGURATION_IMPL_HPP_
 
 #include <vector>
 
@@ -42,4 +42,4 @@ void finalize();
 
 }} // namespace handystats::config
 
-#endif // HANDYSTATS_CONFIGURATION_IMPL_H_
+#endif // HANDYSTATS_CONFIGURATION_IMPL_HPP_

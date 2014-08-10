@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDY_COUNTER_MEASURING_POINTS_H_
-#define HANDY_COUNTER_MEASURING_POINTS_H_
+#ifndef HANDY_COUNTER_MEASURING_POINTS_HPP_
+#define HANDY_COUNTER_MEASURING_POINTS_HPP_
 
 #include <string>
 
@@ -75,4 +75,4 @@ struct scoped_counter_helper {
  */
 #define HANDY_COUNTER_SCOPE(...) HANDY_PP_OVERLOAD(HANDY_COUNTER_SCOPE_,__VA_ARGS__)(__VA_ARGS__)
 
-#endif // HANDYSTATS_COUNTER_MEASURING_POINTS_H_
+#endif // HANDYSTATS_COUNTER_MEASURING_POINTS_HPP_

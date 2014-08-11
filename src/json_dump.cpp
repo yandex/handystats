@@ -14,6 +14,7 @@
 #include <handystats/json/gauge_json_writer.hpp>
 #include <handystats/json/counter_json_writer.hpp>
 #include <handystats/json/timer_json_writer.hpp>
+#include <handystats/json/attribute_json_writer.hpp>
 
 #include "configuration_impl.hpp"
 
@@ -65,6 +66,9 @@ std::shared_ptr<const std::string> create_dump(Allocator&& allocator = Allocator
 				break;
 			case metrics::metric_index::TIMER:
 				json::write_to_json_value(&boost::get<metrics::timer>(metric_entry.second), &metric_value, allocator);
+				break;
+			case metrics::metric_index::ATTRIBUTE:
+				json::write_to_json_value(&boost::get<metrics::attribute>(metric_entry.second), &metric_value, allocator);
 				break;
 		}
 

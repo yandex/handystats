@@ -10,6 +10,7 @@
 #include "events/counter_events_impl.hpp"
 #include "events/gauge_events_impl.hpp"
 #include "events/timer_events_impl.hpp"
+#include "events/attribute_events_impl.hpp"
 
 namespace handystats { namespace internal {
 
@@ -54,6 +55,9 @@ void process_event_message(metrics::metric_ptr_variant& metric_ptr, const events
 		case metrics::metric_index::TIMER:
 			events::timer::process_event(*boost::get<metrics::timer*>(metric_ptr), message);
 			break;
+		case metrics::metric_index::ATTRIBUTE:
+			events::attribute::process_event(*boost::get<metrics::attribute*>(metric_ptr), message);
+			break;
 		default:
 			return;
 	}
@@ -82,6 +86,11 @@ void process_event_message(const events::event_message& message) {
 				empty_metric = true;
 			}
 			break;
+		case metrics::metric_index::ATTRIBUTE:
+			if (boost::get<metrics::attribute*>(metric_ptr) == 0) {
+				empty_metric = true;
+			}
+			break;
 	}
 
 	if (empty_metric) {
@@ -94,6 +103,9 @@ void process_event_message(const events::event_message& message) {
 				break;
 			case events::event_destination_type::TIMER:
 				metric_ptr = new metrics::timer();
+				break;
+			case events::event_destination_type::ATTRIBUTE:
+				metric_ptr = new metrics::attribute();
 				break;
 		}
 	}
@@ -126,6 +138,9 @@ void finalize() {
 				break;
 			case metrics::metric_index::TIMER:
 				delete boost::get<metrics::timer*>(metric_ptr.second);
+				break;
+			case metrics::metric_index::ATTRIBUTE:
+				delete boost::get<metrics::attribute*>(metric_ptr.second);
 				break;
 			default:
 				break;

@@ -6,6 +6,7 @@
 #include <handystats/measuring_points/gauge_measuring_points.hpp>
 #include <handystats/measuring_points/counter_measuring_points.hpp>
 #include <handystats/measuring_points/timer_measuring_points.hpp>
+#include <handystats/measuring_points/attribute_measuring_points.hpp>
 
 #include <handystats/measuring_points/gauge_proxy.hpp>
 #include <handystats/measuring_points/counter_proxy.hpp>

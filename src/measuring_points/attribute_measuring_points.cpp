@@ -1,0 +1,132 @@
+// Copyright (c) 2014 Yandex LLC. All rights reserved.
+
+#include <memory>
+#include <algorithm>
+
+#include "events/attribute_events_impl.hpp"
+#include "message_queue_impl.hpp"
+#include "core_impl.hpp"
+
+#include <handystats/measuring_points/attribute_measuring_points.hpp>
+
+
+namespace handystats { namespace measuring_points {
+
+void attribute_set(
+		const std::string& attribute_name,
+		const handystats::metrics::attribute::value_type& value,
+		const handystats::metrics::attribute::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push_event_message(
+				handystats::events::attribute::create_set_event(attribute_name, value, timestamp)
+			);
+	}
+}
+
+void attribute_set(
+		const std::string& attribute_name,
+		const bool& b,
+		const handystats::metrics::attribute::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push_event_message(
+				handystats::events::attribute::create_set_event(attribute_name, b, timestamp)
+			);
+	}
+}
+
+void attribute_set(
+		const std::string& attribute_name,
+		const int& i,
+		const handystats::metrics::attribute::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push_event_message(
+				handystats::events::attribute::create_set_event(attribute_name, i, timestamp)
+			);
+	}
+}
+
+void attribute_set(
+		const std::string& attribute_name,
+		const unsigned& u,
+		const handystats::metrics::attribute::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push_event_message(
+				handystats::events::attribute::create_set_event(attribute_name, u, timestamp)
+			);
+	}
+}
+
+void attribute_set(
+		const std::string& attribute_name,
+		const int64_t& i64,
+		const handystats::metrics::attribute::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push_event_message(
+				handystats::events::attribute::create_set_event(attribute_name, i64, timestamp)
+			);
+	}
+}
+
+void attribute_set(
+		const std::string& attribute_name,
+		const uint64_t& u64,
+		const handystats::metrics::attribute::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push_event_message(
+				handystats::events::attribute::create_set_event(attribute_name, u64, timestamp)
+			);
+	}
+}
+
+void attribute_set(
+		const std::string& attribute_name,
+		const double& d,
+		const handystats::metrics::attribute::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push_event_message(
+				handystats::events::attribute::create_set_event(attribute_name, d, timestamp)
+			);
+	}
+}
+
+void attribute_set(
+		const std::string& attribute_name,
+		const char* s,
+		const handystats::metrics::attribute::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push_event_message(
+				handystats::events::attribute::create_set_event(attribute_name, s, timestamp)
+			);
+	}
+}
+
+void attribute_set(
+		const std::string& attribute_name,
+		const std::string& s,
+		const handystats::metrics::attribute::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push_event_message(
+				handystats::events::attribute::create_set_event(attribute_name, s, timestamp)
+			);
+	}
+}
+
+}} // namespace handystats::measuring_points

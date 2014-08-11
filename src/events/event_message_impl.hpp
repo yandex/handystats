@@ -16,7 +16,8 @@ namespace event_destination_type {
 enum {
 	COUNTER,
 	GAUGE,
-	TIMER
+	TIMER,
+	ATTRIBUTE
 };
 }
 

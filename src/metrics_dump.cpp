@@ -79,6 +79,14 @@ create_dump()
 						)
 					);
 				break;
+			case metrics::metric_index::ATTRIBUTE:
+				new_dump->insert(
+						std::pair<std::string, metrics::metric_variant>(
+							metric_entry.first,
+							*boost::get<metrics::attribute*>(metric_entry.second)
+						)
+					);
+				break;
 		}
 	}
 

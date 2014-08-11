@@ -7,6 +7,7 @@
 #include "core_impl.hpp"
 
 #include <handystats/measuring_points/gauge_measuring_points.hpp>
+#include <handystats/measuring_points/gauge_measuring_points.h>
 
 
 namespace handystats { namespace measuring_points {
@@ -38,3 +39,24 @@ void gauge_set(
 }
 
 }} // namespace handystats::measuring_points
+
+
+extern "C" {
+
+void handystats_gauge_init(
+		const char* gauge_name,
+		const double init_value
+	)
+{
+	handystats::measuring_points::gauge_init(gauge_name, init_value);
+}
+
+void handystats_gauge_set(
+		const char* gauge_name,
+		const double value
+	)
+{
+	handystats::measuring_points::gauge_set(gauge_name, value);
+}
+
+} // extern "C"

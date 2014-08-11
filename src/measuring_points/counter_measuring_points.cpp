@@ -7,6 +7,7 @@
 #include "core_impl.hpp"
 
 #include <handystats/measuring_points/counter_measuring_points.hpp>
+#include <handystats/measuring_points/counter_measuring_points.h>
 
 
 namespace handystats { namespace measuring_points {
@@ -67,3 +68,40 @@ void counter_change(
 }
 
 }} // namespace handystats::measuring_points
+
+
+extern "C" {
+
+void handystats_counter_init(
+		const char* counter_name,
+		const int64_t init_value
+	)
+{
+	handystats::measuring_points::counter_init(counter_name, init_value);
+}
+
+void handystats_counter_increment(
+		const char* counter_name,
+		const int64_t value
+	)
+{
+	handystats::measuring_points::counter_increment(counter_name, value);
+}
+
+void handystats_counter_decrement(
+		const char* counter_name,
+		const int64_t value
+	)
+{
+	handystats::measuring_points::counter_decrement(counter_name, value);
+}
+
+void handystats_counter_change(
+		const char* counter_name,
+		const int64_t value
+	)
+{
+	handystats::measuring_points::counter_change(counter_name, value);
+}
+
+} // extern "C"

@@ -7,6 +7,7 @@
 #include "core_impl.hpp"
 
 #include <handystats/measuring_points/timer_measuring_points.hpp>
+#include <handystats/measuring_points/timer_measuring_points.h>
 
 
 namespace handystats { namespace measuring_points {
@@ -78,3 +79,47 @@ void timer_heartbeat(
 
 }} // namespace handystats::measuring_points
 
+
+extern "C" {
+
+void handystats_timer_init(
+		const char* timer_name,
+		const uint64_t instance_id
+	)
+{
+	handystats::measuring_points::timer_init(timer_name, instance_id);
+}
+
+void handystats_timer_start(
+		const char* timer_name,
+		const uint64_t instance_id
+	)
+{
+	handystats::measuring_points::timer_start(timer_name, instance_id);
+}
+
+void handystats_timer_stop(
+		const char* timer_name,
+		const uint64_t instance_id
+	)
+{
+	handystats::measuring_points::timer_stop(timer_name, instance_id);
+}
+
+void handystats_timer_discard(
+		const char* timer_name,
+		const uint64_t instance_id
+	)
+{
+	handystats::measuring_points::timer_discard(timer_name, instance_id);
+}
+
+void handystats_timer_heartbeat(
+		const char* timer_name,
+		const uint64_t instance_id
+	)
+{
+	handystats::measuring_points::timer_heartbeat(timer_name, instance_id);
+}
+
+} // extern "C"

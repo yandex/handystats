@@ -9,7 +9,9 @@
 #include <handystats/measuring_points/gauge_measuring_points.hpp>
 
 
-void HANDY_GAUGE_INIT(
+namespace handystats { namespace measuring_points {
+
+void gauge_init(
 		const std::string& gauge_name,
 		const handystats::metrics::gauge::value_type& init_value,
 		const handystats::metrics::gauge::time_point& timestamp
@@ -22,7 +24,7 @@ void HANDY_GAUGE_INIT(
 	}
 }
 
-void HANDY_GAUGE_SET(
+void gauge_set(
 		const std::string& gauge_name,
 		const handystats::metrics::gauge::value_type& value,
 		const handystats::metrics::gauge::time_point& timestamp
@@ -35,3 +37,4 @@ void HANDY_GAUGE_SET(
 	}
 }
 
+}} // namespace handystats::measuring_points

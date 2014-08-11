@@ -9,7 +9,9 @@
 #include <handystats/measuring_points/timer_measuring_points.hpp>
 
 
-void HANDY_TIMER_INIT(
+namespace handystats { namespace measuring_points {
+
+void timer_init(
 		const std::string& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id,
 		const handystats::metrics::timer::time_point& timestamp
@@ -22,7 +24,7 @@ void HANDY_TIMER_INIT(
 	}
 }
 
-void HANDY_TIMER_START(
+void timer_start(
 		const std::string& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id,
 		const handystats::metrics::timer::time_point& timestamp
@@ -35,7 +37,7 @@ void HANDY_TIMER_START(
 	}
 }
 
-void HANDY_TIMER_STOP(
+void timer_stop(
 		const std::string& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id,
 		const handystats::metrics::timer::time_point& timestamp
@@ -48,7 +50,7 @@ void HANDY_TIMER_STOP(
 	}
 }
 
-void HANDY_TIMER_DISCARD(
+void timer_discard(
 		const std::string& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id,
 		const handystats::metrics::timer::time_point& timestamp
@@ -61,7 +63,7 @@ void HANDY_TIMER_DISCARD(
 	}
 }
 
-void HANDY_TIMER_HEARTBEAT(
+void timer_heartbeat(
 		const std::string& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id,
 		const handystats::metrics::timer::time_point& timestamp
@@ -74,4 +76,5 @@ void HANDY_TIMER_HEARTBEAT(
 	}
 }
 
+}} // namespace handystats::measuring_points
 

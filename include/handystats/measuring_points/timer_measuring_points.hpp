@@ -11,38 +11,38 @@
 #include <handystats/metrics/timer.hpp>
 #include <handystats/macro_overload.hpp>
 
-void HANDY_TIMER_INIT(
-		const std::string& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
-	);
-
-void HANDY_TIMER_START(
-		const std::string& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
-	);
-
-void HANDY_TIMER_STOP(
-		const std::string& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
-	);
-
-void HANDY_TIMER_DISCARD(
-		const std::string& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
-	);
-
-void HANDY_TIMER_HEARTBEAT(
-		const std::string& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
-	);
-
 
 namespace handystats { namespace measuring_points {
+
+void timer_init(
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
+
+void timer_start(
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
+
+void timer_stop(
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
+
+void timer_discard(
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
+
+void timer_heartbeat(
+		const std::string& timer_name,
+		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
 
 /*
  * Helper struct.
@@ -56,19 +56,46 @@ struct scoped_timer_helper {
 	scoped_timer_helper(const std::string& timer_name, const handystats::metrics::timer::instance_id_type& instance_id)
 		: timer_name(timer_name), instance_id(instance_id)
 	{
-		HANDY_TIMER_START(timer_name, instance_id);
+		timer_start(timer_name, instance_id);
 	}
 
 	~scoped_timer_helper() {
-		HANDY_TIMER_STOP(timer_name, instance_id);
+		timer_stop(timer_name, instance_id);
 	}
 };
 
 }} // namespace handystats::measuring_points
 
 
+#ifndef HANDYSTATS_DISABLE
+
+	#define HANDY_TIMER_INIT(...) handystats::measuring_points::timer_init(__VA_ARGS__)
+
+	#define HANDY_TIMER_START(...) handystats::measuring_points::timer_start(__VA_ARGS__)
+
+	#define HANDY_TIMER_STOP(...) handystats::measuring_points::timer_stop(__VA_ARGS__)
+
+	#define HANDY_TIMER_DISCARD(...) handystats::measuring_points::timer_discard(__VA_ARGS__)
+
+	#define HANDY_TIMER_HEARTBEAT(...) handystats::measuring_points::timer_heartbeat(__VA_ARGS__)
+
+#else
+
+	#define HANDY_TIMER_INIT(...)
+
+	#define HANDY_TIMER_START(...)
+
+	#define HANDY_TIMER_STOP(...)
+
+	#define HANDY_TIMER_DISCARD(...)
+
+	#define HANDY_TIMER_HEARTBEAT(...)
+
+#endif
+
+
 /*
- * Helper macros.
+ * Helper scope macros.
  */
 #define UNIQUE_SCOPED_TIMER_NAME BOOST_PP_LIST_CAT((HANDY_SCOPED_TIMER_VAR_, (__LINE__, BOOST_PP_NIL)))
 
@@ -80,6 +107,14 @@ struct scoped_timer_helper {
 /*
  * HANDY_TIMER_SCOPE event constructs scoped_timer_helper named variable.
  */
-#define HANDY_TIMER_SCOPE(...) HANDY_PP_OVERLOAD(HANDY_TIMER_SCOPE_,__VA_ARGS__)(__VA_ARGS__)
+#ifndef HANDYSTATS_DISABLE
+
+	#define HANDY_TIMER_SCOPE(...) HANDY_PP_OVERLOAD(HANDY_TIMER_SCOPE_,__VA_ARGS__)(__VA_ARGS__)
+
+#else
+
+	#define HANDY_TIMER_SCOPE(...)
+
+#endif
 
 #endif // HANDYSTATS_TIMER_MEASURING_POINTS_HPP_

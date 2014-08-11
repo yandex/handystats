@@ -9,7 +9,9 @@
 #include <handystats/measuring_points/counter_measuring_points.hpp>
 
 
-void HANDY_COUNTER_INIT(
+namespace handystats { namespace measuring_points {
+
+void counter_init(
 		const std::string& counter_name,
 		const handystats::metrics::counter::value_type& init_value,
 		const handystats::metrics::counter::time_point& timestamp
@@ -22,7 +24,7 @@ void HANDY_COUNTER_INIT(
 	}
 }
 
-void HANDY_COUNTER_INCREMENT(
+void counter_increment(
 		const std::string& counter_name,
 		const handystats::metrics::counter::value_type& value,
 		const handystats::metrics::counter::time_point& timestamp
@@ -35,7 +37,7 @@ void HANDY_COUNTER_INCREMENT(
 	}
 }
 
-void HANDY_COUNTER_DECREMENT(
+void counter_decrement(
 		const std::string& counter_name,
 		const handystats::metrics::counter::value_type& value,
 		const handystats::metrics::counter::time_point& timestamp
@@ -48,7 +50,7 @@ void HANDY_COUNTER_DECREMENT(
 	}
 }
 
-void HANDY_COUNTER_CHANGE(
+void counter_change(
 		const std::string& counter_name,
 		const handystats::metrics::counter::value_type& value,
 		const handystats::metrics::counter::time_point& timestamp
@@ -63,3 +65,5 @@ void HANDY_COUNTER_CHANGE(
 		}
 	}
 }
+
+}} // namespace handystats::measuring_points

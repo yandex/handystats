@@ -8,6 +8,7 @@
 #include "core_impl.hpp"
 
 #include <handystats/measuring_points/attribute_measuring_points.hpp>
+#include <handystats/measuring_points/attribute_measuring_points.h>
 
 
 namespace handystats { namespace measuring_points {
@@ -130,3 +131,64 @@ void attribute_set(
 }
 
 }} // namespace handystats::measuring_points
+
+
+extern "C" {
+
+void handystats_attribute_set_bool(
+		const char* attribute_name,
+		const bool b
+	)
+{
+	handystats::measuring_points::attribute_set(attribute_name, b);
+}
+
+void handystats_attribute_set_int(
+		const char* attribute_name,
+		const int i
+	)
+{
+	handystats::measuring_points::attribute_set(attribute_name, i);
+}
+
+void handystats_attribute_set_uint(
+		const char* attribute_name,
+		const unsigned u
+	)
+{
+	handystats::measuring_points::attribute_set(attribute_name, u);
+}
+
+void handystats_attribute_set_int64(
+		const char* attribute_name,
+		const int64_t i64
+	)
+{
+	handystats::measuring_points::attribute_set(attribute_name, i64);
+}
+
+void handystats_attribute_set_uint64(
+		const char* attribute_name,
+		const uint64_t u64
+	)
+{
+	handystats::measuring_points::attribute_set(attribute_name, u64);
+}
+
+void handystats_attribute_set_double(
+		const char* attribute_name,
+		const double d
+	)
+{
+	handystats::measuring_points::attribute_set(attribute_name, d);
+}
+
+void handystats_attribute_set_string(
+		const char* attribute_name,
+		const char* s
+	)
+{
+	handystats::measuring_points::attribute_set(attribute_name, s);
+}
+
+} // extern "C"

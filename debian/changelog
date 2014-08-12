@@ -1,3 +1,14 @@
+handystats (1.7.0) UNRELEASED; urgency=low
+
+  * measuring_points: measuring points are macros now (can be disabled by defining HANDYSTATS_DISABLE).
+  * measuring_points: C interface added (measuring_points headers with .h extension).
+  * metrics: attribute metric added.
+  * measuring_points: attribute proxy added.
+  * measuring_points: attribute's C interface added (only measuring points with specified attribute's value type like HANDY_ATTRIBUTE_SET_UINT).
+  * metrics_dump: dump timestamp added as attribute.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Tue, 12 Aug 2014 20:19:18 +0400
+
 handystats (1.6.1) UNRELEASED; urgency=low
 
   * metrics: timer's idle timeout mechanics improved.

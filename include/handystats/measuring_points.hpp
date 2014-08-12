@@ -11,5 +11,6 @@
 #include <handystats/measuring_points/gauge_proxy.hpp>
 #include <handystats/measuring_points/counter_proxy.hpp>
 #include <handystats/measuring_points/timer_proxy.hpp>
+#include <handystats/measuring_points/attribute_proxy.hpp>
 
 #endif // HANDYSTATS_MEASURING_POINTS_HPP_

@@ -10,7 +10,6 @@
 #include <handystats/chrono.hpp>
 #include <handystats/json_dump.hpp>
 
-#include <handystats/json/timestamp.hpp>
 #include <handystats/json/gauge_json_writer.hpp>
 #include <handystats/json/counter_json_writer.hpp>
 #include <handystats/json/timer_json_writer.hpp>
@@ -73,12 +72,6 @@ std::shared_ptr<const std::string> create_dump(Allocator&& allocator = Allocator
 		}
 
 		dump_value.AddMember(metric_entry.first.c_str(), allocator, metric_value, allocator);
-	}
-
-	{
-		rapidjson::Value timestamp_value;
-		json::write_to_json_value(metrics_dump::dump_timestamp, &timestamp_value);
-		dump_value.AddMember("handystats.dump_timestamp", timestamp_value, allocator);
 	}
 
 	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator> buffer(&allocator);

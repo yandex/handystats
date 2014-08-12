@@ -153,6 +153,23 @@ create_dump()
 
 	dump_timestamp = chrono::clock::now();
 
+	{
+		std::chrono::system_clock::time_point system_timestamp = chrono::to_system_time(dump_timestamp);
+
+		metrics::attribute timestamp_attr;
+		timestamp_attr.set(
+				chrono::duration_cast<std::chrono::milliseconds>(system_timestamp.time_since_epoch()).count(),
+				dump_timestamp
+			);
+
+		new_dump->insert(
+				std::pair<std::string, metrics::metric_variant>(
+					"handystats.dump_timestamp",
+					timestamp_attr
+					)
+				);
+	}
+
 	stats::dump_time.set(chrono::duration_cast<chrono::time_duration>(dump_timestamp - dump_start_time).count(), dump_timestamp);
 
 	return std::const_pointer_cast<const std::map<std::string, metrics::metric_variant>>(new_dump);

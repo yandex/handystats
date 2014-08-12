@@ -10,7 +10,7 @@
 HANDYSTATS_EXTERN_C
 void handystats_attribute_set_bool(
 		const char* attribute_name,
-		const bool b
+		const char b
 	);
 
 HANDYSTATS_EXTERN_C

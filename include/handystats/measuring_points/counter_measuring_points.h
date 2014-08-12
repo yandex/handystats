@@ -62,7 +62,7 @@ void handystats_counter_change(
 		const int64_t delta_value;
 	};
 
-	void handystats_scoped_counter_cleanup(struct handystats_scoped_counter_helper* scoped_counter) {
+	inline void handystats_scoped_counter_cleanup(struct handystats_scoped_counter_helper* scoped_counter) {
 		HANDY_COUNTER_DECREMENT(scoped_counter->counter_name, scoped_counter->delta_value);
 	}
 

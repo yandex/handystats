@@ -3,6 +3,8 @@
 #ifndef HANDYSTATS_ATTRIBUTE_MEASURING_POINTS_HPP_
 #define HANDYSTATS_ATTRIBUTE_MEASURING_POINTS_HPP_
 
+#include <cstdint>
+
 #include <string>
 
 #include <handystats/metrics/attribute.hpp>

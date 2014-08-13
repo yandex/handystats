@@ -1,5 +1,6 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
+#include <cstdint>
 #include <cassert>
 #include <algorithm>
 #include <ctime>

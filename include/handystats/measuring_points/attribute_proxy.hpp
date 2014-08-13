@@ -3,6 +3,8 @@
 #ifndef HANDYSTATS_MEASURING_POINTS_ATTRIBUTE_PROXY_HPP_
 #define HANDYSTATS_MEASURING_POINTS_ATTRIBUTE_PROXY_HPP_
 
+#include <cstdint>
+
 #include <string>
 
 #include <handystats/metrics/attribute.hpp>

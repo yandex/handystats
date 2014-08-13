@@ -3,6 +3,8 @@
 #ifndef HANDYSTATS_ATTRIBUTE_JSON_WRITER_HPP_
 #define HANDYSTATS_ATTRIBUTE_JSON_WRITER_HPP_
 
+#include <cstdint>
+
 #include <string>
 
 #include <handystats/rapidjson/document.h>

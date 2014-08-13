@@ -3,6 +3,8 @@
 #ifndef HANDYSTATS_METRICS_ATTRIBUTE_HPP_
 #define HANDYSTATS_METRICS_ATTRIBUTE_HPP_
 
+#include <cstdint>
+
 #include <string>
 
 #include <boost/variant.hpp>

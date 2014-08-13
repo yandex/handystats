@@ -3,6 +3,8 @@
 #ifndef HANDYSTATS_CHRONO_TSC_CLOCK_HPP_
 #define HANDYSTATS_CHRONO_TSC_CLOCK_HPP_
 
+#include <cstdint>
+
 #include <chrono>
 
 #include <handystats/common.h>

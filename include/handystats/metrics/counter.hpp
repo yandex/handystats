@@ -3,6 +3,8 @@
 #ifndef HANDYSTATS_METRICS_COUNTER_HPP_
 #define HANDYSTATS_METRICS_COUNTER_HPP_
 
+#include <cstdint>
+
 #include <utility>
 
 #include <handystats/chrono.hpp>

@@ -3,6 +3,8 @@
 #ifndef HANDYSTATS_METRICS_TIMER_HPP_
 #define HANDYSTATS_METRICS_TIMER_HPP_
 
+#include <cstdint>
+
 #include <utility>
 #include <unordered_map>
 

@@ -1,6 +1,6 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#include <atomic>
+#include <handystats/atomic.hpp>
 #include <type_traits>
 
 #include <handystats/chrono.hpp>

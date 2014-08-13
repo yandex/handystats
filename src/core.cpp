@@ -2,7 +2,7 @@
 
 #include <thread>
 #include <mutex>
-#include <atomic>
+#include <handystats/atomic.hpp>
 
 #include <handystats/chrono.hpp>
 #include <handystats/operation.hpp>

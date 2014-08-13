@@ -1,7 +1,7 @@
 #include <chrono>
 #include <thread>
 #include <memory>
-#include <atomic>
+#include <handystats/atomic.hpp>
 
 #include <gtest/gtest.h>
 

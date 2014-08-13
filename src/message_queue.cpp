@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
 #include <memory>
-#include <atomic>
+#include <handystats/atomic.hpp>
 #include <algorithm>
 
 #include <handystats/chrono.hpp>

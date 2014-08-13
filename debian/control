@@ -3,6 +3,7 @@ Section: libdevel
 Priority: optional
 Maintainer: Danil Osherov <shindo@yandex-team.ru>
 Build-Depends: debhelper (>= 7),
+		cdbs,
 		cmake,
 		libboost-dev,
 		libgtest-dev,

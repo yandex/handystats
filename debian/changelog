@@ -1,4 +1,4 @@
-handystats (1.7.0) UNRELEASED; urgency=low
+handystats (1.7.0) unstable; urgency=low
 
   * measuring_points: measuring points are macros now (can be disabled by defining HANDYSTATS_DISABLE).
   * measuring_points: C interface added (measuring_points headers with .h extension).
@@ -9,13 +9,13 @@ handystats (1.7.0) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Tue, 12 Aug 2014 20:19:18 +0400
 
-handystats (1.6.1) UNRELEASED; urgency=low
+handystats (1.6.1) unstable; urgency=low
 
   * metrics: timer's idle timeout mechanics improved.
 
  -- Danil Osherov <shindo@yandex-team.ru>  Thu, 24 Jul 2014 16:52:17 +0400
 
-handystats (1.6.0) UNRELEASED; urgency=low
+handystats (1.6.0) unstable; urgency=low
 
   * json: json writers should take const pointer to const object because writer must not modify it for sure.
   * json: support for writing to buffer and string has been added to timestamp json writer.
@@ -31,7 +31,7 @@ handystats (1.6.0) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Tue, 22 Jul 2014 23:19:53 +0400
 
-handystats (1.5.0) UNRELEASED; urgency=low
+handystats (1.5.0) unstable; urgency=low
 
   * incremental_statistics: internal stats from gauge have been moved out to separate class.
   * metrics: internal stats have been replaced with incremental_statistics (were gauges).
@@ -46,7 +46,7 @@ handystats (1.5.0) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Mon, 09 Jun 2014 20:17:49 +0400
 
-handystats (1.4.0) UNRELEASED; urgency=low
+handystats (1.4.0) unstable; urgency=low
 
   * metrics: convenient extraction methods for gauge internal statistics have been added.
   * core: don't return from finalize() if enabled flag is unset.
@@ -60,7 +60,7 @@ handystats (1.4.0) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Fri, 30 May 2014 19:36:36 +0400
 
-handystats (1.3.0) UNRELEASED; urgency=low
+handystats (1.3.0) unstable; urgency=low
 
   * internal: finalize() bug fixup. Just skip unknown internal metric type while finalizing.
   * metrics: reset() timer method has been added.
@@ -71,7 +71,7 @@ handystats (1.3.0) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Wed, 28 May 2014 17:20:47 +0400
 
-handystats (1.2.1) UNRELEASED; urgency=low
+handystats (1.2.1) unstable; urgency=low
 
   * rapidjson: check double on isnan() before writing (replace with 0 if double value is nan)
   * chrono: tsc_clock duration and time_point base types should be signed to represent negative durations.
@@ -79,7 +79,7 @@ handystats (1.2.1) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Thu, 27 Mar 2014 12:32:24 +0400
 
-handystats (1.2.0) UNRELEASED; urgency=low
+handystats (1.2.0) unstable; urgency=low
 
   * overload macro has been added (copy-pasted from Boost Library) to support older Boost Library versions which don't have BOOST_PP_OVERLOAD macro.
   * measuring_points: HANDY_TIMER_SCOPE measuring point has been added. 
@@ -87,13 +87,13 @@ handystats (1.2.0) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Tue, 18 Mar 2014 00:33:18 +0400
 
-handystats (1.1.3.waitfree) UNRELEASED; urgency=low
+handystats (1.1.3.waitfree) unstable; urgency=low
 
   * rapidjson: json reader fixup (double exponent can be in [-324; 308] range)
 
  -- Danil Osherov <shindo@yandex-team.ru>  Sat, 15 Mar 2014 00:28:02 +0400
 
-handystats (1.1.2.waitfree) UNRELEASED; urgency=low
+handystats (1.1.2.waitfree) unstable; urgency=low
 
   * message queue: use message queue interface (message_queue_impl.hpp) internally
   * message queue: message queue implementation has been replaced with waitfree queue (taken from Boost's Atomic usage examples)
@@ -101,7 +101,7 @@ handystats (1.1.2.waitfree) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Sat, 08 Mar 2014 00:24:34 +0400
 
-handystats (1.1.1) UNRELEASED; urgency=low
+handystats (1.1.1) unstable; urgency=low
 
   * json: global allocators removal fixup
   * event_message: message format has been changed (event types are "old style" enums)
@@ -111,7 +111,7 @@ handystats (1.1.1) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Fri, 07 Mar 2014 17:35:10 +0400
 
-handystats (1.1.0) UNRELEASED; urgency=low
+handystats (1.1.0) unstable; urgency=low
 
   * core: enabled flag has been added (measuring points are processed now only if this flag is set)
   * json: memory allocation has been improved (global rapidjson::MemoryPoolAllocator has been replaced with local ones)
@@ -120,7 +120,7 @@ handystats (1.1.0) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Tue, 04 Mar 2014 18:59:06 +0400
 
-handystats (1.0.1) UNRELEASED; urgency=low
+handystats (1.0.1) unstable; urgency=low
 
   * CMake: test part fixup (gtest targets have been added as dependencies)
   * message_queue: update system pop statistics only if message has been really popped
@@ -128,7 +128,7 @@ handystats (1.0.1) UNRELEASED; urgency=low
 
  -- Danil Osherov <shindo@yandex-team.ru>  Fri, 28 Feb 2014 18:54:37 +0400
 
-handystats (1.0.0) UNRELEASED; urgency=low
+handystats (1.0.0) unstable; urgency=low
 
   * Initial release.
 

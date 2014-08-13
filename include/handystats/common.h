@@ -3,6 +3,8 @@
 #ifndef HANDYSTATS_COMMON_H_
 #define HANDYSTATS_COMMON_H_
 
+#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+
 /* extern */
 #ifdef __cplusplus
 	#define HANDYSTATS_EXTERN_C extern "C"
@@ -12,7 +14,6 @@
 
 /* noexcept */
 #ifdef __cplusplus
-	// GCC_VERSION = __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__
 	#if GCC_VERSION >= 40600
 		#define HANDYSTATS_NOEXCEPT noexcept
 	#else

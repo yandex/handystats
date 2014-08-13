@@ -23,7 +23,7 @@ bool is_enabled() {
 }
 
 
-std::thread* processor_thread = nullptr;
+std::thread processor_thread;
 
 void process_message_queue() {
 	auto message = message_queue::pop_event_message();
@@ -33,6 +33,18 @@ void process_message_queue() {
 	}
 }
 
+static void run_processor() {
+	while (is_enabled()) {
+		if (!message_queue::empty()) {
+			process_message_queue();
+		}
+		else {
+			std::this_thread::sleep_for(std::chrono::microseconds(10));
+		}
+
+		metrics_dump::update();
+	}
+}
 
 void initialize() {
 	std::lock_guard<std::mutex> lock(operation_mutex);
@@ -46,34 +58,15 @@ void initialize() {
 	internal::initialize();
 	message_queue::initialize();
 
-	processor_thread =
-		new std::thread([]
-				() {
-					while (is_enabled()) {
-						if (!message_queue::empty()) {
-							process_message_queue();
-						}
-						else {
-							std::this_thread::sleep_for(std::chrono::microseconds(10));
-						}
-
-						metrics_dump::update();
-					}
-				}
-		);
+	processor_thread = std::thread(run_processor);
 }
 
 void finalize() {
 	std::lock_guard<std::mutex> lock(operation_mutex);
 	enabled_flag.store(false, std::memory_order_release);
 
-	if (processor_thread) {
-		if (processor_thread->joinable()) {
-			processor_thread->join();
-		}
-
-		delete processor_thread;
-		processor_thread = nullptr;
+	if (processor_thread.joinable()) {
+		processor_thread.join();
 	}
 
 	internal::finalize();

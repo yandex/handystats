@@ -54,24 +54,24 @@ std::shared_ptr<const std::string> create_dump(Allocator&& allocator = Allocator
 
 	const auto metrics_dump = metrics_dump::get_dump();
 
-	for (const auto& metric_entry : *metrics_dump) {
+	for (auto metric_iter = metrics_dump->cbegin(); metric_iter != metrics_dump->cend(); ++metric_iter) {
 		rapidjson::Value metric_value;
-		switch (metric_entry.second.which()) {
+		switch (metric_iter->second.which()) {
 			case metrics::metric_index::GAUGE:
-				json::write_to_json_value(&boost::get<metrics::gauge>(metric_entry.second), &metric_value, allocator);
+				json::write_to_json_value(&boost::get<metrics::gauge>(metric_iter->second), &metric_value, allocator);
 				break;
 			case metrics::metric_index::COUNTER:
-				json::write_to_json_value(&boost::get<metrics::counter>(metric_entry.second), &metric_value, allocator);
+				json::write_to_json_value(&boost::get<metrics::counter>(metric_iter->second), &metric_value, allocator);
 				break;
 			case metrics::metric_index::TIMER:
-				json::write_to_json_value(&boost::get<metrics::timer>(metric_entry.second), &metric_value, allocator);
+				json::write_to_json_value(&boost::get<metrics::timer>(metric_iter->second), &metric_value, allocator);
 				break;
 			case metrics::metric_index::ATTRIBUTE:
-				json::write_to_json_value(&boost::get<metrics::attribute>(metric_entry.second), &metric_value, allocator);
+				json::write_to_json_value(&boost::get<metrics::attribute>(metric_iter->second), &metric_value, allocator);
 				break;
 		}
 
-		dump_value.AddMember(metric_entry.first.c_str(), allocator, metric_value, allocator);
+		dump_value.AddMember(metric_iter->first.c_str(), allocator, metric_value, allocator);
 	}
 
 	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator> buffer(&allocator);

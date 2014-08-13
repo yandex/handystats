@@ -53,37 +53,37 @@ create_dump()
 
 	std::shared_ptr<std::map<std::string, metrics::metric_variant>> new_dump(new std::map<std::string, metrics::metric_variant>());
 
-	for (const auto& metric_entry : internal::metrics_map) {
-		switch (metric_entry.second.which()) {
+	for (auto metric_iter = internal::metrics_map.cbegin(); metric_iter != internal::metrics_map.cend(); ++metric_iter) {
+		switch (metric_iter->second.which()) {
 			case metrics::metric_index::GAUGE:
 				new_dump->insert(
 						std::pair<std::string, metrics::metric_variant>(
-							metric_entry.first,
-							*boost::get<metrics::gauge*>(metric_entry.second)
+							metric_iter->first,
+							*boost::get<metrics::gauge*>(metric_iter->second)
 						)
 					);
 				break;
 			case metrics::metric_index::COUNTER:
 				new_dump->insert(
 						std::pair<std::string, metrics::metric_variant>(
-							metric_entry.first,
-							*boost::get<metrics::counter*>(metric_entry.second)
+							metric_iter->first,
+							*boost::get<metrics::counter*>(metric_iter->second)
 						)
 					);
 				break;
 			case metrics::metric_index::TIMER:
 				new_dump->insert(
 						std::pair<std::string, metrics::metric_variant>(
-							metric_entry.first,
-							*boost::get<metrics::timer*>(metric_entry.second)
+							metric_iter->first,
+							*boost::get<metrics::timer*>(metric_iter->second)
 						)
 					);
 				break;
 			case metrics::metric_index::ATTRIBUTE:
 				new_dump->insert(
 						std::pair<std::string, metrics::metric_variant>(
-							metric_entry.first,
-							*boost::get<metrics::attribute*>(metric_entry.second)
+							metric_iter->first,
+							*boost::get<metrics::attribute*>(metric_iter->second)
 						)
 					);
 				break;

@@ -128,19 +128,19 @@ void initialize() {
 }
 
 void finalize() {
-	for (auto& metric_ptr : metrics_map) {
-		switch (metric_ptr.second.which()) {
+	for (auto metric_iter = metrics_map.begin(); metric_iter != metrics_map.end(); ++metric_iter) {
+		switch (metric_iter->second.which()) {
 			case metrics::metric_index::COUNTER:
-				delete boost::get<metrics::counter*>(metric_ptr.second);
+				delete boost::get<metrics::counter*>(metric_iter->second);
 				break;
 			case metrics::metric_index::GAUGE:
-				delete boost::get<metrics::gauge*>(metric_ptr.second);
+				delete boost::get<metrics::gauge*>(metric_iter->second);
 				break;
 			case metrics::metric_index::TIMER:
-				delete boost::get<metrics::timer*>(metric_ptr.second);
+				delete boost::get<metrics::timer*>(metric_iter->second);
 				break;
 			case metrics::metric_index::ATTRIBUTE:
-				delete boost::get<metrics::attribute*>(metric_ptr.second);
+				delete boost::get<metrics::attribute*>(metric_iter->second);
 				break;
 			default:
 				break;

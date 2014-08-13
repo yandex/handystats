@@ -60,8 +60,8 @@ protected:
 TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 	const int SIZE = 50;
 	std::vector<int> data(SIZE);
-	for (auto& element : data) {
-		element = rand();
+	for (auto element = data.begin(); element != data.end(); ++element) {
+		*element = rand();
 	}
 
 	int swaps_count = 0;

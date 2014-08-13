@@ -5,6 +5,8 @@
 
 #include <chrono>
 
+#include <handystats/common.h>
+
 namespace handystats { namespace chrono {
 
 // Follows 'Clock' concept
@@ -119,7 +121,7 @@ public:
 		duration since_epoch;
 	};
 
-	static time_point now() noexcept;
+	static time_point now() HANDYSTATS_NOEXCEPT;
 };
 
 

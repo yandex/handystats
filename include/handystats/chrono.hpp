@@ -19,7 +19,7 @@ namespace handystats { namespace chrono {
  * - clock::duration - represents duration between time points (follows std::chrono::duration)
  *
  * Member functions:
- * - static time_point now() noexcept
+ * - static time_point now() HANDYSTATS_NOEXCEPT
  *       Gets current time point
  *
  * Non-member functions:

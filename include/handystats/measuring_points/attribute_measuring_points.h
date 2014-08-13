@@ -5,7 +5,7 @@
 
 #include <stdlib.h>
 
-#include <handystats/handystats.h>
+#include <handystats/common.h>
 
 HANDYSTATS_EXTERN_C
 void handystats_attribute_set_bool(

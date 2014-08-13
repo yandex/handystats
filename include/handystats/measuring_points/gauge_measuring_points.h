@@ -3,7 +3,7 @@
 #ifndef HANDY_GAUGE_MEASURING_POINTS_H_
 #define HANDY_GAUGE_MEASURING_POINTS_H_
 
-#include <handystats/handystats.h>
+#include <handystats/common.h>
 
 HANDYSTATS_EXTERN_C
 void handystats_gauge_init(

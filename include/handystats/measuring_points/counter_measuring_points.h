@@ -7,7 +7,7 @@
 
 #include <boost/preprocessor/list/cat.hpp>
 
-#include <handystats/handystats.h>
+#include <handystats/common.h>
 
 HANDYSTATS_EXTERN_C
 void handystats_counter_init(

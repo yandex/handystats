@@ -2,7 +2,7 @@ PROJECT (handystats)
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
 
-ADD_DEFINITIONS ("-O2 -std=c++0x -Wreorder -Wreturn-type -Wunused-variable -pedantic -D_GLIBCXX_USE_NANOSLEEP")
+ADD_DEFINITIONS ("-O2 -std=c++0x -Wreorder -Wreturn-type -Wunused-variable -pedantic -D_GLIBCXX_USE_NANOSLEEP -D_GLIBCXX_USE_CLOCK_MONOTONIC")
 
 
 INCLUDE_DIRECTORIES (${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/src)

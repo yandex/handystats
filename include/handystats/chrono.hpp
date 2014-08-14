@@ -75,7 +75,8 @@ template <typename ToDuration, typename FromDuration,
 					int>::type = 0
 		>
 ToDuration duration_cast(const FromDuration& d) {
-	return std::chrono::duration_cast<ToDuration>(duration_cast<std::chrono::nanoseconds>(d));
+	// NOTE: redundant template parameters specification is needed to compile with GCC 4.4
+	return std::chrono::duration_cast<ToDuration>(duration_cast<std::chrono::nanoseconds, clock::duration>(d));
 }
 
 // Cast to clock::duration through std::chrono::nanoseconds
@@ -86,7 +87,8 @@ template <typename ToDuration, typename FromDuration,
 					int>::type = 0
 		>
 ToDuration duration_cast(const FromDuration& d) {
-	return duration_cast<clock::duration>(std::chrono::duration_cast<std::chrono::nanoseconds>(d));
+	// NOTE: redundant template parameters specification is needed to compile with GCC 4.4
+	return duration_cast<clock::duration, std::chrono::nanoseconds>(std::chrono::duration_cast<std::chrono::nanoseconds>(d));
 }
 
 // Trivial cast with the same clock::duration

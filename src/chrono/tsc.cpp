@@ -17,7 +17,17 @@ namespace {
 
 uint64_t get_nanoseconds() {
 	timespec tm;
+
+#if defined(CLOCK_MONOTONIC_RAW)
 	clock_gettime(CLOCK_MONOTONIC_RAW, &tm);
+#elif defined(CLOCK_MONOTONIC)
+	clock_gettime(CLOCK_MONOTONIC, &tm);
+#elif defined(CLOCK_REALTIME)
+	clock_gettime(CLOCK_REALTIME, &tm);
+#else
+	#error "No POSIX clocks are available."
+#endif
+
 	return (uint64_t)tm.tv_sec * (uint64_t)1E9 + tm.tv_nsec;
 }
 

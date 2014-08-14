@@ -3,6 +3,8 @@
 #include <handystats/atomic.hpp>
 #include <type_traits>
 
+#include <handystats/common.h>
+
 #include <handystats/chrono.hpp>
 #include <handystats/chrono/tsc_clock.hpp>
 
@@ -234,7 +236,7 @@ bool tsc_clock::time_point::operator>=(const time_point& t) const {
 // tsc_clock
 //////////////
 
-tsc_clock::time_point tsc_clock::now() noexcept {
+tsc_clock::time_point tsc_clock::now() HANDYSTATS_NOEXCEPT {
 	return
 		time_point(
 			duration(

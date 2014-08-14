@@ -126,7 +126,7 @@ TEST_F(HandyProxyTest, TimerProxySingleInstance) {
 
 	ASSERT_EQ(timer.instances.size(), 0);
 
-	ASSERT_GE(timer.value, handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval));
+	ASSERT_GE(timer.value.count(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count());
 
 	ASSERT_EQ(timer.values.count(), SLEEP_COUNT);
 	ASSERT_GE(timer.values.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count());
@@ -159,7 +159,7 @@ TEST_F(HandyProxyTest, TimerProxyMultiInstance) {
 
 	ASSERT_EQ(timer.instances.size(), 0);
 
-	ASSERT_GE(timer.value, handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval));
+	ASSERT_GE(timer.value.count(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count());
 
 	ASSERT_EQ(timer.values.count(), SLEEP_COUNT);
 	ASSERT_GE(timer.values.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count());

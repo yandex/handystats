@@ -7,8 +7,8 @@
 #include "message_queue_impl.hpp"
 #include "core_impl.hpp"
 
-#include <handystats/measuring_points/attribute_measuring_points.hpp>
-#include <handystats/measuring_points/attribute_measuring_points.h>
+#include <handystats/measuring_points/attribute.hpp>
+#include <handystats/measuring_points/attribute.h>
 
 
 namespace handystats { namespace measuring_points {

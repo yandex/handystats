@@ -7,7 +7,7 @@
 
 #include <handystats/metrics/counter.hpp>
 
-#include <handystats/measuring_points/counter_measuring_points.hpp>
+#include <handystats/measuring_points/counter.hpp>
 
 namespace handystats { namespace measuring_points {
 

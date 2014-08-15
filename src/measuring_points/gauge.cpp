@@ -6,8 +6,8 @@
 #include "message_queue_impl.hpp"
 #include "core_impl.hpp"
 
-#include <handystats/measuring_points/gauge_measuring_points.hpp>
-#include <handystats/measuring_points/gauge_measuring_points.h>
+#include <handystats/measuring_points/gauge.hpp>
+#include <handystats/measuring_points/gauge.h>
 
 
 namespace handystats { namespace measuring_points {

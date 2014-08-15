@@ -9,7 +9,7 @@
 
 #include <handystats/metrics/attribute.hpp>
 
-#include <handystats/measuring_points/attribute_measuring_points.hpp>
+#include <handystats/measuring_points/attribute.hpp>
 
 namespace handystats { namespace measuring_points {
 

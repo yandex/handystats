@@ -7,7 +7,7 @@
 
 #include <handystats/metrics/timer.hpp>
 
-#include <handystats/measuring_points/timer_measuring_points.hpp>
+#include <handystats/measuring_points/timer.hpp>
 
 namespace handystats { namespace measuring_points {
 

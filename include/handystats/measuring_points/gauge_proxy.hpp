@@ -7,7 +7,7 @@
 
 #include <handystats/metrics/gauge.hpp>
 
-#include <handystats/measuring_points/gauge_measuring_points.hpp>
+#include <handystats/measuring_points/gauge.hpp>
 
 namespace handystats { namespace measuring_points {
 

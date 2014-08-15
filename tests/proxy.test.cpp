@@ -15,13 +15,11 @@ protected:
 	virtual void SetUp() {
 		HANDY_CONFIGURATION_JSON(
 				"{\
-					\"handystats\": {\
-						\"metrics-dump\": {\
-							\"interval\": 10\
-						},\
-						\"timer\": {\
-							\"idle-timeout\": 500\
-						}\
+					\"metrics-dump\": {\
+						\"interval\": 10\
+					},\
+					\"timer\": {\
+						\"idle-timeout\": 500\
 					}\
 				}"
 			);

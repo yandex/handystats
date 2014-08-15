@@ -156,24 +156,19 @@ void HANDY_CONFIGURATION_JSON(const rapidjson::Value& config) {
 	if (!config.IsObject()) {
 		return;
 	}
-	if (!config.HasMember("handystats")) {
-		return;
-	}
 
-	const rapidjson::Value& handystats_config = config["handystats"];
-
-	if (handystats_config.HasMember("incremental-statistics")) {
-		const rapidjson::Value& incremental_statistics_config = handystats_config["incremental-statistics"];
+	if (config.HasMember("incremental-statistics")) {
+		const rapidjson::Value& incremental_statistics_config = config["incremental-statistics"];
 		handystats::config::incremental_statistics.configure(incremental_statistics_config);
 	}
 
-	if (handystats_config.HasMember("timer")) {
-		const rapidjson::Value& timer_config = handystats_config["timer"];
+	if (config.HasMember("timer")) {
+		const rapidjson::Value& timer_config = config["timer"];
 		handystats::config::timer.configure(timer_config);
 	}
 
-	if (handystats_config.HasMember("metrics-dump")) {
-		const rapidjson::Value& metrics_dump_config = handystats_config["metrics-dump"];
+	if (config.HasMember("metrics-dump")) {
+		const rapidjson::Value& metrics_dump_config = config["metrics-dump"];
 		handystats::config::metrics_dump.configure(metrics_dump_config);
 	}
 }

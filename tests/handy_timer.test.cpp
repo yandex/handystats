@@ -24,13 +24,11 @@ protected:
 	virtual void SetUp() {
 		HANDY_CONFIGURATION_JSON(
 				"{\
-					\"handystats\": {\
-						\"timer\": {\
-							\"idle-timeout\": 100\
-						},\
-						\"metrics-dump\": {\
-							\"interval\": 10\
-						}\
+					\"timer\": {\
+						\"idle-timeout\": 100\
+					},\
+					\"metrics-dump\": {\
+						\"interval\": 10\
 					}\
 				}"
 			);

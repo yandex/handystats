@@ -7,19 +7,17 @@
 
 /*
  * {
- *    "handystats": {
- *        "incremental-statistics": {
- *            "moving-average-alpha": <double value>,
- *            "moving-interval": <value in msec>
- *        },
- *        "timer": {
- *           "idle-timeout": <value in msec>
- *        },
- *        "metrics-dump": {
- *            "interval": <value in msec>,
- *            "to-json": <boolean value>
- *        }
- *    }
+ *     "incremental-statistics": {
+ *         "moving-average-alpha": <double value>,
+ *         "moving-interval": <value in msec>
+ *     },
+ *     "timer": {
+ *        "idle-timeout": <value in msec>
+ *     },
+ *     "metrics-dump": {
+ *         "interval": <value in msec>,
+ *         "to-json": <boolean value>
+ *     }
  * }
  */
 

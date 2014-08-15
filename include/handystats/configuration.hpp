@@ -21,8 +21,27 @@
  * }
  */
 
-void HANDY_CONFIGURATION_FILE(const char* filename);
-void HANDY_CONFIGURATION_JSON(const char* config);
-void HANDY_CONFIGURATION_JSON(const rapidjson::Value& config);
+namespace handystats {
+
+void configuration_file(const char* filename);
+void configuration_json(const char* config);
+void configuration_json(const rapidjson::Value& config);
+
+} // namespace handystats
+
+
+#ifndef HANDYSTATS_DISABLE
+
+	#define HANDY_CONFIGURATION_FILE(...) handystats::configuration_file(__VA_ARGS__)
+
+	#define HANDY_CONFIGURATION_JSON(...) handystats::configuration_json(__VA_ARGS__)
+
+#else
+
+	#define HANDY_CONFIGURATION_FILE(...)
+
+	#define HANDY_CONFIGURATION_JSON(...)
+
+#endif
 
 #endif // HANDYSTATS_CONFIGURATION_HPP_

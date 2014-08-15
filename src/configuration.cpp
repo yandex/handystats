@@ -8,6 +8,7 @@
 #include <handystats/operation.hpp>
 
 #include <handystats/configuration.hpp>
+#include <handystats/configuration.h>
 #include <handystats/configuration/defaults.hpp>
 #include "configuration_impl.hpp"
 
@@ -116,38 +117,7 @@ namespace handystats {
 extern std::mutex operation_mutex;
 bool is_enabled();
 
-} // namespace handystats
-
-
-void HANDY_CONFIGURATION_FILE(const char* filename) {
-	std::ifstream input(filename, std::ios::in | std::ios::binary);
-	if (!input) {
-		std::cerr << "Unable to open configuration file " << filename << std::endl;
-		return;
-	}
-
-	std::string config_data;
-	input.seekg(0, std::ios::end);
-	config_data.resize(input.tellg());
-	input.seekg(0, std::ios::beg);
-	input.read(&config_data[0], config_data.size());
-	input.close();
-
-	HANDY_CONFIGURATION_JSON(config_data.c_str());
-}
-
-void HANDY_CONFIGURATION_JSON(const char* config_data) {
-	rapidjson::Document config;
-	config.Parse<0>(config_data);
-	if (config.HasParseError()) {
-		std::cerr << "Unable to parse configuration json: " << config.GetParseError() << std::endl;
-		return;
-	}
-
-	HANDY_CONFIGURATION_JSON(config);
-}
-
-void HANDY_CONFIGURATION_JSON(const rapidjson::Value& config) {
+void configuration_json(const rapidjson::Value& config) {
 	std::lock_guard<std::mutex> lock(handystats::operation_mutex);
 	if (handystats::is_enabled()) {
 		return;
@@ -172,3 +142,46 @@ void HANDY_CONFIGURATION_JSON(const rapidjson::Value& config) {
 		handystats::config::metrics_dump.configure(metrics_dump_config);
 	}
 }
+
+void configuration_json(const char* config_data) {
+	rapidjson::Document config;
+	config.Parse<0>(config_data);
+	if (config.HasParseError()) {
+		std::cerr << "Unable to parse configuration json: " << config.GetParseError() << std::endl;
+		return;
+	}
+
+	configuration_json(config);
+}
+
+void configuration_file(const char* filename) {
+	std::ifstream input(filename, std::ios::in | std::ios::binary);
+	if (!input) {
+		std::cerr << "Unable to open configuration file " << filename << std::endl;
+		return;
+	}
+
+	std::string config_data;
+	input.seekg(0, std::ios::end);
+	config_data.resize(input.tellg());
+	input.seekg(0, std::ios::beg);
+	input.read(&config_data[0], config_data.size());
+	input.close();
+
+	configuration_json(config_data.c_str());
+}
+
+} // namespace handystats
+
+
+extern "C" {
+
+void handystats_configuration_file(const char* file) {
+	handystats::configuration_file(file);
+}
+
+void handystats_configuration_json(const char* config_data) {
+	handystats::configuration_json(config_data);
+}
+
+} // extern "C"

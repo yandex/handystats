@@ -6,6 +6,7 @@
 
 #include <handystats/chrono.hpp>
 #include <handystats/operation.hpp>
+#include <handystats/operation.h>
 
 #include "message_queue_impl.hpp"
 #include "internal_impl.hpp"
@@ -78,11 +79,14 @@ void finalize() {
 } // namespace handystats
 
 
-void HANDY_INIT() {
+extern "C" {
+
+void handystats_initialize() {
 	handystats::initialize();
 }
 
-void HANDY_FINALIZE() {
+void handystats_finalize() {
 	handystats::finalize();
 }
 
+} // extern "C"

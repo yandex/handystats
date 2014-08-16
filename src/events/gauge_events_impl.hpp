@@ -23,13 +23,13 @@ enum {
  * Event creation functions
  */
 event_message* create_init_event(
-		const std::string& gauge_name,
+		std::string&& gauge_name,
 		const metrics::gauge::value_type& init_value,
 		const metrics::gauge::time_point& timestamp
 	);
 
 event_message* create_set_event(
-		const std::string& gauge_name,
+		std::string&& gauge_name,
 		const metrics::gauge::value_type& value,
 		const metrics::gauge::time_point& timestamp
 	);

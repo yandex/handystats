@@ -6,14 +6,14 @@
 namespace handystats { namespace events { namespace counter {
 
 event_message* create_init_event(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const metrics::counter::value_type& init_value,
 		const metrics::counter::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = counter_name;
+	message->destination_name.swap(counter_name);
 	message->destination_type = event_destination_type::COUNTER;
 
 	message->timestamp = timestamp;
@@ -32,14 +32,14 @@ void delete_init_event(event_message* message) {
 
 
 event_message* create_increment_event(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const metrics::counter::value_type& value,
 		const metrics::counter::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = counter_name;
+	message->destination_name.swap(counter_name);
 	message->destination_type = event_destination_type::COUNTER;
 
 	message->timestamp = timestamp;
@@ -58,14 +58,14 @@ void delete_increment_event(event_message* message) {
 
 
 event_message* create_decrement_event(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const metrics::counter::value_type& value,
 		const metrics::counter::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = counter_name;
+	message->destination_name.swap(counter_name);
 	message->destination_type = event_destination_type::COUNTER;
 
 	message->timestamp = timestamp;

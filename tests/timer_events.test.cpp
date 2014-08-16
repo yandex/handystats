@@ -12,7 +12,7 @@
 using namespace handystats::events::timer;
 
 TEST(TimerEventsTest, TestTimerInitEventWithDefaultInstance) {
-	const std::string timer_name = "queue.push";
+	const char* timer_name = "queue.push";
 	auto message = create_init_event(timer_name, -1, handystats::metrics::timer::clock::now());
 
 	ASSERT_EQ(message->destination_name, timer_name);
@@ -23,7 +23,7 @@ TEST(TimerEventsTest, TestTimerInitEventWithDefaultInstance) {
 }
 
 TEST(TimerEventsTest, TestTimerInitEventWithSpecificInstance) {
-	const std::string timer_name = "queue.push";
+	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 123;
 	auto message = create_init_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
 
@@ -35,7 +35,7 @@ TEST(TimerEventsTest, TestTimerInitEventWithSpecificInstance) {
 }
 
 TEST(TimerEventsTest, TestTimerStartEvent) {
-	const std::string timer_name = "queue.push";
+	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 1234567890;
 	auto message = create_start_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
 
@@ -47,7 +47,7 @@ TEST(TimerEventsTest, TestTimerStartEvent) {
 }
 
 TEST(TimerEventsTest, TestTimerStopEvent) {
-	const std::string timer_name = "queue.push";
+	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 1234567890;
 	auto message = create_stop_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
 
@@ -59,7 +59,7 @@ TEST(TimerEventsTest, TestTimerStopEvent) {
 }
 
 TEST(TimerEventsTest, TestTimerDiscardEvent) {
-	const std::string timer_name = "queue.push";
+	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 1234567890;
 	auto message = create_discard_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
 
@@ -71,7 +71,7 @@ TEST(TimerEventsTest, TestTimerDiscardEvent) {
 }
 
 TEST(TimerEventsTest, TestTimerHeartbeatEvent) {
-	const std::string timer_name = "queue.push";
+	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 1234567890;
 	auto message = create_heartbeat_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
 

@@ -1,19 +1,21 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
+#include <algorithm>
+
 #include "events/attribute_events_impl.hpp"
 
 
 namespace handystats { namespace events { namespace attribute {
 
 event_message* create_set_event(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const metrics::attribute::value_type& value,
 		const metrics::attribute::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = attribute_name;
+	message->destination_name.swap(attribute_name);
 	message->destination_type = event_destination_type::ATTRIBUTE;
 
 	message->timestamp = timestamp;
@@ -25,75 +27,75 @@ event_message* create_set_event(
 }
 
 event_message* create_set_event(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const bool& b,
 		const metrics::attribute::time_point& timestamp
 	)
 {
-	return create_set_event(attribute_name, metrics::attribute::value_type(b), timestamp);
+	return create_set_event(std::move(attribute_name), metrics::attribute::value_type(b), timestamp);
 }
 
 event_message* create_set_event(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const int& i,
 		const metrics::attribute::time_point& timestamp
 	)
 {
-	return create_set_event(attribute_name, metrics::attribute::value_type(i), timestamp);
+	return create_set_event(std::move(attribute_name), metrics::attribute::value_type(i), timestamp);
 }
 
 event_message* create_set_event(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const unsigned& u,
 		const metrics::attribute::time_point& timestamp
 	)
 {
-	return create_set_event(attribute_name, metrics::attribute::value_type(u), timestamp);
+	return create_set_event(std::move(attribute_name), metrics::attribute::value_type(u), timestamp);
 }
 
 event_message* create_set_event(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const int64_t& i64,
 		const metrics::attribute::time_point& timestamp
 	)
 {
-	return create_set_event(attribute_name, metrics::attribute::value_type(i64), timestamp);
+	return create_set_event(std::move(attribute_name), metrics::attribute::value_type(i64), timestamp);
 }
 
 event_message* create_set_event(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const uint64_t& u64,
 		const metrics::attribute::time_point& timestamp
 	)
 {
-	return create_set_event(attribute_name, metrics::attribute::value_type(u64), timestamp);
+	return create_set_event(std::move(attribute_name), metrics::attribute::value_type(u64), timestamp);
 }
 
 event_message* create_set_event(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const double& d,
 		const metrics::attribute::time_point& timestamp
 	)
 {
-	return create_set_event(attribute_name, metrics::attribute::value_type(d), timestamp);
+	return create_set_event(std::move(attribute_name), metrics::attribute::value_type(d), timestamp);
 }
 
 event_message* create_set_event(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const char* s,
 		const metrics::attribute::time_point& timestamp
 	)
 {
-	return create_set_event(attribute_name, metrics::attribute::value_type(std::string(s)), timestamp);
+	return create_set_event(std::move(attribute_name), metrics::attribute::value_type(std::string(s)), timestamp);
 }
 
 event_message* create_set_event(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const std::string& s,
 		const metrics::attribute::time_point& timestamp
 	)
 {
-	return create_set_event(attribute_name, metrics::attribute::value_type(s), timestamp);
+	return create_set_event(std::move(attribute_name), metrics::attribute::value_type(s), timestamp);
 }
 
 void delete_set_event(event_message* message) {

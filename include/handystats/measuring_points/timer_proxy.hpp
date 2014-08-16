@@ -38,7 +38,7 @@ public:
 			const metrics::timer::time_point& timestamp = metrics::timer::clock::now()
 		)
 	{
-		HANDY_TIMER_INIT(name, choose_instance_id(instance_id), timestamp);
+		HANDY_TIMER_INIT(name.substr(), choose_instance_id(instance_id), timestamp);
 	}
 
 	/*
@@ -49,7 +49,7 @@ public:
 			const metrics::timer::time_point& timestamp = metrics::timer::clock::now()
 		)
 	{
-		HANDY_TIMER_START(name, choose_instance_id(instance_id), timestamp);
+		HANDY_TIMER_START(name.substr(), choose_instance_id(instance_id), timestamp);
 	}
 
 	/*
@@ -60,7 +60,7 @@ public:
 			const metrics::timer::time_point& timestamp = metrics::timer::clock::now()
 		)
 	{
-		HANDY_TIMER_STOP(name, choose_instance_id(instance_id), timestamp);
+		HANDY_TIMER_STOP(name.substr(), choose_instance_id(instance_id), timestamp);
 	}
 
 	/*
@@ -71,7 +71,7 @@ public:
 			const metrics::timer::time_point& timestamp = metrics::timer::clock::now()
 		)
 	{
-		HANDY_TIMER_DISCARD(name, choose_instance_id(instance_id), timestamp);
+		HANDY_TIMER_DISCARD(name.substr(), choose_instance_id(instance_id), timestamp);
 	}
 
 	/*
@@ -82,7 +82,7 @@ public:
 			const metrics::timer::time_point& timestamp = metrics::timer::clock::now()
 		)
 	{
-		HANDY_TIMER_HEARTBEAT(name, choose_instance_id(instance_id), timestamp);
+		HANDY_TIMER_HEARTBEAT(name.substr(), choose_instance_id(instance_id), timestamp);
 	}
 
 private:

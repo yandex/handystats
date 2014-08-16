@@ -11,13 +11,13 @@
 namespace handystats { namespace measuring_points {
 
 void gauge_init(
-		const std::string& gauge_name,
+		std::string&& gauge_name,
 		const handystats::metrics::gauge::value_type& init_value,
 		const handystats::metrics::gauge::time_point& timestamp = handystats::metrics::gauge::clock::now()
 	);
 
 void gauge_set(
-		const std::string& gauge_name,
+		std::string&& gauge_name,
 		const handystats::metrics::gauge::value_type& value,
 		const handystats::metrics::gauge::time_point& timestamp = handystats::metrics::gauge::clock::now()
 	);

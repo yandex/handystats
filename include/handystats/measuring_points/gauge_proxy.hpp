@@ -33,7 +33,7 @@ public:
 		)
 		: name(name)
 	{
-		HANDY_GAUGE_INIT(name, init_value, timestamp);
+		HANDY_GAUGE_INIT(name.substr(), init_value, timestamp);
 	}
 
 	gauge_proxy(const char* name,
@@ -42,7 +42,7 @@ public:
 		)
 		: name(name)
 	{
-		HANDY_GAUGE_INIT(name, init_value, timestamp);
+		HANDY_GAUGE_INIT(this->name.substr(), init_value, timestamp);
 	}
 
 	/*
@@ -53,7 +53,7 @@ public:
 			const metrics::gauge::time_point& timestamp = metrics::gauge::clock::now()
 			)
 	{
-		HANDY_GAUGE_INIT(name, init_value, timestamp);
+		HANDY_GAUGE_INIT(name.substr(), init_value, timestamp);
 	}
 
 	/*
@@ -64,7 +64,7 @@ public:
 			const metrics::gauge::time_point& timestamp = metrics::gauge::clock::now()
 			)
 	{
-		HANDY_GAUGE_SET(name, value, timestamp);
+		HANDY_GAUGE_SET(name.substr(), value, timestamp);
 	}
 
 private:

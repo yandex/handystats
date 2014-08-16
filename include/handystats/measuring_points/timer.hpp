@@ -4,6 +4,7 @@
 #define HANDYSTATS_TIMER_MEASURING_POINTS_HPP_
 
 #include <string>
+#include <algorithm>
 #include <cstdint>
 
 #include <boost/preprocessor/list/cat.hpp>
@@ -15,31 +16,31 @@
 namespace handystats { namespace measuring_points {
 
 void timer_init(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
 		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
 	);
 
 void timer_start(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
 		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
 	);
 
 void timer_stop(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
 		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
 	);
 
 void timer_discard(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
 		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
 	);
 
 void timer_heartbeat(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
 		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
 	);
@@ -53,14 +54,14 @@ struct scoped_timer_helper {
 	const std::string timer_name;
 	const handystats::metrics::timer::instance_id_type instance_id;
 
-	scoped_timer_helper(const std::string& timer_name, const handystats::metrics::timer::instance_id_type& instance_id)
-		: timer_name(timer_name), instance_id(instance_id)
+	scoped_timer_helper(std::string&& timer_name, const handystats::metrics::timer::instance_id_type& instance_id)
+		: timer_name(std::move(timer_name)), instance_id(instance_id)
 	{
-		timer_start(timer_name, instance_id);
+		timer_start(this->timer_name.substr(), instance_id);
 	}
 
 	~scoped_timer_helper() {
-		timer_stop(timer_name, instance_id);
+		timer_stop(timer_name.substr(), instance_id);
 	}
 };
 

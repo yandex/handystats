@@ -4,6 +4,7 @@
 #define HANDYSTATS_COUNTER_MEASURING_POINTS_HPP_
 
 #include <string>
+#include <algorithm>
 
 #include <boost/preprocessor/list/cat.hpp>
 
@@ -14,25 +15,25 @@
 namespace handystats { namespace measuring_points {
 
 void counter_init(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const handystats::metrics::counter::value_type& init_value = handystats::metrics::counter::value_type(),
 		const handystats::metrics::counter::time_point& timestamp = handystats::metrics::counter::clock::now()
 		);
 
 void counter_increment(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const handystats::metrics::counter::value_type& value = 1,
 		const handystats::metrics::counter::time_point& timestamp = handystats::metrics::counter::clock::now()
 		);
 
 void counter_decrement(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const handystats::metrics::counter::value_type& value = 1,
 		const handystats::metrics::counter::time_point& timestamp = handystats::metrics::counter::clock::now()
 		);
 
 void counter_change(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const handystats::metrics::counter::value_type& value,
 		const handystats::metrics::counter::time_point& timestamp = handystats::metrics::counter::clock::now()
 		);
@@ -46,14 +47,14 @@ struct scoped_counter_helper {
 	const std::string counter_name;
 	const handystats::metrics::counter::value_type delta_value;
 
-	scoped_counter_helper(const std::string& counter_name, const handystats::metrics::counter::value_type& delta_value)
-		: counter_name(counter_name), delta_value(delta_value)
+	scoped_counter_helper(std::string&& counter_name, const handystats::metrics::counter::value_type& delta_value)
+		: counter_name(std::move(counter_name)), delta_value(delta_value)
 	{
-		counter_change(counter_name, delta_value);
+		counter_change(this->counter_name.substr(), delta_value);
 	}
 
 	~scoped_counter_helper() {
-		counter_change(counter_name, -delta_value);
+		counter_change(counter_name.substr(), -delta_value);
 	}
 };
 

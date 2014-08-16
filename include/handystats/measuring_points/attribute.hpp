@@ -13,55 +13,55 @@
 namespace handystats { namespace measuring_points {
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const handystats::metrics::attribute::value_type& value,
 		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
 	);
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const bool& b,
 		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
 	);
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const int& i,
 		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
 	);
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const unsigned& u,
 		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
 	);
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const int64_t& i64,
 		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
 	);
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const uint64_t& u64,
 		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
 	);
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const double& d,
 		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
 	);
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const char* s,
 		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
 	);
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const std::string& s,
 		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
 	);

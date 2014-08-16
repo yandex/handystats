@@ -33,7 +33,7 @@ public:
 		)
 		: name(name)
 	{
-		HANDY_COUNTER_INIT(name, init_value, timestamp);
+		HANDY_COUNTER_INIT(name.substr(), init_value, timestamp);
 	}
 
 	counter_proxy(const char* name,
@@ -42,7 +42,7 @@ public:
 		)
 		: name(name)
 	{
-		HANDY_COUNTER_INIT(name, init_value, timestamp);
+		HANDY_COUNTER_INIT(this->name.substr(), init_value, timestamp);
 	}
 
 	/*
@@ -53,7 +53,7 @@ public:
 			const metrics::counter::time_point& timestamp = metrics::counter::clock::now()
 		)
 	{
-		HANDY_COUNTER_INIT(name, init_value, timestamp);
+		HANDY_COUNTER_INIT(name.substr(), init_value, timestamp);
 	}
 
 	/*
@@ -64,7 +64,7 @@ public:
 			const metrics::counter::time_point& timestamp = metrics::counter::clock::now()
 		)
 	{
-		HANDY_COUNTER_INCREMENT(name, value, timestamp);
+		HANDY_COUNTER_INCREMENT(name.substr(), value, timestamp);
 	}
 
 	/*
@@ -75,7 +75,7 @@ public:
 			const metrics::counter::time_point& timestamp = metrics::counter::clock::now()
 		)
 	{
-		HANDY_COUNTER_DECREMENT(name, value, timestamp);
+		HANDY_COUNTER_DECREMENT(name.substr(), value, timestamp);
 	}
 
 	/*
@@ -86,7 +86,7 @@ public:
 			const metrics::counter::time_point& timestamp = metrics::counter::clock::now()
 		)
 	{
-		HANDY_COUNTER_CHANGE(name, value, timestamp);
+		HANDY_COUNTER_CHANGE(name.substr(), value, timestamp);
 	}
 
 private:

@@ -11,7 +11,7 @@
 using namespace handystats::events::gauge;
 
 TEST(GaugeEventsTest, TestGaugeInitEvent) {
-	const std::string gauge_name = "proc.load";
+	const char* gauge_name = "proc.load";
 	const double init_value = 0.75;
 	auto message = create_init_event(gauge_name, init_value, handystats::metrics::gauge::clock::now());
 
@@ -23,7 +23,7 @@ TEST(GaugeEventsTest, TestGaugeInitEvent) {
 }
 
 TEST(GaugeEventsTest, TestGaugeSetEvent) {
-	const std::string gauge_name = "proc.load";
+	const char* gauge_name = "proc.load";
 	const double value = 1.5;
 	auto message = create_set_event(gauge_name, value, handystats::metrics::gauge::clock::now());
 

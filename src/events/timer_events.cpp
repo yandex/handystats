@@ -10,14 +10,14 @@
 namespace handystats { namespace events { namespace timer {
 
 event_message* create_init_event(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = timer_name;
+	message->destination_name.swap(timer_name);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;
@@ -36,14 +36,14 @@ void delete_init_event(event_message* message) {
 
 
 event_message* create_start_event(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = timer_name;
+	message->destination_name.swap(timer_name);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;
@@ -62,14 +62,14 @@ void delete_start_event(event_message* message) {
 
 
 event_message* create_stop_event(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = timer_name;
+	message->destination_name.swap(timer_name);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;
@@ -88,14 +88,14 @@ void delete_stop_event(event_message* message) {
 
 
 event_message* create_discard_event(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = timer_name;
+	message->destination_name.swap(timer_name);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;
@@ -114,14 +114,14 @@ void delete_discard_event(event_message* message) {
 
 
 event_message* create_heartbeat_event(
-		const std::string& timer_name,
+		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = timer_name;
+	message->destination_name.swap(timer_name);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;

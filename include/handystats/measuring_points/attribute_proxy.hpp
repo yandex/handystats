@@ -28,7 +28,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name, value, timestamp);
+		HANDY_ATTRIBUTE_SET(name.substr(), value, timestamp);
 	}
 
 	void set(
@@ -36,7 +36,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name, b, timestamp);
+		HANDY_ATTRIBUTE_SET(name.substr(), b, timestamp);
 	}
 
 	void set(
@@ -44,7 +44,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name, i, timestamp);
+		HANDY_ATTRIBUTE_SET(name.substr(), i, timestamp);
 	}
 
 	void set(
@@ -52,7 +52,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name, u, timestamp);
+		HANDY_ATTRIBUTE_SET(name.substr(), u, timestamp);
 	}
 
 	void set(
@@ -60,7 +60,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name, i64, timestamp);
+		HANDY_ATTRIBUTE_SET(name.substr(), i64, timestamp);
 	}
 
 	void set(
@@ -68,7 +68,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name, u64, timestamp);
+		HANDY_ATTRIBUTE_SET(name.substr(), u64, timestamp);
 	}
 
 	void set(
@@ -76,7 +76,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name, d, timestamp);
+		HANDY_ATTRIBUTE_SET(name.substr(), d, timestamp);
 	}
 
 	void set(
@@ -84,7 +84,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name, s, timestamp);
+		HANDY_ATTRIBUTE_SET(name.substr(), s, timestamp);
 	}
 
 	void set(
@@ -92,7 +92,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name, s, timestamp);
+		HANDY_ATTRIBUTE_SET(name.substr(), s, timestamp);
 	}
 
 private:

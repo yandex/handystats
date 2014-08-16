@@ -1,6 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
 #include <memory>
+#include <algorithm>
 
 #include "events/counter_events_impl.hpp"
 #include "message_queue_impl.hpp"
@@ -13,56 +14,56 @@
 namespace handystats { namespace measuring_points {
 
 void counter_init(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const handystats::metrics::counter::value_type& init_value,
 		const handystats::metrics::counter::time_point& timestamp
 		)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::counter::create_init_event(counter_name, init_value, timestamp)
+				handystats::events::counter::create_init_event(std::move(counter_name), init_value, timestamp)
 			);
 	}
 }
 
 void counter_increment(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const handystats::metrics::counter::value_type& value,
 		const handystats::metrics::counter::time_point& timestamp
 		)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::counter::create_increment_event(counter_name, value, timestamp)
+				handystats::events::counter::create_increment_event(std::move(counter_name), value, timestamp)
 			);
 	}
 }
 
 void counter_decrement(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const handystats::metrics::counter::value_type& value,
 		const handystats::metrics::counter::time_point& timestamp
 		)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::counter::create_decrement_event(counter_name, value, timestamp)
+				handystats::events::counter::create_decrement_event(std::move(counter_name), value, timestamp)
 			);
 	}
 }
 
 void counter_change(
-		const std::string& counter_name,
+		std::string&& counter_name,
 		const handystats::metrics::counter::value_type& value,
 		const handystats::metrics::counter::time_point& timestamp
 		)
 {
 	if (handystats::is_enabled()) {
 		if (value >= 0) {
-			HANDY_COUNTER_INCREMENT(counter_name, value, timestamp);
+			HANDY_COUNTER_INCREMENT(std::move(counter_name), value, timestamp);
 		}
 		else {
-			HANDY_COUNTER_DECREMENT(counter_name, -value, timestamp);
+			HANDY_COUNTER_DECREMENT(std::move(counter_name), -value, timestamp);
 		}
 	}
 }

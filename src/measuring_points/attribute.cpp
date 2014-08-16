@@ -14,118 +14,118 @@
 namespace handystats { namespace measuring_points {
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const handystats::metrics::attribute::value_type& value,
 		const handystats::metrics::attribute::time_point& timestamp
 	)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(attribute_name, value, timestamp)
+				handystats::events::attribute::create_set_event(std::move(attribute_name), value, timestamp)
 			);
 	}
 }
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const bool& b,
 		const handystats::metrics::attribute::time_point& timestamp
 	)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(attribute_name, b, timestamp)
+				handystats::events::attribute::create_set_event(std::move(attribute_name), b, timestamp)
 			);
 	}
 }
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const int& i,
 		const handystats::metrics::attribute::time_point& timestamp
 	)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(attribute_name, i, timestamp)
+				handystats::events::attribute::create_set_event(std::move(attribute_name), i, timestamp)
 			);
 	}
 }
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const unsigned& u,
 		const handystats::metrics::attribute::time_point& timestamp
 	)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(attribute_name, u, timestamp)
+				handystats::events::attribute::create_set_event(std::move(attribute_name), u, timestamp)
 			);
 	}
 }
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const int64_t& i64,
 		const handystats::metrics::attribute::time_point& timestamp
 	)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(attribute_name, i64, timestamp)
+				handystats::events::attribute::create_set_event(std::move(attribute_name), i64, timestamp)
 			);
 	}
 }
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const uint64_t& u64,
 		const handystats::metrics::attribute::time_point& timestamp
 	)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(attribute_name, u64, timestamp)
+				handystats::events::attribute::create_set_event(std::move(attribute_name), u64, timestamp)
 			);
 	}
 }
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const double& d,
 		const handystats::metrics::attribute::time_point& timestamp
 	)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(attribute_name, d, timestamp)
+				handystats::events::attribute::create_set_event(std::move(attribute_name), d, timestamp)
 			);
 	}
 }
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const char* s,
 		const handystats::metrics::attribute::time_point& timestamp
 	)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(attribute_name, s, timestamp)
+				handystats::events::attribute::create_set_event(std::move(attribute_name), s, timestamp)
 			);
 	}
 }
 
 void attribute_set(
-		const std::string& attribute_name,
+		std::string&& attribute_name,
 		const std::string& s,
 		const handystats::metrics::attribute::time_point& timestamp
 	)
 {
 	if (handystats::is_enabled()) {
 		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(attribute_name, s, timestamp)
+				handystats::events::attribute::create_set_event(std::move(attribute_name), s, timestamp)
 			);
 	}
 }

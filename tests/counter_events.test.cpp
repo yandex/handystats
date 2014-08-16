@@ -11,7 +11,7 @@
 using namespace handystats::events::counter;
 
 TEST(CounterEventsTest, TestCounterInitEvent) {
-	const std::string counter_name = "queue.size";
+	const char* counter_name = "queue.size";
 	const handystats::metrics::counter::value_type init_value = 10;
 	auto message = create_init_event(counter_name, init_value, handystats::metrics::counter::clock::now());
 
@@ -23,7 +23,7 @@ TEST(CounterEventsTest, TestCounterInitEvent) {
 }
 
 TEST(CounterEventsTest, TestCounterIncrementEvent) {
-	const std::string counter_name = "queue.size";
+	const char* counter_name = "queue.size";
 	const handystats::metrics::counter::value_type value = 2;
 	auto message = create_increment_event(counter_name, value, handystats::metrics::counter::clock::now());
 
@@ -35,7 +35,7 @@ TEST(CounterEventsTest, TestCounterIncrementEvent) {
 }
 
 TEST(CounterEventsTest, TestCounterDecrementEvent) {
-	const std::string counter_name = "queue.size";
+	const char* counter_name = "queue.size";
 	const handystats::metrics::counter::value_type value = -1;
 	auto message = create_decrement_event(counter_name, value, handystats::metrics::counter::clock::now());
 

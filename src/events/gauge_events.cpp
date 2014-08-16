@@ -6,14 +6,14 @@
 namespace handystats { namespace events { namespace gauge {
 
 event_message* create_init_event(
-		const std::string& gauge_name,
+		std::string&& gauge_name,
 		const metrics::gauge::value_type& init_value,
 		const metrics::gauge::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = gauge_name;
+	message->destination_name.swap(gauge_name);
 	message->destination_type = event_destination_type::GAUGE;
 
 	message->timestamp = timestamp;
@@ -32,14 +32,14 @@ void delete_init_event(event_message* message) {
 
 
 event_message* create_set_event(
-		const std::string& gauge_name,
+		std::string&& gauge_name,
 		const metrics::gauge::value_type& value,
 		const metrics::gauge::time_point& timestamp
 	)
 {
 	event_message* message = new event_message;
 
-	message->destination_name = gauge_name;
+	message->destination_name.swap(gauge_name);
 	message->destination_type = event_destination_type::GAUGE;
 
 	message->timestamp = timestamp;

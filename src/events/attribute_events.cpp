@@ -5,7 +5,7 @@
 
 namespace handystats { namespace events { namespace attribute {
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const metrics::attribute::value_type& value,
 		const metrics::attribute::time_point& timestamp
@@ -21,10 +21,10 @@ event_message_ptr create_set_event(
 	message->event_type = event_type::SET;
 	message->event_data.push_back(new metrics::attribute::value_type(value));
 
-	return event_message_ptr(message);
+	return message;
 }
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const bool& b,
 		const metrics::attribute::time_point& timestamp
@@ -33,7 +33,7 @@ event_message_ptr create_set_event(
 	return create_set_event(attribute_name, metrics::attribute::value_type(b), timestamp);
 }
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const int& i,
 		const metrics::attribute::time_point& timestamp
@@ -42,7 +42,7 @@ event_message_ptr create_set_event(
 	return create_set_event(attribute_name, metrics::attribute::value_type(i), timestamp);
 }
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const unsigned& u,
 		const metrics::attribute::time_point& timestamp
@@ -51,7 +51,7 @@ event_message_ptr create_set_event(
 	return create_set_event(attribute_name, metrics::attribute::value_type(u), timestamp);
 }
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const int64_t& i64,
 		const metrics::attribute::time_point& timestamp
@@ -60,7 +60,7 @@ event_message_ptr create_set_event(
 	return create_set_event(attribute_name, metrics::attribute::value_type(i64), timestamp);
 }
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const uint64_t& u64,
 		const metrics::attribute::time_point& timestamp
@@ -69,7 +69,7 @@ event_message_ptr create_set_event(
 	return create_set_event(attribute_name, metrics::attribute::value_type(u64), timestamp);
 }
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const double& d,
 		const metrics::attribute::time_point& timestamp
@@ -78,7 +78,7 @@ event_message_ptr create_set_event(
 	return create_set_event(attribute_name, metrics::attribute::value_type(d), timestamp);
 }
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const char* s,
 		const metrics::attribute::time_point& timestamp
@@ -87,7 +87,7 @@ event_message_ptr create_set_event(
 	return create_set_event(attribute_name, metrics::attribute::value_type(std::string(s)), timestamp);
 }
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const std::string& s,
 		const metrics::attribute::time_point& timestamp

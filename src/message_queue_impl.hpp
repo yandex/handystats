@@ -6,12 +6,20 @@
 #include <handystats/metrics/gauge.hpp>
 #include <handystats/metrics/counter.hpp>
 
-#include "events/event_message_impl.hpp"
+namespace handystats { namespace events {
+
+struct event_message;
+
+}} // namespace handystats::events
 
 namespace handystats { namespace message_queue {
 
-void push_event_message(events::event_message_ptr&&);
-events::event_message_ptr pop_event_message();
+struct node {
+	events::event_message* next;
+};
+
+void push(node*);
+events::event_message* pop();
 
 bool empty();
 size_t size();

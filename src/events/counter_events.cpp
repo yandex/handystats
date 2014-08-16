@@ -5,7 +5,7 @@
 
 namespace handystats { namespace events { namespace counter {
 
-event_message_ptr create_init_event(
+event_message* create_init_event(
 		const std::string& counter_name,
 		const metrics::counter::value_type& init_value,
 		const metrics::counter::time_point& timestamp
@@ -21,7 +21,7 @@ event_message_ptr create_init_event(
 	message->event_type = event_type::INIT;
 	message->event_data.push_back(new metrics::counter::value_type(init_value));
 
-	return event_message_ptr(message);
+	return message;
 }
 
 void delete_init_event(event_message* message) {
@@ -31,7 +31,7 @@ void delete_init_event(event_message* message) {
 }
 
 
-event_message_ptr create_increment_event(
+event_message* create_increment_event(
 		const std::string& counter_name,
 		const metrics::counter::value_type& value,
 		const metrics::counter::time_point& timestamp
@@ -47,7 +47,7 @@ event_message_ptr create_increment_event(
 	message->event_type = event_type::INCREMENT;
 	message->event_data.push_back(new metrics::counter::value_type(value));
 
-	return event_message_ptr(message);
+	return message;
 }
 
 void delete_increment_event(event_message* message) {
@@ -57,7 +57,7 @@ void delete_increment_event(event_message* message) {
 }
 
 
-event_message_ptr create_decrement_event(
+event_message* create_decrement_event(
 		const std::string& counter_name,
 		const metrics::counter::value_type& value,
 		const metrics::counter::time_point& timestamp
@@ -73,7 +73,7 @@ event_message_ptr create_decrement_event(
 	message->event_type = event_type::DECREMENT;
 	message->event_data.push_back(new metrics::counter::value_type(value));
 
-	return event_message_ptr(message);
+	return message;
 }
 
 void delete_decrement_event(event_message* message) {

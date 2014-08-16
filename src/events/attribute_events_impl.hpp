@@ -21,55 +21,55 @@ enum {
 /*
  * Event creation functions
  */
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const metrics::attribute::value_type& value,
 		const metrics::attribute::time_point& timestamp
 	);
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const bool& b,
 		const metrics::attribute::time_point& timestamp
 	);
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const int& i,
 		const metrics::attribute::time_point& timestamp
 	);
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const unsigned& u,
 		const metrics::attribute::time_point& timestamp
 	);
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const int64_t& i64,
 		const metrics::attribute::time_point& timestamp
 	);
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const uint64_t& u64,
 		const metrics::attribute::time_point& timestamp
 	);
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const double& d,
 		const metrics::attribute::time_point& timestamp
 	);
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const char* s,
 		const metrics::attribute::time_point& timestamp
 	);
 
-event_message_ptr create_set_event(
+event_message* create_set_event(
 		const std::string& attribute_name,
 		const std::string& s,
 		const metrics::attribute::time_point& timestamp

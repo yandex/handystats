@@ -19,7 +19,7 @@ void counter_init(
 		)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::counter::create_init_event(counter_name, init_value, timestamp)
 			);
 	}
@@ -32,7 +32,7 @@ void counter_increment(
 		)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::counter::create_increment_event(counter_name, value, timestamp)
 			);
 	}
@@ -45,7 +45,7 @@ void counter_decrement(
 		)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::counter::create_decrement_event(counter_name, value, timestamp)
 			);
 	}

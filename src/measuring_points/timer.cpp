@@ -19,7 +19,7 @@ void timer_init(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::timer::create_init_event(timer_name, instance_id, timestamp)
 			);
 	}
@@ -32,7 +32,7 @@ void timer_start(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::timer::create_start_event(timer_name, instance_id, timestamp)
 			);
 	}
@@ -45,7 +45,7 @@ void timer_stop(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::timer::create_stop_event(timer_name, instance_id, timestamp)
 			);
 	}
@@ -58,7 +58,7 @@ void timer_discard(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::timer::create_discard_event(timer_name, instance_id, timestamp)
 			);
 	}
@@ -71,7 +71,7 @@ void timer_heartbeat(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::timer::create_heartbeat_event(timer_name, instance_id, timestamp)
 			);
 	}

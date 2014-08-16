@@ -9,7 +9,7 @@
 
 namespace handystats { namespace events { namespace timer {
 
-event_message_ptr create_init_event(
+event_message* create_init_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
@@ -25,7 +25,7 @@ event_message_ptr create_init_event(
 	message->event_type = event_type::INIT;
 	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
-	return event_message_ptr(message);
+	return message;
 }
 
 void delete_init_event(event_message* message) {
@@ -35,7 +35,7 @@ void delete_init_event(event_message* message) {
 }
 
 
-event_message_ptr create_start_event(
+event_message* create_start_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
@@ -51,7 +51,7 @@ event_message_ptr create_start_event(
 	message->event_type = event_type::START;
 	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
-	return event_message_ptr(message);
+	return message;
 }
 
 void delete_start_event(event_message* message) {
@@ -61,7 +61,7 @@ void delete_start_event(event_message* message) {
 }
 
 
-event_message_ptr create_stop_event(
+event_message* create_stop_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
@@ -77,7 +77,7 @@ event_message_ptr create_stop_event(
 	message->event_type = event_type::STOP;
 	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
-	return event_message_ptr(message);
+	return message;
 }
 
 void delete_stop_event(event_message* message) {
@@ -87,7 +87,7 @@ void delete_stop_event(event_message* message) {
 }
 
 
-event_message_ptr create_discard_event(
+event_message* create_discard_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
@@ -103,7 +103,7 @@ event_message_ptr create_discard_event(
 	message->event_type = event_type::DISCARD;
 	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
-	return event_message_ptr(message);
+	return message;
 }
 
 void delete_discard_event(event_message* message) {
@@ -113,7 +113,7 @@ void delete_discard_event(event_message* message) {
 }
 
 
-event_message_ptr create_heartbeat_event(
+event_message* create_heartbeat_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
@@ -129,7 +129,7 @@ event_message_ptr create_heartbeat_event(
 	message->event_type = event_type::HEARTBEAT;
 	message->event_data.push_back(new metrics::timer::instance_id_type(instance_id));
 
-	return event_message_ptr(message);
+	return message;
 }
 
 void delete_heartbeat_event(event_message* message) {

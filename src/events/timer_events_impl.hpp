@@ -25,31 +25,31 @@ enum {
 /*
  * Event creation functions
  */
-event_message_ptr create_init_event(
+event_message* create_init_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
 	);
 
-event_message_ptr create_start_event(
+event_message* create_start_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
 	);
 
-event_message_ptr create_stop_event(
+event_message* create_stop_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
 	);
 
-event_message_ptr create_discard_event(
+event_message* create_discard_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp
 	);
 
-event_message_ptr create_heartbeat_event(
+event_message* create_heartbeat_event(
 		const std::string& timer_name,
 		const metrics::timer::instance_id_type& instance_id,
 		const metrics::timer::time_point& timestamp

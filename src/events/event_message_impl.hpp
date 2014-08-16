@@ -5,10 +5,10 @@
 
 #include <string>
 #include <vector>
-#include <memory>
 
 #include <handystats/chrono.hpp>
 
+#include "message_queue_impl.hpp"
 
 namespace handystats { namespace events {
 
@@ -21,7 +21,8 @@ enum {
 };
 }
 
-struct event_message {
+struct event_message : message_queue::node
+{
 	std::string destination_name;
 	int destination_type;
 
@@ -38,8 +39,6 @@ struct event_message_deleter {
 		delete_event_message(message);
 	}
 };
-
-typedef std::unique_ptr<event_message, event_message_deleter> event_message_ptr;
 
 }} // namespace handystats::events
 

@@ -20,7 +20,7 @@ void attribute_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::attribute::create_set_event(attribute_name, value, timestamp)
 			);
 	}
@@ -33,7 +33,7 @@ void attribute_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::attribute::create_set_event(attribute_name, b, timestamp)
 			);
 	}
@@ -46,7 +46,7 @@ void attribute_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::attribute::create_set_event(attribute_name, i, timestamp)
 			);
 	}
@@ -59,7 +59,7 @@ void attribute_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::attribute::create_set_event(attribute_name, u, timestamp)
 			);
 	}
@@ -72,7 +72,7 @@ void attribute_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::attribute::create_set_event(attribute_name, i64, timestamp)
 			);
 	}
@@ -85,7 +85,7 @@ void attribute_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::attribute::create_set_event(attribute_name, u64, timestamp)
 			);
 	}
@@ -98,7 +98,7 @@ void attribute_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::attribute::create_set_event(attribute_name, d, timestamp)
 			);
 	}
@@ -111,7 +111,7 @@ void attribute_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::attribute::create_set_event(attribute_name, s, timestamp)
 			);
 	}
@@ -124,7 +124,7 @@ void attribute_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push_event_message(
+		handystats::message_queue::push(
 				handystats::events::attribute::create_set_event(attribute_name, s, timestamp)
 			);
 	}

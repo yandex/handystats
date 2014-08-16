@@ -23,19 +23,19 @@ enum {
 /*
  * Event creation functions
  */
-event_message_ptr create_init_event(
+event_message* create_init_event(
 		const std::string& counter_name,
 		const metrics::counter::value_type& init_value,
 		const metrics::counter::time_point& timestamp
 	);
 
-event_message_ptr create_increment_event(
+event_message* create_increment_event(
 		const std::string& counter_name,
 		const metrics::counter::value_type& value,
 		const metrics::counter::time_point& timestamp
 	);
 
-event_message_ptr create_decrement_event(
+event_message* create_decrement_event(
 		const std::string& counter_name,
 		const metrics::counter::value_type& value,
 		const metrics::counter::time_point& timestamp

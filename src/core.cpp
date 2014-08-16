@@ -8,6 +8,7 @@
 #include <handystats/operation.hpp>
 #include <handystats/operation.h>
 
+#include "events/event_message_impl.hpp"
 #include "message_queue_impl.hpp"
 #include "internal_impl.hpp"
 #include "metrics_dump_impl.hpp"
@@ -27,11 +28,13 @@ bool is_enabled() {
 std::thread processor_thread;
 
 void process_message_queue() {
-	auto message = message_queue::pop_event_message();
+	auto* message = message_queue::pop();
 
 	if (message) {
 		internal::process_event_message(*message);
 	}
+
+	events::delete_event_message(message);
 }
 
 static void run_processor() {

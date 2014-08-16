@@ -1,6 +1,5 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#include <memory>
 #include <handystats/atomic.hpp>
 #include <algorithm>
 
@@ -15,30 +14,17 @@ namespace {
 /*
  * Taken from Boost's Atomic usage examples.
  */
-template <typename DataType>
-struct waitfree_queue
+struct __event_message_queue
 {
-	typedef DataType data_type;
+	typedef handystats::message_queue::node node;
 
-	struct node
+	__event_message_queue() : head_node(nullptr) {}
+
+	void push(node* n)
 	{
-		node(data_type&& data, node* next = nullptr)
-			: data(std::move(data))
-			, next(next)
-		{}
-
-		data_type data;
-		node* next;
-	};
-
-	waitfree_queue() : head_node(nullptr) {}
-
-	void push(data_type&& data)
-	{
-		node* n = new node(std::move(data));
 		node* stale_head = head_node.load(std::memory_order_relaxed);
 		do {
-			n->next = stale_head;
+			n->next = static_cast<handystats::events::event_message*>(stale_head);
 		}
 		while (
 				!head_node.compare_exchange_weak(
@@ -56,7 +42,7 @@ struct waitfree_queue
 		while(last) {
 			node* tmp = last;
 			last = last->next;
-			tmp->next = first;
+			tmp->next = static_cast<handystats::events::event_message*>(first);
 			first = tmp;
 		}
 		return first;
@@ -73,7 +59,7 @@ struct waitfree_queue
 		return !head_node.load(std::memory_order_acquire);
 	}
 
-	~waitfree_queue() {
+	~__event_message_queue() {
 		// what if queue is not empty?
 		// this will be memory leak for sure
 	}
@@ -114,32 +100,30 @@ void finalize() {
 } // namespace stats
 
 
-waitfree_queue<handystats::events::event_message_ptr>* event_message_queue = nullptr;
-waitfree_queue<handystats::events::event_message_ptr>::node* popped_head = nullptr;
+__event_message_queue* event_message_queue = nullptr;
+__event_message_queue::node* popped_head = nullptr;
 
 std::atomic<size_t> mq_size(0);
 
-void push_event_message(events::event_message_ptr&& message) {
+void push(node* n) {
 	if (event_message_queue) {
-		event_message_queue->push(std::move(message));
+		event_message_queue->push(n);
 		++mq_size;
 	}
 }
 
-events::event_message_ptr pop_event_message() {
-	events::event_message_ptr message;
+events::event_message* pop() {
+	events::event_message* message = nullptr;
 
 	if (!popped_head && event_message_queue) {
 		popped_head = event_message_queue->pop_all();
 	}
 
 	if (popped_head) {
-		auto* tmp = popped_head;
-		message = std::move(popped_head->data);
+		message = static_cast<events::event_message*>(popped_head);
 		--mq_size;
 
 		popped_head = popped_head->next;
-		delete tmp;
 	}
 
 	if (message) {
@@ -153,7 +137,7 @@ events::event_message_ptr pop_event_message() {
 			);
 	}
 
-	return std::move(message);
+	return message;
 }
 
 bool empty() {
@@ -166,7 +150,7 @@ size_t size() {
 
 void initialize() {
 	if (!event_message_queue) {
-		event_message_queue = new waitfree_queue<events::event_message_ptr>();
+		event_message_queue = new __event_message_queue();
 		mq_size.store(0, std::memory_order_release);
 	}
 
@@ -175,7 +159,8 @@ void initialize() {
 
 void finalize() {
 	while (!empty()) {
-		pop_event_message();
+		auto* message = pop();
+		events::delete_event_message(message);
 	}
 	mq_size.store(0);
 

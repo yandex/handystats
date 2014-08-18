@@ -20,6 +20,8 @@ public:
 			const double& moving_average_alpha = config::defaults::incremental_statistics::moving_average_alpha
 		);
 
+	void clear();
+
 	void operator() (const value_type& value, const time_point& timestamp = clock::now());
 
 	value_type min() const;

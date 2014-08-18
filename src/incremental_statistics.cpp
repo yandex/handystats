@@ -17,15 +17,19 @@ incremental_statistics::incremental_statistics(
 		)
 	: m_moving_interval(chrono::duration_cast<duration>(moving_interval))
 	, m_moving_average_alpha(moving_average_alpha)
-	, m_min(std::numeric_limits<value_type>::max())
-	, m_max(std::numeric_limits<value_type>::min())
-	, m_sum(0)
-	, m_count(0)
-	, m_interval_count(0)
-	, m_interval_sum(0)
-	, m_moving_average(0)
-	, m_timestamp()
 {
+	clear();
+}
+
+void incremental_statistics::clear() {
+	m_min = std::numeric_limits<value_type>::max();
+	m_max = std::numeric_limits<value_type>::min();
+	m_sum = 0;
+	m_count = 0;
+	m_interval_count = 0;
+	m_interval_sum = 0;
+	m_moving_average = 0;
+	m_timestamp = time_point();
 }
 
 void incremental_statistics::operator() (const value_type& value, const time_point& timestamp) {

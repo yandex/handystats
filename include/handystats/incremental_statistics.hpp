@@ -4,58 +4,48 @@
 #define HANDYSTATS_INCREMENTAL_STATISTICS_HPP_
 
 #include <handystats/chrono.hpp>
-
-#include <boost/accumulators/framework/accumulator_set.hpp>
-#include <boost/accumulators/framework/features.hpp>
-
-#include <boost/accumulators/statistics/min.hpp>
-#include <boost/accumulators/statistics/max.hpp>
-#include <boost/accumulators/statistics/sum.hpp>
-#include <boost/accumulators/statistics/count.hpp>
-#include <boost/accumulators/statistics/mean.hpp>
-
-#include <handystats/accumulators/moving_average.hpp>
-#include <handystats/accumulators/interval_count.hpp>
-#include <handystats/accumulators/interval_sum.hpp>
-#include <handystats/accumulators/interval_mean.hpp>
+#include <handystats/configuration/defaults.hpp>
 
 namespace handystats {
 
 class incremental_statistics {
 public:
 	typedef double value_type;
-	typedef chrono::time_duration time_duration;
 	typedef chrono::clock clock;
+	typedef clock::duration duration;
 	typedef clock::time_point time_point;
 
-	typedef boost::accumulators::features <
-			boost::accumulators::tag::min,
-			boost::accumulators::tag::max,
-			boost::accumulators::tag::sum,
-			boost::accumulators::tag::count,
-			boost::accumulators::tag::mean,
-			boost::accumulators::tag::moving_average,
-			boost::accumulators::tag::interval_count,
-			boost::accumulators::tag::interval_sum,
-			boost::accumulators::tag::interval_mean
-		> value_features;
-
-	incremental_statistics();
+	incremental_statistics(
+			const chrono::time_duration& moving_interval = config::defaults::incremental_statistics::moving_interval,
+			const double& moving_average_alpha = config::defaults::incremental_statistics::moving_average_alpha
+		);
 
 	void operator() (const value_type& value, const time_point& timestamp = clock::now());
 
 	value_type min() const;
 	value_type max() const;
 	value_type sum() const;
-	value_type count() const;
+	size_t count() const;
 	value_type mean() const;
-	value_type moving_average() const;
 	value_type interval_count() const;
 	value_type interval_sum() const;
 	value_type interval_mean() const;
+	value_type moving_average() const;
+	time_point timestamp() const;
 
 private:
-	boost::accumulators::accumulator_set<value_type, value_features> values;
+	duration m_moving_interval;
+	double m_moving_average_alpha;
+
+	value_type m_min;
+	value_type m_max;
+	value_type m_sum;
+	size_t m_count;
+	value_type m_interval_count;
+	value_type m_interval_sum;
+	value_type m_moving_average;
+
+	time_point m_timestamp;
 };
 
 } // namespace handystats

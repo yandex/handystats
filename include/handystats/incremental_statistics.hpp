@@ -16,8 +16,7 @@ public:
 	typedef clock::time_point time_point;
 
 	incremental_statistics(
-			const chrono::time_duration& moving_interval = config::incremental_statistics::defaults::moving_interval,
-			const double& moving_average_alpha = config::incremental_statistics::defaults::moving_average_alpha
+			const config::incremental_statistics& opts = config::incremental_statistics()
 		);
 
 	void clear();

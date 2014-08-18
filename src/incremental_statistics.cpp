@@ -10,11 +10,10 @@
 namespace handystats {
 
 incremental_statistics::incremental_statistics(
-			const chrono::time_duration& moving_interval,
-			const double& moving_average_alpha
+			const config::incremental_statistics& opts
 		)
-	: m_moving_interval(chrono::duration_cast<duration>(moving_interval))
-	, m_moving_average_alpha(moving_average_alpha)
+	: m_moving_interval(chrono::duration_cast<duration>(opts.moving_interval))
+	, m_moving_average_alpha(opts.moving_average_alpha)
 {
 	clear();
 }

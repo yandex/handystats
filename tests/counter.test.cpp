@@ -10,7 +10,8 @@
 using namespace handystats::metrics;
 
 TEST(CounterTest, TestCounterConstruction) {
-	counter sample_counter(10);
+	counter sample_counter;
+	sample_counter.init(10);
 
 	ASSERT_EQ(sample_counter.value, 10);
 

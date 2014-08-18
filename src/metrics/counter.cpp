@@ -5,15 +5,30 @@
 
 namespace handystats { namespace metrics {
 
-counter::counter(const value_type& value, const time_point& timestamp)
-	: value(value)
-	, timestamp(timestamp)
+counter::counter()
+	: value()
+	, timestamp()
 {
-	values(this->value, this->timestamp);
 }
 
 
+void counter::init(const value_type& init_value, const time_point& timestamp) {
+	this->value = init_value;
+	this->timestamp = timestamp;
+
+	values.clear();
+	deltas.clear();
+	incr_deltas.clear();
+	decr_deltas.clear();
+
+	values(this->value, this->timestamp);
+}
+
 void counter::increment(const value_type& incr_value, const time_point& timestamp) {
+	if (this->timestamp == time_point()) {
+		init(0, timestamp);
+	}
+
 	this->value += incr_value;
 	this->timestamp = timestamp;
 
@@ -23,6 +38,10 @@ void counter::increment(const value_type& incr_value, const time_point& timestam
 }
 
 void counter::decrement(const value_type& decr_value, const time_point& timestamp) {
+	if (this->timestamp == time_point()) {
+		init(0, timestamp);
+	}
+
 	this->value -= decr_value;
 	this->timestamp = timestamp;
 

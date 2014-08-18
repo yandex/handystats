@@ -20,8 +20,9 @@ struct counter
 	typedef chrono::clock clock;
 	typedef clock::time_point time_point;
 
-	counter(const value_type& value = value_type(), const time_point& timestamp = clock::now());
+	counter();
 
+	void init(const value_type& value = 0, const time_point& timestamp = clock::now());
 	void increment(const value_type& value = 1, const time_point& timestamp = clock::now());
 	void decrement(const value_type& value = 1, const time_point& timestamp = clock::now());
 

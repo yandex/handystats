@@ -23,8 +23,15 @@ public:
 		typedef int64_t rep;
 
 		/* Constructors */
-		duration() = default;
-		duration(const duration&) = default;
+		duration()
+			: tick_count()
+		{
+		}
+
+		duration(const duration& d)
+			: tick_count(d.tick_count)
+		{
+		}
 
 		template <class Rep2>
 		explicit duration(const Rep2& r) {
@@ -33,7 +40,10 @@ public:
 		}
 
 		/* Assign operator */
-		duration& operator=(const duration&) = default;
+		duration& operator=(const duration& d) {
+			tick_count = d.tick_count;
+			return *this;
+		}
 
 		/* Get duration's tick count */
 		rep count() const;
@@ -90,7 +100,11 @@ public:
 		typedef duration::rep rep;
 
 		/* Constructors */
-		time_point() = default;
+		time_point()
+			: since_epoch()
+		{
+		}
+
 		explicit time_point(const duration&);
 
 		/* Special time_point values */

@@ -12,6 +12,8 @@
 #include "events/timer_events_impl.hpp"
 #include "events/attribute_events_impl.hpp"
 
+#include "internal_impl.hpp"
+
 namespace handystats { namespace internal {
 
 

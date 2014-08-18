@@ -10,7 +10,8 @@
 using namespace handystats::metrics;
 
 TEST(GaugeTest, TestGaugeConstruction) {
-	gauge sample_gauge(-10);
+	gauge sample_gauge;
+	sample_gauge.set(-10);
 
 	ASSERT_NEAR(sample_gauge.value, -10, 1E-9);
 

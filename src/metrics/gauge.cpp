@@ -11,14 +11,6 @@ gauge::gauge()
 	timestamp = time_point();
 }
 
-gauge::gauge(const value_type& value, const time_point& timestamp)
-	: value(value)
-	, timestamp(timestamp)
-{
-	values(value, timestamp);
-}
-
-
 void gauge::set(const value_type& value, const time_point& timestamp) {
 	this->value = value;
 	this->timestamp = timestamp;

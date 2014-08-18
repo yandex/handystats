@@ -18,7 +18,6 @@ struct gauge
 	typedef clock::time_point time_point;
 
 	gauge();
-	gauge(const value_type& value, const time_point& timestamp = clock::now());
 
 	void set(const value_type& value, const time_point& timestamp = clock::now());
 

@@ -72,7 +72,7 @@ void handystats_timer_heartbeat(
 		const uint64_t instance_id;
 	};
 
-	inline void handystats_scoped_timer_cleanup(struct handystats_scoped_timer_helper* scoped_timer) {
+	static inline void handystats_scoped_timer_cleanup(struct handystats_scoped_timer_helper* scoped_timer) {
 		HANDY_TIMER_STOP(scoped_timer->timer_name, scoped_timer->instance_id);
 	}
 

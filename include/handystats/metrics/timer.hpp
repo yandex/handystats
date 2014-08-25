@@ -11,6 +11,9 @@
 #include <handystats/chrono.hpp>
 #include <handystats/incremental_statistics.hpp>
 
+#include <handystats/config/timer.hpp>
+#include <handystats/config/incremental_statistics.hpp>
+
 namespace handystats { namespace metrics {
 
 struct timer
@@ -39,10 +42,10 @@ struct timer
 		}
 	};
 
-	// This ctor will use timer parameters from config namespace
-	timer();
-
-	timer(const clock::duration& idle_timeout);
+	timer(
+			const config::timer& timer_opts = config::timer(),
+			const config::incremental_statistics& incremental_statistics_opts = config::incremental_statistics()
+		);
 
 	void start(
 			const instance_id_type& instance_id = DEFAULT_INSTANCE_ID,

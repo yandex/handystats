@@ -2,6 +2,8 @@
 
 #include <handystats/chrono.hpp>
 
+#include "config_impl.hpp"
+
 #include "events/timer_events_impl.hpp"
 
 
@@ -152,7 +154,7 @@ void delete_event(event_message* message) {
 void process_init_event(metrics::timer& timer, const event_message& message) {
 	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
 
-	timer = metrics::timer();
+	timer = metrics::timer(config::timer_opts, config::incremental_statistics_opts);
 	timer.start(instance_id, message.timestamp);
 }
 

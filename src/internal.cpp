@@ -11,6 +11,7 @@
 #include "events/gauge_events_impl.hpp"
 #include "events/timer_events_impl.hpp"
 #include "events/attribute_events_impl.hpp"
+#include "config_impl.hpp"
 
 #include "internal_impl.hpp"
 
@@ -104,7 +105,7 @@ void process_event_message(const events::event_message& message) {
 				metric_ptr = new metrics::gauge();
 				break;
 			case events::event_destination_type::TIMER:
-				metric_ptr = new metrics::timer();
+				metric_ptr = new metrics::timer(config::timer_opts, config::incremental_statistics_opts);
 				break;
 			case events::event_destination_type::ATTRIBUTE:
 				metric_ptr = new metrics::attribute();

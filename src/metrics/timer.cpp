@@ -2,26 +2,20 @@
 
 #include <handystats/metrics/timer.hpp>
 
-#include "config_impl.hpp"
-
 namespace handystats { namespace metrics {
 
 const timer::instance_id_type timer::DEFAULT_INSTANCE_ID = -1;
 
-timer::timer()
-	: idle_timeout(chrono::duration_cast<clock::duration>(config::timer_opts.idle_timeout))
+timer::timer(
+		const config::timer& timer_opts,
+		const config::incremental_statistics& incremental_statistics_opts
+	)
+	: idle_timeout(chrono::duration_cast<clock::duration>(timer_opts.idle_timeout))
+	, timestamp()
+	, value()
+	, values(incremental_statistics_opts)
+	, idle_check_timestamp()
 {
-	this->timestamp = time_point();
-	this->value = value_type();
-	this->idle_check_timestamp = time_point();
-}
-
-timer::timer(const clock::duration& idle_timeout)
-	: idle_timeout(idle_timeout)
-{
-	this->timestamp = time_point();
-	this->value = value_type();
-	this->idle_check_timestamp = time_point();
 }
 
 void timer::start(const instance_id_type& instance_id, const time_point& timestamp) {

@@ -50,6 +50,12 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
+	ASSERT_EQ(
+			boost::get<handystats::metrics::gauge>(metrics_dump->at("handystats.internal.size"))
+			.value,
+			1
+		);
+
 	ASSERT_TRUE(metrics_dump->find("sleep.time") != metrics_dump->end());
 
 	ASSERT_TRUE(
@@ -79,6 +85,12 @@ TEST_F(HandyScopedTimerTest, TestMultiInstanceScopedTimer) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(20));
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	ASSERT_EQ(
+			boost::get<handystats::metrics::gauge>(metrics_dump->at("handystats.internal.size"))
+			.value,
+			1
+		);
 
 	ASSERT_TRUE(metrics_dump->find("sleep.time") != metrics_dump->end());
 
@@ -111,6 +123,12 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(20));
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	ASSERT_EQ(
+			boost::get<handystats::metrics::gauge>(metrics_dump->at("handystats.internal.size"))
+			.value,
+			2
+		);
 
 	ASSERT_TRUE(metrics_dump->find("sleep.time") != metrics_dump->end());
 	ASSERT_TRUE(metrics_dump->find("double.sleep.time") != metrics_dump->end());

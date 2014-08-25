@@ -2,8 +2,6 @@
 
 #include <handystats/chrono.hpp>
 
-#include "configuration_impl.hpp"
-
 #include "events/timer_events_impl.hpp"
 
 

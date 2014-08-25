@@ -4,7 +4,7 @@
 #include <handystats/metrics.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/operation.hpp>
-#include <handystats/configuration.hpp>
+#include <handystats/config.hpp>
 #include <handystats/metrics_dump.hpp>
 
 #include "message_queue_helper.hpp"
@@ -13,7 +13,7 @@
 class HandyProxyTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
-		HANDY_CONFIGURATION_JSON(
+		HANDY_CONFIG_JSON(
 				"{\
 					\"metrics-dump\": {\
 						\"interval\": 10\

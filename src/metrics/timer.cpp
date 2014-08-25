@@ -2,7 +2,7 @@
 
 #include <handystats/metrics/timer.hpp>
 
-#include "configuration_impl.hpp"
+#include "config_impl.hpp"
 
 namespace handystats { namespace metrics {
 

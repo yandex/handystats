@@ -11,7 +11,7 @@
 #include "message_queue_impl.hpp"
 #include "json_dump_impl.hpp"
 
-#include "configuration_impl.hpp"
+#include "config_impl.hpp"
 
 #include "metrics_dump_impl.hpp"
 

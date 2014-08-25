@@ -13,7 +13,7 @@
 #include <handystats/operation.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
-#include <handystats/configuration.hpp>
+#include <handystats/config.hpp>
 
 #include "message_queue_helper.hpp"
 
@@ -21,7 +21,7 @@
 class HandyScopedTimerTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
-		HANDY_CONFIGURATION_JSON(
+		HANDY_CONFIG_JSON(
 				"{\
 					\"metrics-dump\": {\
 						\"interval\": 10\

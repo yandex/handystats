@@ -15,7 +15,7 @@
 #include <handystats/json/timer_json_writer.hpp>
 #include <handystats/json/attribute_json_writer.hpp>
 
-#include "configuration_impl.hpp"
+#include "config_impl.hpp"
 
 #include "metrics_dump_impl.hpp"
 

@@ -8,13 +8,12 @@
 #include <handystats/rapidjson/document.h>
 
 #include <handystats/operation.hpp>
-#include <handystats/configuration.hpp>
+#include <handystats/config.hpp>
 #include <handystats/measuring_points.hpp>
-#include <handystats/configuration.hpp>
 #include <handystats/metrics_dump.hpp>
 #include <handystats/json_dump.hpp>
 
-#include "configuration_impl.hpp"
+#include "config_impl.hpp"
 #include "metrics_dump_impl.hpp"
 
 #include "message_queue_helper.hpp"
@@ -30,7 +29,7 @@ protected:
 };
 
 TEST_F(HandyConfigurationTest, MetricsDumpConfiguration) {
-	HANDY_CONFIGURATION_JSON(
+	HANDY_CONFIG_JSON(
 			"{\
 				\"metrics-dump\": {\
 					\"interval\": 750,\
@@ -44,7 +43,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpConfiguration) {
 }
 
 TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
-	HANDY_CONFIGURATION_JSON(
+	HANDY_CONFIG_JSON(
 			"{\
 				\"metrics-dump\": {\
 					\"interval\": 2,\
@@ -73,7 +72,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 }
 
 TEST_F(HandyConfigurationTest, MetricsDumpToJsonFalseCheck) {
-	HANDY_CONFIGURATION_JSON(
+	HANDY_CONFIG_JSON(
 			"{\
 				\"metrics-dump\": {\
 					\"interval\": 2,\
@@ -102,7 +101,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonFalseCheck) {
 }
 
 TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
-	HANDY_CONFIGURATION_JSON(
+	HANDY_CONFIG_JSON(
 			"{\
 				\"metrics-dump\": {\
 					\"interval\": 0,\
@@ -131,7 +130,7 @@ TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 }
 
 TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
-	HANDY_CONFIGURATION_JSON(
+	HANDY_CONFIG_JSON(
 			"{\
 				\"timer\": {\
 					\"idle-timeout\": 10\
@@ -176,7 +175,7 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 }
 
 TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
-	HANDY_CONFIGURATION_JSON(
+	HANDY_CONFIG_JSON(
 			"{\
 			}"
 		);
@@ -188,7 +187,7 @@ TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
 }
 
 TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
-	HANDY_CONFIGURATION_JSON(
+	HANDY_CONFIG_JSON(
 			"{\
 				\"incremental-statistics\": {\
 					\"moving-interval\": 1234,\

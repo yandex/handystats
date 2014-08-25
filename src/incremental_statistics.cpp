@@ -5,7 +5,7 @@
 
 #include <handystats/math_utils.hpp>
 
-#include "configuration_impl.hpp"
+#include "config_impl.hpp"
 
 #include <handystats/incremental_statistics.hpp>
 

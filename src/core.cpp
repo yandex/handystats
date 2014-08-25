@@ -12,7 +12,7 @@
 #include "message_queue_impl.hpp"
 #include "internal_impl.hpp"
 #include "metrics_dump_impl.hpp"
-#include "configuration_impl.hpp"
+#include "config_impl.hpp"
 #include "core_impl.hpp"
 
 namespace handystats {

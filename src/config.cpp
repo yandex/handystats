@@ -7,10 +7,10 @@
 
 #include <handystats/operation.hpp>
 
-#include <handystats/configuration.hpp>
-#include <handystats/configuration.h>
-#include <handystats/configuration/defaults.hpp>
-#include "configuration_impl.hpp"
+#include <handystats/config.hpp>
+#include <handystats/config.h>
+#include <handystats/config/defaults.hpp>
+#include "config_impl.hpp"
 
 namespace handystats { namespace config { namespace defaults {
 
@@ -117,7 +117,7 @@ namespace handystats {
 extern std::mutex operation_mutex;
 bool is_enabled();
 
-void configuration_json(const rapidjson::Value& config) {
+void config_json(const rapidjson::Value& config) {
 	std::lock_guard<std::mutex> lock(handystats::operation_mutex);
 	if (handystats::is_enabled()) {
 		return;
@@ -143,7 +143,7 @@ void configuration_json(const rapidjson::Value& config) {
 	}
 }
 
-void configuration_json(const char* config_data) {
+void config_json(const char* config_data) {
 	rapidjson::Document config;
 	config.Parse<0>(config_data);
 	if (config.HasParseError()) {
@@ -151,10 +151,10 @@ void configuration_json(const char* config_data) {
 		return;
 	}
 
-	configuration_json(config);
+	config_json(config);
 }
 
-void configuration_file(const char* filename) {
+void config_file(const char* filename) {
 	std::ifstream input(filename, std::ios::in | std::ios::binary);
 	if (!input) {
 		std::cerr << "Unable to open configuration file " << filename << std::endl;
@@ -168,7 +168,7 @@ void configuration_file(const char* filename) {
 	input.read(&config_data[0], config_data.size());
 	input.close();
 
-	configuration_json(config_data.c_str());
+	config_json(config_data.c_str());
 }
 
 } // namespace handystats
@@ -176,12 +176,12 @@ void configuration_file(const char* filename) {
 
 extern "C" {
 
-void handystats_configuration_file(const char* file) {
-	handystats::configuration_file(file);
+void handystats_config_file(const char* file) {
+	handystats::config_file(file);
 }
 
-void handystats_configuration_json(const char* config_data) {
-	handystats::configuration_json(config_data);
+void handystats_config_json(const char* config_data) {
+	handystats::config_json(config_data);
 }
 
 } // extern "C"

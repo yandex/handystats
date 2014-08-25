@@ -5,9 +5,13 @@
 
 namespace handystats { namespace metrics {
 
-counter::counter()
+counter::counter(const config::incremental_statistics& opts)
 	: value()
 	, timestamp()
+	, values(opts)
+	, deltas(opts)
+	, incr_deltas(opts)
+	, decr_deltas(opts)
 {
 }
 

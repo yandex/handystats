@@ -1,5 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
+#include "config_impl.hpp"
+
 #include "events/counter_events_impl.hpp"
 
 

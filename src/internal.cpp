@@ -99,7 +99,7 @@ void process_event_message(const events::event_message& message) {
 	if (empty_metric) {
 		switch (message.destination_type) {
 			case events::event_destination_type::COUNTER:
-				metric_ptr = new metrics::counter();
+				metric_ptr = new metrics::counter(config::incremental_statistics_opts);
 				break;
 			case events::event_destination_type::GAUGE:
 				metric_ptr = new metrics::gauge(config::incremental_statistics_opts);

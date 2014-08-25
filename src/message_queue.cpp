@@ -86,7 +86,7 @@ void initialize() {
 
 	message_wait_time = metrics::gauge(config::incremental_statistics_opts);
 
-	pop_count = metrics::counter();
+	pop_count = metrics::counter(config::incremental_statistics_opts);
 }
 
 void finalize() {
@@ -95,7 +95,7 @@ void finalize() {
 
 	message_wait_time = metrics::gauge(config::incremental_statistics_opts);
 
-	pop_count = metrics::counter();
+	pop_count = metrics::counter(config::incremental_statistics_opts);
 }
 
 } // namespace stats

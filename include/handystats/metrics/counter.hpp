@@ -9,7 +9,7 @@
 
 #include <handystats/chrono.hpp>
 #include <handystats/incremental_statistics.hpp>
-
+#include <handystats/config/incremental_statistics.hpp>
 
 namespace handystats { namespace metrics {
 
@@ -20,7 +20,7 @@ struct counter
 	typedef chrono::clock clock;
 	typedef clock::time_point time_point;
 
-	counter();
+	counter(const config::incremental_statistics& opts = config::incremental_statistics());
 
 	void init(const value_type& value = 0, const time_point& timestamp = clock::now());
 	void increment(const value_type& value = 1, const time_point& timestamp = clock::now());

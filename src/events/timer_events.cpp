@@ -23,14 +23,12 @@ event_message* create_init_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::INIT;
-	message->event_data = new metrics::timer::instance_id_type(instance_id);
+	new (&message->event_data) metrics::timer::instance_id_type(instance_id);
 
 	return message;
 }
 
 void delete_init_event(event_message* message) {
-	delete static_cast<metrics::timer::instance_id_type*>(message->event_data);
-
 	delete message;
 }
 
@@ -49,14 +47,12 @@ event_message* create_start_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::START;
-	message->event_data = new metrics::timer::instance_id_type(instance_id);
+	new (&message->event_data) metrics::timer::instance_id_type(instance_id);
 
 	return message;
 }
 
 void delete_start_event(event_message* message) {
-	delete static_cast<metrics::timer::instance_id_type*>(message->event_data);
-
 	delete message;
 }
 
@@ -75,14 +71,12 @@ event_message* create_stop_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::STOP;
-	message->event_data = new metrics::timer::instance_id_type(instance_id);
+	new (&message->event_data) metrics::timer::instance_id_type(instance_id);
 
 	return message;
 }
 
 void delete_stop_event(event_message* message) {
-	delete static_cast<metrics::timer::instance_id_type*>(message->event_data);
-
 	delete message;
 }
 
@@ -101,14 +95,12 @@ event_message* create_discard_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::DISCARD;
-	message->event_data = new metrics::timer::instance_id_type(instance_id);
+	new (&message->event_data) metrics::timer::instance_id_type(instance_id);
 
 	return message;
 }
 
 void delete_discard_event(event_message* message) {
-	delete static_cast<metrics::timer::instance_id_type*>(message->event_data);
-
 	delete message;
 }
 
@@ -127,14 +119,12 @@ event_message* create_heartbeat_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::HEARTBEAT;
-	message->event_data = new metrics::timer::instance_id_type(instance_id);
+	new (&message->event_data) metrics::timer::instance_id_type(instance_id);
 
 	return message;
 }
 
 void delete_heartbeat_event(event_message* message) {
-	delete static_cast<metrics::timer::instance_id_type*>(message->event_data);
-
 	delete message;
 }
 
@@ -162,29 +152,29 @@ void delete_event(event_message* message) {
 
 
 void process_init_event(metrics::timer& timer, const event_message& message) {
-	auto instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data);
+	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
 
 	timer = metrics::timer();
 	timer.start(instance_id, message.timestamp);
 }
 
 void process_start_event(metrics::timer& timer, const event_message& message) {
-	auto instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data);
+	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
 	timer.start(instance_id, message.timestamp);
 }
 
 void process_stop_event(metrics::timer& timer, const event_message& message) {
-	auto instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data);
+	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
 	timer.stop(instance_id, message.timestamp);
 }
 
 void process_discard_event(metrics::timer& timer, const event_message& message) {
-	auto instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data);
+	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
 	timer.discard(instance_id, message.timestamp);
 }
 
 void process_heartbeat_event(metrics::timer& timer, const event_message& message) {
-	auto instance_id = *static_cast<metrics::timer::instance_id_type*>(message.event_data);
+	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
 	timer.heartbeat(instance_id, message.timestamp);
 }
 

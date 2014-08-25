@@ -19,13 +19,13 @@ event_message* create_init_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::INIT;
-	message->event_data.push_back(new metrics::gauge::value_type(init_value));
+	message->event_data = new metrics::gauge::value_type(init_value);
 
 	return message;
 }
 
 void delete_init_event(event_message* message) {
-	delete static_cast<metrics::gauge::value_type*>(message->event_data[0]);
+	delete static_cast<metrics::gauge::value_type*>(message->event_data);
 
 	delete message;
 }
@@ -45,13 +45,13 @@ event_message* create_set_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::SET;
-	message->event_data.push_back(new metrics::gauge::value_type(value));
+	message->event_data = new metrics::gauge::value_type(value);
 
 	return message;
 }
 
 void delete_set_event(event_message* message) {
-	delete static_cast<metrics::gauge::value_type*>(message->event_data[0]);
+	delete static_cast<metrics::gauge::value_type*>(message->event_data);
 
 	delete message;
 }
@@ -71,12 +71,12 @@ void delete_event(event_message* message) {
 
 
 void process_init_event(metrics::gauge& gauge, const event_message& message) {
-	auto init_value = *static_cast<metrics::gauge::value_type*>(message.event_data[0]);
+	auto init_value = *static_cast<metrics::gauge::value_type*>(message.event_data);
 	gauge = metrics::gauge(init_value, message.timestamp);
 }
 
 void process_set_event(metrics::gauge& gauge, const event_message& message) {
-	auto value = *static_cast<metrics::gauge::value_type*>(message.event_data[0]);
+	auto value = *static_cast<metrics::gauge::value_type*>(message.event_data);
 	gauge.set(value, message.timestamp);
 }
 

@@ -19,7 +19,7 @@ TEST(TimerEventsTest, TestTimerInitEventWithDefaultInstance) {
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::TIMER);
 
 	ASSERT_EQ(message->event_type, event_type::INIT);
-	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data[0]), handystats::metrics::timer::instance_id_type(-1));
+	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data), handystats::metrics::timer::instance_id_type(-1));
 }
 
 TEST(TimerEventsTest, TestTimerInitEventWithSpecificInstance) {
@@ -31,7 +31,7 @@ TEST(TimerEventsTest, TestTimerInitEventWithSpecificInstance) {
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::TIMER);
 
 	ASSERT_EQ(message->event_type, event_type::INIT);
-	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data[0]), instance_id);
+	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data), instance_id);
 }
 
 TEST(TimerEventsTest, TestTimerStartEvent) {
@@ -43,7 +43,7 @@ TEST(TimerEventsTest, TestTimerStartEvent) {
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::TIMER);
 
 	ASSERT_EQ(message->event_type, event_type::START);
-	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data[0]), instance_id);
+	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data), instance_id);
 }
 
 TEST(TimerEventsTest, TestTimerStopEvent) {
@@ -55,7 +55,7 @@ TEST(TimerEventsTest, TestTimerStopEvent) {
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::TIMER);
 
 	ASSERT_EQ(message->event_type, event_type::STOP);
-	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data[0]), instance_id);
+	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data), instance_id);
 }
 
 TEST(TimerEventsTest, TestTimerDiscardEvent) {
@@ -67,7 +67,7 @@ TEST(TimerEventsTest, TestTimerDiscardEvent) {
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::TIMER);
 
 	ASSERT_EQ(message->event_type, event_type::DISCARD);
-	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data[0]), instance_id);
+	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data), instance_id);
 }
 
 TEST(TimerEventsTest, TestTimerHeartbeatEvent) {
@@ -79,7 +79,7 @@ TEST(TimerEventsTest, TestTimerHeartbeatEvent) {
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::TIMER);
 
 	ASSERT_EQ(message->event_type, event_type::HEARTBEAT);
-	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data[0]), instance_id);
+	ASSERT_EQ(*static_cast<handystats::metrics::timer::instance_id_type*>(message->event_data), instance_id);
 }
 
 

@@ -29,7 +29,7 @@ struct event_message : message_queue::node
 	chrono::clock::time_point timestamp;
 
 	int event_type;
-	std::vector<void*> event_data;
+	void* event_data;
 };
 
 void delete_event_message(event_message* message);

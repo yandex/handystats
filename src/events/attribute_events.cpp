@@ -21,7 +21,7 @@ event_message* create_set_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::SET;
-	message->event_data.push_back(new metrics::attribute::value_type(value));
+	message->event_data = new metrics::attribute::value_type(value);
 
 	return message;
 }
@@ -99,7 +99,7 @@ event_message* create_set_event(
 }
 
 void delete_set_event(event_message* message) {
-	delete static_cast<metrics::attribute::value_type*>(message->event_data[0]);
+	delete static_cast<metrics::attribute::value_type*>(message->event_data);
 
 	delete message;
 }
@@ -113,7 +113,7 @@ void delete_event(event_message* message) {
 }
 
 void process_set_event(metrics::attribute& attribute, const event_message& message) {
-	const auto& value = *static_cast<metrics::attribute::value_type*>(message.event_data[0]);
+	const auto& value = *static_cast<metrics::attribute::value_type*>(message.event_data);
 	attribute.set(value, message.timestamp);
 }
 

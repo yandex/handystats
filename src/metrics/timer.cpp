@@ -9,7 +9,7 @@ namespace handystats { namespace metrics {
 const timer::instance_id_type timer::DEFAULT_INSTANCE_ID = -1;
 
 timer::timer()
-	: idle_timeout(chrono::duration_cast<clock::duration>(config::timer.idle_timeout))
+	: idle_timeout(chrono::duration_cast<clock::duration>(config::timer_opts.idle_timeout))
 {
 	this->timestamp = time_point();
 	this->value = value_type();

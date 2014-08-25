@@ -9,7 +9,6 @@
 #include <unordered_map>
 
 #include <handystats/chrono.hpp>
-#include <handystats/config/defaults.hpp>
 #include <handystats/incremental_statistics.hpp>
 
 namespace handystats { namespace metrics {

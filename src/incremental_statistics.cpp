@@ -5,8 +5,6 @@
 
 #include <handystats/math_utils.hpp>
 
-#include "config_impl.hpp"
-
 #include <handystats/incremental_statistics.hpp>
 
 namespace handystats {

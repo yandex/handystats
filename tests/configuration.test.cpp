@@ -38,8 +38,8 @@ TEST_F(HandyConfigurationTest, MetricsDumpConfiguration) {
 			}"
 		);
 
-	ASSERT_EQ(handystats::config::metrics_dump.interval.count(), std::chrono::milliseconds(750).count());
-	ASSERT_EQ(handystats::config::metrics_dump.to_json, false);
+	ASSERT_EQ(handystats::config::metrics_dump_opts.interval.count(), std::chrono::milliseconds(750).count());
+	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, false);
 }
 
 TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
@@ -52,8 +52,8 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 			}"
 		);
 
-	ASSERT_EQ(handystats::config::metrics_dump.interval.count(), std::chrono::milliseconds(2).count());
-	ASSERT_EQ(handystats::config::metrics_dump.to_json, true);
+	ASSERT_EQ(handystats::config::metrics_dump_opts.interval.count(), std::chrono::milliseconds(2).count());
+	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, true);
 
 	HANDY_INIT();
 
@@ -81,8 +81,8 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonFalseCheck) {
 			}"
 		);
 
-	ASSERT_EQ(handystats::config::metrics_dump.interval.count(), std::chrono::milliseconds(2).count());
-	ASSERT_EQ(handystats::config::metrics_dump.to_json, false);
+	ASSERT_EQ(handystats::config::metrics_dump_opts.interval.count(), std::chrono::milliseconds(2).count());
+	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, false);
 
 	HANDY_INIT();
 
@@ -97,6 +97,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonFalseCheck) {
 
 	auto json_dump = HANDY_JSON_DUMP();
 
+	std::cout << *json_dump << std::endl;
 	ASSERT_TRUE(json_dump->empty());
 }
 
@@ -110,8 +111,8 @@ TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 			}"
 		);
 
-	ASSERT_EQ(handystats::config::metrics_dump.interval.count(), std::chrono::milliseconds(0).count());
-	ASSERT_EQ(handystats::config::metrics_dump.to_json, true);
+	ASSERT_EQ(handystats::config::metrics_dump_opts.interval.count(), std::chrono::milliseconds(0).count());
+	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, true);
 
 	HANDY_INIT();
 
@@ -141,7 +142,7 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 			}"
 		);
 
-	ASSERT_EQ(handystats::config::timer.idle_timeout.count(), std::chrono::milliseconds(10).count());
+	ASSERT_EQ(handystats::config::timer_opts.idle_timeout.count(), std::chrono::milliseconds(10).count());
 
 	HANDY_INIT();
 
@@ -179,11 +180,11 @@ TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
 			"{\
 			}"
 		);
-	ASSERT_EQ(handystats::config::incremental_statistics.moving_average_alpha, handystats::config::incremental_statistics_parameters().moving_average_alpha);
-	ASSERT_EQ(handystats::config::incremental_statistics.moving_interval.count(), handystats::config::incremental_statistics_parameters().moving_interval.count());
-	ASSERT_EQ(handystats::config::timer.idle_timeout.count(), handystats::config::timer_parameters().idle_timeout.count());
-	ASSERT_EQ(handystats::config::metrics_dump.interval.count(), handystats::config::metrics_dump_parameters().interval.count());
-	ASSERT_EQ(handystats::config::metrics_dump.to_json, handystats::config::metrics_dump_parameters().to_json);
+	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_average_alpha, handystats::config::incremental_statistics().moving_average_alpha);
+	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_interval.count(), handystats::config::incremental_statistics().moving_interval.count());
+	ASSERT_EQ(handystats::config::timer_opts.idle_timeout.count(), handystats::config::timer().idle_timeout.count());
+	ASSERT_EQ(handystats::config::metrics_dump_opts.interval.count(), handystats::config::metrics_dump().interval.count());
+	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, handystats::config::metrics_dump().to_json);
 }
 
 TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
@@ -196,6 +197,6 @@ TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
 			}"
 		);
 
-	ASSERT_EQ(handystats::config::incremental_statistics.moving_interval.count(), std::chrono::milliseconds(1234).count());
-	ASSERT_EQ(handystats::config::incremental_statistics.moving_average_alpha, 1.5);
+	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_interval.count(), std::chrono::milliseconds(1234).count());
+	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_average_alpha, 1.5);
 }

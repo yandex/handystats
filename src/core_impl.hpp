@@ -3,8 +3,11 @@
 #ifndef HANDYSTATS_CORE_IMPL_HPP_
 #define HANDYSTATS_CORE_IMPL_HPP_
 
+#include <mutex>
 
 namespace handystats {
+
+extern std::mutex operation_mutex;
 
 bool is_enabled();
 

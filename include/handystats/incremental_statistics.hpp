@@ -4,7 +4,7 @@
 #define HANDYSTATS_INCREMENTAL_STATISTICS_HPP_
 
 #include <handystats/chrono.hpp>
-#include <handystats/configuration/defaults.hpp>
+#include <handystats/config/incremental_statistics.hpp>
 
 namespace handystats {
 
@@ -16,8 +16,8 @@ public:
 	typedef clock::time_point time_point;
 
 	incremental_statistics(
-			const chrono::time_duration& moving_interval = config::defaults::incremental_statistics::moving_interval,
-			const double& moving_average_alpha = config::defaults::incremental_statistics::moving_average_alpha
+			const chrono::time_duration& moving_interval = config::incremental_statistics::defaults::moving_interval,
+			const double& moving_average_alpha = config::incremental_statistics::defaults::moving_average_alpha
 		);
 
 	void clear();

@@ -84,7 +84,7 @@ std::shared_ptr<const std::string> create_dump(Allocator&& allocator = Allocator
 }
 
 void update() {
-	if (!config::metrics_dump.to_json) {
+	if (!config::metrics_dump_opts.to_json) {
 		return;
 	}
 

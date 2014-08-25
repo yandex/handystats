@@ -176,17 +176,18 @@ create_dump()
 }
 
 void update() {
-	if (config::metrics_dump.interval.count() == 0) {
+	if (config::metrics_dump_opts.interval.count() == 0) {
 		return;
 	}
-	if (chrono::duration_cast<std::chrono::nanoseconds>(chrono::clock::now() - dump_timestamp) > config::metrics_dump.interval) {
+
+	if (chrono::duration_cast<std::chrono::nanoseconds>(chrono::clock::now() - dump_timestamp) > config::metrics_dump_opts.interval) {
 		auto new_dump = create_dump();
 		{
 			std::lock_guard<std::mutex> lock(dump_mutex);
 			dump = new_dump;
 		}
 
-		if (config::metrics_dump.to_json) {
+		if (config::metrics_dump_opts.to_json) {
 			json_dump::update();
 		}
 	}

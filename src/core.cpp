@@ -1,7 +1,6 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
 #include <thread>
-#include <mutex>
 #include <handystats/atomic.hpp>
 
 #include <handystats/chrono.hpp>
@@ -13,6 +12,7 @@
 #include "internal_impl.hpp"
 #include "metrics_dump_impl.hpp"
 #include "config_impl.hpp"
+
 #include "core_impl.hpp"
 
 namespace handystats {

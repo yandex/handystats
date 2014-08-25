@@ -5,10 +5,11 @@
 
 namespace handystats { namespace metrics {
 
-gauge::gauge()
+gauge::gauge(const config::incremental_statistics& opts)
+	: value()
+	, timestamp()
+	, values(opts)
 {
-	value = value_type();
-	timestamp = time_point();
 }
 
 void gauge::set(const value_type& value, const time_point& timestamp) {

@@ -6,6 +6,7 @@
 #include <handystats/chrono.hpp>
 
 #include "events/event_message_impl.hpp"
+#include "config_impl.hpp"
 
 #include "message_queue_impl.hpp"
 
@@ -80,19 +81,19 @@ metrics::gauge message_wait_time;
 metrics::counter pop_count;
 
 void initialize() {
-	size = metrics::gauge();
+	size = metrics::gauge(config::incremental_statistics_opts);
 	size.set(0);
 
-	message_wait_time = metrics::gauge();
+	message_wait_time = metrics::gauge(config::incremental_statistics_opts);
 
 	pop_count = metrics::counter();
 }
 
 void finalize() {
-	size = metrics::gauge();
+	size = metrics::gauge(config::incremental_statistics_opts);
 	size.set(0);
 
-	message_wait_time = metrics::gauge();
+	message_wait_time = metrics::gauge(config::incremental_statistics_opts);
 
 	pop_count = metrics::counter();
 }

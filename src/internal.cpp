@@ -24,17 +24,17 @@ metrics::gauge size;
 metrics::gauge process_time;
 
 void initialize() {
-	size = metrics::gauge();
+	size = metrics::gauge(config::incremental_statistics_opts);
 	size.set(0);
 
-	process_time = metrics::gauge();
+	process_time = metrics::gauge(config::incremental_statistics_opts);
 }
 
 void finalize() {
-	size = metrics::gauge();
+	size = metrics::gauge(config::incremental_statistics_opts);
 	size.set(0);
 
-	process_time = metrics::gauge();
+	process_time = metrics::gauge(config::incremental_statistics_opts);
 }
 
 } // namespace stats
@@ -102,7 +102,7 @@ void process_event_message(const events::event_message& message) {
 				metric_ptr = new metrics::counter();
 				break;
 			case events::event_destination_type::GAUGE:
-				metric_ptr = new metrics::gauge();
+				metric_ptr = new metrics::gauge(config::incremental_statistics_opts);
 				break;
 			case events::event_destination_type::TIMER:
 				metric_ptr = new metrics::timer(config::timer_opts, config::incremental_statistics_opts);

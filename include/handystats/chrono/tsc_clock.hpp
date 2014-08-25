@@ -24,7 +24,7 @@ public:
 
 		/* Constructors */
 		duration()
-			: tick_count()
+			: tick_count(0)
 		{
 		}
 

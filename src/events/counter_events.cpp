@@ -96,17 +96,17 @@ void delete_event(event_message* message) {
 
 
 void process_init_event(metrics::counter& counter, const event_message& message) {
-	const auto& init_value = *reinterpret_cast<const metrics::counter::value_type*>(&message.event_data);
+	const auto& init_value = reinterpret_cast<const metrics::counter::value_type>(message.event_data);
 	counter.init(init_value, message.timestamp);
 }
 
 void process_increment_event(metrics::counter& counter, const event_message& message) {
-	const auto& incr_value = *reinterpret_cast<const metrics::counter::value_type*>(&message.event_data);
+	const auto& incr_value = reinterpret_cast<const metrics::counter::value_type>(message.event_data);
 	counter.increment(incr_value, message.timestamp);
 }
 
 void process_decrement_event(metrics::counter& counter, const event_message& message) {
-	const auto& decr_value = *reinterpret_cast<const metrics::counter::value_type*>(&message.event_data);
+	const auto& decr_value = reinterpret_cast<const metrics::counter::value_type>(message.event_data);
 	counter.decrement(decr_value, message.timestamp);
 }
 

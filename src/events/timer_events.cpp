@@ -152,29 +152,29 @@ void delete_event(event_message* message) {
 
 
 void process_init_event(metrics::timer& timer, const event_message& message) {
-	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
+	const auto& instance_id = reinterpret_cast<const metrics::timer::instance_id_type>(message.event_data);
 
 	timer = metrics::timer(config::timer_opts, config::incremental_statistics_opts);
 	timer.start(instance_id, message.timestamp);
 }
 
 void process_start_event(metrics::timer& timer, const event_message& message) {
-	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
+	const auto& instance_id = reinterpret_cast<const metrics::timer::instance_id_type>(message.event_data);
 	timer.start(instance_id, message.timestamp);
 }
 
 void process_stop_event(metrics::timer& timer, const event_message& message) {
-	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
+	const auto& instance_id = reinterpret_cast<const metrics::timer::instance_id_type>(message.event_data);
 	timer.stop(instance_id, message.timestamp);
 }
 
 void process_discard_event(metrics::timer& timer, const event_message& message) {
-	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
+	const auto& instance_id = reinterpret_cast<const metrics::timer::instance_id_type>(message.event_data);
 	timer.discard(instance_id, message.timestamp);
 }
 
 void process_heartbeat_event(metrics::timer& timer, const event_message& message) {
-	const auto& instance_id = *reinterpret_cast<const metrics::timer::instance_id_type*>(&message.event_data);
+	const auto& instance_id = reinterpret_cast<const metrics::timer::instance_id_type>(message.event_data);
 	timer.heartbeat(instance_id, message.timestamp);
 }
 

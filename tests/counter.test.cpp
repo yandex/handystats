@@ -14,8 +14,6 @@ TEST(CounterTest, TestCounterConstruction) {
 	sample_counter.init(10);
 
 	ASSERT_EQ(sample_counter.value, 10);
-
-	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&sample_counter) << std::endl;
 }
 
 TEST(CounterTest, TestCounterIncrementDecrement) {
@@ -36,8 +34,6 @@ TEST(CounterTest, TestCounterIncrementDecrement) {
 		sample_counter.decrement(1);
 	}
 	ASSERT_EQ(sample_counter.value, 0);
-
-	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&sample_counter) << std::endl;
 }
 
 TEST(CounterTest, TestCounterInternalStats) {
@@ -61,6 +57,4 @@ TEST(CounterTest, TestCounterInternalStats) {
 	ASSERT_EQ(sample_counter.values.min(), 0);
 	ASSERT_EQ(sample_counter.decr_deltas.max(), 1);
 	ASSERT_EQ(sample_counter.values.max(), max_test_value);
-
-	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&sample_counter) << std::endl;
 }

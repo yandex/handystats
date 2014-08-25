@@ -97,7 +97,6 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonFalseCheck) {
 
 	auto json_dump = HANDY_JSON_DUMP();
 
-	std::cout << *json_dump << std::endl;
 	ASSERT_TRUE(json_dump->empty());
 }
 

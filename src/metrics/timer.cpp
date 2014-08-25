@@ -12,7 +12,7 @@ timer::timer(
 	)
 	: idle_timeout(chrono::duration_cast<clock::duration>(timer_opts.idle_timeout))
 	, timestamp()
-	, value()
+	, value(0)
 	, values(incremental_statistics_opts)
 	, idle_check_timestamp()
 {

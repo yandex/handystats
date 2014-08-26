@@ -48,8 +48,7 @@ void attribute::set(const double& d, const time_point& timestamp) {
 }
 
 void attribute::set(const char* s, const time_point& timestamp) {
-	this->value = s;
-	this->timestamp = timestamp;
+	set(std::string(s), timestamp);
 }
 
 void attribute::set(const std::string& s, const time_point& timestamp) {

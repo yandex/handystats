@@ -13,6 +13,8 @@ extern incremental_statistics incremental_statistics_opts;
 extern timer timer_opts;
 extern metrics_dump metrics_dump_opts;
 
+extern bool default_initialized;
+
 void initialize();
 void finalize();
 

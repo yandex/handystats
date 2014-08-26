@@ -18,13 +18,22 @@ incremental_statistics incremental_statistics_opts;
 timer timer_opts;
 metrics_dump metrics_dump_opts;
 
+bool default_initialized = false;
+
 void initialize() {
+	incremental_statistics_opts = incremental_statistics();
+	timer_opts = timer();
+	metrics_dump_opts = metrics_dump();
+
+	default_initialized = true;
 }
 
 void finalize() {
 	incremental_statistics_opts = incremental_statistics();
 	timer_opts = timer();
 	metrics_dump_opts = metrics_dump();
+
+	default_initialized = true;
 }
 
 }} // namespace handystats::config
@@ -36,6 +45,10 @@ void config_json(const rapidjson::Value& config) {
 	std::lock_guard<std::mutex> lock(handystats::operation_mutex);
 	if (handystats::is_enabled()) {
 		return;
+	}
+
+	if (!config::default_initialized) {
+		config::initialize();
 	}
 
 	if (!config.IsObject()) {

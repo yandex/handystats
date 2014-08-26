@@ -57,7 +57,10 @@ void initialize() {
 	}
 	enabled_flag.store(true, std::memory_order_release);
 
-	config::initialize();
+	if (!config::default_initialized) {
+		config::initialize();
+	}
+
 	metrics_dump::initialize();
 	internal::initialize();
 	message_queue::initialize();

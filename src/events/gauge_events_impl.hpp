@@ -13,7 +13,7 @@
 namespace handystats { namespace events { namespace gauge {
 
 namespace event_type {
-enum {
+enum : char {
 	INIT = 0,
 	SET
 };

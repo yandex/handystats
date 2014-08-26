@@ -13,7 +13,7 @@
 namespace handystats { namespace events { namespace attribute {
 
 namespace event_type {
-enum {
+enum : char {
 	SET = 0
 };
 } // namespace event_type

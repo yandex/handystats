@@ -13,7 +13,7 @@
 namespace handystats { namespace events { namespace counter {
 
 namespace event_type {
-enum {
+enum : char {
 	INIT = 0,
 	INCREMENT,
 	DECREMENT

@@ -13,8 +13,8 @@
 namespace handystats { namespace events {
 
 namespace event_destination_type {
-enum {
-	COUNTER,
+enum : char {
+	COUNTER = 0,
 	GAUGE,
 	TIMER,
 	ATTRIBUTE
@@ -23,12 +23,12 @@ enum {
 
 struct event_message : message_queue::node
 {
+	char destination_type;
+	char event_type;
 	std::string destination_name;
-	int destination_type;
 
 	chrono::clock::time_point timestamp;
 
-	int event_type;
 	void* event_data;
 };
 

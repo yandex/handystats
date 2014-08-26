@@ -13,7 +13,7 @@
 namespace handystats { namespace events { namespace timer {
 
 namespace event_type {
-enum {
+enum : char {
 	INIT = 0,
 	START,
 	STOP,

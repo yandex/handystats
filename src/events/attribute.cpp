@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "events/attribute_events_impl.hpp"
+#include "events/attribute_impl.hpp"
 
 
 namespace handystats { namespace events { namespace attribute {

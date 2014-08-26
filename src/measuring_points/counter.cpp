@@ -3,7 +3,7 @@
 #include <memory>
 #include <algorithm>
 
-#include "events/counter_events_impl.hpp"
+#include "events/counter_impl.hpp"
 #include "message_queue_impl.hpp"
 #include "core_impl.hpp"
 

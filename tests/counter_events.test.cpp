@@ -5,7 +5,7 @@
 #include <handystats/metrics/counter.hpp>
 
 #include "events/event_message_impl.hpp"
-#include "events/counter_events_impl.hpp"
+#include "events/counter_impl.hpp"
 
 
 using namespace handystats::events::counter;

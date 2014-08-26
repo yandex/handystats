@@ -2,7 +2,7 @@
 
 #include "config_impl.hpp"
 
-#include "events/counter_events_impl.hpp"
+#include "events/counter_impl.hpp"
 
 
 namespace handystats { namespace events { namespace counter {

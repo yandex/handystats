@@ -6,7 +6,7 @@
 #include <handystats/metrics/timer.hpp>
 
 #include "events/event_message_impl.hpp"
-#include "events/timer_events_impl.hpp"
+#include "events/timer_impl.hpp"
 
 
 using namespace handystats::events::timer;

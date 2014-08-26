@@ -2,7 +2,7 @@
 
 #include "config_impl.hpp"
 
-#include "events/gauge_events_impl.hpp"
+#include "events/gauge_impl.hpp"
 
 
 namespace handystats { namespace events { namespace gauge {

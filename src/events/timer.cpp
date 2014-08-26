@@ -4,7 +4,7 @@
 
 #include "config_impl.hpp"
 
-#include "events/timer_events_impl.hpp"
+#include "events/timer_impl.hpp"
 
 
 namespace handystats { namespace events { namespace timer {

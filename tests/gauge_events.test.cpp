@@ -5,7 +5,7 @@
 #include <handystats/metrics/gauge.hpp>
 
 #include "events/event_message_impl.hpp"
-#include "events/gauge_events_impl.hpp"
+#include "events/gauge_impl.hpp"
 
 
 using namespace handystats::events::gauge;

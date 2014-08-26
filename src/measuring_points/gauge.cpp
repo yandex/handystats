@@ -3,7 +3,7 @@
 #include <memory>
 #include <algorithm>
 
-#include "events/gauge_events_impl.hpp"
+#include "events/gauge_impl.hpp"
 #include "message_queue_impl.hpp"
 #include "core_impl.hpp"
 

@@ -5,7 +5,7 @@
 #include <handystats/metrics/attribute.hpp>
 
 #include "events/event_message_impl.hpp"
-#include "events/attribute_events_impl.hpp"
+#include "events/attribute_impl.hpp"
 
 
 using namespace handystats::events::attribute;

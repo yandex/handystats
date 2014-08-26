@@ -20,6 +20,8 @@ TEST(GaugeEventsTest, TestGaugeInitEvent) {
 
 	ASSERT_EQ(message->event_type, event_type::INIT);
 	ASSERT_NEAR(*reinterpret_cast<handystats::metrics::gauge::value_type*>(&message->event_data), init_value, 1E-6);
+
+	delete_event_message(message);
 }
 
 TEST(GaugeEventsTest, TestGaugeSetEvent) {
@@ -32,5 +34,7 @@ TEST(GaugeEventsTest, TestGaugeSetEvent) {
 
 	ASSERT_EQ(message->event_type, event_type::SET);
 	ASSERT_NEAR(*reinterpret_cast<handystats::metrics::gauge::value_type*>(&message->event_data), value, 1E-6);
+
+	delete_event_message(message);
 }
 

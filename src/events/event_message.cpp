@@ -3,6 +3,7 @@
 #include "events/gauge_events_impl.hpp"
 #include "events/counter_events_impl.hpp"
 #include "events/timer_events_impl.hpp"
+#include "events/attribute_events_impl.hpp"
 
 #include "events/event_message_impl.hpp"
 
@@ -23,6 +24,9 @@ void delete_event_message(event_message* message) {
 			break;
 		case event_destination_type::TIMER:
 			timer::delete_event(message);
+			break;
+		case event_destination_type::ATTRIBUTE:
+			attribute::delete_event(message);
 			break;
 		default:
 			return;

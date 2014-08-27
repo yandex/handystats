@@ -8,7 +8,7 @@ URL: https://github.com/shindo/handystats
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires: cmake
+BuildRequires: cmake >= 2.8
 BuildRequires: boost-devel
 BuildRequires: gtest-devel
 

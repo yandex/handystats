@@ -29,7 +29,7 @@ popd
 make %{?_smp_mflags} -C %{_target_platform}
 
 %check
-make check
+make check -C %{_target_platform}
 
 %install
 rm -rf %{buildroot}

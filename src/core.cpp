@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
 #include <thread>
-#include <pthread.h>
+#include <sys/prctl.h>
 #include <handystats/atomic.hpp>
 
 #include <handystats/chrono.hpp>
@@ -44,7 +44,7 @@ static void run_processor() {
 
 	sprintf(thread_name, "handystats");
 
-	pthread_setname_np(pthread_self(), thread_name);
+	prctl(PR_SET_NAME, thread_name);
 
 	while (is_enabled()) {
 		if (!message_queue::empty()) {

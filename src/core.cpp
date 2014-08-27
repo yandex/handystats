@@ -1,6 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
 #include <thread>
+#include <pthread.h>
 #include <handystats/atomic.hpp>
 
 #include <handystats/chrono.hpp>
@@ -38,6 +39,13 @@ void process_message_queue() {
 }
 
 static void run_processor() {
+	char thread_name[16];
+	memset(thread_name, 0, sizeof(thread_name));
+
+	sprintf(thread_name, "handystats");
+
+	pthread_setname_np(pthread_self(), thread_name);
+
 	while (is_enabled()) {
 		if (!message_queue::empty()) {
 			process_message_queue();

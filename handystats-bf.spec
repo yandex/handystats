@@ -8,7 +8,12 @@ URL: https://github.com/shindo/handystats
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires: cmake >= 2.8
+%if %{defined rhel} && 0%{?rhel} < 7
+BuildRequires: cmake28
+%else
+BuildRequires: cmake
+%endif
+
 BuildRequires: boost-devel
 BuildRequires: gtest-devel
 
@@ -22,7 +27,11 @@ C++ library for collecting user-defined in-process runtime statistics with low o
 mkdir -p %{_target_platform}
 pushd %{_target_platform}
 
+%if %{defined rhel} && 0%{?rhel} < 7
+%{cmake28} ..
+%else
 %{cmake} ..
+%endif
 
 popd
 

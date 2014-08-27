@@ -12,7 +12,8 @@ BuildRequires: cmake
 BuildRequires: boost-devel
 BuildRequires: gtest-devel
 
-#%description
+%description
+C++ library for collecting user-defined in-process runtime statistics with low overhead.
 
 %prep
 %setup -q

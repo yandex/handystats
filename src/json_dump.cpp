@@ -5,21 +5,15 @@
 #include <string>
 #include <map>
 
-#include <handystats/rapidjson/document.h>
-
 #include <handystats/chrono.hpp>
 #include <handystats/json_dump.hpp>
-
-#include <handystats/json/gauge_json_writer.hpp>
-#include <handystats/json/counter_json_writer.hpp>
-#include <handystats/json/timer_json_writer.hpp>
-#include <handystats/json/attribute_json_writer.hpp>
 
 #include "config_impl.hpp"
 
 #include "metrics_dump_impl.hpp"
 
 #include "json_dump_impl.hpp"
+
 
 namespace handystats { namespace json_dump {
 
@@ -50,37 +44,9 @@ get_dump() {
 
 template<typename Allocator>
 std::shared_ptr<const std::string> create_dump(Allocator&& allocator = Allocator()) {
-	rapidjson::Value dump_value(rapidjson::kObjectType);
-
-	const auto metrics_dump = metrics_dump::get_dump();
-
-	for (auto metric_iter = metrics_dump->cbegin(); metric_iter != metrics_dump->cend(); ++metric_iter) {
-		rapidjson::Value metric_value;
-		switch (metric_iter->second.which()) {
-			case metrics::metric_index::GAUGE:
-				json::write_to_json_value(&boost::get<metrics::gauge>(metric_iter->second), &metric_value, allocator);
-				break;
-			case metrics::metric_index::COUNTER:
-				json::write_to_json_value(&boost::get<metrics::counter>(metric_iter->second), &metric_value, allocator);
-				break;
-			case metrics::metric_index::TIMER:
-				json::write_to_json_value(&boost::get<metrics::timer>(metric_iter->second), &metric_value, allocator);
-				break;
-			case metrics::metric_index::ATTRIBUTE:
-				json::write_to_json_value(&boost::get<metrics::attribute>(metric_iter->second), &metric_value, allocator);
-				break;
-		}
-
-		dump_value.AddMember(metric_iter->first.c_str(), allocator, metric_value, allocator);
-	}
-
-	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator> buffer(&allocator);
-	rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator>> writer(buffer);
-	dump_value.Accept(writer);
-
-	auto dump_end_time = chrono::clock::now();
-
-	return std::shared_ptr<const std::string>(new std::string(buffer.GetString(), buffer.GetSize()));
+	return std::shared_ptr<const std::string>(
+			new std::string(to_string(*metrics_dump::get_dump(), allocator))
+		);
 }
 
 void update() {

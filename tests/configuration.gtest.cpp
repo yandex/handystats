@@ -7,8 +7,7 @@
 
 #include <handystats/rapidjson/document.h>
 
-#include <handystats/operation.hpp>
-#include <handystats/config.hpp>
+#include <handystats/core.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
 #include <handystats/json_dump.hpp>

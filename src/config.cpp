@@ -5,8 +5,8 @@
 #include <string>
 #include <iostream>
 
-#include <handystats/config.hpp>
-#include <handystats/config.h>
+#include <handystats/core.hpp>
+#include <handystats/core.h>
 
 #include "core_impl.hpp"
 

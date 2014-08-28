@@ -10,10 +10,9 @@
 #include <gtest/gtest.h>
 
 #include <handystats/chrono.hpp>
-#include <handystats/operation.hpp>
+#include <handystats/core.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
-#include <handystats/config.hpp>
 
 #include "message_queue_helper.hpp"
 

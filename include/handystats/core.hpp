@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CONFIG_HPP_
-#define HANDYSTATS_CONFIG_HPP_
+#ifndef HANDYSTATS_CORE_HPP_
+#define HANDYSTATS_CORE_HPP_
 
 #include <handystats/rapidjson/document.h>
 
@@ -26,6 +26,10 @@
 
 namespace handystats {
 
+void initialize();
+
+void finalize();
+
 void config_file(const char* filename);
 void config_json(const char* config);
 void config_json(const rapidjson::Value& config);
@@ -35,11 +39,19 @@ void config_json(const rapidjson::Value& config);
 
 #ifndef HANDYSTATS_DISABLE
 
+	#define HANDY_INIT(...) handystats::initialize(__VA_ARGS__)
+
+	#define HANDY_FINALIZE(...) handystats::finalize(__VA_ARGS__)
+
 	#define HANDY_CONFIG_FILE(...) handystats::config_file(__VA_ARGS__)
 
 	#define HANDY_CONFIG_JSON(...) handystats::config_json(__VA_ARGS__)
 
 #else
+
+	#define HANDY_INIT(...)
+
+	#define HANDY_FINALIZE(...)
 
 	#define HANDY_CONFIG_FILE(...)
 
@@ -47,4 +59,4 @@ void config_json(const rapidjson::Value& config);
 
 #endif
 
-#endif // HANDYSTATS_CONFIG_HPP_
+#endif // HANDYSTATS_CORE_HPP_

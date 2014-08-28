@@ -1,7 +1,6 @@
 #include <time.h>
 
-#include <handystats/operation.h>
-#include <handystats/config.h>
+#include <handystats/core.h>
 #include <handystats/measuring_points.h>
 
 #include "test.h"

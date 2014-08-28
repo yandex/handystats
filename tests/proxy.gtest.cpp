@@ -3,8 +3,7 @@
 #include <handystats/chrono.hpp>
 #include <handystats/metrics.hpp>
 #include <handystats/measuring_points.hpp>
-#include <handystats/operation.hpp>
-#include <handystats/config.hpp>
+#include <handystats/core.hpp>
 #include <handystats/metrics_dump.hpp>
 
 #include "message_queue_helper.hpp"

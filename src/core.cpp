@@ -5,8 +5,8 @@
 #include <handystats/atomic.hpp>
 
 #include <handystats/chrono.hpp>
-#include <handystats/operation.hpp>
-#include <handystats/operation.h>
+#include <handystats/core.hpp>
+#include <handystats/core.h>
 
 #include "events/event_message_impl.hpp"
 #include "message_queue_impl.hpp"

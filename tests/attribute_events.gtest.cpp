@@ -13,7 +13,7 @@ using namespace handystats::events::attribute;
 TEST(AttributeEventsTest, TestAttributeSetDoubleEvent) {
 	const char* attribute_name = "attr.test";
 	const double value = 0.75;
-	auto message = create_set_event(attribute_name, value, handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
@@ -31,7 +31,7 @@ TEST(AttributeEventsTest, TestAttributeSetDoubleEvent) {
 TEST(AttributeEventsTest, TestAttributeSetBoolEvent) {
 	const char* attribute_name = "attr.test";
 	const bool value = true;
-	auto message = create_set_event(attribute_name, value, handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
@@ -48,7 +48,7 @@ TEST(AttributeEventsTest, TestAttributeSetBoolEvent) {
 TEST(AttributeEventsTest, TestAttributeSetIntEvent) {
 	const char* attribute_name = "attr.test";
 	const int value = -123;
-	auto message = create_set_event(attribute_name, value, handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
@@ -65,7 +65,7 @@ TEST(AttributeEventsTest, TestAttributeSetIntEvent) {
 TEST(AttributeEventsTest, TestAttributeSetUintEvent) {
 	const char* attribute_name = "attr.test";
 	const unsigned value = 123;
-	auto message = create_set_event(attribute_name, value, handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
@@ -82,7 +82,7 @@ TEST(AttributeEventsTest, TestAttributeSetUintEvent) {
 TEST(AttributeEventsTest, TestAttributeSetInt64Event) {
 	const char* attribute_name = "attr.test";
 	const int64_t value = -1e13;
-	auto message = create_set_event(attribute_name, value, handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
@@ -99,7 +99,7 @@ TEST(AttributeEventsTest, TestAttributeSetInt64Event) {
 TEST(AttributeEventsTest, TestAttributeSetUint64Event) {
 	const char* attribute_name = "attr.test";
 	const uint64_t value = 1e13;
-	auto message = create_set_event(attribute_name, value, handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
@@ -116,7 +116,7 @@ TEST(AttributeEventsTest, TestAttributeSetUint64Event) {
 TEST(AttributeEventsTest, TestAttributeSetStringEvent) {
 	const char* attribute_name = "attr.test";
 	const char* value = "attr.test.value";
-	auto message = create_set_event(attribute_name, value, handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(std::string(value)), handystats::metrics::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);

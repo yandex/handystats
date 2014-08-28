@@ -36,7 +36,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name.substr(), b, timestamp);
+		HANDY_ATTRIBUTE_SET_BOOL(name.substr(), b, timestamp);
 	}
 
 	void set(
@@ -44,7 +44,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name.substr(), i, timestamp);
+		HANDY_ATTRIBUTE_SET_INT(name.substr(), i, timestamp);
 	}
 
 	void set(
@@ -52,7 +52,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name.substr(), u, timestamp);
+		HANDY_ATTRIBUTE_SET_UINT(name.substr(), u, timestamp);
 	}
 
 	void set(
@@ -60,7 +60,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name.substr(), i64, timestamp);
+		HANDY_ATTRIBUTE_SET_INT64(name.substr(), i64, timestamp);
 	}
 
 	void set(
@@ -68,7 +68,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name.substr(), u64, timestamp);
+		HANDY_ATTRIBUTE_SET_UINT64(name.substr(), u64, timestamp);
 	}
 
 	void set(
@@ -76,15 +76,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name.substr(), d, timestamp);
-	}
-
-	void set(
-			const char* s,
-			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
-		)
-	{
-		HANDY_ATTRIBUTE_SET(name.substr(), s, timestamp);
+		HANDY_ATTRIBUTE_SET_DOUBLE(name.substr(), d, timestamp);
 	}
 
 	void set(
@@ -92,7 +84,7 @@ public:
 			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
 		)
 	{
-		HANDY_ATTRIBUTE_SET(name.substr(), s, timestamp);
+		HANDY_ATTRIBUTE_SET_STRING(name.substr(), s, timestamp);
 	}
 
 private:

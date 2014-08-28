@@ -1,3 +1,40 @@
+handystats (1.8.0) unstable; urgency=low
+
+  * debian/control: dependency on cdbs package added.
+  * Header with common defines (handystats.h) replaced with common.h
+  * atomic.hpp wrapper for C++'s atomic header added.
+  * configuration: top json node "handystats" removed.
+  * measuring_points: fixed multiple linkage of some functions in C interface
+  * operation: C interface for init and finalize calls added.
+  * configuration: C interface for configuration_file and configuration_json calls added.
+  * measuring_points: header files names reworked.
+  * measuring_points: metrics names are handled by rvalue reference (move semantics).
+    One can pass either const char* or temporary std::string object as metrics name (the latter can be constructed from std::string by substr() method).
+  * incremental_statistics: boost::accumulators removed.
+  * config: configuration replaced with config in include, source files and configuration functions.
+  * incremental_statistics: clear() method added that clears all statistics data (config parameters stay the same).
+  * metrics: counter init() method added that clears previous state and initializes counter with specified value.
+  * incremental_statistics: incremental statistics configuration opts can be passed to the constructor now.
+  * metrics: timer and incremental statistics configuration opts can be passed to the timer constructor.
+  * metrics: incremental statistics configuration opts can be passed to the gauge constructor.
+  * metrics: incremental statistics configuration opts can be passed to the counter constructor.
+  * tests: run gtest verbosely (-V option).
+  * events: fixed event_message deletion (added case for attribute's events).
+  * rpm spec added (support RHEL 6, RHEL 7).
+  * tests: '.test.cpp' suffix for GTest tests renamed to '.gtest.cpp'.
+  * core: name of the main thread set to 'handystats'.
+  * tests: C bindings test added.
+  * measuring_points, events: strictly recommended to use "full" (specifying value type) attribute's measuring points instead of common HANDY_ATTRIBUTE_SET.
+  * measuring_points: attribute's measuring_points fixed (HANDY_ATTRIBUTE_SET_JSON removed, HANDY_ATTRIBUTE_SET_STRING fixed).
+  * config: "core" config section added with "enable" option (default is true).
+  * json_dump: public methods 'fill()' and 'to_string()' added.
+    That allows to fill in rapidjson::Value from metrics map and create std::string with json dump from metrics map.
+  * config: default metrics_dump parameters changed (interval = 750ms, to-json = false).
+    One can create json dump from metrics dump as follows: handystats::json_dump::to_string(*HANDY_METRICS_DUMP()).
+  * 'operation' and 'config' public headers joined into single public header 'core'.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Thu, 28 Aug 2014 19:20:26 +0400
+
 handystats (1.7.0) unstable; urgency=low
 
   * measuring_points: measuring points are macros now (can be disabled by defining HANDYSTATS_DISABLE).

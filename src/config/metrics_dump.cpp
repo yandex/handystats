@@ -2,8 +2,8 @@
 
 namespace handystats { namespace config {
 
-const std::chrono::milliseconds metrics_dump::defaults::interval = std::chrono::milliseconds(500);
-const bool metrics_dump::defaults::to_json = true;
+const std::chrono::milliseconds metrics_dump::defaults::interval = std::chrono::milliseconds(750);
+const bool metrics_dump::defaults::to_json = false;
 
 metrics_dump::metrics_dump()
 	: interval(defaults::interval)

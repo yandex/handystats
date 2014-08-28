@@ -6,12 +6,14 @@
 #include <handystats/config/incremental_statistics.hpp>
 #include <handystats/config/timer.hpp>
 #include <handystats/config/metrics_dump.hpp>
+#include <handystats/config/core.hpp>
 
 namespace handystats { namespace config {
 
 extern incremental_statistics incremental_statistics_opts;
 extern timer timer_opts;
 extern metrics_dump metrics_dump_opts;
+extern core core_opts;
 
 extern bool default_initialized;
 

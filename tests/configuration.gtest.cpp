@@ -199,3 +199,28 @@ TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
 	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_interval.count(), std::chrono::milliseconds(1234).count());
 	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_average_alpha, 1.5);
 }
+
+TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
+	HANDY_CONFIG_JSON(
+			"{\
+				\"core\": {\
+					\"enable\": false\
+				},\
+				\"metrics-dump\": {\
+					\"interval\": 1,\
+					\"to-json\": true\
+				}\
+			}"
+		);
+
+	ASSERT_FALSE(handystats::config::core_opts.enable);
+
+	for (int i = 0; i < 10; ++i) {
+		HANDY_GAUGE_SET("test.gauge", i);
+	}
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+	ASSERT_TRUE(HANDY_METRICS_DUMP()->empty());
+	ASSERT_TRUE(HANDY_JSON_DUMP()->empty());
+}

@@ -17,6 +17,7 @@ namespace handystats { namespace config {
 incremental_statistics incremental_statistics_opts;
 timer timer_opts;
 metrics_dump metrics_dump_opts;
+core core_opts;
 
 bool default_initialized = false;
 
@@ -24,6 +25,7 @@ void initialize() {
 	incremental_statistics_opts = incremental_statistics();
 	timer_opts = timer();
 	metrics_dump_opts = metrics_dump();
+	core_opts = core();
 
 	default_initialized = true;
 }
@@ -32,6 +34,7 @@ void finalize() {
 	incremental_statistics_opts = incremental_statistics();
 	timer_opts = timer();
 	metrics_dump_opts = metrics_dump();
+	core_opts = core();
 
 	default_initialized = true;
 }
@@ -68,6 +71,11 @@ void config_json(const rapidjson::Value& config) {
 	if (config.HasMember("metrics-dump")) {
 		const rapidjson::Value& metrics_dump_config = config["metrics-dump"];
 		config::metrics_dump_opts.configure(metrics_dump_config);
+	}
+
+	if (config.HasMember("core")) {
+		const rapidjson::Value& core_config = config["core"];
+		config::core_opts.configure(core_config);
 	}
 }
 

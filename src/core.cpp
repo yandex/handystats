@@ -19,10 +19,10 @@
 namespace handystats {
 
 std::mutex operation_mutex;
-std::atomic<bool> enabled_flag;
+std::atomic<bool> enabled_flag(false);
 
 bool is_enabled() {
-	return enabled_flag.load(std::memory_order_acquire);
+	return config::core_opts.enable && enabled_flag.load(std::memory_order_acquire);
 }
 
 
@@ -60,10 +60,9 @@ static void run_processor() {
 
 void initialize() {
 	std::lock_guard<std::mutex> lock(operation_mutex);
-	if (is_enabled()) {
+	if (enabled_flag.load(std::memory_order_acquire)) {
 		return;
 	}
-	enabled_flag.store(true, std::memory_order_release);
 
 	if (!config::default_initialized) {
 		config::initialize();
@@ -73,10 +72,20 @@ void initialize() {
 	internal::initialize();
 	message_queue::initialize();
 
+	if (!config::core_opts.enable) {
+		return;
+	}
+
+	enabled_flag.store(true, std::memory_order_release);
+
 	processor_thread = std::thread(run_processor);
 }
 
 void finalize() {
+	if (!config::core_opts.enable) {
+		return;
+	}
+
 	std::lock_guard<std::mutex> lock(operation_mutex);
 	enabled_flag.store(false, std::memory_order_release);
 

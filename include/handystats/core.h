@@ -18,8 +18,7 @@
  *        "idle-timeout": <value in msec>
  *     },
  *     "metrics-dump": {
- *         "interval": <value in msec>,
- *         "to-json": <boolean value>
+ *         "interval": <value in msec>
  *     }
  * }
  */

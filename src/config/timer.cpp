@@ -6,20 +6,6 @@ const std::chrono::milliseconds timer::defaults::idle_timeout = std::chrono::sec
 
 timer::timer()
 	: idle_timeout(timer::defaults::idle_timeout)
-{
-}
-
-void timer::configure(const rapidjson::Value& config) {
-	if (!config.IsObject()) {
-		return;
-	}
-
-	if (config.HasMember("idle-timeout")) {
-		const rapidjson::Value& idle_timeout = config["idle-timeout"];
-		if (idle_timeout.IsUint64()) {
-			this->idle_timeout = std::chrono::milliseconds(idle_timeout.GetUint64());
-		}
-	}
-}
+{}
 
 }} // namespace handystats::config

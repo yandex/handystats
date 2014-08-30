@@ -5,8 +5,6 @@
 
 #include <chrono>
 
-#include <handystats/rapidjson/document.h>
-
 namespace handystats { namespace config {
 
 struct timer {
@@ -17,7 +15,6 @@ struct timer {
 	std::chrono::milliseconds idle_timeout;
 
 	timer();
-	void configure(const rapidjson::Value& config);
 };
 
 }} // namespace handystats::config

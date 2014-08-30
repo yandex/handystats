@@ -2,12 +2,8 @@
 
 #include <gtest/gtest.h>
 
-#include <handystats/rapidjson/allocators.h>
-
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/timer.hpp>
-
-#include <handystats/json/timer_json_writer.hpp>
 
 using namespace handystats::metrics;
 

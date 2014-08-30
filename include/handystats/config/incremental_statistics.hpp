@@ -5,8 +5,6 @@
 
 #include <chrono>
 
-#include <handystats/rapidjson/document.h>
-
 namespace handystats { namespace config {
 
 struct incremental_statistics {
@@ -19,7 +17,6 @@ struct incremental_statistics {
 	std::chrono::milliseconds moving_interval;
 
 	incremental_statistics();
-	void configure(const rapidjson::Value& config);
 };
 
 }} // namespace handystats::config

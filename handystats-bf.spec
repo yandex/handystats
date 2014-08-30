@@ -16,6 +16,7 @@ BuildRequires: cmake
 
 BuildRequires: boost-devel
 BuildRequires: gtest-devel
+BuildRequires: librapidjson-devel
 
 %description
 C++ library for collecting user-defined in-process runtime statistics with low overhead.

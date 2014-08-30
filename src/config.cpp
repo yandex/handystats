@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 
+#include <rapidjson/document.h>
+
 #include <handystats/core.hpp>
 #include <handystats/core.h>
 
@@ -42,16 +44,90 @@ void finalize() {
 }} // namespace handystats::config
 
 
-namespace handystats {
+namespace {
 
+/*
+ * Configure global incremental_statistics opts with rapidjson::Value config
+ */
+void configure(handystats::config::incremental_statistics& opts, const rapidjson::Value& config) {
+	if (!config.IsObject()) {
+		return;
+	}
+
+	if (config.HasMember("moving-average-alpha")) {
+		const rapidjson::Value& moving_average_alpha = config["moving-average-alpha"];
+		if (moving_average_alpha.IsNumber()) {
+			opts.moving_average_alpha = moving_average_alpha.GetDouble();
+		}
+	}
+
+	if (config.HasMember("moving-interval")) {
+		const rapidjson::Value& moving_interval = config["moving-interval"];
+		if (moving_interval.IsUint64()) {
+			opts.moving_interval = std::chrono::milliseconds(moving_interval.GetUint64());
+		}
+	}
+}
+
+/*
+ * Configure global timer opts with rapidjson::Value config
+ */
+void configure(handystats::config::timer& opts, const rapidjson::Value& config) {
+	if (!config.IsObject()) {
+		return;
+	}
+
+	if (config.HasMember("idle-timeout")) {
+		const rapidjson::Value& idle_timeout = config["idle-timeout"];
+		if (idle_timeout.IsUint64()) {
+			opts.idle_timeout = std::chrono::milliseconds(idle_timeout.GetUint64());
+		}
+	}
+}
+
+/*
+ * Configure global metrics_dump opts with rapidjson::Value config
+ */
+void configure(handystats::config::metrics_dump& opts, const rapidjson::Value& config) {
+	if (!config.IsObject()) {
+		return;
+	}
+
+	if (config.HasMember("interval")) {
+		const rapidjson::Value& interval = config["interval"];
+		if (interval.IsUint64()) {
+			opts.interval = std::chrono::milliseconds(interval.GetUint64());
+		}
+	}
+}
+
+/*
+ * Configure global core opts with rapidjson::Value config
+ */
+void configure(handystats::config::core& opts, const rapidjson::Value& config) {
+	if (!config.IsObject()) {
+		return;
+	}
+
+	if (config.HasMember("enable")) {
+		const rapidjson::Value& enable = config["enable"];
+		if (enable.IsBool()) {
+			opts.enable = enable.GetBool();
+		}
+	}
+}
+
+/*
+ * Configure global opts with rapidjson::Value config
+ */
 void config_json(const rapidjson::Value& config) {
 	std::lock_guard<std::mutex> lock(handystats::operation_mutex);
 	if (handystats::is_enabled()) {
 		return;
 	}
 
-	if (!config::default_initialized) {
-		config::initialize();
+	if (!handystats::config::default_initialized) {
+		handystats::config::initialize();
 	}
 
 	if (!config.IsObject()) {
@@ -60,24 +136,29 @@ void config_json(const rapidjson::Value& config) {
 
 	if (config.HasMember("incremental-statistics")) {
 		const rapidjson::Value& incremental_statistics_config = config["incremental-statistics"];
-		config::incremental_statistics_opts.configure(incremental_statistics_config);
+		configure(handystats::config::incremental_statistics_opts, incremental_statistics_config);
 	}
 
 	if (config.HasMember("timer")) {
 		const rapidjson::Value& timer_config = config["timer"];
-		config::timer_opts.configure(timer_config);
+		configure(handystats::config::timer_opts, timer_config);
 	}
 
 	if (config.HasMember("metrics-dump")) {
 		const rapidjson::Value& metrics_dump_config = config["metrics-dump"];
-		config::metrics_dump_opts.configure(metrics_dump_config);
+		configure(handystats::config::metrics_dump_opts, metrics_dump_config);
 	}
 
 	if (config.HasMember("core")) {
 		const rapidjson::Value& core_config = config["core"];
-		config::core_opts.configure(core_config);
+		configure(handystats::config::core_opts, core_config);
 	}
 }
+
+} // unnamed namespace
+
+
+namespace handystats {
 
 void config_json(const char* config_data) {
 	rapidjson::Document config;
@@ -87,7 +168,7 @@ void config_json(const char* config_data) {
 		return;
 	}
 
-	config_json(config);
+	::config_json(config);
 }
 
 void config_file(const char* filename) {

@@ -3,8 +3,6 @@
 #ifndef HANDYSTATS_CORE_HPP_
 #define HANDYSTATS_CORE_HPP_
 
-#include <handystats/rapidjson/document.h>
-
 /*
  * {
  *     "core": {
@@ -18,8 +16,7 @@
  *        "idle-timeout": <value in msec>
  *     },
  *     "metrics-dump": {
- *         "interval": <value in msec>,
- *         "to-json": <boolean value>
+ *         "interval": <value in msec>
  *     }
  * }
  */
@@ -32,7 +29,6 @@ void finalize();
 
 void config_file(const char* filename);
 void config_json(const char* config);
-void config_json(const rapidjson::Value& config);
 
 } // namespace handystats
 

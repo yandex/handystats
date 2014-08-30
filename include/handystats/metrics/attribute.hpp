@@ -43,7 +43,7 @@ struct attribute
 
 	void set(const value_type& value, const time_point& timestamp = clock::now());
 
-	// support for primitive types (as in rapidjson)
+	// support for primitive types
 	void set(const bool& b, const time_point& timestamp = clock::now());
 	void set(const int& i, const time_point& timestamp = clock::now());
 	void set(const unsigned& u, const time_point& timestamp = clock::now());

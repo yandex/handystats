@@ -1,5 +1,6 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
+#include <cstring>
 #include <thread>
 #include <sys/prctl.h>
 #include <handystats/atomic.hpp>

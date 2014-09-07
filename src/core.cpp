@@ -82,10 +82,6 @@ void initialize() {
 }
 
 void finalize() {
-	if (!config::core_opts.enable) {
-		return;
-	}
-
 	std::lock_guard<std::mutex> lock(operation_mutex);
 	enabled_flag.store(false, std::memory_order_release);
 

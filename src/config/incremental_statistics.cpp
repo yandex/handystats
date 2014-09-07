@@ -4,10 +4,12 @@ namespace handystats { namespace config {
 
 const double incremental_statistics::defaults::moving_average_alpha = 2.0 / 16;
 const std::chrono::milliseconds incremental_statistics::defaults::moving_interval = std::chrono::seconds(1);
+const size_t incremental_statistics::defaults::histogram_bins = 0;
 
 incremental_statistics::incremental_statistics()
 	: moving_average_alpha(defaults::moving_average_alpha)
 	, moving_interval(defaults::moving_interval)
+	, histogram_bins(defaults::histogram_bins)
 {}
 
 void incremental_statistics::configure(const rapidjson::Value& config) {
@@ -26,6 +28,13 @@ void incremental_statistics::configure(const rapidjson::Value& config) {
 		const rapidjson::Value& moving_interval = config["moving-interval"];
 		if (moving_interval.IsUint64()) {
 			this->moving_interval = std::chrono::milliseconds(moving_interval.GetUint64());
+		}
+	}
+
+	if (config.HasMember("histogram-bins")) {
+		const rapidjson::Value& histogram_bins = config["histogram-bins"];
+		if (histogram_bins.IsUint64()) {
+			this->histogram_bins = histogram_bins.GetUint64();
 		}
 	}
 }

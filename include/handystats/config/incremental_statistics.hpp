@@ -13,10 +13,12 @@ struct incremental_statistics {
 	struct defaults {
 		static const double moving_average_alpha;
 		static const std::chrono::milliseconds moving_interval;
+		static const size_t histogram_bins;
 	};
 
 	double moving_average_alpha;
 	std::chrono::milliseconds moving_interval;
+	size_t histogram_bins;
 
 	incremental_statistics();
 	void configure(const rapidjson::Value& config);

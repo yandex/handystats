@@ -36,6 +36,11 @@ inline void write_to_json_value(const incremental_statistics* const obj, rapidjs
 	json_value->AddMember("interval-count", obj->interval_count(), allocator);
 	json_value->AddMember("interval-sum", obj->interval_sum(), allocator);
 	json_value->AddMember("interval-mean", obj->interval_mean(), allocator);
+	json_value->AddMember("25%", obj->quantile(0.25), allocator);
+	json_value->AddMember("50%", obj->quantile(0.50), allocator);
+	json_value->AddMember("75%", obj->quantile(0.75), allocator);
+	json_value->AddMember("90%", obj->quantile(0.90), allocator);
+	json_value->AddMember("95%", obj->quantile(0.95), allocator);
 }
 
 template<typename StringBuffer, typename Allocator>

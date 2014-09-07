@@ -180,6 +180,7 @@ TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
 		);
 	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_average_alpha, handystats::config::incremental_statistics().moving_average_alpha);
 	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_interval.count(), handystats::config::incremental_statistics().moving_interval.count());
+	ASSERT_EQ(handystats::config::incremental_statistics_opts.histogram_bins, handystats::config::incremental_statistics().histogram_bins);
 	ASSERT_EQ(handystats::config::timer_opts.idle_timeout.count(), handystats::config::timer().idle_timeout.count());
 	ASSERT_EQ(handystats::config::metrics_dump_opts.interval.count(), handystats::config::metrics_dump().interval.count());
 	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, handystats::config::metrics_dump().to_json);
@@ -190,13 +191,15 @@ TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
 			"{\
 				\"incremental-statistics\": {\
 					\"moving-interval\": 1234,\
-					\"moving-average-alpha\": 1.5\
+					\"moving-average-alpha\": 1.5,\
+					\"histogram-bins\": 200\
 				}\
 			}"
 		);
 
 	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_interval.count(), std::chrono::milliseconds(1234).count());
 	ASSERT_EQ(handystats::config::incremental_statistics_opts.moving_average_alpha, 1.5);
+	ASSERT_EQ(handystats::config::incremental_statistics_opts.histogram_bins, 200);
 }
 
 TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
@@ -214,6 +217,8 @@ TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
 
 	ASSERT_FALSE(handystats::config::core_opts.enable);
 
+	HANDY_INIT();
+
 	for (int i = 0; i < 10; ++i) {
 		HANDY_GAUGE_SET("test.gauge", i);
 	}
@@ -222,4 +227,78 @@ TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
 
 	ASSERT_TRUE(HANDY_METRICS_DUMP()->empty());
 	ASSERT_TRUE(HANDY_JSON_DUMP()->empty());
+}
+
+TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {
+	HANDY_CONFIG_JSON(
+			"{\
+				\"incremental-statistics\": {\
+					\"histogram-bins\": 25\
+				},\
+				\"metrics-dump\": {\
+					\"interval\": 1\
+				}\
+			}"
+		);
+
+	ASSERT_EQ(handystats::config::incremental_statistics_opts.histogram_bins, 25);
+
+	HANDY_INIT();
+
+	for (int i = 0; i < 10; ++i) {
+		HANDY_GAUGE_SET("test.gauge", i);
+	}
+
+	for (int i = 0; i < 100; ++i) {
+		HANDY_COUNTER_INCREMENT("test.counter", i);
+	}
+
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+	ASSERT_FALSE(HANDY_METRICS_DUMP()->empty());
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at("test.gauge"));
+
+	ASSERT_EQ(gauge.values.histogram().size(), 10);
+
+	auto counter = boost::get<handystats::metrics::counter>(metrics_dump->at("test.counter"));
+
+	ASSERT_EQ(counter.incr_deltas.histogram().size(), 24);
+
+	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&gauge) << std::endl;
+
+	std::cout << handystats::json::write_to_json_string<rapidjson::MemoryPoolAllocator<>>(&counter) << std::endl;
+}
+
+TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
+	HANDY_CONFIG_JSON(
+			"{\
+				\"incremental-statistics\": {\
+					\"histogram-bins\": 0\
+				},\
+				\"metrics-dump\": {\
+					\"interval\": 1\
+				}\
+			}"
+		);
+
+	ASSERT_EQ(handystats::config::incremental_statistics_opts.histogram_bins, 0);
+
+	HANDY_INIT();
+
+	for (int i = 0; i < 10; ++i) {
+		HANDY_GAUGE_SET("test.gauge", i);
+	}
+
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+	ASSERT_FALSE(HANDY_METRICS_DUMP()->empty());
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at("test.gauge"));
+
+	ASSERT_EQ(gauge.values.histogram().size(), 0);
 }

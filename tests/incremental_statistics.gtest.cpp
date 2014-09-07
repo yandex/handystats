@@ -146,3 +146,64 @@ TEST_F(IncrementalStatisticsTest, AverageWithAlpha0EqualFirstElement) {
 	stats(-200);
 	ASSERT_NEAR(stats.moving_average(), 100, 1E-8);
 }
+
+TEST_F(IncrementalStatisticsTest, Histogram25RightTailTest) {
+	opts.histogram_bins = 30;
+	opts.moving_interval = std::chrono::seconds(1);
+
+	stats = handystats::incremental_statistics(opts);
+
+	const size_t TOTAL_COUNT = 10000;
+	const double normal_value = 100;
+	const double right_tail_value = 1000;
+
+	const handystats::chrono::clock::duration time_span(
+			handystats::chrono::duration_cast<handystats::chrono::clock::duration>(opts.moving_interval).count() / TOTAL_COUNT
+		);
+
+	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
+		handystats::chrono::clock::time_point current_time(time_span * index);
+
+		if (index % 100 <= 75) {
+			stats(normal_value + double(rand()) / RAND_MAX, current_time);
+		}
+		else {
+			stats(right_tail_value + double(rand()) / RAND_MAX, current_time);
+		}
+	}
+
+	ASSERT_NEAR(stats.quantile(0.5), normal_value, normal_value * 0.05);
+	ASSERT_NEAR(stats.quantile(0.99), right_tail_value, right_tail_value * 0.05);
+}
+
+TEST_F(IncrementalStatisticsTest, HistogramNormalTest) {
+	opts.histogram_bins = 30;
+	opts.moving_interval = std::chrono::seconds(1);
+
+	stats = handystats::incremental_statistics(opts);
+
+	const size_t TOTAL_COUNT = 10000;
+	double normal_value = 100;
+
+	const handystats::chrono::clock::duration time_span(
+			handystats::chrono::duration_cast<handystats::chrono::clock::duration>(opts.moving_interval).count() / TOTAL_COUNT
+		);
+
+	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
+		handystats::chrono::clock::time_point current_time(time_span * index);
+		stats(normal_value + double(rand()) / RAND_MAX, current_time);
+	}
+
+	ASSERT_NEAR(stats.quantile(0.5), normal_value, normal_value * 0.05);
+	ASSERT_NEAR(stats.quantile(0.99), normal_value, normal_value * 0.05);
+
+	normal_value *= 2;
+
+	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
+		handystats::chrono::clock::time_point current_time(time_span * (TOTAL_COUNT + index));
+		stats(normal_value + double(rand()) / RAND_MAX, current_time);
+	}
+
+	ASSERT_NEAR(stats.quantile(0.5), normal_value, normal_value * 0.05);
+	ASSERT_NEAR(stats.quantile(0.99), normal_value, normal_value * 0.05);
+}

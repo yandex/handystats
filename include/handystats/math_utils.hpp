@@ -32,6 +32,23 @@ public:
 		return std::sqrt(static_cast<long double>(a));
 	}
 
+	// a x^2 + b x + c = 0
+	static long double solve_equation(const double& a, const double& b, const double& c) {
+		// b x + c = 0
+		if (cmp(a, 0.0) == 0) {
+			if (cmp(b, 0.0) == 0) {
+				return std::numeric_limits<double>::min();
+			}
+			else {
+				return - c / b;
+			}
+		}
+		else {
+			double d = sqrt(b * b - 4 * a * c);
+			return (d - b) / 2.0 / a;
+		}
+	}
+
 }; // class math_utils
 
 } // namespace handystats

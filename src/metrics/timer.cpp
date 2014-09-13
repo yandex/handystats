@@ -8,20 +8,18 @@ const timer::instance_id_type timer::DEFAULT_INSTANCE_ID = -1;
 
 timer::timer(
 		const config::timer& timer_opts,
-		const config::incremental_statistics& incremental_statistics_opts
+		const config::statistics& statistics_opts
 	)
-	: idle_timeout(chrono::duration_cast<clock::duration>(timer_opts.idle_timeout))
-	, timestamp()
-	, value(0)
-	, values(incremental_statistics_opts)
-	, idle_check_timestamp()
+	: m_idle_timeout(chrono::duration_cast<clock::duration>(timer_opts.idle_timeout))
+	, m_values(statistics_opts)
+	, m_idle_check_timestamp()
 {
 }
 
 void timer::start(const instance_id_type& instance_id, const time_point& timestamp) {
 	check_idle_timeout(timestamp);
 
-	auto& instance = instances[instance_id];
+	auto& instance = m_instances[instance_id];
 	instance.start_timestamp = timestamp;
 	instance.heartbeat_timestamp = timestamp;
 }
@@ -29,36 +27,33 @@ void timer::start(const instance_id_type& instance_id, const time_point& timesta
 void timer::stop(const instance_id_type& instance_id, const time_point& timestamp) {
 	check_idle_timeout(timestamp);
 
-	auto instance = instances.find(instance_id);
-	if (instance == instances.end()) {
+	auto instance = m_instances.find(instance_id);
+	if (instance == m_instances.end()) {
 		return;
 	}
 
-	if (instance->second.expired(idle_timeout, timestamp)) {
-		instances.erase(instance);
+	if (instance->second.expired(m_idle_timeout, timestamp)) {
+		m_instances.erase(instance);
 		return;
 	}
 
 	auto instance_value = timestamp - instance->second.start_timestamp;
 
-	this->timestamp = timestamp;
-	value = chrono::duration_cast<value_type>(instance_value);
+	m_values.update(chrono::duration_cast<value_type>(instance_value).count(), timestamp);
 
-	values(value.count(), timestamp);
-
-	instances.erase(instance);
+	m_instances.erase(instance);
 }
 
 void timer::heartbeat(const instance_id_type& instance_id, const time_point& timestamp) {
 	check_idle_timeout(timestamp);
 
-	auto instance = instances.find(instance_id);
-	if (instance == instances.end()) {
+	auto instance = m_instances.find(instance_id);
+	if (instance == m_instances.end()) {
 		return;
 	}
 
-	if (instance->second.expired(idle_timeout, timestamp)) {
-		instances.erase(instance);
+	if (instance->second.expired(m_idle_timeout, timestamp)) {
+		m_instances.erase(instance);
 		return;
 	}
 
@@ -68,28 +63,36 @@ void timer::heartbeat(const instance_id_type& instance_id, const time_point& tim
 void timer::discard(const instance_id_type& instance_id, const time_point& timestamp) {
 	check_idle_timeout(timestamp);
 
-	instances.erase(instance_id);
+	m_instances.erase(instance_id);
 }
 
 void timer::check_idle_timeout(const time_point& timestamp, const bool& force) {
 	if (!force) {
-		if (timestamp < idle_check_timestamp + idle_timeout) {
+		if (timestamp < m_idle_check_timestamp + m_idle_timeout) {
 			return;
 		}
 	}
 
-	for (auto instance = instances.begin(); instance != instances.end();) {
-		if (instance->second.expired(idle_timeout, timestamp)) {
-			instance = instances.erase(instance);
+	for (auto instance = m_instances.begin(); instance != m_instances.end();) {
+		if (instance->second.expired(m_idle_timeout, timestamp)) {
+			instance = m_instances.erase(instance);
 		}
 		else {
 			++instance;
 		}
 	}
 
-	if (idle_check_timestamp < timestamp) {
-		idle_check_timestamp = timestamp;
+	if (m_idle_check_timestamp < timestamp) {
+		m_idle_check_timestamp = timestamp;
 	}
+}
+
+void timer::update_statistics(const time_point& timestamp) {
+	m_values.update_time(timestamp);
+}
+
+const statistics& timer::values() const {
+	return m_values;
 }
 
 }} // namespace handystats::metrics

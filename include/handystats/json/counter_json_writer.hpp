@@ -9,7 +9,6 @@
 #include <handystats/rapidjson/stringbuffer.h>
 #include <handystats/rapidjson/prettywriter.h>
 
-#include <handystats/json/timestamp.hpp>
 #include <handystats/json/gauge_json_writer.hpp>
 #include <handystats/metrics/counter.hpp>
 
@@ -31,27 +30,30 @@ inline void write_to_json_value(const metrics::counter* const obj, rapidjson::Va
 	}
 
 	json_value->AddMember("type", "counter", allocator);
-	json_value->AddMember("value", obj->value, allocator);
-
-	rapidjson::Value timestamp;
-	write_to_json_value(obj->timestamp, &timestamp);
-	json_value->AddMember("timestamp", timestamp, allocator);
 
 	rapidjson::Value values;
-	write_to_json_value(&obj->values, &values, allocator);
-	json_value->AddMember("values", values, allocator);
+	write_to_json_value(&obj->values(), &values, allocator);
+	if (!values.IsNull()) {
+		json_value->AddMember("values", values, allocator);
+	}
 
 	rapidjson::Value incr_deltas;
-	write_to_json_value(&obj->incr_deltas, &incr_deltas, allocator);
-	json_value->AddMember("incr-deltas", incr_deltas, allocator);
+	write_to_json_value(&obj->incr_deltas(), &incr_deltas, allocator);
+	if (!incr_deltas.IsNull()) {
+		json_value->AddMember("incr-deltas", incr_deltas, allocator);
+	}
 
 	rapidjson::Value decr_deltas;
-	write_to_json_value(&obj->decr_deltas, &decr_deltas, allocator);
-	json_value->AddMember("decr-deltas", decr_deltas, allocator);
+	write_to_json_value(&obj->decr_deltas(), &decr_deltas, allocator);
+	if (!decr_deltas.IsNull()) {
+		json_value->AddMember("decr-deltas", decr_deltas, allocator);
+	}
 
 	rapidjson::Value deltas;
-	write_to_json_value(&obj->deltas, &deltas, allocator);
-	json_value->AddMember("deltas", deltas, allocator);
+	write_to_json_value(&obj->deltas(), &deltas, allocator);
+	if (!deltas.IsNull()) {
+		json_value->AddMember("deltas", deltas, allocator);
+	}
 }
 
 template<typename StringBuffer, typename Allocator>

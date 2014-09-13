@@ -8,31 +8,38 @@
 #include <utility>
 
 #include <handystats/chrono.hpp>
-#include <handystats/incremental_statistics.hpp>
-#include <handystats/config/incremental_statistics.hpp>
+#include <handystats/statistics.hpp>
+#include <handystats/config/statistics.hpp>
 
 namespace handystats { namespace metrics {
 
 struct counter
 {
 	typedef int64_t value_type;
-	typedef chrono::time_duration time_duration;
 	typedef chrono::clock clock;
 	typedef clock::time_point time_point;
 
-	counter(const config::incremental_statistics& opts = config::incremental_statistics());
+	counter(const config::statistics& opts = config::statistics());
 
 	void init(const value_type& value = 0, const time_point& timestamp = clock::now());
 	void increment(const value_type& value = 1, const time_point& timestamp = clock::now());
 	void decrement(const value_type& value = 1, const time_point& timestamp = clock::now());
 
-	value_type value;
-	time_point timestamp;
+	void update_statistics(const time_point& timestamp = clock::now());
 
-	incremental_statistics values;
-	incremental_statistics deltas;
-	incremental_statistics incr_deltas;
-	incremental_statistics decr_deltas;
+	const statistics& values() const;
+	const statistics& incr_deltas() const;
+	const statistics& decr_deltas() const;
+	const statistics& deltas() const;
+
+private:
+	statistics m_values;
+	statistics m_incr_deltas;
+	statistics m_decr_deltas;
+	statistics m_deltas;
+
+	value_type m_value;
+	time_point m_timestamp;
 
 }; // struct counter
 

@@ -5,53 +5,80 @@
 
 namespace handystats { namespace metrics {
 
-counter::counter(const config::incremental_statistics& opts)
-	: value()
-	, timestamp()
-	, values(opts)
-	, deltas(opts)
-	, incr_deltas(opts)
-	, decr_deltas(opts)
+counter::counter(const config::statistics& opts)
+	: m_values(opts)
+	, m_incr_deltas(opts)
+	, m_decr_deltas(opts)
+	, m_deltas(opts)
+	, m_value()
+	, m_timestamp()
 {
 }
 
 
 void counter::init(const value_type& init_value, const time_point& timestamp) {
-	this->value = init_value;
-	this->timestamp = timestamp;
+	m_value = init_value;
+	m_timestamp = timestamp;
 
-	values.clear();
-	deltas.clear();
-	incr_deltas.clear();
-	decr_deltas.clear();
+	m_values.reset();
+	m_incr_deltas.reset();
+	m_decr_deltas.reset();
+	m_deltas.reset();
 
-	values(this->value, this->timestamp);
+	m_values.update(m_value, m_timestamp);
 }
 
 void counter::increment(const value_type& incr_value, const time_point& timestamp) {
-	if (this->timestamp == time_point()) {
+	if (m_timestamp == time_point()) {
 		init(0, timestamp);
 	}
 
-	this->value += incr_value;
-	this->timestamp = timestamp;
+	m_value += incr_value;
+	if (m_timestamp < timestamp) {
+		m_timestamp = timestamp;
+	}
 
-	values(this->value, this->timestamp);
-	deltas(incr_value, this->timestamp);
-	incr_deltas(incr_value, this->timestamp);
+	m_values.update(m_value, m_timestamp);
+	m_incr_deltas.update(incr_value, m_timestamp);
+	m_deltas.update(incr_value, m_timestamp);
 }
 
 void counter::decrement(const value_type& decr_value, const time_point& timestamp) {
-	if (this->timestamp == time_point()) {
+	if (m_timestamp == time_point()) {
 		init(0, timestamp);
 	}
 
-	this->value -= decr_value;
-	this->timestamp = timestamp;
+	m_value -= decr_value;
+	if (m_timestamp < timestamp) {
+		m_timestamp = timestamp;
+	}
 
-	values(this->value, this->timestamp);
-	deltas(-decr_value, this->timestamp);
-	decr_deltas(decr_value, this->timestamp);
+	m_values.update(m_value, m_timestamp);
+	m_decr_deltas.update(decr_value, m_timestamp);
+	m_deltas.update(-decr_value, m_timestamp);
+}
+
+void counter::update_statistics(const time_point& timestamp) {
+	m_values.update_time(timestamp);
+	m_incr_deltas.update_time(timestamp);
+	m_decr_deltas.update_time(timestamp);
+	m_deltas.update_time(timestamp);
+}
+
+const statistics& counter::values() const {
+	return m_values;
+}
+
+const statistics& counter::incr_deltas() const {
+	return m_incr_deltas;
+}
+
+const statistics& counter::decr_deltas() const {
+	return m_decr_deltas;
+}
+
+const statistics& counter::deltas() const {
+	return m_deltas;
 }
 
 }} // namespace handystats::metrics

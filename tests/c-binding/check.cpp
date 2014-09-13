@@ -2,6 +2,7 @@
 
 #include <gtest/gtest.h>
 
+#include <handystats/statistics.hpp>
 #include <handystats/metrics_dump.hpp>
 
 #include "message_queue_impl.hpp"
@@ -14,13 +15,13 @@ TEST(CBindingTest, TestGauge) {
 
 	const auto& test_gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at(TEST_GAUGE_NAME));
 
-	ASSERT_NEAR(test_gauge.values.min(), TEST_GAUGE_MIN, 1E-9);
+	ASSERT_NEAR(test_gauge.values().get<handystats::statistics::tag::min>(), TEST_GAUGE_MIN, 1E-9);
 
-	ASSERT_NEAR(test_gauge.values.max(), TEST_GAUGE_MAX, 1E-9);
+	ASSERT_NEAR(test_gauge.values().get<handystats::statistics::tag::max>(), TEST_GAUGE_MAX, 1E-9);
 
-	ASSERT_EQ(test_gauge.values.count(), TEST_GAUGE_MAX - TEST_GAUGE_MIN + 1);
+	ASSERT_EQ(test_gauge.values().get<handystats::statistics::tag::count>(), TEST_GAUGE_MAX - TEST_GAUGE_MIN + 1);
 
-	ASSERT_NEAR(test_gauge.values.mean(), (TEST_GAUGE_MIN + TEST_GAUGE_MAX) / 2.0, 1E-9);
+	ASSERT_NEAR(test_gauge.values().get<handystats::statistics::tag::avg>(), (TEST_GAUGE_MIN + TEST_GAUGE_MAX) / 2.0, 1E-9);
 }
 
 TEST(CBindingTest, TestCounter) {
@@ -30,15 +31,15 @@ TEST(CBindingTest, TestCounter) {
 
 	const auto& test_counter = boost::get<handystats::metrics::counter>(metrics_dump->at(TEST_COUNTER_NAME));
 
-	ASSERT_EQ(test_counter.incr_deltas.count(), TEST_COUNTER_INCR_COUNT);
-	ASSERT_NEAR(test_counter.incr_deltas.min(), TEST_COUNTER_INCR_DELTA, 1E-9);
-	ASSERT_NEAR(test_counter.incr_deltas.max(), TEST_COUNTER_INCR_DELTA, 1E-9);
+	ASSERT_EQ(test_counter.incr_deltas().get<handystats::statistics::tag::count>(), TEST_COUNTER_INCR_COUNT);
+	ASSERT_NEAR(test_counter.incr_deltas().get<handystats::statistics::tag::min>(), TEST_COUNTER_INCR_DELTA, 1E-9);
+	ASSERT_NEAR(test_counter.incr_deltas().get<handystats::statistics::tag::max>(), TEST_COUNTER_INCR_DELTA, 1E-9);
 
-	ASSERT_EQ(test_counter.decr_deltas.count(), TEST_COUNTER_DECR_COUNT);
-	ASSERT_NEAR(test_counter.decr_deltas.min(), TEST_COUNTER_DECR_DELTA, 1E-9);
-	ASSERT_NEAR(test_counter.decr_deltas.max(), TEST_COUNTER_DECR_DELTA, 1E-9);
+	ASSERT_EQ(test_counter.decr_deltas().get<handystats::statistics::tag::count>(), TEST_COUNTER_DECR_COUNT);
+	ASSERT_NEAR(test_counter.decr_deltas().get<handystats::statistics::tag::min>(), TEST_COUNTER_DECR_DELTA, 1E-9);
+	ASSERT_NEAR(test_counter.decr_deltas().get<handystats::statistics::tag::max>(), TEST_COUNTER_DECR_DELTA, 1E-9);
 
-	ASSERT_EQ(test_counter.values.count(), TEST_COUNTER_INCR_COUNT + TEST_COUNTER_DECR_COUNT + 1);
+	ASSERT_EQ(test_counter.values().get<handystats::statistics::tag::count>(), TEST_COUNTER_INCR_COUNT + TEST_COUNTER_DECR_COUNT + 1);
 }
 
 TEST(CBindingTest, TestScopedCounter) {
@@ -48,16 +49,16 @@ TEST(CBindingTest, TestScopedCounter) {
 
 	const auto& test_scoped_counter = boost::get<handystats::metrics::counter>(metrics_dump->at(TEST_SCOPED_COUNTER_NAME));
 
-	ASSERT_EQ(test_scoped_counter.values.count(), TEST_SCOPED_COUNTER_COUNT * 2 + 1);
-	ASSERT_NEAR(test_scoped_counter.value, 0, 1E-9);
+	ASSERT_EQ(test_scoped_counter.values().get<handystats::statistics::tag::count>(), TEST_SCOPED_COUNTER_COUNT * 2 + 1);
+	ASSERT_NEAR(test_scoped_counter.values().get<handystats::statistics::tag::value>(), 0, 1E-9);
 
-	ASSERT_EQ(test_scoped_counter.incr_deltas.count(), TEST_SCOPED_COUNTER_COUNT);
-	ASSERT_NEAR(test_scoped_counter.incr_deltas.min(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
-	ASSERT_NEAR(test_scoped_counter.incr_deltas.max(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
+	ASSERT_EQ(test_scoped_counter.incr_deltas().get<handystats::statistics::tag::count>(), TEST_SCOPED_COUNTER_COUNT);
+	ASSERT_NEAR(test_scoped_counter.incr_deltas().get<handystats::statistics::tag::min>(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
+	ASSERT_NEAR(test_scoped_counter.incr_deltas().get<handystats::statistics::tag::max>(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
 
-	ASSERT_EQ(test_scoped_counter.decr_deltas.count(), TEST_SCOPED_COUNTER_COUNT);
-	ASSERT_NEAR(test_scoped_counter.decr_deltas.min(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
-	ASSERT_NEAR(test_scoped_counter.decr_deltas.max(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
+	ASSERT_EQ(test_scoped_counter.decr_deltas().get<handystats::statistics::tag::count>(), TEST_SCOPED_COUNTER_COUNT);
+	ASSERT_NEAR(test_scoped_counter.decr_deltas().get<handystats::statistics::tag::min>(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
+	ASSERT_NEAR(test_scoped_counter.decr_deltas().get<handystats::statistics::tag::max>(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
 }
 
 TEST(CBindingTest, TestTimer) {
@@ -67,8 +68,8 @@ TEST(CBindingTest, TestTimer) {
 
 	const auto& test_timer = boost::get<handystats::metrics::timer>(metrics_dump->at(TEST_TIMER_NAME));
 
-	ASSERT_EQ(test_timer.values.count(), TEST_TIMER_NANOSLEEP_COUNT);
-	ASSERT_GE(test_timer.values.min(), TEST_TIMER_NANOSLEEP_COUNT / 1000.0);
+	ASSERT_EQ(test_timer.values().get<handystats::statistics::tag::count>(), TEST_TIMER_NANOSLEEP_COUNT);
+	ASSERT_GE(test_timer.values().get<handystats::statistics::tag::min>(), TEST_TIMER_NANOSLEEP_COUNT / 1000.0);
 }
 
 TEST(CBindingTest, TestScopedTimer) {
@@ -78,8 +79,8 @@ TEST(CBindingTest, TestScopedTimer) {
 
 	const auto& test_scoped_timer = boost::get<handystats::metrics::timer>(metrics_dump->at(TEST_SCOPED_TIMER_NAME));
 
-	ASSERT_EQ(test_scoped_timer.values.count(), TEST_SCOPED_TIMER_NANOSLEEP_COUNT);
-	ASSERT_GE(test_scoped_timer.values.min(), TEST_SCOPED_TIMER_NANOSLEEP_COUNT / 1000.0);
+	ASSERT_EQ(test_scoped_timer.values().get<handystats::statistics::tag::count>(), TEST_SCOPED_TIMER_NANOSLEEP_COUNT);
+	ASSERT_GE(test_scoped_timer.values().get<handystats::statistics::tag::min>(), TEST_SCOPED_TIMER_NANOSLEEP_COUNT / 1000.0);
 }
 
 TEST(CBindingTest, TestBoolAttr) {
@@ -89,7 +90,7 @@ TEST(CBindingTest, TestBoolAttr) {
 
 	const auto& test_bool_attr = boost::get<handystats::metrics::attribute>(metrics_dump->at(TEST_BOOL_ATTR_NAME));
 
-	ASSERT_EQ(boost::get<bool>(test_bool_attr.value), TEST_BOOL_ATTR_VALUE);
+	ASSERT_EQ(boost::get<bool>(test_bool_attr.value()), TEST_BOOL_ATTR_VALUE);
 }
 
 TEST(CBindingTest, TestDoubleAttr) {
@@ -99,7 +100,7 @@ TEST(CBindingTest, TestDoubleAttr) {
 
 	const auto& test_double_attr = boost::get<handystats::metrics::attribute>(metrics_dump->at(TEST_DOUBLE_ATTR_NAME));
 
-	ASSERT_NEAR(boost::get<double>(test_double_attr.value), TEST_DOUBLE_ATTR_VALUE, 1E-9);
+	ASSERT_NEAR(boost::get<double>(test_double_attr.value()), TEST_DOUBLE_ATTR_VALUE, 1E-9);
 }
 
 TEST(CBindingTest, TestIntAttr) {
@@ -109,7 +110,7 @@ TEST(CBindingTest, TestIntAttr) {
 
 	const auto& test_int_attr = boost::get<handystats::metrics::attribute>(metrics_dump->at(TEST_INT_ATTR_NAME));
 
-	ASSERT_EQ(boost::get<int>(test_int_attr.value), TEST_INT_ATTR_VALUE);
+	ASSERT_EQ(boost::get<int>(test_int_attr.value()), TEST_INT_ATTR_VALUE);
 }
 
 TEST(CBindingTest, TestUintAttr) {
@@ -119,7 +120,7 @@ TEST(CBindingTest, TestUintAttr) {
 
 	const auto& test_uint_attr = boost::get<handystats::metrics::attribute>(metrics_dump->at(TEST_UINT_ATTR_NAME));
 
-	ASSERT_EQ(boost::get<unsigned>(test_uint_attr.value), TEST_UINT_ATTR_VALUE);
+	ASSERT_EQ(boost::get<unsigned>(test_uint_attr.value()), TEST_UINT_ATTR_VALUE);
 }
 
 TEST(CBindingTest, TestInt64Attr) {
@@ -129,7 +130,7 @@ TEST(CBindingTest, TestInt64Attr) {
 
 	const auto& test_int64_attr = boost::get<handystats::metrics::attribute>(metrics_dump->at(TEST_INT64_ATTR_NAME));
 
-	ASSERT_EQ(boost::get<int64_t>(test_int64_attr.value), TEST_INT64_ATTR_VALUE);
+	ASSERT_EQ(boost::get<int64_t>(test_int64_attr.value()), TEST_INT64_ATTR_VALUE);
 }
 
 TEST(CBindingTest, TestUint64Attr) {
@@ -139,7 +140,7 @@ TEST(CBindingTest, TestUint64Attr) {
 
 	const auto& test_uint64_attr = boost::get<handystats::metrics::attribute>(metrics_dump->at(TEST_UINT64_ATTR_NAME));
 
-	ASSERT_EQ(boost::get<uint64_t>(test_uint64_attr.value), TEST_UINT64_ATTR_VALUE);
+	ASSERT_EQ(boost::get<uint64_t>(test_uint64_attr.value()), TEST_UINT64_ATTR_VALUE);
 }
 
 TEST(CBindingTest, TestStringAttr) {
@@ -149,7 +150,7 @@ TEST(CBindingTest, TestStringAttr) {
 
 	const auto& test_string_attr = boost::get<handystats::metrics::attribute>(metrics_dump->at(TEST_STRING_ATTR_NAME));
 
-	ASSERT_EQ(boost::get<std::string>(test_string_attr.value), TEST_STRING_ATTR_VALUE);
+	ASSERT_EQ(boost::get<std::string>(test_string_attr.value()), TEST_STRING_ATTR_VALUE);
 }
 
 

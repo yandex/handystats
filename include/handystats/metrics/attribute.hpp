@@ -4,7 +4,6 @@
 #define HANDYSTATS_METRICS_ATTRIBUTE_HPP_
 
 #include <cstdint>
-
 #include <string>
 
 #include <boost/variant.hpp>
@@ -41,22 +40,24 @@ struct attribute
 
 	attribute();
 
-	void set(const value_type& value, const time_point& timestamp = clock::now());
+	void set(const value_type& value);
 
 	// support for primitive types (as in rapidjson)
-	void set(const bool& b, const time_point& timestamp = clock::now());
-	void set(const int& i, const time_point& timestamp = clock::now());
-	void set(const unsigned& u, const time_point& timestamp = clock::now());
-	void set(const int64_t& i64, const time_point& timestamp = clock::now());
-	void set(const uint64_t& u64, const time_point& timestamp = clock::now());
-	void set(const double& d, const time_point& timestamp = clock::now());
+	void set(const bool& b);
+	void set(const int& i);
+	void set(const unsigned& u);
+	void set(const int64_t& i64);
+	void set(const uint64_t& u64);
+	void set(const double& d);
 
 	// support for strings
-	void set(const char* s, const time_point& timestamp = clock::now());
-	void set(const std::string& s, const time_point& timestamp = clock::now());
+	void set(const char* s);
+	void set(const std::string& s);
 
-	value_type value;
-	time_point timestamp;
+	const value_type& value() const;
+
+private:
+	value_type m_value;
 
 }; // struct attribute
 

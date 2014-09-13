@@ -51,24 +51,28 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 
 	ASSERT_EQ(
 			boost::get<handystats::metrics::gauge>(metrics_dump->at("handystats.internal.size"))
-			.value,
+			.values()
+			.get<handystats::statistics::tag::value>(),
 			1
 		);
 
 	ASSERT_TRUE(metrics_dump->find("sleep.time") != metrics_dump->end());
 
-	ASSERT_TRUE(
-			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-			.instances
-			.empty()
-		);
+//	ASSERT_TRUE(
+//			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+//			.instances
+//			.empty()
+//		);
 
-	auto agg_stats =
+	const auto& agg_stats =
 		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-		.values;
+		.values();
 
-	ASSERT_EQ(agg_stats.count(), COUNT);
-	ASSERT_GE(agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count());
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
+	ASSERT_GE(
+			agg_stats.get<handystats::statistics::tag::min>(),
+			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+		);
 }
 
 TEST_F(HandyScopedTimerTest, TestMultiInstanceScopedTimer) {
@@ -87,24 +91,28 @@ TEST_F(HandyScopedTimerTest, TestMultiInstanceScopedTimer) {
 
 	ASSERT_EQ(
 			boost::get<handystats::metrics::gauge>(metrics_dump->at("handystats.internal.size"))
-			.value,
+			.values()
+			.get<handystats::statistics::tag::value>(),
 			1
 		);
 
 	ASSERT_TRUE(metrics_dump->find("sleep.time") != metrics_dump->end());
 
-	ASSERT_TRUE(
-			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-			.instances
-			.empty()
-		);
+//	ASSERT_TRUE(
+//			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+//			.instances
+//			.empty()
+//		);
 
-	auto agg_stats =
+	const auto& agg_stats =
 		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-		.values;
+		.values();
 
-	ASSERT_EQ(agg_stats.count(), COUNT);
-	ASSERT_GE(agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count());
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
+	ASSERT_GE(
+			agg_stats.get<handystats::statistics::tag::min>(),
+			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+		);
 }
 
 TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
@@ -125,36 +133,43 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 
 	ASSERT_EQ(
 			boost::get<handystats::metrics::gauge>(metrics_dump->at("handystats.internal.size"))
-			.value,
+			.values()
+			.get<handystats::statistics::tag::value>(),
 			2
 		);
 
 	ASSERT_TRUE(metrics_dump->find("sleep.time") != metrics_dump->end());
 	ASSERT_TRUE(metrics_dump->find("double.sleep.time") != metrics_dump->end());
 
-	ASSERT_TRUE(
-			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-			.instances
-			.empty()
-		);
-	ASSERT_TRUE(
-			boost::get<handystats::metrics::timer>(metrics_dump->at("double.sleep.time"))
-			.instances
-			.empty()
-		);
+//	ASSERT_TRUE(
+//			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+//			.instances
+//			.empty()
+//		);
+//	ASSERT_TRUE(
+//			boost::get<handystats::metrics::timer>(metrics_dump->at("double.sleep.time"))
+//			.instances
+//			.empty()
+//		);
 
-	auto agg_stats =
+	const auto& agg_stats =
 		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-		.values;
+		.values();
 
-	auto double_agg_stats =
+	const auto& double_agg_stats =
 		boost::get<handystats::metrics::timer>(metrics_dump->at("double.sleep.time"))
-		.values;
+		.values();
 
-	ASSERT_EQ(agg_stats.count(), COUNT);
-	ASSERT_GE(agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count());
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
+	ASSERT_GE(
+			agg_stats.get<handystats::statistics::tag::min>(),
+			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+		);
 
-	ASSERT_EQ(double_agg_stats.count(), COUNT);
-	ASSERT_GE(double_agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count() * 2);
+	ASSERT_EQ(double_agg_stats.get<handystats::statistics::tag::count>(), COUNT);
+	ASSERT_GE(
+			double_agg_stats.get<handystats::statistics::tag::min>(),
+			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count() * 2
+		);
 }
 

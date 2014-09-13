@@ -6,54 +6,48 @@
 namespace handystats { namespace metrics {
 
 attribute::attribute()
-	: value()
-	, timestamp()
+	: m_value()
 {
 }
 
-void attribute::set(const value_type& value, const time_point& timestamp)
-{
-	this->value = value;
-	this->timestamp = timestamp;
+void attribute::set(const attribute::value_type& value) {
+	m_value = value;
 }
 
-void attribute::set(const bool& b, const time_point& timestamp) {
-	this->value = b;
-	this->timestamp = timestamp;
+void attribute::set(const bool& b) {
+	m_value = b;
 }
 
-void attribute::set(const int& i, const time_point& timestamp) {
-	this->value = i;
-	this->timestamp = timestamp;
+void attribute::set(const int& i) {
+	m_value = i;
 }
 
-void attribute::set(const unsigned& u, const time_point& timestamp) {
-	this->value = u;
-	this->timestamp = timestamp;
+void attribute::set(const unsigned& u) {
+	m_value = u;
 }
 
-void attribute::set(const int64_t& i64, const time_point& timestamp) {
-	this->value = i64;
-	this->timestamp = timestamp;
+void attribute::set(const int64_t& i64) {
+	m_value = i64;
 }
 
-void attribute::set(const uint64_t& u64, const time_point& timestamp) {
-	this->value = u64;
-	this->timestamp = timestamp;
+void attribute::set(const uint64_t& u64) {
+	m_value = u64;
 }
 
-void attribute::set(const double& d, const time_point& timestamp) {
-	this->value = d;
-	this->timestamp = timestamp;
+void attribute::set(const double& d) {
+	m_value = d;
 }
 
-void attribute::set(const char* s, const time_point& timestamp) {
-	set(std::string(s), timestamp);
+void attribute::set(const char* s) {
+	set(std::string(s));
 }
 
-void attribute::set(const std::string& s, const time_point& timestamp) {
-	this->value = s;
-	this->timestamp = timestamp;
+void attribute::set(const std::string& s) {
+	m_value = s;
+}
+
+const attribute::value_type& attribute::value() const {
+	return m_value;
 }
 
 }} // namespace handystats::metrics

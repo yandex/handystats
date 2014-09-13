@@ -24,11 +24,11 @@ namespace stats {
 metrics::gauge dump_time;
 
 void initialize() {
-	dump_time = metrics::gauge(config::incremental_statistics_opts);
+	dump_time = metrics::gauge(config::statistics_opts);
 }
 
 void finalize() {
-	dump_time = metrics::gauge(config::incremental_statistics_opts);
+	dump_time = metrics::gauge(config::statistics_opts);
 }
 
 } // namespace stats
@@ -50,6 +50,32 @@ std::shared_ptr<const std::map<std::string, metrics::metric_variant>>
 create_dump()
 {
 	auto dump_start_time = chrono::clock::now();
+
+	// update time
+	for (auto metric_iter = internal::metrics_map.begin(); metric_iter != internal::metrics_map.end(); ++metric_iter) {
+		switch (metric_iter->second.which()) {
+			case metrics::metric_index::GAUGE:
+			{
+				auto* gauge = boost::get<metrics::gauge*>(metric_iter->second);
+				gauge->update_statistics(dump_start_time);
+				break;
+			}
+			case metrics::metric_index::COUNTER:
+			{
+				auto* counter = boost::get<metrics::counter*>(metric_iter->second);
+				counter->update_statistics(dump_start_time);
+				break;
+			}
+			case metrics::metric_index::TIMER:
+			{
+				auto* timer = boost::get<metrics::timer*>(metric_iter->second);
+				timer->update_statistics(dump_start_time);
+				break;
+			}
+			case metrics::metric_index::ATTRIBUTE:
+				break;
+		}
+	}
 
 	std::shared_ptr<std::map<std::string, metrics::metric_variant>> new_dump(new std::map<std::string, metrics::metric_variant>());
 
@@ -158,8 +184,7 @@ create_dump()
 
 		metrics::attribute timestamp_attr;
 		timestamp_attr.set(
-				chrono::duration_cast<std::chrono::milliseconds>(system_timestamp.time_since_epoch()).count(),
-				dump_timestamp
+				chrono::duration_cast<std::chrono::milliseconds>(system_timestamp.time_since_epoch()).count()
 			);
 
 		new_dump->insert(

@@ -54,18 +54,21 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(
-			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-			.instances
-			.empty()
-		);
+//	ASSERT_TRUE(
+//			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+//			.instances
+//			.empty()
+//		);
 
-	auto agg_stats =
+	const auto& agg_stats =
 		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-		.values;
+		.values();
 
-	ASSERT_EQ(agg_stats.count(), COUNT);
-	ASSERT_GE(agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count());
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
+	ASSERT_GE(
+			agg_stats.get<handystats::statistics::tag::min>(),
+			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+		);
 }
 
 TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
@@ -83,18 +86,21 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(
-			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-			.instances
-			.empty()
-		);
+//	ASSERT_TRUE(
+//			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+//			.instances
+//			.empty()
+//		);
 
-	auto agg_stats =
+	const auto& agg_stats =
 		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-		.values;
+		.values();
 
-	ASSERT_EQ(agg_stats.count(), COUNT);
-	ASSERT_GE(agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count());
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
+	ASSERT_GE(
+			agg_stats.get<handystats::statistics::tag::min>(),
+			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+		);
 }
 
 TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
@@ -116,16 +122,19 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(
-			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-			.instances
-			.empty()
-		);
+//	ASSERT_TRUE(
+//			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+//			.instances
+//			.empty()
+//		);
 
-	auto agg_stats =
+	const auto& agg_stats =
 		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
-		.values;
+		.values();
 
-	ASSERT_EQ(agg_stats.count(), COUNT);
-	ASSERT_GE(agg_stats.min(), handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count());
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
+	ASSERT_GE(
+			agg_stats.get<handystats::statistics::tag::min>(),
+			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+		);
 }

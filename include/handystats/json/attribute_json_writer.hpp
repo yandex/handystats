@@ -32,33 +32,29 @@ inline void write_to_json_value(const metrics::attribute* const obj, rapidjson::
 
 	json_value->AddMember("type", "attribute", allocator);
 
-	switch (obj->value.which()) {
+	switch (obj->value().which()) {
 		case metrics::attribute::value_index::BOOL:
-			json_value->AddMember("value", boost::get<bool>(obj->value), allocator);
+			json_value->AddMember("value", boost::get<bool>(obj->value()), allocator);
 			break;
 		case metrics::attribute::value_index::INT:
-			json_value->AddMember("value", boost::get<int>(obj->value), allocator);
+			json_value->AddMember("value", boost::get<int>(obj->value()), allocator);
 			break;
 		case metrics::attribute::value_index::UINT:
-			json_value->AddMember("value", boost::get<unsigned>(obj->value), allocator);
+			json_value->AddMember("value", boost::get<unsigned>(obj->value()), allocator);
 			break;
 		case metrics::attribute::value_index::INT64:
-			json_value->AddMember("value", boost::get<int64_t>(obj->value), allocator);
+			json_value->AddMember("value", boost::get<int64_t>(obj->value()), allocator);
 			break;
 		case metrics::attribute::value_index::UINT64:
-			json_value->AddMember("value", boost::get<uint64_t>(obj->value), allocator);
+			json_value->AddMember("value", boost::get<uint64_t>(obj->value()), allocator);
 			break;
 		case metrics::attribute::value_index::DOUBLE:
-			json_value->AddMember("value", boost::get<double>(obj->value), allocator);
+			json_value->AddMember("value", boost::get<double>(obj->value()), allocator);
 			break;
 		case metrics::attribute::value_index::STRING:
-			json_value->AddMember("value", boost::get<std::string>(obj->value).c_str(), allocator);
+			json_value->AddMember("value", boost::get<std::string>(obj->value()).c_str(), allocator);
 			break;
 	}
-
-	rapidjson::Value timestamp;
-	write_to_json_value(obj->timestamp, &timestamp);
-	json_value->AddMember("timestamp", timestamp, allocator);
 }
 
 template<typename StringBuffer, typename Allocator>

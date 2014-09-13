@@ -9,8 +9,7 @@
 #include <handystats/rapidjson/stringbuffer.h>
 #include <handystats/rapidjson/prettywriter.h>
 
-#include <handystats/json/timestamp.hpp>
-#include <handystats/json/incremental_statistics_json_writer.hpp>
+#include <handystats/json/statistics_json_writer.hpp>
 #include <handystats/metrics/timer.hpp>
 
 namespace handystats { namespace json {
@@ -31,17 +30,11 @@ inline void write_to_json_value(const metrics::timer* const obj, rapidjson::Valu
 
 	json_value->AddMember("type", "timer", allocator);
 
-	json_value->AddMember("instances", obj->instances.size(), allocator);
-
-	json_value->AddMember("value", obj->value.count(), allocator);
-
 	rapidjson::Value values;
-	write_to_json_value(&obj->values, &values, allocator);
-	json_value->AddMember("values", values, allocator);
-
-	rapidjson::Value timestamp;
-	write_to_json_value(obj->timestamp, &timestamp);
-	json_value->AddMember("timestamp", timestamp, allocator);
+	write_to_json_value(&obj->values(), &values, allocator);
+	if (!values.IsNull()) {
+		json_value->AddMember("values", values, allocator);
+	}
 }
 
 template<typename StringBuffer, typename Allocator>

@@ -48,13 +48,13 @@ TEST_F(HandyScopedCounterTest, TestSingleScope) {
 
 	ASSERT_TRUE(metrics_dump->find("test.counter") != metrics_dump->end());
 
-	auto agg_stats =
+	const auto& agg_stats =
 		boost::get<handystats::metrics::counter>(metrics_dump->at("test.counter"))
-		.values;
+		.values();
 
-	ASSERT_EQ(agg_stats.count(), 2 * COUNT + 1);
-	ASSERT_EQ(agg_stats.min(), 0);
-	ASSERT_EQ(agg_stats.max(), 1);
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), 2 * COUNT + 1);
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::min>(), 0);
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::max>(), 1);
 }
 
 TEST_F(HandyScopedCounterTest, TestDoubleNestedScope) {
@@ -74,11 +74,11 @@ TEST_F(HandyScopedCounterTest, TestDoubleNestedScope) {
 
 	ASSERT_TRUE(metrics_dump->find("test.counter") != metrics_dump->end());
 
-	auto agg_stats =
+	const auto& agg_stats =
 		boost::get<handystats::metrics::counter>(metrics_dump->at("test.counter"))
-		.values;
+		.values();
 
-	ASSERT_EQ(agg_stats.count(), 4 * COUNT + 1);
-	ASSERT_EQ(agg_stats.min(), 0);
-	ASSERT_EQ(agg_stats.max(), 1);
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), 4 * COUNT + 1);
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::min>(), 0);
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::max>(), 1);
 }

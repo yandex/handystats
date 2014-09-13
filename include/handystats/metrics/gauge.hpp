@@ -6,26 +6,27 @@
 #include <utility>
 
 #include <handystats/chrono.hpp>
-#include <handystats/incremental_statistics.hpp>
-#include <handystats/config/incremental_statistics.hpp>
+#include <handystats/statistics.hpp>
+#include <handystats/config/statistics.hpp>
 
 namespace handystats { namespace metrics {
 
 struct gauge
 {
 	typedef double value_type;
-	typedef chrono::time_duration time_duration;
 	typedef chrono::clock clock;
 	typedef clock::time_point time_point;
 
-	gauge(const config::incremental_statistics& opts = config::incremental_statistics());
+	gauge(const config::statistics& opts = config::statistics());
 
 	void set(const value_type& value, const time_point& timestamp = clock::now());
 
-	value_type value;
-	time_point timestamp;
+	void update_statistics(const time_point& timestamp = clock::now());
 
-	incremental_statistics values;
+	const statistics& values() const;
+
+private:
+	statistics m_values;
 
 }; // struct gauge
 

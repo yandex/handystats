@@ -9,17 +9,16 @@
 #include <unordered_map>
 
 #include <handystats/chrono.hpp>
-#include <handystats/incremental_statistics.hpp>
+#include <handystats/statistics.hpp>
 
 #include <handystats/config/timer.hpp>
-#include <handystats/config/incremental_statistics.hpp>
+#include <handystats/config/statistics.hpp>
 
 namespace handystats { namespace metrics {
 
 struct timer
 {
 	typedef chrono::time_duration value_type;
-	typedef chrono::time_duration time_duration;
 	typedef chrono::clock clock;
 	typedef clock::time_point time_point;
 
@@ -44,7 +43,7 @@ struct timer
 
 	timer(
 			const config::timer& timer_opts = config::timer(),
-			const config::incremental_statistics& incremental_statistics_opts = config::incremental_statistics()
+			const config::statistics& statistics_opts = config::statistics()
 		);
 
 	void start(
@@ -67,22 +66,23 @@ struct timer
 			const time_point& timestamp = clock::now()
 		);
 
-	clock::duration idle_timeout;
-
-	time_point timestamp;
-	value_type value;
-
-	incremental_statistics values;
-
-	std::unordered_map<instance_id_type, instance_state> instances;
-
-	time_point idle_check_timestamp;
-
 	void check_idle_timeout(
 			const time_point& timestamp = clock::now(),
 			const bool& force = false
 		);
 
+	void update_statistics(const time_point& timestamp = clock::now());
+
+	const statistics& values() const;
+
+private:
+	clock::duration m_idle_timeout;
+
+	statistics m_values;
+
+	std::unordered_map<instance_id_type, instance_state> m_instances;
+
+	time_point m_idle_check_timestamp;
 
 }; // struct timer
 

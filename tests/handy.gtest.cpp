@@ -86,7 +86,8 @@ TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 
 	int handy_count =
 		boost::get<handystats::metrics::counter>(metrics_dump->at("swaps.count"))
-		.value;
+		.values()
+		.get<handystats::statistics::tag::value>();
 
 	ASSERT_EQ(handy_count, swaps_count);
 }
@@ -121,8 +122,8 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 
 	int handy_max_size =
 			boost::get<handystats::metrics::gauge>(metrics_dump->at("queue.size"))
-			.values
-			.max();
+			.values()
+			.get<handystats::statistics::tag::max>();
 
 	ASSERT_EQ(handy_max_size, max_queue_size);
 }

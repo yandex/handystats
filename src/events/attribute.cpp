@@ -42,7 +42,7 @@ void delete_event(event_message* message) {
 
 void process_set_event(metrics::attribute& attribute, const event_message& message) {
 	const auto& value = *reinterpret_cast<metrics::attribute::value_type*>(message.event_data);
-	attribute.set(value, message.timestamp);
+	attribute.set(value);
 }
 
 void process_event(metrics::attribute& attribute, const event_message& message) {

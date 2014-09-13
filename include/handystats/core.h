@@ -10,7 +10,7 @@
  *     "core": {
  *         "enable": <boolean value>
  *     },
- *     "incremental-statistics": {
+ *     "statistics": {
  *         "moving-average-alpha": <double value>,
  *         "moving-interval": <value in msec>
  *     },

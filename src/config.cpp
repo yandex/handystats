@@ -14,7 +14,7 @@
 
 namespace handystats { namespace config {
 
-incremental_statistics incremental_statistics_opts;
+statistics statistics_opts;
 timer timer_opts;
 metrics_dump metrics_dump_opts;
 core core_opts;
@@ -22,7 +22,7 @@ core core_opts;
 bool default_initialized = false;
 
 void initialize() {
-	incremental_statistics_opts = incremental_statistics();
+	statistics_opts = statistics();
 	timer_opts = timer();
 	metrics_dump_opts = metrics_dump();
 	core_opts = core();
@@ -31,7 +31,7 @@ void initialize() {
 }
 
 void finalize() {
-	incremental_statistics_opts = incremental_statistics();
+	statistics_opts = statistics();
 	timer_opts = timer();
 	metrics_dump_opts = metrics_dump();
 	core_opts = core();
@@ -58,9 +58,9 @@ void config_json(const rapidjson::Value& config) {
 		return;
 	}
 
-	if (config.HasMember("incremental-statistics")) {
-		const rapidjson::Value& incremental_statistics_config = config["incremental-statistics"];
-		config::incremental_statistics_opts.configure(incremental_statistics_config);
+	if (config.HasMember("statistics")) {
+		const rapidjson::Value& statistics_config = config["statistics"];
+		config::statistics_opts.configure(statistics_config);
 	}
 
 	if (config.HasMember("timer")) {

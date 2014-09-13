@@ -5,18 +5,21 @@
 
 namespace handystats { namespace metrics {
 
-gauge::gauge(const config::incremental_statistics& opts)
-	: value()
-	, timestamp()
-	, values(opts)
+gauge::gauge(const config::statistics& opts)
+	: m_values(opts)
 {
 }
 
 void gauge::set(const value_type& value, const time_point& timestamp) {
-	this->value = value;
-	this->timestamp = timestamp;
+	m_values.update(value, timestamp);
+}
 
-	values(this->value, this->timestamp);
+void gauge::update_statistics(const time_point& timestamp) {
+	m_values.update_time(timestamp);
+}
+
+const statistics& gauge::values() const {
+	return m_values;
 }
 
 }} // namespace handystats::metrics

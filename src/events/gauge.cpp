@@ -70,7 +70,7 @@ void delete_event(event_message* message) {
 
 void process_init_event(metrics::gauge& gauge, const event_message& message) {
 	const auto& init_value = *reinterpret_cast<const metrics::gauge::value_type*>(&message.event_data);
-	gauge = metrics::gauge(config::incremental_statistics_opts);
+	gauge = metrics::gauge(config::statistics_opts);
 	gauge.set(init_value, message.timestamp);
 }
 

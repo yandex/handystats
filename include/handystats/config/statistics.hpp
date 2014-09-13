@@ -9,18 +9,18 @@
 
 namespace handystats { namespace config {
 
-struct incremental_statistics {
+struct statistics {
 	struct defaults {
-		static const double moving_average_alpha;
 		static const std::chrono::milliseconds moving_interval;
 		static const size_t histogram_bins;
+		static const int tag_mask;
 	};
 
-	double moving_average_alpha;
 	std::chrono::milliseconds moving_interval;
 	size_t histogram_bins;
+	int tag_mask;
 
-	incremental_statistics();
+	statistics();
 	void configure(const rapidjson::Value& config);
 };
 

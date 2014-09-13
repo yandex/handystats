@@ -22,14 +22,14 @@ void check_json_dump(const std::string& string_dump) {
 		std::string type(iter->value.FindMember("type")->value.GetString(), iter->value.FindMember("type")->value.GetStringLength());
 
 		if (type == "gauge") {
-			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
-			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
 
 			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
 		}
 		else if (type == "counter") {
-			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
-			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
 
 			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
 			ASSERT_TRUE(iter->value.FindMember("incr-deltas") != NULL);
@@ -37,13 +37,13 @@ void check_json_dump(const std::string& string_dump) {
 			ASSERT_TRUE(iter->value.FindMember("deltas") != NULL);
 		}
 		else if (type == "timer") {
-			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
-			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
 
 			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
 		}
 		else if (type == "attribute") {
-			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
 			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
 		}
 	}

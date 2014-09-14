@@ -11,11 +11,36 @@
  *         "enable": <boolean value>
  *     },
  *     "statistics": {
- *         "moving-average-alpha": <double value>,
- *         "moving-interval": <value in msec>
+ *         "moving-interval": <value in msec>,
+ *         "histogram-bins": <integer value>,
+ *         "tags": "<tag name>" | ["<tag name>", "<tag name>", ...]
  *     },
- *     "timer": {
- *        "idle-timeout": <value in msec>
+ *     "metrics": {
+ *         "gauge": {
+ *             "values": {
+ *                 <statistics opts>
+ *             }
+ *         },
+ *         "counter": {
+ *             "values": {
+ *                 <statistics opts>
+ *             },
+ *             "incr-deltas": {
+ *                 <statistics opts>
+ *             },
+ *             "decr-deltas": {
+ *                 <statistics opts>
+ *             },
+ *             "deltas": {
+ *                 <statistics opts>
+ *             }
+ *         },
+ *         "timer": {
+ *             "idle-timeout": <value in msec>,
+ *             "values": {
+ *                 <statistics opts>
+ *             }
+ *         }
  *     },
  *     "metrics-dump": {
  *         "interval": <value in msec>,
@@ -23,6 +48,7 @@
  *     }
  * }
  */
+
 
 namespace handystats {
 

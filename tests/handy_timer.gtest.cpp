@@ -23,8 +23,10 @@ protected:
 	virtual void SetUp() {
 		HANDY_CONFIG_JSON(
 				"{\
-					\"timer\": {\
-						\"idle-timeout\": 100\
+					\"metrics\": {\
+						\"timer\": {\
+							\"idle-timeout\": 100\
+						}\
 					},\
 					\"metrics-dump\": {\
 						\"interval\": 10\

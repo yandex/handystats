@@ -150,7 +150,7 @@ bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXC
 		return enabled(tag::avg);
 
 	case tag::moving_count:
-		return enabled(tag::moving_count) || computed(tag::moving_avg);
+		return enabled(tag::moving_count) || computed(tag::moving_avg) || computed(tag::quantile);
 
 	case tag::moving_sum:
 		return enabled(tag::moving_sum) || computed(tag::moving_avg);
@@ -181,7 +181,7 @@ statistics::tag::type statistics::tag_mask() const HANDYSTATS_NOEXCEPT {
 statistics::statistics(
 			const config::statistics& opts
 		)
-	: m_moving_interval(chrono::duration_cast<duration>(opts.moving_interval))
+	: m_moving_interval(opts.moving_interval)
 	, m_histogram_bins(opts.histogram_bins)
 	, m_tag_mask(opts.tag_mask)
 {
@@ -486,7 +486,7 @@ typename statistics::result_type<statistics::tag::moving_avg>::type
 statistics::get_impl<statistics::tag::moving_avg>() const
 {
 	if (computed(tag::moving_avg)) {
-		if (math_utils::cmp<result_type<tag::moving_count>::type>(m_count, 0) <= 0) {
+		if (math_utils::cmp<result_type<tag::moving_count>::type>(m_moving_count, 0) <= 0) {
 			return 0;
 		}
 		else {

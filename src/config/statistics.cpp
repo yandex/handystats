@@ -5,14 +5,16 @@
 
 namespace handystats { namespace config {
 
-const std::chrono::milliseconds statistics::defaults::moving_interval = std::chrono::seconds(1);
+const chrono::clock::duration statistics::defaults::moving_interval =
+		chrono::duration_cast<chrono::clock::duration>(
+			std::chrono::seconds(1)
+		);
 const size_t statistics::defaults::histogram_bins = 0;
 const int statistics::defaults::tag_mask =
 	handystats::statistics::tag::value |
 	handystats::statistics::tag::min | handystats::statistics::tag::max |
 	handystats::statistics::tag::count | handystats::statistics::tag::sum | handystats::statistics::tag::avg |
 	handystats::statistics::tag::moving_count | handystats::statistics::tag::moving_sum | handystats::statistics::tag::moving_avg |
-	handystats::statistics::tag::quantile |
 	handystats::statistics::tag::timestamp
 	;
 
@@ -30,7 +32,10 @@ void statistics::configure(const rapidjson::Value& config) {
 	if (config.HasMember("moving-interval")) {
 		const rapidjson::Value& moving_interval = config["moving-interval"];
 		if (moving_interval.IsUint64()) {
-			this->moving_interval = std::chrono::milliseconds(moving_interval.GetUint64());
+			this->moving_interval =
+				chrono::duration_cast<chrono::clock::duration>(
+					std::chrono::milliseconds(moving_interval.GetUint64())
+				);
 		}
 	}
 

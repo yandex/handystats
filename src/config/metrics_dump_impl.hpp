@@ -1,21 +1,20 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CONFIG_METRICS_DUMP_HPP_
-#define HANDYSTATS_CONFIG_METRICS_DUMP_HPP_
+#ifndef HANDYSTATS_CONFIG_METRICS_DUMP_IMPL_HPP_
+#define HANDYSTATS_CONFIG_METRICS_DUMP_IMPL_HPP_
 
-#include <chrono>
-
+#include <handystats/chrono.hpp>
 #include <handystats/rapidjson/document.h>
 
 namespace handystats { namespace config {
 
 struct metrics_dump {
 	struct defaults {
-		static const std::chrono::milliseconds interval;
+		static const chrono::clock::duration interval;
 		static const bool to_json;
 	};
 
-	std::chrono::milliseconds interval;
+	chrono::clock::duration interval;
 	bool to_json;
 
 	metrics_dump();

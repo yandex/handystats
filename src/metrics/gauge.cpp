@@ -2,11 +2,10 @@
 
 #include <handystats/metrics/gauge.hpp>
 
-
 namespace handystats { namespace metrics {
 
-gauge::gauge(const config::statistics& opts)
-	: m_values(opts)
+gauge::gauge(const config::metrics::gauge& opts)
+	: m_values(opts.values)
 {
 }
 

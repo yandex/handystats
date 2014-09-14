@@ -23,25 +23,25 @@ namespace stats {
 metrics::gauge size;
 metrics::gauge process_time;
 
-void initialize() {
-	size = metrics::gauge(config::statistics_opts);
+static void reset() {
+	size = metrics::gauge(config::metrics::gauge_opts);
 	size.set(0);
 
-	process_time = metrics::gauge(config::statistics_opts);
+	process_time = metrics::gauge(config::metrics::gauge_opts);
+}
+
+void initialize() {
+	reset();
 }
 
 void finalize() {
-	size = metrics::gauge(config::statistics_opts);
-	size.set(0);
-
-	process_time = metrics::gauge(config::statistics_opts);
+	reset();
 }
 
 } // namespace stats
 
 
 std::map<std::string, metrics::metric_ptr_variant> metrics_map;
-
 
 size_t size() {
 	return metrics_map.size();
@@ -99,13 +99,13 @@ void process_event_message(const events::event_message& message) {
 	if (empty_metric) {
 		switch (message.destination_type) {
 			case events::event_destination_type::COUNTER:
-				metric_ptr = new metrics::counter(config::statistics_opts);
+				metric_ptr = new metrics::counter(config::metrics::counter_opts);
 				break;
 			case events::event_destination_type::GAUGE:
-				metric_ptr = new metrics::gauge(config::statistics_opts);
+				metric_ptr = new metrics::gauge(config::metrics::gauge_opts);
 				break;
 			case events::event_destination_type::TIMER:
-				metric_ptr = new metrics::timer(config::timer_opts, config::statistics_opts);
+				metric_ptr = new metrics::timer(config::metrics::timer_opts);
 				break;
 			case events::event_destination_type::ATTRIBUTE:
 				metric_ptr = new metrics::attribute();

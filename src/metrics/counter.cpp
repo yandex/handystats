@@ -5,11 +5,11 @@
 
 namespace handystats { namespace metrics {
 
-counter::counter(const config::statistics& opts)
-	: m_values(opts)
-	, m_incr_deltas(opts)
-	, m_decr_deltas(opts)
-	, m_deltas(opts)
+counter::counter(const config::metrics::counter& opts)
+	: m_values(opts.values)
+	, m_incr_deltas(opts.incr_deltas)
+	, m_decr_deltas(opts.decr_deltas)
+	, m_deltas(opts.deltas)
 	, m_value()
 	, m_timestamp()
 {

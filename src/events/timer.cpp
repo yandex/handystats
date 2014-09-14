@@ -154,7 +154,7 @@ void delete_event(event_message* message) {
 void process_init_event(metrics::timer& timer, const event_message& message) {
 	const auto& instance_id = reinterpret_cast<const metrics::timer::instance_id_type>(message.event_data);
 
-	timer = metrics::timer(config::timer_opts, config::statistics_opts);
+	timer = metrics::timer(config::metrics::timer_opts);
 	timer.start(instance_id, message.timestamp);
 }
 

@@ -11,8 +11,7 @@
 #include <handystats/chrono.hpp>
 #include <handystats/statistics.hpp>
 
-#include <handystats/config/timer.hpp>
-#include <handystats/config/statistics.hpp>
+#include <handystats/config/metrics/timer.hpp>
 
 namespace handystats { namespace metrics {
 
@@ -41,10 +40,7 @@ struct timer
 		}
 	};
 
-	timer(
-			const config::timer& timer_opts = config::timer(),
-			const config::statistics& statistics_opts = config::statistics()
-		);
+	timer(const config::metrics::timer& timer_opts = config::metrics::timer());
 
 	void start(
 			const instance_id_type& instance_id = DEFAULT_INSTANCE_ID,

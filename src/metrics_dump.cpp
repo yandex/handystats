@@ -23,12 +23,16 @@ namespace stats {
 
 metrics::gauge dump_time;
 
+static void reset() {
+	dump_time = metrics::gauge(config::metrics::gauge_opts);
+}
+
 void initialize() {
-	dump_time = metrics::gauge(config::statistics_opts);
+	reset();
 }
 
 void finalize() {
-	dump_time = metrics::gauge(config::statistics_opts);
+	reset();
 }
 
 } // namespace stats
@@ -74,6 +78,27 @@ create_dump()
 			}
 			case metrics::metric_index::ATTRIBUTE:
 				break;
+		}
+	}
+	// handystats' statistics
+	{
+		// internal
+		{
+			internal::stats::size.update_statistics(dump_start_time);
+			internal::stats::process_time.update_statistics(dump_start_time);
+		}
+
+		// message queue
+		{
+			message_queue::stats::size.update_statistics(dump_start_time);
+			message_queue::stats::message_wait_time.update_statistics(dump_start_time);
+			message_queue::stats::pop_count.update_statistics(dump_start_time);
+		}
+
+		// dump
+		{
+			stats::dump_time.update_statistics(dump_start_time);
+			json_dump::stats::dump_time.update_statistics(dump_start_time);
 		}
 	}
 
@@ -205,7 +230,7 @@ void update() {
 		return;
 	}
 
-	if (chrono::duration_cast<std::chrono::nanoseconds>(chrono::clock::now() - dump_timestamp) > config::metrics_dump_opts.interval) {
+	if (chrono::clock::now() - dump_timestamp > config::metrics_dump_opts.interval) {
 		auto new_dump = create_dump();
 		{
 			std::lock_guard<std::mutex> lock(dump_mutex);

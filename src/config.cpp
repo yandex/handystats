@@ -15,28 +15,37 @@
 namespace handystats { namespace config {
 
 statistics statistics_opts;
-timer timer_opts;
+
+namespace metrics {
+	gauge gauge_opts;
+	counter counter_opts;
+	timer timer_opts;
+}
+
 metrics_dump metrics_dump_opts;
 core core_opts;
 
 bool default_initialized = false;
 
-void initialize() {
+static void reset() {
 	statistics_opts = statistics();
-	timer_opts = timer();
+
+	metrics::gauge_opts = metrics::gauge();
+	metrics::counter_opts = metrics::counter();
+	metrics::timer_opts = metrics::timer();
+
 	metrics_dump_opts = metrics_dump();
 	core_opts = core();
 
 	default_initialized = true;
 }
 
-void finalize() {
-	statistics_opts = statistics();
-	timer_opts = timer();
-	metrics_dump_opts = metrics_dump();
-	core_opts = core();
+void initialize() {
+	reset();
+}
 
-	default_initialized = true;
+void finalize() {
+	reset();
 }
 
 }} // namespace handystats::config
@@ -60,12 +69,31 @@ void config_json(const rapidjson::Value& config) {
 
 	if (config.HasMember("statistics")) {
 		const rapidjson::Value& statistics_config = config["statistics"];
+
 		config::statistics_opts.configure(statistics_config);
+
+		config::metrics::gauge_opts.values.configure(statistics_config);
+
+		config::metrics::counter_opts.values.configure(statistics_config);
+		config::metrics::counter_opts.incr_deltas.configure(statistics_config);
+		config::metrics::counter_opts.decr_deltas.configure(statistics_config);
+		config::metrics::counter_opts.deltas.configure(statistics_config);
+
+		config::metrics::timer_opts.values.configure(statistics_config);
 	}
 
-	if (config.HasMember("timer")) {
-		const rapidjson::Value& timer_config = config["timer"];
-		config::timer_opts.configure(timer_config);
+	if (config.HasMember("metrics")) {
+		const rapidjson::Value& metrics_config = config["metrics"];
+
+		if (metrics_config.HasMember("gauge")) {
+			config::metrics::gauge_opts.configure(metrics_config["gauge"]);
+		}
+		if (metrics_config.HasMember("counter")) {
+			config::metrics::counter_opts.configure(metrics_config["counter"]);
+		}
+		if (metrics_config.HasMember("timer")) {
+			config::metrics::timer_opts.configure(metrics_config["timer"]);
+		}
 	}
 
 	if (config.HasMember("metrics-dump")) {

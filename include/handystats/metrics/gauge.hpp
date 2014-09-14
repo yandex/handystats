@@ -7,7 +7,7 @@
 
 #include <handystats/chrono.hpp>
 #include <handystats/statistics.hpp>
-#include <handystats/config/statistics.hpp>
+#include <handystats/config/metrics/gauge.hpp>
 
 namespace handystats { namespace metrics {
 
@@ -17,7 +17,7 @@ struct gauge
 	typedef chrono::clock clock;
 	typedef clock::time_point time_point;
 
-	gauge(const config::statistics& opts = config::statistics());
+	gauge(const config::metrics::gauge& opts = config::metrics::gauge());
 
 	void set(const value_type& value, const time_point& timestamp = clock::now());
 

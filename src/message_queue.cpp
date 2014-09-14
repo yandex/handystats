@@ -80,22 +80,21 @@ metrics::gauge size;
 metrics::gauge message_wait_time;
 metrics::counter pop_count;
 
-void initialize() {
-	size = metrics::gauge(config::statistics_opts);
+static void reset() {
+	size = metrics::gauge(config::metrics::gauge_opts);
 	size.set(0);
 
-	message_wait_time = metrics::gauge(config::statistics_opts);
+	message_wait_time = metrics::gauge(config::metrics::gauge_opts);
 
-	pop_count = metrics::counter(config::statistics_opts);
+	pop_count = metrics::counter(config::metrics::counter_opts);
+}
+
+void initialize() {
+	reset();
 }
 
 void finalize() {
-	size = metrics::gauge(config::statistics_opts);
-	size.set(0);
-
-	message_wait_time = metrics::gauge(config::statistics_opts);
-
-	pop_count = metrics::counter(config::statistics_opts);
+	reset();
 }
 
 } // namespace stats

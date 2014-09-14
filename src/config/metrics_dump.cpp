@@ -1,8 +1,10 @@
-#include <handystats/config/metrics_dump.hpp>
+#include "config/metrics_dump_impl.hpp"
 
 namespace handystats { namespace config {
 
-const std::chrono::milliseconds metrics_dump::defaults::interval = std::chrono::milliseconds(750);
+const chrono::clock::duration metrics_dump::defaults::interval =
+	chrono::duration_cast<chrono::clock::duration>(std::chrono::milliseconds(750));
+
 const bool metrics_dump::defaults::to_json = false;
 
 metrics_dump::metrics_dump()
@@ -18,7 +20,8 @@ void metrics_dump::configure(const rapidjson::Value& config) {
 	if (config.HasMember("interval")) {
 		const rapidjson::Value& interval = config["interval"];
 		if (interval.IsUint64()) {
-			this->interval = std::chrono::milliseconds(interval.GetUint64());
+			this->interval =
+				chrono::duration_cast<chrono::clock::duration>(std::chrono::milliseconds(interval.GetUint64()));
 		}
 	}
 

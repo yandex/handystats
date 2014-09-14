@@ -23,11 +23,11 @@ namespace stats {
 metrics::gauge dump_time;
 
 void initialize() {
-	dump_time = metrics::gauge(config::statistics_opts);
+	dump_time = metrics::gauge(config::metrics::gauge_opts);
 }
 
 void finalize() {
-	dump_time = metrics::gauge(config::statistics_opts);
+	dump_time = metrics::gauge(config::metrics::gauge_opts);
 }
 
 } // namespace stats

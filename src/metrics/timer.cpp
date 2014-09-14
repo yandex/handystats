@@ -7,11 +7,10 @@ namespace handystats { namespace metrics {
 const timer::instance_id_type timer::DEFAULT_INSTANCE_ID = -1;
 
 timer::timer(
-		const config::timer& timer_opts,
-		const config::statistics& statistics_opts
+		const config::metrics::timer& timer_opts
 	)
-	: m_idle_timeout(chrono::duration_cast<clock::duration>(timer_opts.idle_timeout))
-	, m_values(statistics_opts)
+	: m_idle_timeout(timer_opts.idle_timeout)
+	, m_values(timer_opts.values)
 	, m_idle_check_timestamp()
 {
 }

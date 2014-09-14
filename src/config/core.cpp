@@ -1,4 +1,4 @@
-#include <handystats/config/core.hpp>
+#include "config/core_impl.hpp"
 
 namespace handystats { namespace config {
 

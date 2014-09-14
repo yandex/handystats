@@ -19,7 +19,8 @@ protected:
 };
 
 TEST_F(IncrementalStatisticsTest, TestIntervalCount) {
-	opts.moving_interval = std::chrono::milliseconds(1);
+	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::milliseconds(1));
+	opts.tag_mask = handystats::statistics::tag::moving_count;
 
 	stats = handystats::statistics(opts);
 
@@ -40,7 +41,8 @@ TEST_F(IncrementalStatisticsTest, TestIntervalCount) {
 }
 
 TEST_F(IncrementalStatisticsTest, TestIntervalSum) {
-	opts.moving_interval = std::chrono::milliseconds(1);
+	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::milliseconds(1));
+	opts.tag_mask = handystats::statistics::tag::moving_sum;
 
 	stats = handystats::statistics(opts);
 
@@ -61,7 +63,8 @@ TEST_F(IncrementalStatisticsTest, TestIntervalSum) {
 }
 
 TEST_F(IncrementalStatisticsTest, TestIntervalMean) {
-	opts.moving_interval = std::chrono::milliseconds(1);
+	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::milliseconds(1));
+	opts.tag_mask = handystats::statistics::tag::moving_avg;
 
 	stats = handystats::statistics(opts);
 
@@ -73,7 +76,9 @@ TEST_F(IncrementalStatisticsTest, TestIntervalMean) {
 	for (int cycle = 0; cycle < CYCLE_COUNT; ++cycle) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-		handystats::statistics mean_stats;
+		handystats::config::statistics mean_opts;
+		mean_opts.tag_mask = handystats::statistics::tag::avg;
+		handystats::statistics mean_stats(mean_opts);
 
 		for (int step = 0; step < STEP_COUNT; ++step) {
 			auto value = rand() % 1000;
@@ -91,7 +96,8 @@ TEST_F(IncrementalStatisticsTest, TestIntervalMean) {
 
 TEST_F(IncrementalStatisticsTest, Histogram25RightTailTest) {
 	opts.histogram_bins = 30;
-	opts.moving_interval = std::chrono::seconds(1);
+	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
+	opts.tag_mask = handystats::statistics::tag::quantile;
 
 	stats = handystats::statistics(opts);
 
@@ -120,7 +126,8 @@ TEST_F(IncrementalStatisticsTest, Histogram25RightTailTest) {
 
 TEST_F(IncrementalStatisticsTest, HistogramNormalTest) {
 	opts.histogram_bins = 30;
-	opts.moving_interval = std::chrono::seconds(1);
+	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
+	opts.tag_mask = handystats::statistics::tag::quantile;
 
 	stats = handystats::statistics(opts);
 

@@ -1,25 +1,23 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_CONFIG_TIMER_HPP_
-#define HANDYSTATS_CONFIG_TIMER_HPP_
-
-#include <chrono>
+#ifndef HANDYSTATS_CONFIG_CORE_IMPL_HPP_
+#define HANDYSTATS_CONFIG_CORE_IMPL_HPP_
 
 #include <handystats/rapidjson/document.h>
 
 namespace handystats { namespace config {
 
-struct timer {
+struct core {
 	struct defaults {
-		static const std::chrono::milliseconds idle_timeout;
+		static const bool enable;
 	};
 
-	std::chrono::milliseconds idle_timeout;
+	bool enable;
 
-	timer();
+	core();
 	void configure(const rapidjson::Value& config);
 };
 
 }} // namespace handystats::config
 
-#endif // HANDYSTATS_CONFIG_TIMER_HPP_
+#endif // HANDYSTATS_CONFIG_CORE_HPP_

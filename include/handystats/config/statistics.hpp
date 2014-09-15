@@ -12,12 +12,12 @@ struct statistics {
 	struct defaults {
 		static const chrono::clock::duration moving_interval;
 		static const size_t histogram_bins;
-		static const int tag_mask;
+		static const int tags;
 	};
 
 	chrono::clock::duration moving_interval;
 	size_t histogram_bins;
-	int tag_mask;
+	int tags;
 
 	statistics();
 	void configure(const rapidjson::Value& config);

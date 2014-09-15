@@ -84,7 +84,7 @@ public:
 	bool enabled(const tag::type& t) const HANDYSTATS_NOEXCEPT;
 	bool computed(const tag::type& t) const HANDYSTATS_NOEXCEPT;
 
-	tag::type tag_mask() const HANDYSTATS_NOEXCEPT;
+	tag::type tags() const HANDYSTATS_NOEXCEPT;
 
 	// Ctor
 	statistics(
@@ -145,7 +145,7 @@ private:
 	// configuration (internal form)
 	duration m_moving_interval;
 	size_t m_histogram_bins;
-	tag::type m_tag_mask;
+	tag::type m_tags;
 
 	template <tag::type Tag>
 	typename result_type<Tag>::type get_impl() const;

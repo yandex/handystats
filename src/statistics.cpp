@@ -126,7 +126,7 @@ statistics::tag::type statistics::tag::from_string(const std::string& tag_name) 
 }
 
 bool statistics::enabled(const statistics::tag::type& t) const HANDYSTATS_NOEXCEPT {
-	return m_tag_mask & t;
+	return m_tags & t;
 }
 
 bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXCEPT {
@@ -174,8 +174,8 @@ bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXC
 	};
 }
 
-statistics::tag::type statistics::tag_mask() const HANDYSTATS_NOEXCEPT {
-	return m_tag_mask;
+statistics::tag::type statistics::tags() const HANDYSTATS_NOEXCEPT {
+	return m_tags;
 }
 
 statistics::statistics(
@@ -183,7 +183,7 @@ statistics::statistics(
 		)
 	: m_moving_interval(opts.moving_interval)
 	, m_histogram_bins(opts.histogram_bins)
-	, m_tag_mask(opts.tag_mask)
+	, m_tags(opts.tags)
 {
 	reset();
 }

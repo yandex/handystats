@@ -27,7 +27,7 @@ inline void write_to_json_value(const statistics* const obj, rapidjson::Value* j
 		json_value->SetObject();
 	}
 
-	if (obj->tag_mask() == statistics::tag::empty) {
+	if (obj->tags() == statistics::tag::empty) {
 		json_value->SetNull();
 		return;
 	}

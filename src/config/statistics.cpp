@@ -10,7 +10,7 @@ const chrono::clock::duration statistics::defaults::moving_interval =
 			std::chrono::seconds(1)
 		);
 const size_t statistics::defaults::histogram_bins = 0;
-const int statistics::defaults::tag_mask =
+const int statistics::defaults::tags =
 	handystats::statistics::tag::value |
 	handystats::statistics::tag::min | handystats::statistics::tag::max |
 	handystats::statistics::tag::count | handystats::statistics::tag::sum | handystats::statistics::tag::avg |
@@ -21,7 +21,7 @@ const int statistics::defaults::tag_mask =
 statistics::statistics()
 	: moving_interval(defaults::moving_interval)
 	, histogram_bins(defaults::histogram_bins)
-	, tag_mask(defaults::tag_mask)
+	, tags(defaults::tags)
 {}
 
 void statistics::configure(const rapidjson::Value& config) {
@@ -50,14 +50,14 @@ void statistics::configure(const rapidjson::Value& config) {
 		const rapidjson::Value& tags = config["tags"];
 
 		if (tags.IsString()) {
-			this->tag_mask = handystats::statistics::tag::from_string(tags.GetString());
+			this->tags = handystats::statistics::tag::from_string(tags.GetString());
 		}
 		else if (tags.IsArray()) {
-			this->tag_mask = handystats::statistics::tag::empty;
+			this->tags = handystats::statistics::tag::empty;
 			for (size_t index = 0; index < tags.Size(); ++index) {
 				const rapidjson::Value& tag = tags[index];
 				if (tag.IsString()) {
-					this->tag_mask |= handystats::statistics::tag::from_string(tag.GetString());
+					this->tags |= handystats::statistics::tag::from_string(tag.GetString());
 				}
 			}
 		}

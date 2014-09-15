@@ -283,8 +283,8 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {
 	ASSERT_EQ(handystats::config::metrics::gauge_opts.values.histogram_bins, 25);
 	ASSERT_EQ(handystats::config::metrics::counter_opts.incr_deltas.histogram_bins, 25);
 
-	ASSERT_EQ(handystats::config::metrics::gauge_opts.values.tag_mask, handystats::statistics::tag::histogram);
-	ASSERT_EQ(handystats::config::metrics::counter_opts.incr_deltas.tag_mask, handystats::statistics::tag::histogram);
+	ASSERT_EQ(handystats::config::metrics::gauge_opts.values.tags, handystats::statistics::tag::histogram);
+	ASSERT_EQ(handystats::config::metrics::counter_opts.incr_deltas.tags, handystats::statistics::tag::histogram);
 
 	HANDY_INIT();
 

@@ -4,10 +4,8 @@
 
 namespace handystats { namespace config { namespace metrics {
 
-const statistics gauge::defaults::values = statistics();
-
 gauge::gauge()
-	: values(gauge::defaults::values)
+	: values(statistics())
 {
 }
 

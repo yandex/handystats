@@ -10,10 +10,6 @@
 namespace handystats { namespace config { namespace metrics {
 
 struct gauge {
-	struct defaults {
-		static const statistics values;
-	};
-
 	statistics values;
 
 	gauge();

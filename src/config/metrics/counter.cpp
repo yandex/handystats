@@ -4,16 +4,11 @@
 
 namespace handystats { namespace config { namespace metrics {
 
-const statistics counter::defaults::values = statistics();
-const statistics counter::defaults::incr_deltas = statistics();
-const statistics counter::defaults::decr_deltas = statistics();
-const statistics counter::defaults::deltas = statistics();
-
 counter::counter()
-	: values(counter::defaults::values)
-	, incr_deltas(counter::defaults::incr_deltas)
-	, decr_deltas(counter::defaults::decr_deltas)
-	, deltas(counter::defaults::deltas)
+	: values(statistics())
+	, incr_deltas(statistics())
+	, decr_deltas(statistics())
+	, deltas(statistics())
 {
 }
 

@@ -9,11 +9,6 @@
 namespace handystats { namespace config {
 
 struct metrics_dump {
-	struct defaults {
-		static const chrono::clock::duration interval;
-		static const bool to_json;
-	};
-
 	chrono::clock::duration interval;
 	bool to_json;
 

@@ -10,13 +10,6 @@
 namespace handystats { namespace config { namespace metrics {
 
 struct counter {
-	struct defaults {
-		static const statistics values;
-		static const statistics incr_deltas;
-		static const statistics decr_deltas;
-		static const statistics deltas;
-	};
-
 	statistics values;
 	statistics incr_deltas;
 	statistics decr_deltas;

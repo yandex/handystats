@@ -8,10 +8,6 @@
 namespace handystats { namespace config {
 
 struct core {
-	struct defaults {
-		static const bool enable;
-	};
-
 	bool enable;
 
 	core();

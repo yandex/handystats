@@ -5,23 +5,20 @@
 
 namespace handystats { namespace config {
 
-const chrono::clock::duration statistics::defaults::moving_interval =
+statistics::statistics()
+	: moving_interval(
 		chrono::duration_cast<chrono::clock::duration>(
 			std::chrono::seconds(1)
-		);
-const size_t statistics::defaults::histogram_bins = 30;
-const int statistics::defaults::tags =
-	handystats::statistics::tag::value |
-	handystats::statistics::tag::min | handystats::statistics::tag::max |
-	handystats::statistics::tag::count | handystats::statistics::tag::sum | handystats::statistics::tag::avg |
-	handystats::statistics::tag::moving_count | handystats::statistics::tag::moving_sum | handystats::statistics::tag::moving_avg |
-	handystats::statistics::tag::timestamp
-	;
-
-statistics::statistics()
-	: moving_interval(defaults::moving_interval)
-	, histogram_bins(defaults::histogram_bins)
-	, tags(defaults::tags)
+		)
+	)
+	, histogram_bins(30)
+	, tags(
+		handystats::statistics::tag::value |
+		handystats::statistics::tag::min | handystats::statistics::tag::max |
+		handystats::statistics::tag::count | handystats::statistics::tag::sum | handystats::statistics::tag::avg |
+		handystats::statistics::tag::moving_count | handystats::statistics::tag::moving_sum | handystats::statistics::tag::moving_avg |
+		handystats::statistics::tag::timestamp
+	)
 {}
 
 void statistics::configure(const rapidjson::Value& config) {

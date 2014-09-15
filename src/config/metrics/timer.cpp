@@ -6,15 +6,13 @@
 
 namespace handystats { namespace config { namespace metrics {
 
-const chrono::clock::duration timer::defaults::idle_timeout =
+timer::timer()
+	: idle_timeout(
 		chrono::duration_cast<chrono::clock::duration>(
 			std::chrono::seconds(10)
-		);
-const statistics timer::defaults::values = statistics();
-
-timer::timer()
-	: idle_timeout(timer::defaults::idle_timeout)
-	, values(timer::defaults::values)
+		)
+	)
+	, values(statistics())
 {
 }
 

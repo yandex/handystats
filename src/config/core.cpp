@@ -2,10 +2,8 @@
 
 namespace handystats { namespace config {
 
-const bool core::defaults::enable = true;
-
 core::core()
-	: enable(defaults::enable)
+	: enable(true)
 {}
 
 void core::configure(const rapidjson::Value& config) {

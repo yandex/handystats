@@ -2,14 +2,13 @@
 
 namespace handystats { namespace config {
 
-const chrono::clock::duration metrics_dump::defaults::interval =
-	chrono::duration_cast<chrono::clock::duration>(std::chrono::milliseconds(750));
-
-const bool metrics_dump::defaults::to_json = false;
-
 metrics_dump::metrics_dump()
-	: interval(defaults::interval)
-	, to_json(defaults::to_json)
+	: interval(
+		chrono::duration_cast<chrono::clock::duration>(
+			std::chrono::milliseconds(750)
+		)
+	)
+	, to_json(false)
 {}
 
 void metrics_dump::configure(const rapidjson::Value& config) {

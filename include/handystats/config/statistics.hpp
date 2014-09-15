@@ -9,12 +9,6 @@
 namespace handystats { namespace config {
 
 struct statistics {
-	struct defaults {
-		static const chrono::clock::duration moving_interval;
-		static const size_t histogram_bins;
-		static const int tags;
-	};
-
 	chrono::clock::duration moving_interval;
 	size_t histogram_bins;
 	int tags;

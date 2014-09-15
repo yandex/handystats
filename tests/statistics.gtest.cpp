@@ -152,3 +152,27 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.5), normal_value, normal_value * 0.05);
 	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.99), normal_value, normal_value * 0.05);
 }
+
+TEST_F(IncrementalStatisticsTest, HistogramTest) {
+	opts.histogram_bins = 10;
+	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(30));
+	opts.tags = handystats::statistics::tag::histogram;
+
+	stats = handystats::statistics(opts);
+
+	const size_t BIN_COUNT = 1000;
+
+	for (size_t value = 0; value < 10; ++value) {
+		for (size_t count = 0; count < BIN_COUNT; ++count) {
+			stats.update(value);
+		}
+	}
+
+	auto histogram = stats.get<handystats::statistics::tag::histogram>();
+
+	ASSERT_EQ(histogram.size(), 10);
+	for (size_t index = 0; index < 10; ++index) {
+		ASSERT_NEAR(histogram[index].first, index, 1E-3);
+		ASSERT_NEAR(histogram[index].second, BIN_COUNT, 0.05 * BIN_COUNT);
+	}
+}

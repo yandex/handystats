@@ -318,7 +318,7 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 			"{\
 				\"statistics\": {\
 					\"histogram-bins\": 0,\
-					\"tags\": \"histogram\",\
+					\"tags\": [\"histogram\"],\
 					\"moving-interval\": 1000\
 				},\
 				\"metrics-dump\": {\

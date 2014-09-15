@@ -49,10 +49,7 @@ void statistics::configure(const rapidjson::Value& config) {
 	if (config.HasMember("tags")) {
 		const rapidjson::Value& tags = config["tags"];
 
-		if (tags.IsString()) {
-			this->tags = handystats::statistics::tag::from_string(tags.GetString());
-		}
-		else if (tags.IsArray()) {
+		if (tags.IsArray()) {
 			this->tags = handystats::statistics::tag::empty;
 			for (size_t index = 0; index < tags.Size(); ++index) {
 				const rapidjson::Value& tag = tags[index];

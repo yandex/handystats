@@ -35,7 +35,7 @@ public:
 	private:
 		const statistics* const m_statistics;
 	};
-	friend quantile_extractor;
+	friend struct quantile_extractor;
 
 	struct tag {
 		typedef int type;

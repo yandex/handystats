@@ -24,10 +24,17 @@ metrics::gauge size;
 metrics::gauge process_time;
 
 static void reset() {
-	size = metrics::gauge(config::metrics::gauge_opts);
+	config::metrics::gauge size_opts;
+	size_opts.values.tags = statistics::tag::value;
+
+	size = metrics::gauge(size_opts);
 	size.set(0);
 
-	process_time = metrics::gauge(config::metrics::gauge_opts);
+	config::metrics::gauge process_time_opts;
+	process_time_opts.values.tags = statistics::tag::moving_avg;
+	process_time_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+
+	process_time = metrics::gauge(process_time_opts);
 }
 
 void initialize() {

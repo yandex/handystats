@@ -22,12 +22,20 @@ namespace stats {
 
 metrics::gauge dump_time;
 
+static void reset() {
+	config::metrics::gauge dump_time_opts;
+	dump_time_opts.values.tags = statistics::tag::moving_avg;
+	dump_time_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+
+	dump_time = metrics::gauge(dump_time_opts);
+}
+
 void initialize() {
-	dump_time = metrics::gauge(config::metrics::gauge_opts);
+	reset();
 }
 
 void finalize() {
-	dump_time = metrics::gauge(config::metrics::gauge_opts);
+	reset();
 }
 
 } // namespace stats

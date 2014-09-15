@@ -11,7 +11,7 @@
 
 #include "message_queue_helper.hpp"
 
-static void check_json_dump(const std::string& string_dump) {
+static void check_full_json_dump(const std::string& string_dump) {
 	rapidjson::Document dump;
 	dump.Parse<0>(string_dump.c_str());
 
@@ -20,6 +20,12 @@ static void check_json_dump(const std::string& string_dump) {
 		ASSERT_TRUE(iter->value.FindMember("type") != NULL);
 
 		std::string type(iter->value.FindMember("type")->value.GetString(), iter->value.FindMember("type")->value.GetStringLength());
+		std::string name(iter->name.GetString());
+
+		// skip internal metrics
+		if (name.find("handystats") == 0) {
+			continue;
+		}
 
 		if (type == "gauge") {
 //			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
@@ -86,9 +92,9 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 
 	ASSERT_EQ(to_string_dump, string_dump);
 
-	check_json_dump(to_string_dump);
+	check_full_json_dump(to_string_dump);
 
-	check_json_dump(*HANDY_JSON_DUMP());
+	check_full_json_dump(*HANDY_JSON_DUMP());
 
 	HANDY_FINALIZE();
 }

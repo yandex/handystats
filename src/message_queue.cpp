@@ -81,12 +81,36 @@ metrics::gauge message_wait_time;
 metrics::counter pop_count;
 
 static void reset() {
-	size = metrics::gauge(config::metrics::gauge_opts);
+	config::metrics::gauge size_opts;
+	size_opts.values.tags =
+		statistics::tag::value | statistics::tag::max |
+		statistics::tag::moving_avg
+		;
+	size_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+
+	size = metrics::gauge(size_opts);
 	size.set(0);
 
-	message_wait_time = metrics::gauge(config::metrics::gauge_opts);
+	config::metrics::gauge message_wait_time_opts;
+	message_wait_time_opts.values.tags =
+		statistics::tag::moving_avg
+		;
+	message_wait_time_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
 
-	pop_count = metrics::counter(config::metrics::counter_opts);
+	message_wait_time = metrics::gauge(message_wait_time_opts);
+
+	config::metrics::counter pop_count_opts;
+
+	pop_count_opts.values.tags = statistics::tag::value;
+
+	pop_count_opts.incr_deltas.tags = statistics::tag::moving_sum;
+	pop_count_opts.incr_deltas.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+
+	pop_count_opts.decr_deltas.tags = statistics::tag::empty;
+
+	pop_count_opts.deltas.tags = statistics::tag::empty;
+
+	pop_count = metrics::counter(pop_count_opts);
 }
 
 void initialize() {

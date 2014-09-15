@@ -24,8 +24,6 @@ namespace metrics {
 extern metrics_dump metrics_dump_opts;
 extern core core_opts;
 
-extern bool default_initialized;
-
 void initialize();
 void finalize();
 

@@ -72,7 +72,7 @@ void estimate_cycles_frequency() {
 	handystats::chrono::cycles_per_nanosec = cycles_tests[TESTS_COUNT / 2];
 }
 
-__attribute__((constructor))
+__attribute__((constructor(200)))
 void init_cycles_per_nanosec() {
 	estimate_cycles_frequency();
 }

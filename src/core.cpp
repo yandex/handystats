@@ -64,10 +64,6 @@ void initialize() {
 		return;
 	}
 
-	if (!config::default_initialized) {
-		config::initialize();
-	}
-
 	metrics_dump::initialize();
 	internal::initialize();
 	message_queue::initialize();

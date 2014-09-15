@@ -25,8 +25,6 @@ namespace metrics {
 metrics_dump metrics_dump_opts;
 core core_opts;
 
-bool default_initialized = false;
-
 static void reset() {
 	statistics_opts = statistics();
 
@@ -36,8 +34,11 @@ static void reset() {
 
 	metrics_dump_opts = metrics_dump();
 	core_opts = core();
+}
 
-	default_initialized = true;
+__attribute__((constructor(300)))
+static void init_opts() {
+	reset();
 }
 
 void initialize() {
@@ -57,10 +58,6 @@ void config_json(const rapidjson::Value& config) {
 	std::lock_guard<std::mutex> lock(handystats::operation_mutex);
 	if (handystats::is_enabled()) {
 		return;
-	}
-
-	if (!config::default_initialized) {
-		config::initialize();
 	}
 
 	if (!config.IsObject()) {

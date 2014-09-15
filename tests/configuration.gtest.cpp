@@ -317,8 +317,8 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 	HANDY_CONFIG_JSON(
 			"{\
 				\"statistics\": {\
-					\"histogram-bins\": 0,\
-					\"tags\": [\"histogram\"],\
+					\"histogram-bins\": 20,\
+					\"tags\": [],\
 					\"moving-interval\": 1000\
 				},\
 				\"metrics-dump\": {\
@@ -327,7 +327,7 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 			}"
 		);
 
-	ASSERT_EQ(handystats::config::statistics_opts.histogram_bins, 0);
+	ASSERT_EQ(handystats::config::statistics_opts.histogram_bins, 20);
 
 	HANDY_INIT();
 
@@ -343,5 +343,45 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 
 	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at("test.gauge"));
 
-	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::histogram>().size(), 0);
+	ASSERT_FALSE(gauge.values().computed(handystats::statistics::tag::histogram));
+}
+
+TEST_F(HandyConfigurationTest, MetricsConfigOverwritesStatistcs) {
+	HANDY_CONFIG_JSON(
+			"{\
+				\"statistics\": {\
+					\"histogram-bins\": 50,\
+					\"tags\": [\"histogram\"],\
+					\"moving-interval\": 1000\
+				},\
+				\"metrics\": {\
+					\"gauge\": {\
+						\"values\": {\
+							\"tags\": []\
+						}\
+					}\
+				},\
+				\"metrics-dump\": {\
+					\"interval\": 1\
+				}\
+			}"
+		);
+
+	ASSERT_EQ(handystats::config::statistics_opts.histogram_bins, 50);
+
+	HANDY_INIT();
+
+	for (int i = 0; i < 10; ++i) {
+		HANDY_GAUGE_SET("test.gauge", i);
+	}
+
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+	ASSERT_FALSE(HANDY_METRICS_DUMP()->empty());
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at("test.gauge"));
+
+	ASSERT_FALSE(gauge.values().computed(handystats::statistics::tag::histogram));
 }

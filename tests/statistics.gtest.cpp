@@ -176,3 +176,108 @@ TEST_F(IncrementalStatisticsTest, HistogramTest) {
 		ASSERT_NEAR(histogram[index].second, BIN_COUNT, 0.05 * BIN_COUNT);
 	}
 }
+
+class StatisticsTagDependency : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		opts = handystats::config::statistics();
+	}
+	virtual void TearDown() {
+	}
+
+	handystats::statistics stats;
+	handystats::config::statistics opts;
+};
+
+static size_t count_computed_tags(const handystats::statistics& stats) {
+	size_t result = 0;
+	result += stats.computed(handystats::statistics::tag::value);
+	result += stats.computed(handystats::statistics::tag::min);
+	result += stats.computed(handystats::statistics::tag::max);
+	result += stats.computed(handystats::statistics::tag::count);
+	result += stats.computed(handystats::statistics::tag::sum);
+	result += stats.computed(handystats::statistics::tag::avg);
+	result += stats.computed(handystats::statistics::tag::moving_count);
+	result += stats.computed(handystats::statistics::tag::moving_sum);
+	result += stats.computed(handystats::statistics::tag::moving_avg);
+	result += stats.computed(handystats::statistics::tag::histogram);
+	result += stats.computed(handystats::statistics::tag::quantile);
+	result += stats.computed(handystats::statistics::tag::timestamp);
+
+	return result;
+}
+
+template <handystats::statistics::tag::type Tag>
+static bool check_independent_tag(handystats::statistics& stats) {
+	handystats::config::statistics opts;
+	opts.tags = Tag;
+	stats = handystats::statistics(opts);
+
+	return stats.computed(Tag) && count_computed_tags(stats) == 1;
+}
+
+TEST_F(StatisticsTagDependency, IndependentStatisticsCheck) {
+	ASSERT_TRUE(check_independent_tag<handystats::statistics::tag::value>(stats));
+	ASSERT_TRUE(check_independent_tag<handystats::statistics::tag::min>(stats));
+	ASSERT_TRUE(check_independent_tag<handystats::statistics::tag::max>(stats));
+	ASSERT_TRUE(check_independent_tag<handystats::statistics::tag::count>(stats));
+	ASSERT_TRUE(check_independent_tag<handystats::statistics::tag::sum>(stats));
+	ASSERT_TRUE(check_independent_tag<handystats::statistics::tag::timestamp>(stats));
+}
+
+TEST_F(StatisticsTagDependency, AvgStatisticsCheck) {
+	opts.tags = handystats::statistics::tag::avg;
+	stats = handystats::statistics(opts);
+
+	ASSERT_TRUE(stats.enabled(handystats::statistics::tag::avg));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::count));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::sum));
+
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::timestamp));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::value));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::min));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::moving_count));
+}
+
+TEST_F(StatisticsTagDependency, MovingAvgStatisticsCheck) {
+	opts.tags = handystats::statistics::tag::moving_avg;
+	stats = handystats::statistics(opts);
+
+	ASSERT_TRUE(stats.enabled(handystats::statistics::tag::moving_avg));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::moving_count));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::moving_sum));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::timestamp));
+
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::value));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::sum));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::count));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::avg));
+}
+
+TEST_F(StatisticsTagDependency, QuantileStatisticsCheck) {
+	opts.tags = handystats::statistics::tag::quantile;
+	stats = handystats::statistics(opts);
+
+	ASSERT_TRUE(stats.enabled(handystats::statistics::tag::quantile));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::histogram));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::moving_count));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::timestamp));
+
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::value));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::sum));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::count));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::avg));
+}
+
+TEST_F(StatisticsTagDependency, HistogramStatisticsCheck) {
+	opts.tags = handystats::statistics::tag::histogram;
+	stats = handystats::statistics(opts);
+
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::histogram));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::timestamp));
+
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::value));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::moving_count));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::moving_sum));
+	ASSERT_FALSE(stats.computed(handystats::statistics::tag::quantile));
+}

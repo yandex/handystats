@@ -11,7 +11,7 @@
 
 #include "message_queue_helper.hpp"
 
-void check_json_dump(const std::string& string_dump) {
+static void check_json_dump(const std::string& string_dump) {
 	rapidjson::Document dump;
 	dump.Parse<0>(string_dump.c_str());
 
@@ -89,6 +89,60 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 	check_json_dump(to_string_dump);
 
 	check_json_dump(*HANDY_JSON_DUMP());
+
+	HANDY_FINALIZE();
+}
+
+TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
+	HANDY_CONFIG_JSON(
+			"{\
+				\"metrics\": {\
+					\"gauge\": {\
+						\"values\": {\
+							\"tags\": []\
+						}\
+					},\
+					\"counter\": {\
+						\"incr-deltas\": {\
+							\"tags\": []\
+						},\
+						\"deltas\": {\
+							\"tags\": []\
+						}\
+					}\
+				},\
+				\"metrics-dump\": {\
+					\"interval\": 1,\
+					\"to-json\": true\
+				}\
+			}"
+		);
+
+	HANDY_INIT();
+
+	for (int i = 0; i < 10; ++i) {
+		HANDY_TIMER_SCOPE("test.timer");
+		HANDY_GAUGE_SET("test.gauge", i);
+		HANDY_COUNTER_INCREMENT("test.counter", i);
+		HANDY_ATTRIBUTE_SET("cycle.interation", i);
+	}
+
+	handystats::message_queue::wait_until_empty();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+	auto metrics_dump = HANDY_METRICS_DUMP();
+
+	rapidjson::Document dump;
+	handystats::json_dump::fill(dump, dump.GetAllocator(), *metrics_dump);
+
+	ASSERT_FALSE(dump["test.gauge"].HasMember("values"));
+
+	ASSERT_TRUE(dump["test.counter"].HasMember("values"));
+	ASSERT_FALSE(dump["test.counter"].HasMember("incr-deltas"));
+	ASSERT_TRUE(dump["test.counter"].HasMember("decr-deltas"));
+	ASSERT_FALSE(dump["test.counter"].HasMember("deltas"));
+
+	ASSERT_TRUE(dump["test.timer"].HasMember("values"));
 
 	HANDY_FINALIZE();
 }

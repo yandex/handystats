@@ -385,7 +385,7 @@ void statistics::update_time(const time_point& timestamp) {
 
 // get_impl
 template <>
-typename statistics::result_type<statistics::tag::value>::type
+statistics::result_type<statistics::tag::value>::type
 statistics::get_impl<statistics::tag::value>() const
 {
 	if (computed(tag::value)) {
@@ -397,7 +397,7 @@ statistics::get_impl<statistics::tag::value>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::min>::type
+statistics::result_type<statistics::tag::min>::type
 statistics::get_impl<statistics::tag::min>() const
 {
 	if (computed(tag::min)) {
@@ -409,7 +409,7 @@ statistics::get_impl<statistics::tag::min>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::max>::type
+statistics::result_type<statistics::tag::max>::type
 statistics::get_impl<statistics::tag::max>() const
 {
 	if (computed(tag::max)) {
@@ -421,7 +421,7 @@ statistics::get_impl<statistics::tag::max>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::count>::type
+statistics::result_type<statistics::tag::count>::type
 statistics::get_impl<statistics::tag::count>() const
 {
 	if (computed(tag::count)) {
@@ -433,7 +433,7 @@ statistics::get_impl<statistics::tag::count>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::sum>::type
+statistics::result_type<statistics::tag::sum>::type
 statistics::get_impl<statistics::tag::sum>() const
 {
 	if (computed(tag::sum)) {
@@ -445,7 +445,7 @@ statistics::get_impl<statistics::tag::sum>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::avg>::type
+statistics::result_type<statistics::tag::avg>::type
 statistics::get_impl<statistics::tag::avg>() const
 {
 	if (computed(tag::avg)) {
@@ -462,7 +462,7 @@ statistics::get_impl<statistics::tag::avg>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::moving_count>::type
+statistics::result_type<statistics::tag::moving_count>::type
 statistics::get_impl<statistics::tag::moving_count>() const
 {
 	if (computed(tag::moving_count)) {
@@ -474,7 +474,7 @@ statistics::get_impl<statistics::tag::moving_count>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::moving_sum>::type
+statistics::result_type<statistics::tag::moving_sum>::type
 statistics::get_impl<statistics::tag::moving_sum>() const
 {
 	if (computed(tag::moving_sum)) {
@@ -486,7 +486,7 @@ statistics::get_impl<statistics::tag::moving_sum>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::moving_avg>::type
+statistics::result_type<statistics::tag::moving_avg>::type
 statistics::get_impl<statistics::tag::moving_avg>() const
 {
 	if (computed(tag::moving_avg)) {
@@ -503,7 +503,7 @@ statistics::get_impl<statistics::tag::moving_avg>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::histogram>::type
+statistics::result_type<statistics::tag::histogram>::type
 statistics::get_impl<statistics::tag::histogram>() const
 {
 	if (computed(tag::histogram)) {
@@ -515,7 +515,7 @@ statistics::get_impl<statistics::tag::histogram>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::quantile>::type
+statistics::result_type<statistics::tag::quantile>::type
 statistics::get_impl<statistics::tag::quantile>() const
 {
 	if (computed(tag::quantile)) {
@@ -527,7 +527,7 @@ statistics::get_impl<statistics::tag::quantile>() const
 }
 
 template <>
-typename statistics::result_type<statistics::tag::timestamp>::type
+statistics::result_type<statistics::tag::timestamp>::type
 statistics::get_impl<statistics::tag::timestamp>() const
 {
 	if (computed(tag::timestamp)) {

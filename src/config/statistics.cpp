@@ -9,7 +9,7 @@ const chrono::clock::duration statistics::defaults::moving_interval =
 		chrono::duration_cast<chrono::clock::duration>(
 			std::chrono::seconds(1)
 		);
-const size_t statistics::defaults::histogram_bins = 0;
+const size_t statistics::defaults::histogram_bins = 30;
 const int statistics::defaults::tags =
 	handystats::statistics::tag::value |
 	handystats::statistics::tag::min | handystats::statistics::tag::max |

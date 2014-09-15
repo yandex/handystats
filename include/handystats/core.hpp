@@ -13,7 +13,7 @@
  *     "statistics": {
  *         "moving-interval": <value in msec>,
  *         "histogram-bins": <integer value>,
- *         "tags": "<tag name>" | ["<tag name>", "<tag name>", ...]
+ *         "tags": ["<tag name>", "<tag name>", ...]
  *     },
  *     "metrics": {
  *         "gauge": {

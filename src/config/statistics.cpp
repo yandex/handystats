@@ -31,7 +31,7 @@ void statistics::configure(const rapidjson::Value& config) {
 
 	if (config.HasMember("moving-interval")) {
 		const rapidjson::Value& moving_interval = config["moving-interval"];
-		if (moving_interval.IsUint64()) {
+		if (moving_interval.IsUint64() && moving_interval.GetUint64() > 0) {
 			this->moving_interval =
 				chrono::duration_cast<chrono::clock::duration>(
 					std::chrono::milliseconds(moving_interval.GetUint64())
@@ -41,7 +41,7 @@ void statistics::configure(const rapidjson::Value& config) {
 
 	if (config.HasMember("histogram-bins")) {
 		const rapidjson::Value& histogram_bins = config["histogram-bins"];
-		if (histogram_bins.IsUint64()) {
+		if (histogram_bins.IsUint64() && histogram_bins.GetUint64() > 0) {
 			this->histogram_bins = histogram_bins.GetUint64();
 		}
 	}

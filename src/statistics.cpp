@@ -211,12 +211,16 @@ static double bin_merge_criteria(
 	// possible variants:
 	// * distance of bins' centers
 	// * sum of bins' weights (number of elements)
+	// * other heuristics
 
 	// distance of bins' centers
 	// return right_bin.first - left_bin.first;
 
 	// sum of bins' weights
-	return left_bin.second + right_bin.second;
+	// return left_bin.second + right_bin.second;
+
+	// heuristic
+	return (left_bin.second + right_bin.second) * (right_bin.first - left_bin.first);
 }
 
 static void update_histogram(

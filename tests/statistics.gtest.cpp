@@ -94,7 +94,7 @@ TEST_F(IncrementalStatisticsTest, TestIntervalMean) {
 	}
 }
 
-TEST_F(IncrementalStatisticsTest, Histogram25RightTailTest) {
+TEST_F(IncrementalStatisticsTest, Quantile25RightTailTest) {
 	opts.histogram_bins = 30;
 	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
 	opts.tags = handystats::statistics::tag::quantile;
@@ -105,9 +105,7 @@ TEST_F(IncrementalStatisticsTest, Histogram25RightTailTest) {
 	const double normal_value = 100;
 	const double right_tail_value = 1000;
 
-	const handystats::chrono::clock::duration time_span(
-			handystats::chrono::duration_cast<handystats::chrono::clock::duration>(opts.moving_interval).count() / TOTAL_COUNT
-		);
+	const handystats::chrono::clock::duration time_span = opts.moving_interval / TOTAL_COUNT;
 
 	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
 		handystats::chrono::clock::time_point current_time(time_span * index);
@@ -124,7 +122,7 @@ TEST_F(IncrementalStatisticsTest, Histogram25RightTailTest) {
 	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.99), right_tail_value, right_tail_value * 0.05);
 }
 
-TEST_F(IncrementalStatisticsTest, HistogramNormalTest) {
+TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	opts.histogram_bins = 30;
 	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
 	opts.tags = handystats::statistics::tag::quantile;
@@ -134,9 +132,7 @@ TEST_F(IncrementalStatisticsTest, HistogramNormalTest) {
 	const size_t TOTAL_COUNT = 10000;
 	double normal_value = 100;
 
-	const handystats::chrono::clock::duration time_span(
-			handystats::chrono::duration_cast<handystats::chrono::clock::duration>(opts.moving_interval).count() / TOTAL_COUNT
-		);
+	const handystats::chrono::clock::duration time_span = opts.moving_interval / TOTAL_COUNT;
 
 	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
 		handystats::chrono::clock::time_point current_time(time_span * index);

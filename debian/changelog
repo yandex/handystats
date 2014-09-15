@@ -1,3 +1,21 @@
+handystats (1.9.0) unstable; urgency=low
+
+  * incremental_statistics renamed to statistics.
+  * statistics: histograms added.
+  * config: histogram parameter "statistics"->"histogram-bins" added.
+  * json_dump: 25%, 50%, 75%, 90%, 95% quantiles added.
+  * statistics: tags (min, count, moving_sum, ...) added.
+  * config: 'statistics'->'tags' config option added.
+  * statistics: 'get' and 'get_safe' interface added (min(), sum(), ... is deprecated).
+  * config: interval config sections moved out from public headers.
+  * config: gauge, counter, timer config added (now one can directly configure deltas statistics of counter).
+  * config: ability to disable statistics over moving interval and histogram & quantiles (by passing 0 to corresponding parameters) removed.
+    By now all statistics enable/disable configuration should be done by specifying appropriate tags.
+  * internal metrics configured manually (thus, passed user's configuration doesn't affect them).
+  * config: defaults sections removed (get rid of global variables).
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Mon, 15 Sep 2014 20:19:19 +0400
+
 handystats (1.8.0) unstable; urgency=low
 
   * debian/control: dependency on cdbs package added.

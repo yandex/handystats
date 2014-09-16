@@ -54,8 +54,9 @@ get_dump()
 	return dump;
 }
 
+static
 std::shared_ptr<const std::map<std::string, metrics::metric_variant>>
-create_dump()
+create_dump(const chrono::clock::time_point& timestamp)
 {
 	auto dump_start_time = chrono::clock::now();
 
@@ -65,19 +66,19 @@ create_dump()
 			case metrics::metric_index::GAUGE:
 			{
 				auto* gauge = boost::get<metrics::gauge*>(metric_iter->second);
-				gauge->update_statistics(dump_start_time);
+				gauge->update_statistics(timestamp);
 				break;
 			}
 			case metrics::metric_index::COUNTER:
 			{
 				auto* counter = boost::get<metrics::counter*>(metric_iter->second);
-				counter->update_statistics(dump_start_time);
+				counter->update_statistics(timestamp);
 				break;
 			}
 			case metrics::metric_index::TIMER:
 			{
 				auto* timer = boost::get<metrics::timer*>(metric_iter->second);
-				timer->update_statistics(dump_start_time);
+				timer->update_statistics(timestamp);
 				break;
 			}
 			case metrics::metric_index::ATTRIBUTE:
@@ -88,21 +89,21 @@ create_dump()
 	{
 		// internal
 		{
-			internal::stats::size.update_statistics(dump_start_time);
-			internal::stats::process_time.update_statistics(dump_start_time);
+			internal::stats::size.update_statistics(timestamp);
+			internal::stats::process_time.update_statistics(timestamp);
 		}
 
 		// message queue
 		{
-			message_queue::stats::size.update_statistics(dump_start_time);
-			message_queue::stats::message_wait_time.update_statistics(dump_start_time);
-			message_queue::stats::pop_count.update_statistics(dump_start_time);
+			message_queue::stats::size.update_statistics(timestamp);
+			message_queue::stats::message_wait_time.update_statistics(timestamp);
+			message_queue::stats::pop_count.update_statistics(timestamp);
 		}
 
 		// dump
 		{
-			stats::dump_time.update_statistics(dump_start_time);
-			json_dump::stats::dump_time.update_statistics(dump_start_time);
+			stats::dump_time.update_statistics(timestamp);
+			json_dump::stats::dump_time.update_statistics(timestamp);
 		}
 	}
 
@@ -206,7 +207,7 @@ create_dump()
 		}
 	}
 
-	dump_timestamp = chrono::clock::now();
+	dump_timestamp = timestamp;
 
 	{
 		std::chrono::system_clock::time_point system_timestamp = chrono::to_system_time(dump_timestamp);
@@ -224,25 +225,27 @@ create_dump()
 				);
 	}
 
-	stats::dump_time.set(chrono::duration_cast<chrono::time_duration>(dump_timestamp - dump_start_time).count(), dump_timestamp);
+	auto dump_end_time = chrono::clock::now();
+
+	stats::dump_time.set(chrono::duration_cast<chrono::time_duration>(dump_end_time - dump_start_time).count(), dump_timestamp);
 
 	return std::const_pointer_cast<const std::map<std::string, metrics::metric_variant>>(new_dump);
 }
 
-void update() {
+void update(const chrono::clock::time_point& timestamp) {
 	if (config::metrics_dump_opts.interval.count() == 0) {
 		return;
 	}
 
-	if (chrono::clock::now() - dump_timestamp > config::metrics_dump_opts.interval) {
-		auto new_dump = create_dump();
+	if (timestamp - dump_timestamp > config::metrics_dump_opts.interval) {
+		auto new_dump = create_dump(timestamp);
 		{
 			std::lock_guard<std::mutex> lock(dump_mutex);
 			dump = new_dump;
 		}
 
 		if (config::metrics_dump_opts.to_json) {
-			json_dump::update();
+			json_dump::update(timestamp);
 		}
 	}
 }

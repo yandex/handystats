@@ -15,7 +15,7 @@ namespace handystats { namespace metrics_dump {
 
 extern chrono::clock::time_point dump_timestamp;
 
-void update();
+void update(const chrono::clock::time_point&);
 
 const std::shared_ptr<const std::map<std::string, metrics::metric_variant>> get_dump();
 

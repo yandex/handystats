@@ -3,11 +3,14 @@
 #ifndef HANDYSTATS_JSON_DUMP_IMPL_HPP_
 #define HANDYSTATS_JSON_DUMP_IMPL_HPP_
 
+#include <handystats/chrono.hpp>
 #include <handystats/metrics/gauge.hpp>
 
 namespace handystats { namespace json_dump {
 
-void update();
+void update(const chrono::clock::time_point&);
+
+const std::shared_ptr<const std::string> get_dump();
 
 void initialize();
 void finalize();

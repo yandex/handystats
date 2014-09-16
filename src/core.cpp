@@ -28,14 +28,19 @@ bool is_enabled() {
 
 std::thread processor_thread;
 
-void process_message_queue() {
+static chrono::clock::time_point process_message_queue() {
 	auto* message = message_queue::pop();
 
+	chrono::clock::time_point timestamp;
+
 	if (message) {
+		timestamp = message->timestamp;
 		internal::process_event_message(*message);
 	}
 
 	events::delete_event_message(message);
+
+	return timestamp;
 }
 
 static void run_processor() {
@@ -47,14 +52,16 @@ static void run_processor() {
 	prctl(PR_SET_NAME, thread_name);
 
 	while (is_enabled()) {
+		chrono::clock::time_point current_timestamp;
 		if (!message_queue::empty()) {
-			process_message_queue();
+			current_timestamp = process_message_queue();
 		}
 		else {
+			current_timestamp = chrono::clock::now();
 			std::this_thread::sleep_for(std::chrono::microseconds(10));
 		}
 
-		metrics_dump::update();
+		metrics_dump::update(current_timestamp);
 	}
 }
 

@@ -51,24 +51,25 @@ get_dump() {
 }
 
 template<typename Allocator>
-std::shared_ptr<const std::string> create_dump(Allocator&& allocator = Allocator()) {
+static
+std::shared_ptr<const std::string> create_dump(const chrono::clock::time_point&, Allocator&& allocator = Allocator()) {
 	return std::shared_ptr<const std::string>(
 			new std::string(to_string(*metrics_dump::get_dump(), allocator))
 		);
 }
 
-void update() {
+void update(const chrono::clock::time_point& timestamp) {
 	if (!config::metrics_dump_opts.to_json) {
 		return;
 	}
 
 	auto dump_start_time = chrono::clock::now();
-	auto new_dump = create_dump<rapidjson::MemoryPoolAllocator<>>();
+	auto new_dump = create_dump<rapidjson::MemoryPoolAllocator<>>(timestamp);
 	auto dump_end_time = chrono::clock::now();
 
 	stats::dump_time.set(
 			chrono::duration_cast<chrono::time_duration>(dump_end_time - dump_start_time).count(),
-			dump_end_time
+			timestamp
 		);
 
 	{

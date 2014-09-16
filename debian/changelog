@@ -1,3 +1,10 @@
+handystats (1.9.2) unstable; urgency=low
+
+  * message_queue: event message queue reimplemented.
+    http://www.1024cores.net/home/lock-free-algorithms/queues/intrusive-mpsc-node-based-queue
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Tue, 16 Sep 2014 16:40:37 +0400
+
 handystats (1.9.1) unstable; urgency=low
 
   * track timestamp from event messages (in case of absence get current time) to update metrics statistics correctly.

@@ -1,3 +1,9 @@
+handystats (1.9.1) unstable; urgency=low
+
+  * track timestamp from event messages (in case of absence get current time) to update metrics statistics correctly.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Tue, 16 Sep 2014 14:29:21 +0400
+
 handystats (1.9.0) unstable; urgency=low
 
   * incremental_statistics renamed to statistics.

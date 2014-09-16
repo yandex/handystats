@@ -23,20 +23,20 @@ struct __event_message_queue
 		: m_head_node(&m_stub_node)
 		, m_tail_node(&m_stub_node)
 	{
-		m_stub_node.next = nullptr;
+		m_stub_node.next.store(nullptr, std::memory_order_release);
 	}
 
 	void push(node* n)
 	{
-		n->next = nullptr;
+		n->next.store(nullptr, std::memory_order_release);
 		node* prev = m_head_node.exchange(n, std::memory_order_acquire);
-		prev->next = static_cast<handystats::events::event_message*>(n);
+		prev->next.store(static_cast<handystats::events::event_message*>(n), std::memory_order_release);
 	}
 
 	node* pop()
 	{
 		node* tail = m_tail_node;
-		node* next = tail->next;
+		node* next = tail->next.load(std::memory_order_acquire);
 
 		if (tail == &m_stub_node) {
 			if (next == nullptr) {
@@ -45,7 +45,7 @@ struct __event_message_queue
 
 			m_tail_node = next;
 			tail = next;
-			next = next->next;
+			next = next->next.load(std::memory_order_acquire);
 		}
 
 		if (next) {
@@ -61,7 +61,7 @@ struct __event_message_queue
 
 		push(&m_stub_node);
 
-		next = tail->next;
+		next = tail->next.load(std::memory_order_acquire);
 
 		if (next) {
 			m_tail_node = next;

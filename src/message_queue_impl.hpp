@@ -3,6 +3,7 @@
 #ifndef HANDYSTATS_MESSAGE_QUEUE_IMPL_HPP_
 #define HANDYSTATS_MESSAGE_QUEUE_IMPL_HPP_
 
+#include <handystats/atomic.hpp>
 #include <handystats/metrics/gauge.hpp>
 #include <handystats/metrics/counter.hpp>
 
@@ -15,7 +16,7 @@ struct event_message;
 namespace handystats { namespace message_queue {
 
 struct node {
-	events::event_message* next;
+	std::atomic<events::event_message*> next;
 };
 
 void push(node*);

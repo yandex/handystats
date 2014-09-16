@@ -7,6 +7,7 @@
 namespace std {
 
 template <typename T>
+void
 atomic<T*>::store(T* value, memory_order order) volatile {
 	this->exchange(value, order);
 }

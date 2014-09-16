@@ -5,6 +5,7 @@
 
 #include <handystats/common.h>
 
+#include <handystats/chrono.h>
 #include <handystats/chrono.hpp>
 #include <handystats/chrono/tsc_clock.hpp>
 
@@ -319,3 +320,14 @@ tsc_clock::duration duration_cast<tsc_clock::duration, std::chrono::nanoseconds>
 }
 
 }} // namespace handystats::chrono
+
+
+HANDYSTATS_EXTERN_C
+int64_t handystats_now(void) {
+	return (int64_t)rdtsc();
+}
+
+HANDYSTATS_EXTERN_C
+double handystats_difftime(int64_t end, int64_t start) {
+	return double(end - start) / cycles_per_nanosec / 1E9;
+}

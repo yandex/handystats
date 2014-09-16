@@ -157,7 +157,7 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 			"{\
 				\"metrics\": {\
 					\"timer\": {\
-						\"idle-timeout\": 10\
+						\"idle-timeout\": 100\
 					}\
 				},\
 				\"metrics-dump\": {\
@@ -168,7 +168,7 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 
 	ASSERT_NEAR(handystats::config::metrics::timer_opts.idle_timeout.count(),
 			handystats::chrono::duration_cast<handystats::chrono::clock::duration>(
-				std::chrono::milliseconds(10)
+				std::chrono::milliseconds(100)
 			)
 			.count(),
 			1E-6
@@ -179,7 +179,7 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 	HANDY_TIMER_START("dead-timer");
 	HANDY_TIMER_START("alive-timer");
 
-	for (int cycle = 0; cycle < 10; ++cycle) {
+	for (int cycle = 0; cycle < 100; ++cycle) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 		HANDY_TIMER_HEARTBEAT("alive-timer");
 	}

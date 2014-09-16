@@ -13,51 +13,62 @@
 namespace {
 
 /*
- * Taken from Boost's Atomic usage examples.
+ * http://www.1024cores.net/home/lock-free-algorithms/queues/intrusive-mpsc-node-based-queue
  */
 struct __event_message_queue
 {
 	typedef handystats::message_queue::node node;
 
-	__event_message_queue() : head_node(nullptr) {}
+	__event_message_queue()
+		: m_head_node(&m_stub_node)
+		, m_tail_node(&m_stub_node)
+	{
+		m_stub_node.next = nullptr;
+	}
 
 	void push(node* n)
 	{
-		node* stale_head = head_node.load(std::memory_order_relaxed);
-		do {
-			n->next = static_cast<handystats::events::event_message*>(stale_head);
-		}
-		while (
-				!head_node.compare_exchange_weak(
-					stale_head, // expected
-					n, // desired
-					std::memory_order_release // order
-				)
-			);
+		n->next = nullptr;
+		node* prev = m_head_node.exchange(n, std::memory_order_acquire);
+		prev->next = static_cast<handystats::events::event_message*>(n);
 	}
 
-	node* pop_all(void)
+	node* pop()
 	{
-		node* last = pop_all_reverse();
-		node* first = 0;
-		while(last) {
-			node* tmp = last;
-			last = last->next;
-			tmp->next = static_cast<handystats::events::event_message*>(first);
-			first = tmp;
+		node* tail = m_tail_node;
+		node* next = tail->next;
+
+		if (tail == &m_stub_node) {
+			if (next == nullptr) {
+				return nullptr;
+			}
+
+			m_tail_node = next;
+			tail = next;
+			next = next->next;
 		}
-		return first;
-	}
 
-	// alternative interface if ordering is of no importance
-	node* pop_all_reverse(void)
-	{
-		// TODO: memory order should be std::memory_order_consume here, but it causes compilation error
-		return head_node.exchange(0, std::memory_order_acquire);
-	}
+		if (next) {
+			m_tail_node = next;
+			return tail;
+		}
 
-	bool empty() const {
-		return !head_node.load(std::memory_order_acquire);
+		node* head = m_head_node.load(std::memory_order_acquire);
+
+		if (tail != head) {
+			return nullptr;
+		}
+
+		push(&m_stub_node);
+
+		next = tail->next;
+
+		if (next) {
+			m_tail_node = next;
+			return tail;
+		}
+
+		return nullptr;
 	}
 
 	~__event_message_queue() {
@@ -65,7 +76,10 @@ struct __event_message_queue
 		// this will be memory leak for sure
 	}
 
-	std::atomic<node*> head_node;
+private:
+	std::atomic<node*> m_head_node;
+	node* m_tail_node;
+	node m_stub_node;
 };
 
 } // unnamed namespace
@@ -125,7 +139,6 @@ void finalize() {
 
 
 __event_message_queue* event_message_queue = nullptr;
-__event_message_queue::node* popped_head = nullptr;
 
 std::atomic<size_t> mq_size(0);
 
@@ -139,18 +152,12 @@ void push(node* n) {
 events::event_message* pop() {
 	events::event_message* message = nullptr;
 
-	if (!popped_head && event_message_queue) {
-		popped_head = event_message_queue->pop_all();
-	}
-
-	if (popped_head) {
-		message = static_cast<events::event_message*>(popped_head);
-		--mq_size;
-
-		popped_head = popped_head->next;
+	if (event_message_queue) {
+		message = static_cast<events::event_message*>(event_message_queue->pop());
 	}
 
 	if (message) {
+		--mq_size;
 		auto current_time = chrono::clock::now();
 		stats::size.set(size(), current_time);
 		stats::pop_count.increment(1, current_time);

@@ -8,7 +8,6 @@ metrics_dump::metrics_dump()
 			std::chrono::milliseconds(750)
 		)
 	)
-	, to_json(false)
 {}
 
 void metrics_dump::configure(const rapidjson::Value& config) {
@@ -21,13 +20,6 @@ void metrics_dump::configure(const rapidjson::Value& config) {
 		if (interval.IsUint64()) {
 			this->interval =
 				chrono::duration_cast<chrono::clock::duration>(std::chrono::milliseconds(interval.GetUint64()));
-		}
-	}
-
-	if (config.HasMember("to-json")) {
-		const rapidjson::Value& to_json = config["to-json"];
-		if (to_json.IsBool()) {
-			this->to_json = to_json.GetBool();
 		}
 	}
 }

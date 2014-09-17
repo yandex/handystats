@@ -31,8 +31,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpConfiguration) {
 	HANDY_CONFIG_JSON(
 			"{\
 				\"metrics-dump\": {\
-					\"interval\": 750,\
-					\"to-json\": false\
+					\"interval\": 750\
 				}\
 			}"
 		);
@@ -44,15 +43,13 @@ TEST_F(HandyConfigurationTest, MetricsDumpConfiguration) {
 			.count(),
 			1E-6
 		);
-	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, false);
 }
 
 TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 	HANDY_CONFIG_JSON(
 			"{\
 				\"metrics-dump\": {\
-					\"interval\": 2,\
-					\"to-json\": true\
+					\"interval\": 2\
 				}\
 			}"
 		);
@@ -64,7 +61,6 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 			.count(),
 			1E-6
 		);
-	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, true);
 
 	HANDY_INIT();
 
@@ -79,50 +75,14 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 
 	auto json_dump = HANDY_JSON_DUMP();
 
-	ASSERT_FALSE(json_dump->empty());
-}
-
-TEST_F(HandyConfigurationTest, MetricsDumpToJsonFalseCheck) {
-	HANDY_CONFIG_JSON(
-			"{\
-				\"metrics-dump\": {\
-					\"interval\": 2,\
-					\"to-json\": false\
-				}\
-			}"
-		);
-
-	ASSERT_NEAR(handystats::config::metrics_dump_opts.interval.count(),
-			handystats::chrono::duration_cast<handystats::chrono::clock::duration>(
-				std::chrono::milliseconds(2)
-			)
-			.count(),
-			1E-6
-		);
-	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, false);
-
-	HANDY_INIT();
-
-	HANDY_GAUGE_SET("gauge.test", 15);
-
-	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-
-	auto metrics_dump = HANDY_METRICS_DUMP();
-
-	ASSERT_TRUE(metrics_dump->find("gauge.test") != metrics_dump->end());
-
-	auto json_dump = HANDY_JSON_DUMP();
-
-	ASSERT_TRUE(json_dump->empty());
+	ASSERT_FALSE(json_dump.empty());
 }
 
 TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 	HANDY_CONFIG_JSON(
 			"{\
 				\"metrics-dump\": {\
-					\"interval\": 0,\
-					\"to-json\": true\
+					\"interval\": 0\
 				}\
 			}"
 		);
@@ -134,7 +94,6 @@ TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 			.count(),
 			1E-6
 		);
-	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, true);
 
 	HANDY_INIT();
 
@@ -149,7 +108,7 @@ TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 
 	auto json_dump = HANDY_JSON_DUMP();
 
-	ASSERT_TRUE(json_dump->empty());
+	ASSERT_EQ(json_dump, "{}");
 }
 
 TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
@@ -214,7 +173,6 @@ TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
 	ASSERT_EQ(handystats::config::statistics_opts.histogram_bins, handystats::config::statistics().histogram_bins);
 	ASSERT_EQ(handystats::config::metrics::timer_opts.idle_timeout.count(), handystats::config::metrics::timer().idle_timeout.count());
 	ASSERT_EQ(handystats::config::metrics_dump_opts.interval.count(), handystats::config::metrics_dump().interval.count());
-	ASSERT_EQ(handystats::config::metrics_dump_opts.to_json, handystats::config::metrics_dump().to_json);
 }
 
 TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
@@ -244,8 +202,7 @@ TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
 					\"enable\": false\
 				},\
 				\"metrics-dump\": {\
-					\"interval\": 1,\
-					\"to-json\": true\
+					\"interval\": 1\
 				}\
 			}"
 		);
@@ -261,7 +218,7 @@ TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 	ASSERT_TRUE(HANDY_METRICS_DUMP()->empty());
-	ASSERT_TRUE(HANDY_JSON_DUMP()->empty());
+	ASSERT_EQ(HANDY_JSON_DUMP(), "{}");
 }
 
 TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {

@@ -9,7 +9,6 @@
 
 #include "internal_impl.hpp"
 #include "message_queue_impl.hpp"
-#include "json_dump_impl.hpp"
 
 #include "config_impl.hpp"
 
@@ -103,7 +102,6 @@ create_dump(const chrono::clock::time_point& timestamp)
 		// dump
 		{
 			stats::dump_time.update_statistics(timestamp);
-			json_dump::stats::dump_time.update_statistics(timestamp);
 		}
 	}
 
@@ -197,13 +195,6 @@ create_dump(const chrono::clock::time_point& timestamp)
 						stats::dump_time
 						)
 					);
-
-			new_dump->insert(
-					std::pair<std::string, metrics::metric_variant>(
-						"handystats.json_dump.dump_time",
-						json_dump::stats::dump_time
-						)
-					);
 		}
 	}
 
@@ -243,10 +234,6 @@ void update(const chrono::clock::time_point& timestamp) {
 			std::lock_guard<std::mutex> lock(dump_mutex);
 			dump = new_dump;
 		}
-
-		if (config::metrics_dump_opts.to_json) {
-			json_dump::update(timestamp);
-		}
 	}
 }
 
@@ -259,8 +246,6 @@ void initialize() {
 		dump_timestamp = chrono::clock::time_point();
 		dump = std::shared_ptr<const std::map<std::string, metrics::metric_variant>>(new std::map<std::string, metrics::metric_variant>());
 	}
-
-	json_dump::initialize();
 }
 
 void finalize() {
@@ -272,8 +257,6 @@ void finalize() {
 		dump_timestamp = chrono::clock::time_point();
 		dump = std::shared_ptr<const std::map<std::string, metrics::metric_variant>>(new std::map<std::string, metrics::metric_variant>());
 	}
-
-	json_dump::finalize();
 }
 
 }} // namespace handystats::metrics_dump

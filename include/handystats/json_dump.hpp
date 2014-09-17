@@ -16,13 +16,10 @@
 
 #include <handystats/metrics_dump.hpp>
 
-const std::shared_ptr<const std::string> HANDY_JSON_DUMP();
-
-
-namespace handystats { namespace json_dump {
+namespace handystats { namespace json {
 
 template<typename Allocator>
-static void fill(
+void fill(
 		rapidjson::Value& dump, Allocator& allocator,
 		const std::map<std::string, handystats::metrics::metric_variant>& metrics_map
 	)
@@ -51,7 +48,7 @@ static void fill(
 }
 
 template <typename Allocator = rapidjson::MemoryPoolAllocator<>>
-static std::string to_string(
+std::string to_string(
 		const std::map<std::string, handystats::metrics::metric_variant>& metrics_map,
 		Allocator&& allocator = Allocator()
 	)
@@ -68,6 +65,10 @@ static std::string to_string(
 	return std::string(buffer.GetString(), buffer.GetSize());
 }
 
-}} // namespace handystats::json_dump
+}} // namespace handystats::json
+
+std::string HANDY_JSON_DUMP() {
+	return handystats::json::to_string<>(*HANDY_METRICS_DUMP());
+}
 
 #endif // HANDYSTATS_JSON_DUMP_HPP_

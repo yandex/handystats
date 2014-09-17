@@ -59,8 +59,7 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 	HANDY_CONFIG_JSON(
 			"{\
 				\"metrics-dump\": {\
-					\"interval\": 1,\
-					\"to-json\": true\
+					\"interval\": 1\
 				}\
 			}"
 		);
@@ -80,7 +79,7 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
 	rapidjson::Document dump;
-	handystats::json_dump::fill(dump, dump.GetAllocator(), *metrics_dump);
+	handystats::json::fill(dump, dump.GetAllocator(), *metrics_dump);
 
 	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, rapidjson::Document::AllocatorType> buffer(&dump.GetAllocator());
 	rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, rapidjson::Document::AllocatorType>> writer(buffer);
@@ -88,13 +87,13 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 
 	std::string string_dump(buffer.GetString(), buffer.GetSize());
 
-	std::string to_string_dump = handystats::json_dump::to_string(*metrics_dump);
+	std::string to_string_dump = handystats::json::to_string(*metrics_dump);
 
 	ASSERT_EQ(to_string_dump, string_dump);
 
 	check_full_json_dump(to_string_dump);
 
-	check_full_json_dump(*HANDY_JSON_DUMP());
+	check_full_json_dump(HANDY_JSON_DUMP());
 
 	HANDY_FINALIZE();
 }
@@ -118,8 +117,7 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 					}\
 				},\
 				\"metrics-dump\": {\
-					\"interval\": 1,\
-					\"to-json\": true\
+					\"interval\": 1\
 				}\
 			}"
 		);
@@ -139,7 +137,7 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
 	rapidjson::Document dump;
-	handystats::json_dump::fill(dump, dump.GetAllocator(), *metrics_dump);
+	handystats::json::fill(dump, dump.GetAllocator(), *metrics_dump);
 
 	ASSERT_FALSE(dump["test.gauge"].HasMember("values"));
 

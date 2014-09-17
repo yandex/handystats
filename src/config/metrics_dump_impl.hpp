@@ -10,7 +10,6 @@ namespace handystats { namespace config {
 
 struct metrics_dump {
 	chrono::clock::duration interval;
-	bool to_json;
 
 	metrics_dump();
 	void configure(const rapidjson::Value& config);

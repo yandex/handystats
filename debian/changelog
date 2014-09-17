@@ -1,3 +1,14 @@
+handystats (1.9.4) unstable; urgency=low
+
+  * chrono: partail chrono C interface added:
+    - handystats_now()
+    - handystats_difftime(end, start)
+  * timer: added set() method that accepts chrono::clock::duration.
+  * measuring_points: HANDY_TIMER_SET added.
+  * measuring_points: HANDY_TIMER_SCOPE accepts timer's name only and produces signle SET event at end of the scope.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Wed, 17 Sep 2014 21:29:26 +0400
+
 handystats (1.9.3) unstable; urgency=low
 
   * message_queue: data race fixup.

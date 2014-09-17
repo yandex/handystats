@@ -62,6 +62,11 @@ struct timer
 			const time_point& timestamp = clock::now()
 		);
 
+	void set(
+			const clock::duration& measurement,
+			const time_point& timestamp = clock::now()
+		);
+
 	void check_idle_timeout(
 			const time_point& timestamp = clock::now(),
 			const bool& force = false

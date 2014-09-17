@@ -18,7 +18,8 @@ enum : char {
 	START,
 	STOP,
 	DISCARD,
-	HEARTBEAT
+	HEARTBEAT,
+	SET
 };
 } // namespace event_type
 
@@ -55,6 +56,11 @@ event_message* create_heartbeat_event(
 		const metrics::timer::time_point& timestamp
 	);
 
+event_message* create_set_event(
+		std::string&& timer_name,
+		const metrics::timer::clock::duration& measurement,
+		const metrics::timer::time_point& timestamp
+	);
 
 /*
  * Event destructor

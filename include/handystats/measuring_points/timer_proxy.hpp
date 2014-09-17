@@ -85,6 +85,17 @@ public:
 		HANDY_TIMER_HEARTBEAT(name.substr(), choose_instance_id(instance_id), timestamp);
 	}
 
+	/*
+	 * Proxy set event
+	 */
+	void set(
+			const metrics::timer::clock::duration& measurement,
+			const metrics::timer::time_point& timestamp = metrics::timer::clock::now()
+		)
+	{
+		HANDY_TIMER_SET(name.substr(), measurement, timestamp);
+	}
+
 private:
 	const std::string name;
 	const metrics::timer::instance_id_type instance_id;

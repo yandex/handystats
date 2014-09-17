@@ -59,7 +59,7 @@ void run_test_scoped_timer(void) {
 	int cycle;
 
 	for (cycle = 0; cycle < TEST_SCOPED_TIMER_NANOSLEEP_COUNT; ++cycle) {
-		HANDY_TIMER_SCOPE(TEST_SCOPED_TIMER_NAME, cycle);
+		HANDY_TIMER_SCOPE(TEST_SCOPED_TIMER_NAME);
 		nanosleep(&rqtp, NULL);
 	}
 }

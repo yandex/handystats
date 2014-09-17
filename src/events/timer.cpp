@@ -129,6 +129,30 @@ void delete_heartbeat_event(event_message* message) {
 }
 
 
+event_message* create_set_event(
+		std::string&& timer_name,
+		const metrics::timer::clock::duration& measurement,
+		const metrics::timer::time_point& timestamp
+	)
+{
+	event_message* message = new event_message;
+
+	message->destination_name.swap(timer_name);
+	message->destination_type = event_destination_type::TIMER;
+
+	message->timestamp = timestamp;
+
+	message->event_type = event_type::SET;
+	new (&message->event_data) metrics::timer::clock::duration::rep(measurement.count());
+
+	return message;
+}
+
+void delete_set_event(event_message* message) {
+	delete message;
+}
+
+
 void delete_event(event_message* message) {
 	switch (message->event_type) {
 		case event_type::INIT:
@@ -146,9 +170,11 @@ void delete_event(event_message* message) {
 		case event_type::HEARTBEAT:
 			delete_heartbeat_event(message);
 			break;
+		case event_type::SET:
+			delete_set_event(message);
+			break;
 	}
 }
-
 
 
 void process_init_event(metrics::timer& timer, const event_message& message) {
@@ -178,6 +204,11 @@ void process_heartbeat_event(metrics::timer& timer, const event_message& message
 	timer.heartbeat(instance_id, message.timestamp);
 }
 
+void process_set_event(metrics::timer& timer, const event_message& message) {
+	const auto& duration_rep = reinterpret_cast<const metrics::timer::clock::duration::rep>(message.event_data);
+	timer.set(chrono::clock::duration(duration_rep), message.timestamp);
+}
+
 
 void process_event(metrics::timer& timer, const event_message& message) {
 	switch (message.event_type) {
@@ -195,6 +226,9 @@ void process_event(metrics::timer& timer, const event_message& message) {
 			break;
 		case event_type::HEARTBEAT:
 			process_heartbeat_event(timer, message);
+			break;
+		case event_type::SET:
+			process_set_event(timer, message);
 			break;
 		default:
 			return;

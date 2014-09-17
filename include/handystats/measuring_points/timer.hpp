@@ -45,6 +45,12 @@ void timer_heartbeat(
 		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
 	);
 
+void timer_set(
+		std::string&& timer_name,
+		const handystats::metrics::timer::clock::duration& measurement,
+		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+	);
+
 /*
  * Helper struct.
  * On construction HANDY_TIMER_START event is generated.
@@ -52,16 +58,16 @@ void timer_heartbeat(
  */
 struct scoped_timer_helper {
 	const std::string timer_name;
-	const handystats::metrics::timer::instance_id_type instance_id;
+	const handystats::metrics::timer::clock::time_point start_time;
 
-	scoped_timer_helper(std::string&& timer_name, const handystats::metrics::timer::instance_id_type& instance_id)
-		: timer_name(std::move(timer_name)), instance_id(instance_id)
+	scoped_timer_helper(std::string&& timer_name, const handystats::metrics::timer::clock::time_point& start_time)
+		: timer_name(std::move(timer_name)), start_time(start_time)
 	{
-		timer_start(this->timer_name.substr(), instance_id);
 	}
 
 	~scoped_timer_helper() {
-		timer_stop(timer_name.substr(), instance_id);
+		auto end_time = handystats::chrono::clock::now();
+		timer_set(timer_name.substr(), end_time - start_time);
 	}
 };
 
@@ -80,6 +86,8 @@ struct scoped_timer_helper {
 
 	#define HANDY_TIMER_HEARTBEAT(...) handystats::measuring_points::timer_heartbeat(__VA_ARGS__)
 
+	#define HANDY_TIMER_SET(...) handystats::measuring_points::timer_set(__VA_ARGS__)
+
 #else
 
 	#define HANDY_TIMER_INIT(...)
@@ -92,6 +100,8 @@ struct scoped_timer_helper {
 
 	#define HANDY_TIMER_HEARTBEAT(...)
 
+	#define HANDY_TIMER_SET(...)
+
 #endif
 
 
@@ -100,17 +110,13 @@ struct scoped_timer_helper {
  */
 #define UNIQUE_SCOPED_TIMER_NAME BOOST_PP_LIST_CAT((HANDY_SCOPED_TIMER_VAR_, (__LINE__, BOOST_PP_NIL)))
 
-#define HANDY_TIMER_SCOPE_1(timer_name) HANDY_TIMER_SCOPE_2(timer_name, handystats::metrics::timer::DEFAULT_INSTANCE_ID)
-
-#define HANDY_TIMER_SCOPE_2(timer_name, instance_id) \
-	handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME (timer_name, instance_id)
-
 /*
  * HANDY_TIMER_SCOPE event constructs scoped_timer_helper named variable.
  */
 #ifndef HANDYSTATS_DISABLE
 
-	#define HANDY_TIMER_SCOPE(...) HANDY_PP_OVERLOAD(HANDY_TIMER_SCOPE_,__VA_ARGS__)(__VA_ARGS__)
+	#define HANDY_TIMER_SCOPE(timer_name) \
+	handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME (timer_name, handystats::chrono::clock::now())
 
 #else
 

@@ -75,13 +75,22 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 		);
 }
 
-TEST_F(HandyScopedTimerTest, TestMultiInstanceScopedTimer) {
-	const int COUNT = 10;
+TEST_F(HandyScopedTimerTest, TestMultipleNestedScopes) {
 	auto sleep_time = std::chrono::milliseconds(1);
 
-	for (int step = 0; step < COUNT; ++step) {
-		HANDY_TIMER_SCOPE("sleep.time", step);
+	{
+		HANDY_TIMER_SCOPE("sleep.time");
 		std::this_thread::sleep_for(sleep_time);
+
+		{
+			HANDY_TIMER_SCOPE("sleep.time");
+			std::this_thread::sleep_for(sleep_time);
+
+			{
+				HANDY_TIMER_SCOPE("sleep.time");
+				std::this_thread::sleep_for(sleep_time);
+			}
+		}
 	}
 
 	handystats::message_queue::wait_until_empty();
@@ -108,10 +117,14 @@ TEST_F(HandyScopedTimerTest, TestMultiInstanceScopedTimer) {
 		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
 		.values();
 
-	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
+	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), 3);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
 			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+		);
+	ASSERT_GE(
+			agg_stats.get<handystats::statistics::tag::max>(),
+			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count() * 3
 		);
 }
 
@@ -120,9 +133,9 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 	auto sleep_time = std::chrono::milliseconds(1);
 
 	for (int step = 0; step < COUNT; ++step) {
-		HANDY_TIMER_SCOPE("double.sleep.time", step);
+		HANDY_TIMER_SCOPE("double.sleep.time");
 		std::this_thread::sleep_for(sleep_time);
-		HANDY_TIMER_SCOPE("sleep.time", step);
+		HANDY_TIMER_SCOPE("sleep.time");
 		std::this_thread::sleep_for(sleep_time);
 	}
 

@@ -78,6 +78,19 @@ void timer_heartbeat(
 	}
 }
 
+void timer_set(
+		std::string&& timer_name,
+		const handystats::metrics::timer::clock::duration& measurement,
+		const handystats::metrics::timer::time_point& timestamp
+	)
+{
+	if (handystats::is_enabled()) {
+		handystats::message_queue::push(
+				handystats::events::timer::create_set_event(std::move(timer_name), measurement, timestamp)
+			);
+	}
+}
+
 }} // namespace handystats::measuring_points
 
 
@@ -121,6 +134,14 @@ void handystats_timer_heartbeat(
 	)
 {
 	handystats::measuring_points::timer_heartbeat(timer_name, instance_id);
+}
+
+void handystats_timer_set(
+		const char* timer_name,
+		const int64_t measurement
+	)
+{
+	handystats::measuring_points::timer_set(timer_name, handystats::chrono::clock::duration(measurement));
 }
 
 } // extern "C"

@@ -65,6 +65,10 @@ void timer::discard(const instance_id_type& instance_id, const time_point& times
 	m_instances.erase(instance_id);
 }
 
+void timer::set(const clock::duration& measurement, const time_point& timestamp) {
+	m_values.update(chrono::duration_cast<value_type>(measurement).count(), timestamp);
+}
+
 void timer::check_idle_timeout(const time_point& timestamp, const bool& force) {
 	if (!force) {
 		if (timestamp < m_idle_check_timestamp + m_idle_timeout) {

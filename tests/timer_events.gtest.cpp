@@ -94,4 +94,17 @@ TEST(TimerEventsTest, TestTimerHeartbeatEvent) {
 	delete_event_message(message);
 }
 
+TEST(TimerEventsTest, TestTimerSetEvent) {
+	const char* timer_name = "queue.push";
+	handystats::chrono::clock::duration duration(123456);
+	auto message = create_set_event(timer_name, duration, handystats::metrics::timer::clock::now());
+
+	ASSERT_EQ(message->destination_name, timer_name);
+	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::TIMER);
+
+	ASSERT_EQ(message->event_type, event_type::SET);
+	ASSERT_EQ(reinterpret_cast<handystats::metrics::timer::clock::duration::rep>(message->event_data), duration.count());
+
+	delete_event_message(message);
+}
 

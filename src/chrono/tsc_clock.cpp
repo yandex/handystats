@@ -297,7 +297,9 @@ std::chrono::system_clock::time_point to_system_time(const tsc_clock::time_point
 
 	return std::chrono::system_clock::time_point(
 			duration_cast<std::chrono::system_clock::duration>(t.time_since_epoch()) +
-			std::chrono::system_clock::duration(ns_offset.load(std::memory_order_acquire))
+			duration_cast<std::chrono::system_clock::duration>(
+				std::chrono::nanoseconds(ns_offset.load(std::memory_order_acquire))
+			)
 		);
 }
 

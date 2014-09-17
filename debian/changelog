@@ -1,3 +1,12 @@
+handystats (1.9.5) unstable; urgency=low
+
+  * config: "metrics-dump"->"to-json" option removed.
+  * json_dump: HANDY_JSON_DUMP() constructs text representation of metrics dump and returns std::string.
+  * json_dump: HANDY_JSON_DUMP() always returns non-empty std::string as empty metrics dump is represented by "{}".
+  * json: fill() and to_string() methods that construct rapidjson::Value and std::string representations of metrics dump are in handystats::json namespace.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Wed, 17 Sep 2014 22:11:29 +0400
+
 handystats (1.9.4) unstable; urgency=low
 
   * chrono: partail chrono C interface added:

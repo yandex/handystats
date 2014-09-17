@@ -351,6 +351,9 @@ void statistics::update_time(const time_point& timestamp) {
 		else if (elapsed_duration.count() > 0) {
 			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
 			m_moving_count = m_moving_count * (1.0 - elapsed);
+			if (math_utils::cmp<result_type<tag::moving_count>::type>(m_moving_count, 0) <= 0) {
+				m_moving_count = 0;
+			}
 		}
 	}
 
@@ -362,6 +365,9 @@ void statistics::update_time(const time_point& timestamp) {
 		else if (elapsed_duration.count() > 0) {
 			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
 			m_moving_sum = m_moving_sum * (1.0 - elapsed);
+			if (math_utils::cmp<result_type<tag::moving_sum>::type>(m_moving_sum, 0) == 0) {
+				m_moving_sum = 0;
+			}
 		}
 	}
 
@@ -372,8 +378,14 @@ void statistics::update_time(const time_point& timestamp) {
 		}
 		else if (elapsed_duration.count() > 0) {
 			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
+			for (auto bin = m_histogram.begin(); bin != m_histogram.end();) {
 				bin->second *= (1.0 - elapsed);
+				if (math_utils::cmp<double>(bin->second, 0) <= 0) {
+					bin = m_histogram.erase(bin);
+				}
+				else {
+					++bin;
+				}
 			}
 		}
 	}

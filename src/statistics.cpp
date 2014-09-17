@@ -217,10 +217,10 @@ static double bin_merge_criteria(
 	// return right_bin.first - left_bin.first;
 
 	// sum of bins' weights
-	// return left_bin.second + right_bin.second;
+	return left_bin.second + right_bin.second;
 
 	// heuristic
-	return (left_bin.second + right_bin.second) * (right_bin.first - left_bin.first);
+	//return (left_bin.second + right_bin.second) * (right_bin.first - left_bin.first);
 }
 
 static void update_histogram(
@@ -232,6 +232,13 @@ static void update_histogram(
 	if (histogram_bins == 0) {
 		// histogram is disabled
 		return;
+	}
+
+	for (auto bin = histogram.begin(); bin != histogram.end(); ++bin) {
+		if (math_utils::cmp<statistics::value_type>(bin->first, value) == 0) {
+			bin->second += 1;
+			return;
+		}
 	}
 
 	statistics::bin_type new_bin(value, 1.0);

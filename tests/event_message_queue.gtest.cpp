@@ -8,8 +8,12 @@
 #include "events/event_message_impl.hpp"
 #include "message_queue_impl.hpp"
 
-#include <handystats/measuring_points.hpp>
+#include <handystats/module.h>
 
+#ifndef _HAVE_HANDY_MODULE_TEST
+#define _HAVE_HANDY_MODULE_TEST 1
+#endif
+HANDY_MODULE(TEST)
 
 namespace handystats {
 
@@ -32,32 +36,32 @@ protected:
 
 
 TEST_F(EventMessageQueueTest, SinglePushCorrectlyAddsMessage) {
-	HANDY_COUNTER_INIT("counter.name", 10);
+	TEST_COUNTER_INIT("counter.name", 10);
 	ASSERT_EQ(handystats::message_queue::size(), 1);
 
-	HANDY_COUNTER_INCREMENT("counter.name", 1);
+	TEST_COUNTER_INCREMENT("counter.name", 1);
 	ASSERT_EQ(handystats::message_queue::size(), 2);
 
-	HANDY_COUNTER_DECREMENT("counter.name", 11);
+	TEST_COUNTER_DECREMENT("counter.name", 11);
 	ASSERT_EQ(handystats::message_queue::size(), 3);
 
-	HANDY_COUNTER_CHANGE("counter.name", -10);
+	TEST_COUNTER_CHANGE("counter.name", -10);
 	ASSERT_EQ(handystats::message_queue::size(), 4);
 }
 
 TEST_F(EventMessageQueueTest, MultiplePushesCorrectlyAddMessages) {
-	HANDY_COUNTER_INIT("counter.name", 10);
-	HANDY_COUNTER_INCREMENT("counter.name", 1);
-	HANDY_COUNTER_DECREMENT("counter.name", 11);
-	HANDY_COUNTER_CHANGE("counter.name", 13);
+	TEST_COUNTER_INIT("counter.name", 10);
+	TEST_COUNTER_INCREMENT("counter.name", 1);
+	TEST_COUNTER_DECREMENT("counter.name", 11);
+	TEST_COUNTER_CHANGE("counter.name", 13);
 
 	ASSERT_EQ(handystats::message_queue::size(), 4);
 }
 
 TEST_F(EventMessageQueueTest, PushDifferentMessages) {
-	HANDY_COUNTER_INIT("counter.name", 10);
-	HANDY_GAUGE_INIT("gauge.name", 10);
-	HANDY_TIMER_INIT("timer.name");
+	TEST_COUNTER_INIT("counter.name", 10);
+	TEST_GAUGE_INIT("gauge.name", 10);
+	TEST_TIMER_INIT("timer.name");
 
 	ASSERT_EQ(handystats::message_queue::size(), 3);
 }

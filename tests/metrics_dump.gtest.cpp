@@ -13,8 +13,14 @@
 #include <handystats/core.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
+#include <handystats/module.h>
 
 #include "message_queue_helper.hpp"
+
+#ifndef _HAVE_HANDY_MODULE_TEST
+#define _HAVE_HANDY_MODULE_TEST 1
+#endif
+HANDY_MODULE(TEST)
 
 class MetricsDumpTest : public ::testing::Test {
 protected:
@@ -39,7 +45,7 @@ TEST_F(MetricsDumpTest, SampleCounter) {
 	const size_t INCR_VALUE = 10;
 
 	for (size_t i = 0; i < INCR_COUNT; ++i) {
-		HANDY_COUNTER_INCREMENT("counter", INCR_VALUE);
+		TEST_COUNTER_INCREMENT("counter", INCR_VALUE);
 	}
 
 	handystats::message_queue::wait_until_empty();
@@ -61,13 +67,13 @@ TEST_F(MetricsDumpTest, SampleTimer) {
 	const size_t TIMER_INSTANCES = 10;
 
 	for (size_t i = 0; i < TIMER_INSTANCES; ++i) {
-		HANDY_TIMER_START("timer", i);
+		TEST_TIMER_START("timer", i);
 	}
 
 	std::this_thread::sleep_for(sleep_interval);
 
 	for (size_t i = 0; i < TIMER_INSTANCES; ++i) {
-		HANDY_TIMER_STOP("timer", i);
+		TEST_TIMER_STOP("timer", i);
 	}
 
 	handystats::message_queue::wait_until_empty();
@@ -90,7 +96,7 @@ TEST_F(MetricsDumpTest, SampleGauge) {
 	const size_t MAX_VALUE = 100;
 
 	for (size_t value = MIN_VALUE; value <= MAX_VALUE; ++value) {
-		HANDY_GAUGE_SET("gauge", value);
+		TEST_GAUGE_SET("gauge", value);
 	}
 
 	handystats::message_queue::wait_until_empty();

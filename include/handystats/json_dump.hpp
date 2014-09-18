@@ -4,10 +4,6 @@
 #define HANDYSTATS_JSON_DUMP_HPP_
 
 #include <string>
-#include <memory>
-#include <type_traits>
-
-#include <handystats/rapidjson/document.h>
 
 #include <handystats/json/gauge_json_writer.hpp>
 #include <handystats/json/counter_json_writer.hpp>
@@ -47,28 +43,10 @@ void fill(
 	}
 }
 
-template <typename Allocator = rapidjson::MemoryPoolAllocator<>>
-std::string to_string(
-		const std::map<std::string, handystats::metrics::metric_variant>& metrics_map,
-		Allocator&& allocator = Allocator()
-	)
-{
-	typedef typename std::remove_reference<Allocator>::type allocator_type;
-
-	rapidjson::Value dump;
-	fill(dump, allocator, metrics_map);
-
-	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type> buffer(&allocator);
-	rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type>> writer(buffer);
-	dump.Accept(writer);
-
-	return std::string(buffer.GetString(), buffer.GetSize());
-}
+std::string to_string(const std::map<std::string, handystats::metrics::metric_variant>&);
 
 }} // namespace handystats::json
 
-std::string HANDY_JSON_DUMP() {
-	return handystats::json::to_string<>(*HANDY_METRICS_DUMP());
-}
+std::string HANDY_JSON_DUMP();
 
 #endif // HANDYSTATS_JSON_DUMP_HPP_

@@ -1,3 +1,10 @@
+handystats (1.9.6) unstable; urgency=low
+
+  * json: to_string() method accepts only std::map of metrics (with no allocator).
+  * json: implementations of to_string() and HANDY_JSON_DUMP() methods moved out from header.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Thu, 18 Sep 2014 19:16:11 +0400
+
 handystats (1.9.5) unstable; urgency=low
 
   * config: "metrics-dump"->"to-json" option removed.

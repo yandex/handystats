@@ -200,6 +200,8 @@ void update(const chrono::clock::time_point& system_time, const chrono::clock::t
 			std::lock_guard<std::mutex> lock(dump_mutex);
 			dump = new_dump;
 		}
+
+		dump_timestamp = system_time;
 	}
 }
 

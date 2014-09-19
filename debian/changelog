@@ -1,3 +1,9 @@
+handystats (1.9.9) unstable; urgency=low
+
+  * core: metrics timestamping fixup.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 19 Sep 2014 19:18:01 +0400
+
 handystats (1.9.8) unstable; urgency=low
 
   * config: added return values to config methods 

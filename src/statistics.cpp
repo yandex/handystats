@@ -27,6 +27,10 @@ double statistics::quantile_extractor::at(const double& probability) const {
 		return 0;
 	}
 
+	if (math_utils::cmp<double>(m_statistics->m_moving_count, 0) <= 0) {
+		return 0;
+	}
+
 	if (histogram.size() == 1) {
 		return histogram[0].first;
 	}

@@ -23,6 +23,11 @@ namespace stats {
 metrics::gauge size;
 metrics::gauge process_time;
 
+void update(const chrono::clock::time_point& timestamp) {
+	size.update_statistics(timestamp);
+	process_time.update_statistics(timestamp);
+}
+
 static void reset() {
 	config::metrics::gauge size_opts;
 	size_opts.values.tags = statistics::tag::value;
@@ -52,6 +57,33 @@ std::map<std::string, metrics::metric_ptr_variant> metrics_map;
 
 size_t size() {
 	return metrics_map.size();
+}
+
+void update_metrics(const chrono::clock::time_point& timestamp) {
+	for (auto metric_iter = metrics_map.begin(); metric_iter != metrics_map.end(); ++metric_iter) {
+		switch (metric_iter->second.which()) {
+			case metrics::metric_index::GAUGE:
+			{
+				auto* gauge = boost::get<metrics::gauge*>(metric_iter->second);
+				gauge->update_statistics(timestamp);
+				break;
+			}
+			case metrics::metric_index::COUNTER:
+			{
+				auto* counter = boost::get<metrics::counter*>(metric_iter->second);
+				counter->update_statistics(timestamp);
+				break;
+			}
+			case metrics::metric_index::TIMER:
+			{
+				auto* timer = boost::get<metrics::timer*>(metric_iter->second);
+				timer->update_statistics(timestamp);
+				break;
+			}
+			case metrics::metric_index::ATTRIBUTE:
+				break;
+		}
+	}
 }
 
 void process_event_message(metrics::metric_ptr_variant& metric_ptr, const events::event_message& message) {

@@ -22,6 +22,10 @@ namespace stats {
 
 metrics::gauge dump_time;
 
+void update(const chrono::clock::time_point& timestamp) {
+	dump_time.update_statistics(timestamp);
+}
+
 static void reset() {
 	config::metrics::gauge dump_time_opts;
 	dump_time_opts.values.tags = statistics::tag::moving_avg;
@@ -55,55 +59,9 @@ get_dump()
 
 static
 std::shared_ptr<const std::map<std::string, metrics::metric_variant>>
-create_dump(const chrono::clock::time_point& timestamp)
+create_dump()
 {
 	auto dump_start_time = chrono::clock::now();
-
-	// update time
-	for (auto metric_iter = internal::metrics_map.begin(); metric_iter != internal::metrics_map.end(); ++metric_iter) {
-		switch (metric_iter->second.which()) {
-			case metrics::metric_index::GAUGE:
-			{
-				auto* gauge = boost::get<metrics::gauge*>(metric_iter->second);
-				gauge->update_statistics(timestamp);
-				break;
-			}
-			case metrics::metric_index::COUNTER:
-			{
-				auto* counter = boost::get<metrics::counter*>(metric_iter->second);
-				counter->update_statistics(timestamp);
-				break;
-			}
-			case metrics::metric_index::TIMER:
-			{
-				auto* timer = boost::get<metrics::timer*>(metric_iter->second);
-				timer->update_statistics(timestamp);
-				break;
-			}
-			case metrics::metric_index::ATTRIBUTE:
-				break;
-		}
-	}
-	// handystats' statistics
-	{
-		// internal
-		{
-			internal::stats::size.update_statistics(timestamp);
-			internal::stats::process_time.update_statistics(timestamp);
-		}
-
-		// message queue
-		{
-			message_queue::stats::size.update_statistics(timestamp);
-			message_queue::stats::message_wait_time.update_statistics(timestamp);
-			message_queue::stats::pop_count.update_statistics(timestamp);
-		}
-
-		// dump
-		{
-			stats::dump_time.update_statistics(timestamp);
-		}
-	}
 
 	std::shared_ptr<std::map<std::string, metrics::metric_variant>> new_dump(new std::map<std::string, metrics::metric_variant>());
 
@@ -187,21 +145,11 @@ create_dump(const chrono::clock::time_point& timestamp)
 					);
 		}
 
-		// dump
-		{
-			new_dump->insert(
-					std::pair<std::string, metrics::metric_variant>(
-						"handystats.metrics_dump.dump_time",
-						stats::dump_time
-						)
-					);
-		}
+		// metrics_dump.dump_time will be added later
 	}
 
-	dump_timestamp = timestamp;
-
 	{
-		std::chrono::system_clock::time_point system_timestamp = chrono::to_system_time(dump_timestamp);
+		std::chrono::system_clock::time_point system_timestamp = chrono::to_system_time(chrono::clock::now());
 
 		metrics::attribute timestamp_attr;
 		timestamp_attr.set(
@@ -218,18 +166,36 @@ create_dump(const chrono::clock::time_point& timestamp)
 
 	auto dump_end_time = chrono::clock::now();
 
-	stats::dump_time.set(chrono::duration_cast<chrono::time_duration>(dump_end_time - dump_start_time).count(), dump_timestamp);
+	stats::dump_time.set(
+			chrono::duration_cast<chrono::time_duration>(dump_end_time - dump_start_time).count(),
+			dump_end_time
+		);
+
+	{
+		new_dump->insert(
+				std::pair<std::string, metrics::metric_variant>(
+					"handystats.metrics_dump.dump_time",
+					stats::dump_time
+					)
+				);
+	}
 
 	return std::const_pointer_cast<const std::map<std::string, metrics::metric_variant>>(new_dump);
 }
 
-void update(const chrono::clock::time_point& timestamp) {
+void update(const chrono::clock::time_point& system_time, const chrono::clock::time_point& internal_time) {
 	if (config::metrics_dump_opts.interval.count() == 0) {
 		return;
 	}
 
-	if (timestamp - dump_timestamp > config::metrics_dump_opts.interval) {
-		auto new_dump = create_dump(timestamp);
+	if (system_time - dump_timestamp > config::metrics_dump_opts.interval) {
+		internal::update_metrics(internal_time);
+
+		internal::stats::update(system_time);
+		message_queue::stats::update(system_time);
+		stats::update(system_time);
+
+		auto new_dump = create_dump();
 		{
 			std::lock_guard<std::mutex> lock(dump_mutex);
 			dump = new_dump;

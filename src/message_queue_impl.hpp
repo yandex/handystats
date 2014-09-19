@@ -35,6 +35,8 @@ extern metrics::gauge size;
 extern metrics::gauge message_wait_time;
 extern metrics::counter pop_count;
 
+void update(const chrono::clock::time_point&);
+
 void initialize();
 void finalize();
 

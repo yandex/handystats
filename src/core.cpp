@@ -1,5 +1,6 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
+#include <algorithm>
 #include <thread>
 #include <sys/prctl.h>
 #include <handystats/atomic.hpp>
@@ -26,21 +27,20 @@ bool is_enabled() {
 }
 
 
+chrono::clock::time_point last_message_timestamp;
 std::thread processor_thread;
 
-static chrono::clock::time_point process_message_queue() {
+static void process_message_queue() {
 	auto* message = message_queue::pop();
 
 	chrono::clock::time_point timestamp;
 
 	if (message) {
-		timestamp = message->timestamp;
+		last_message_timestamp = std::max(last_message_timestamp, message->timestamp);
 		internal::process_event_message(*message);
 	}
 
 	events::delete_event_message(message);
-
-	return timestamp;
 }
 
 static void run_processor() {
@@ -52,16 +52,15 @@ static void run_processor() {
 	prctl(PR_SET_NAME, thread_name);
 
 	while (is_enabled()) {
-		chrono::clock::time_point current_timestamp;
 		if (!message_queue::empty()) {
-			current_timestamp = process_message_queue();
+			process_message_queue();
 		}
 		else {
-			current_timestamp = chrono::clock::now();
+			last_message_timestamp = std::max(last_message_timestamp, chrono::clock::now());
 			std::this_thread::sleep_for(std::chrono::microseconds(10));
 		}
 
-		metrics_dump::update(current_timestamp);
+		metrics_dump::update(chrono::clock::now(), last_message_timestamp);
 	}
 }
 
@@ -80,6 +79,8 @@ void initialize() {
 	}
 
 	enabled_flag.store(true, std::memory_order_release);
+
+	last_message_timestamp = chrono::clock::time_point();
 
 	processor_thread = std::thread(run_processor);
 }

@@ -94,6 +94,12 @@ metrics::gauge size;
 metrics::gauge message_wait_time;
 metrics::counter pop_count;
 
+void update(const chrono::clock::time_point& timestamp) {
+	size.update_statistics(timestamp);
+	message_wait_time.update_statistics(timestamp);
+	pop_count.update_statistics(timestamp);
+}
+
 static void reset() {
 	config::metrics::gauge size_opts;
 	size_opts.values.tags =

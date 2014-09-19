@@ -21,6 +21,8 @@ namespace handystats { namespace internal {
 
 extern std::map<std::string, metrics::metric_ptr_variant> metrics_map;
 
+void update_metrics(const chrono::clock::time_point&);
+
 void process_event_message(const events::event_message&);
 
 size_t size();
@@ -33,6 +35,8 @@ namespace stats {
 
 extern metrics::gauge size;
 extern metrics::gauge process_time;
+
+void update(const chrono::clock::time_point&);
 
 void initialize();
 void finalize();

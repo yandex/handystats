@@ -1,3 +1,9 @@
+handystats (1.9.8) unstable; urgency=low
+
+  * config: added return values to config methods 
+
+ -- Ivan Chelubeev <ijon@yandex-team.ru>  Fri, 19 Sep 2014 15:05:01 +0400
+
 handystats (1.9.7) unstable; urgency=low
 
   * module: added ability to create measuring points calls with specified prefix (e.g. CACHE_COUNTER_INCREMENT).

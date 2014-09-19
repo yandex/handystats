@@ -55,9 +55,9 @@ void initialize();
 
 void finalize();
 
-void config_file(const char* filename);
-void config_json(const char* config);
-void config_json(const rapidjson::Value& config);
+bool config_file(const char* filename);
+bool config_json(const char* config);
+bool config_json(const rapidjson::Value& config);
 
 } // namespace handystats
 

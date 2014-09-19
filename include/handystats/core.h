@@ -56,10 +56,10 @@ HANDYSTATS_EXTERN_C
 void handystats_finalize();
 
 HANDYSTATS_EXTERN_C
-void handystats_config_file(const char* filename);
+int handystats_config_file(const char* filename);
 
 HANDYSTATS_EXTERN_C
-void handystats_config_json(const char* config);
+int handystats_config_json(const char* config);
 
 
 #ifndef __cplusplus

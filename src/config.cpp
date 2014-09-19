@@ -54,14 +54,14 @@ void finalize() {
 
 namespace handystats {
 
-void config_json(const rapidjson::Value& config) {
+bool config_json(const rapidjson::Value& config) {
 	std::lock_guard<std::mutex> lock(handystats::operation_mutex);
 	if (handystats::is_enabled()) {
-		return;
+		return true;
 	}
 
 	if (!config.IsObject()) {
-		return;
+		return false;
 	}
 
 	if (config.HasMember("statistics")) {
@@ -102,24 +102,26 @@ void config_json(const rapidjson::Value& config) {
 		const rapidjson::Value& core_config = config["core"];
 		config::core_opts.configure(core_config);
 	}
+
+	return true;
 }
 
-void config_json(const char* config_data) {
+bool config_json(const char* config_data) {
 	rapidjson::Document config;
 	config.Parse<0>(config_data);
 	if (config.HasParseError()) {
 		std::cerr << "Unable to parse configuration json: " << config.GetParseError() << std::endl;
-		return;
+		return false;
 	}
 
-	config_json(config);
+	return config_json(config);
 }
 
-void config_file(const char* filename) {
+bool config_file(const char* filename) {
 	std::ifstream input(filename, std::ios::in | std::ios::binary);
 	if (!input) {
 		std::cerr << "Unable to open configuration file " << filename << std::endl;
-		return;
+		return false;
 	}
 
 	std::string config_data;
@@ -129,7 +131,7 @@ void config_file(const char* filename) {
 	input.read(&config_data[0], config_data.size());
 	input.close();
 
-	config_json(config_data.c_str());
+	return config_json(config_data.c_str());
 }
 
 } // namespace handystats
@@ -137,12 +139,12 @@ void config_file(const char* filename) {
 
 extern "C" {
 
-void handystats_config_file(const char* file) {
-	handystats::config_file(file);
+int handystats_config_file(const char* file) {
+	return handystats::config_file(file);
 }
 
-void handystats_config_json(const char* config_data) {
-	handystats::config_json(config_data);
+int handystats_config_json(const char* config_data) {
+	return handystats::config_json(config_data);
 }
 
 } // extern "C"

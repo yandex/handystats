@@ -385,13 +385,10 @@ void statistics::update_time(const time_point& timestamp) {
 		}
 		else if (elapsed_duration.count() > 0) {
 			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			for (auto bin = m_histogram.begin(); bin != m_histogram.end();) {
+			for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
 				bin->second *= (1.0 - elapsed);
 				if (math_utils::cmp<double>(bin->second, 0) <= 0) {
-					bin = m_histogram.erase(bin);
-				}
-				else {
-					++bin;
+					bin->second = 0;
 				}
 			}
 		}

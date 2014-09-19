@@ -1,3 +1,9 @@
+handystats (1.9.12) unstable; urgency=low
+
+  * statistics: return 0 on quantile request if all data is gone.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 19 Sep 2014 23:39:32 +0400
+
 handystats (1.9.11) unstable; urgency=low
 
   * core: update metrics dump timestamp.

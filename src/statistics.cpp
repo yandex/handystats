@@ -264,13 +264,21 @@ static void update_histogram(
 		}
 	}
 
-	histogram[best_merge_index].first =
-		histogram[best_merge_index].first * histogram[best_merge_index].second +
-		histogram[best_merge_index + 1].first * histogram[best_merge_index + 1].second;
+	if (math_utils::cmp<double>(histogram[best_merge_index].second + histogram[best_merge_index + 1].second, 0) <= 0) {
+		histogram[best_merge_index].first += histogram[best_merge_index + 1].first;
+		histogram[best_merge_index].first /= 2;
 
-	histogram[best_merge_index].second += histogram[best_merge_index + 1].second;
+		histogram[best_merge_index].second = 0;
+	}
+	else {
+		histogram[best_merge_index].first =
+			histogram[best_merge_index].first * histogram[best_merge_index].second +
+			histogram[best_merge_index + 1].first * histogram[best_merge_index + 1].second;
 
-	histogram[best_merge_index].first /= histogram[best_merge_index].second;
+		histogram[best_merge_index].second += histogram[best_merge_index + 1].second;
+
+		histogram[best_merge_index].first /= histogram[best_merge_index].second;
+	}
 
 	histogram.erase(histogram.begin() + best_merge_index + 1);
 }

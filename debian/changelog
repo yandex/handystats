@@ -1,3 +1,9 @@
+handystats (1.9.13) unstable; urgency=low
+
+  * statistics: empty bins merge fixup.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Tue, 23 Sep 2014 00:01:18 +0400
+
 handystats (1.9.12) unstable; urgency=low
 
   * statistics: return 0 on quantile request if all data is gone.

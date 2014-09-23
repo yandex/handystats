@@ -177,6 +177,60 @@ TEST_F(IncrementalStatisticsTest, HistogramTest) {
 	}
 }
 
+TEST_F(IncrementalStatisticsTest, RateMovingCountTest) {
+	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
+	opts.rate_unit = opts.moving_interval;
+	opts.tags = handystats::statistics::tag::rate |
+		handystats::statistics::tag::moving_count |
+		handystats::statistics::tag::moving_sum;
+
+	stats = handystats::statistics(opts);
+
+	const size_t COUNT = 1000;
+
+	for (int value = 1; value <= COUNT; ++value) {
+		stats.update(value);
+		std::this_thread::yield();
+	}
+
+	ASSERT_NEAR(
+			stats.get<handystats::statistics::tag::rate>(),
+			stats.get<handystats::statistics::tag::moving_count>(),
+			1E-6
+		);
+}
+
+TEST_F(IncrementalStatisticsTest, ZeroRateTest) {
+	opts.rate_unit = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
+	opts.tags = handystats::statistics::tag::rate;
+
+	stats = handystats::statistics(opts);
+
+	const size_t COUNT = 1000;
+
+	for (int value = 0; value < COUNT; ++value) {
+		stats.update(value);
+		std::this_thread::yield();
+	}
+
+	ASSERT_NEAR(
+			stats.get<handystats::statistics::tag::rate>(),
+			COUNT - 1,
+			0.05 * (COUNT - 1)
+		);
+
+	for (int value = COUNT - 1; value >= 0; --value) {
+		stats.update(value);
+		std::this_thread::yield();
+	}
+
+	ASSERT_NEAR(
+			stats.get<handystats::statistics::tag::rate>(),
+			0,
+			0.05 * (COUNT - 1)
+		);
+}
+
 class StatisticsTagDependency : public ::testing::Test {
 protected:
 	virtual void SetUp() {

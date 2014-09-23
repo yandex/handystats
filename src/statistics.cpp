@@ -87,6 +87,7 @@ const statistics::tag::type statistics::tag::moving_avg;
 const statistics::tag::type statistics::tag::histogram;
 const statistics::tag::type statistics::tag::quantile;
 const statistics::tag::type statistics::tag::timestamp;
+const statistics::tag::type statistics::tag::rate;
 
 statistics::tag::type statistics::tag::from_string(const std::string& tag_name) {
 	if (strcmp("value", tag_name.c_str()) == 0) {
@@ -125,6 +126,9 @@ statistics::tag::type statistics::tag::from_string(const std::string& tag_name) 
 	if (strcmp("timestamp", tag_name.c_str()) == 0) {
 		return timestamp;
 	}
+	if (strcmp("rate", tag_name.c_str()) == 0) {
+		return rate;
+	}
 
 	throw invalid_tag_error();
 }
@@ -136,7 +140,7 @@ bool statistics::enabled(const statistics::tag::type& t) const HANDYSTATS_NOEXCE
 bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXCEPT {
 	switch (t) {
 	case tag::value:
-		return enabled(tag::value);
+		return enabled(tag::value) || computed(tag::rate);
 
 	case tag::min:
 		return enabled(tag::min);
@@ -171,7 +175,11 @@ bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXC
 	case tag::timestamp:
 		return enabled(tag::timestamp) ||
 			computed(tag::moving_count) || computed(tag::moving_sum) || computed(tag::moving_avg) ||
-			computed(tag::histogram) || computed(tag::quantile);
+			computed(tag::histogram) || computed(tag::quantile) ||
+			computed(tag::rate);
+
+	case tag::rate:
+		return enabled(tag::rate);
 
 	default:
 		return false;
@@ -188,6 +196,7 @@ statistics::statistics(
 	: m_moving_interval(opts.moving_interval)
 	, m_histogram_bins(opts.histogram_bins)
 	, m_tags(opts.tags)
+	, m_rate_unit(opts.rate_unit)
 {
 	reset();
 }
@@ -205,6 +214,7 @@ void statistics::reset() {
 		m_histogram.reserve(m_histogram_bins + 1);
 	}
 	m_timestamp = time_point();
+	m_rate = 0;
 }
 
 static double bin_merge_criteria(
@@ -284,6 +294,21 @@ static void update_histogram(
 }
 
 void statistics::update(const value_type& value, const time_point& timestamp) {
+	if (computed(tag::rate)) {
+		const value_type delta = value - m_value;
+		duration elapsed_duration = timestamp - m_timestamp;
+		if (elapsed_duration > m_moving_interval) {
+			m_rate = delta;
+		}
+		else if (elapsed_duration.count() > 0) {
+			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
+			m_rate = m_rate * (1.0 - elapsed) + delta;
+		}
+		else if (elapsed_duration > -m_moving_interval) {
+			m_rate += delta;
+		}
+	}
+
 	if (computed(tag::value)) {
 		m_value = value;
 	}
@@ -360,6 +385,20 @@ void statistics::update(const value_type& value, const time_point& timestamp) {
 void statistics::update_time(const time_point& timestamp) {
 	if (timestamp <= m_timestamp) {
 		return;
+	}
+
+	if (computed(tag::rate)) {
+		duration elapsed_duration = timestamp - m_timestamp;
+		if (elapsed_duration > m_moving_interval) {
+			m_rate = 0;
+		}
+		else if (elapsed_duration.count() > 0) {
+			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
+			m_rate = m_rate * (1.0 - elapsed);
+			if (math_utils::cmp<result_type<tag::rate>::type>(m_rate, 0) <= 0) {
+				m_rate = 0;
+			}
+		}
 	}
 
 	if (computed(tag::moving_count)) {
@@ -560,6 +599,18 @@ statistics::get_impl<statistics::tag::timestamp>() const
 {
 	if (computed(tag::timestamp)) {
 		return m_timestamp;
+	}
+	else {
+		throw invalid_tag_error();
+	}
+}
+
+template <>
+statistics::result_type<statistics::tag::rate>::type
+statistics::get_impl<statistics::tag::rate>() const
+{
+	if (computed(tag::rate)) {
+		return double(m_rate) / m_moving_interval.count() * m_rate_unit.count();
 	}
 	else {
 		throw invalid_tag_error();

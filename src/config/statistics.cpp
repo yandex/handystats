@@ -19,6 +19,11 @@ statistics::statistics()
 		handystats::statistics::tag::moving_count | handystats::statistics::tag::moving_sum | handystats::statistics::tag::moving_avg |
 		handystats::statistics::tag::timestamp
 	)
+	, rate_unit(
+		chrono::duration_cast<chrono::clock::duration>(
+			std::chrono::seconds(1)
+		)
+	)
 {}
 
 void statistics::configure(const rapidjson::Value& config) {
@@ -53,6 +58,54 @@ void statistics::configure(const rapidjson::Value& config) {
 				if (tag.IsString()) {
 					this->tags |= handystats::statistics::tag::from_string(tag.GetString());
 				}
+			}
+		}
+	}
+
+	if (config.HasMember("rate-unit")) {
+		const rapidjson::Value& rate_unit = config["rate-unit"];
+
+		if (rate_unit.IsString()) {
+			chrono::clock::duration rate_interval(0);
+			if (strcmp(rate_unit.GetString(), "ns") == 0) {
+				rate_interval =
+					chrono::duration_cast<chrono::clock::duration>(
+						std::chrono::nanoseconds(1)
+					);
+			}
+			else if (strcmp(rate_unit.GetString(), "us") == 0) {
+				rate_interval =
+					chrono::duration_cast<chrono::clock::duration>(
+						std::chrono::microseconds(1)
+					);
+			}
+			else if (strcmp(rate_unit.GetString(), "ms") == 0) {
+				rate_interval =
+					chrono::duration_cast<chrono::clock::duration>(
+						std::chrono::milliseconds(1)
+					);
+			}
+			else if (strcmp(rate_unit.GetString(), "s") == 0) {
+				rate_interval =
+					chrono::duration_cast<chrono::clock::duration>(
+						std::chrono::seconds(1)
+					);
+			}
+			else if (strcmp(rate_unit.GetString(), "m") == 0) {
+				rate_interval =
+					chrono::duration_cast<chrono::clock::duration>(
+						std::chrono::minutes(1)
+					);
+			}
+			else if (strcmp(rate_unit.GetString(), "h") == 0) {
+				rate_interval =
+					chrono::duration_cast<chrono::clock::duration>(
+						std::chrono::hours(1)
+					);
+			}
+
+			if (rate_interval.count() > 0) {
+				this->rate_unit = rate_interval;
 			}
 		}
 	}

@@ -13,7 +13,8 @@
  *     "statistics": {
  *         "moving-interval": <value in msec>,
  *         "histogram-bins": <integer value>,
- *         "tags": ["<tag name>", "<tag name>", ...]
+ *         "tags": ["<tag name>", "<tag name>", ...],
+ *         "rate-unit": <"ns" | "us" | "ms" | "s" | "m" | "h">
  *     },
  *     "metrics": {
  *         "gauge": {

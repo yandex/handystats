@@ -54,6 +54,7 @@ public:
 		static const type histogram = 1 << 10;
 		static const type quantile = 1 << 11;
 		static const type timestamp = 1 << 12;
+		static const type rate = 1 << 13;
 
 		static type from_string(const std::string&);
 	};
@@ -77,6 +78,7 @@ public:
 		, enable_if_eq<Tag, tag::histogram, histogram_type>
 		, enable_if_eq<Tag, tag::quantile, quantile_extractor>
 		, enable_if_eq<Tag, tag::timestamp, time_point>
+		, enable_if_eq<Tag, tag::rate, double>
 	{};
 
 	// statistics is enabled from configuration
@@ -146,6 +148,7 @@ private:
 	duration m_moving_interval;
 	size_t m_histogram_bins;
 	tag::type m_tags;
+	duration m_rate_unit;
 
 	template <tag::type Tag>
 	typename result_type<Tag>::type get_impl() const;
@@ -159,6 +162,7 @@ private:
 	value_type m_moving_sum;
 	histogram_type m_histogram;
 	time_point m_timestamp;
+	value_type m_rate;
 };
 
 } // namespace handystats

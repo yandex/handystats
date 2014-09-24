@@ -165,6 +165,9 @@ private:
 	histogram_type m_histogram;
 	time_point m_timestamp;
 	value_type m_rate;
+
+	duration m_actual_interval;
+	time_point m_actual_timestamp;
 };
 
 } // namespace handystats

@@ -223,6 +223,9 @@ void statistics::reset() {
 	}
 	m_timestamp = time_point();
 	m_rate = 0;
+
+	m_actual_interval = duration(0);
+	m_actual_timestamp = time_point();
 }
 
 static double bin_merge_criteria(
@@ -302,18 +305,57 @@ static void update_histogram(
 }
 
 void statistics::update(const value_type& value, const time_point& timestamp) {
+	// moving statistics preparation
+	double stale_factor = 0;
+	bool out_of_interval = false;
+	if (computed(tag::timestamp)) {
+		duration elapsed_duration = timestamp - m_timestamp;
+		if (elapsed_duration >= m_moving_interval) {
+			stale_factor = 0;
+			m_actual_interval = duration(0);
+			m_actual_timestamp = timestamp;
+		}
+		else if (elapsed_duration.count() >= 0) {
+			duration actual_elapsed_duration = timestamp - m_actual_timestamp;
+			if (actual_elapsed_duration >= m_moving_interval) {
+				stale_factor = 0;
+				m_actual_interval = duration(0);
+				m_actual_timestamp = timestamp;
+			}
+			else if (actual_elapsed_duration.count() >= 0) {
+				duration actual_stale_duration = m_moving_interval - actual_elapsed_duration;
+				if (actual_stale_duration >= m_actual_interval) {
+					stale_factor = 1;
+					m_actual_interval += actual_elapsed_duration;
+					m_actual_timestamp = timestamp;
+				}
+				else {
+					stale_factor = double(actual_stale_duration.count()) / m_actual_interval.count();
+					m_actual_interval = m_moving_interval;
+					m_actual_timestamp = timestamp;
+				}
+			}
+			else {
+				// impossible branch
+			}
+		}
+		else if (elapsed_duration >= -m_moving_interval) {
+			stale_factor = 1;
+			if (timestamp > m_actual_timestamp) {
+				m_actual_interval += (timestamp - m_actual_timestamp);
+				m_actual_timestamp = timestamp;
+			}
+		}
+		else {
+			out_of_interval = true;
+		}
+	}
+
+
 	if (computed(tag::rate)) {
 		const value_type delta = value - m_value;
-		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration > m_moving_interval) {
-			m_rate = delta;
-		}
-		else if (elapsed_duration.count() > 0) {
-			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			m_rate = m_rate * (1.0 - elapsed) + delta;
-		}
-		else if (elapsed_duration > -m_moving_interval) {
-			m_rate += delta;
+		if (!out_of_interval) {
+			m_rate = m_rate * stale_factor + delta;
 		}
 	}
 
@@ -338,47 +380,30 @@ void statistics::update(const value_type& value, const time_point& timestamp) {
 	}
 
 	if (computed(tag::moving_count)) {
-		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration > m_moving_interval) {
-			m_moving_count = 1;
-		}
-		else if (elapsed_duration.count() > 0) {
-			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			m_moving_count = m_moving_count * (1.0 - elapsed) + 1;
-		}
-		else if (elapsed_duration > -m_moving_interval) {
-			m_moving_count += 1;
+		if (!out_of_interval) {
+			m_moving_count = m_moving_count * stale_factor + 1;
 		}
 	}
 
 	if (computed(tag::moving_sum)) {
-		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration > m_moving_interval) {
-			m_moving_sum = value;
-		}
-		else if (elapsed_duration.count() > 0) {
-			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			m_moving_sum = m_moving_sum * (1.0 - elapsed) + value;
-		}
-		else if (elapsed_duration > -m_moving_interval) {
-			m_moving_sum += value;
+		if (!out_of_interval) {
+			m_moving_sum = m_moving_sum * stale_factor + value;
 		}
 	}
 
 	if (computed(tag::histogram)) {
-		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration > m_moving_interval) {
-			m_histogram.clear();
-			update_histogram(m_histogram, m_histogram_bins, value);
-		}
-		else if (elapsed_duration.count() > 0) {
-			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
-				bin->second *= (1.0 - elapsed);
+		if (!out_of_interval) {
+			if (math_utils::cmp<double>(stale_factor, 0) <= 0) {
+				m_histogram.clear();
 			}
-			update_histogram(m_histogram, m_histogram_bins, value);
-		}
-		else if (elapsed_duration > -m_moving_interval) {
+			else if (math_utils::cmp<double>(stale_factor, 1.0) < 0) {
+				for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
+					bin->second *= stale_factor;
+					if (math_utils::cmp<double>(bin->second, 0) <= 0) {
+						bin->second = 0;
+					}
+				}
+			}
 			update_histogram(m_histogram, m_histogram_bins, value);
 		}
 	}
@@ -395,59 +420,84 @@ void statistics::update_time(const time_point& timestamp) {
 		return;
 	}
 
-	if (computed(tag::rate)) {
+	// moving statistics preparation
+	double stale_factor = 0;
+	bool out_of_interval = false;
+	if (computed(tag::timestamp)) {
 		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration > m_moving_interval) {
-			m_rate = 0;
+		if (elapsed_duration >= m_moving_interval) {
+			stale_factor = 0;
+			m_actual_interval = duration(0);
+			m_actual_timestamp = time_point();
 		}
-		else if (elapsed_duration.count() > 0) {
-			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			m_rate = m_rate * (1.0 - elapsed);
-			if (math_utils::cmp<result_type<tag::rate>::type>(m_rate, 0) <= 0) {
+		else if (elapsed_duration.count() >= 0) {
+			duration actual_elapsed_duration = timestamp - m_actual_timestamp;
+			if (actual_elapsed_duration >= m_moving_interval) {
+				stale_factor = 0;
+				m_actual_interval = duration(0);
+				m_actual_timestamp = time_point();
+			}
+			else if (actual_elapsed_duration.count() >= 0) {
+				duration actual_stale_duration = m_moving_interval - actual_elapsed_duration;
+				if (actual_stale_duration >= m_actual_interval) {
+					stale_factor = 1;
+				}
+				else {
+					stale_factor = double(actual_stale_duration.count()) / m_actual_interval.count();
+					m_actual_interval = actual_stale_duration;
+				}
+			}
+			else {
+				// impossible branch
+			}
+		}
+		else if (elapsed_duration >= -m_moving_interval) {
+			stale_factor = 1;
+		}
+		else {
+			out_of_interval = true;
+		}
+	}
+
+
+	if (computed(tag::rate)) {
+		if (!out_of_interval) {
+			m_rate *= stale_factor;
+			if (math_utils::cmp<double>(m_rate, 0) <= 0) {
 				m_rate = 0;
 			}
 		}
 	}
 
 	if (computed(tag::moving_count)) {
-		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration > m_moving_interval) {
-			m_moving_count = 0;
-		}
-		else if (elapsed_duration.count() > 0) {
-			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			m_moving_count = m_moving_count * (1.0 - elapsed);
-			if (math_utils::cmp<result_type<tag::moving_count>::type>(m_moving_count, 0) <= 0) {
+		if (!out_of_interval) {
+			m_moving_count *= stale_factor;
+			if (math_utils::cmp<double>(m_moving_count, 0) <= 0) {
 				m_moving_count = 0;
 			}
 		}
 	}
 
 	if (computed(tag::moving_sum)) {
-		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration > m_moving_interval) {
-			m_moving_sum = 0;
-		}
-		else if (elapsed_duration.count() > 0) {
-			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			m_moving_sum = m_moving_sum * (1.0 - elapsed);
-			if (math_utils::cmp<result_type<tag::moving_sum>::type>(m_moving_sum, 0) == 0) {
+		if (!out_of_interval) {
+			m_moving_sum *= stale_factor;
+			if (math_utils::cmp<double>(m_moving_sum, 0) <= 0) {
 				m_moving_sum = 0;
 			}
 		}
 	}
 
 	if (computed(tag::histogram)) {
-		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration > m_moving_interval) {
-			m_histogram.clear();
-		}
-		else if (elapsed_duration.count() > 0) {
-			double elapsed = double(elapsed_duration.count()) / m_moving_interval.count();
-			for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
-				bin->second *= (1.0 - elapsed);
-				if (math_utils::cmp<double>(bin->second, 0) <= 0) {
-					bin->second = 0;
+		if (!out_of_interval) {
+			if (math_utils::cmp<double>(stale_factor, 0) <= 0) {
+				m_histogram.clear();
+			}
+			else if (math_utils::cmp<double>(stale_factor, 1) < 0) {
+				for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
+					bin->second *= stale_factor;
+					if (math_utils::cmp<double>(bin->second, 0) <= 0) {
+						bin->second = 0;
+					}
 				}
 			}
 		}

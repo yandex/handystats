@@ -57,9 +57,6 @@ TEST_F(MetricsDumpTest, SampleCounter) {
 
 	auto& counter = boost::get<handystats::metrics::counter>(metrics_dump->at("counter"));
 	ASSERT_EQ(counter.values().get<handystats::statistics::tag::value>(), INCR_COUNT * INCR_VALUE);
-	ASSERT_EQ(counter.incr_deltas().get<handystats::statistics::tag::count>(), INCR_COUNT);
-	ASSERT_EQ(counter.incr_deltas().get<handystats::statistics::tag::sum>(), INCR_COUNT * INCR_VALUE);
-	ASSERT_EQ(counter.incr_deltas().get<handystats::statistics::tag::avg>(), INCR_VALUE);
 }
 
 TEST_F(MetricsDumpTest, SampleTimer) {

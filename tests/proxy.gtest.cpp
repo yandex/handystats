@@ -84,19 +84,6 @@ TEST_F(HandyProxyTest, CounterProxy) {
 	ASSERT_EQ(counter.values().get<handystats::statistics::tag::count>(), 1 + DELTA_STEPS * 2);
 	ASSERT_EQ(counter.values().get<handystats::statistics::tag::min>(), INIT_VALUE);
 	ASSERT_EQ(counter.values().get<handystats::statistics::tag::max>(), INIT_VALUE + DELTA * DELTA_STEPS);
-
-	ASSERT_EQ(counter.incr_deltas().get<handystats::statistics::tag::count>(), DELTA_STEPS);
-	ASSERT_EQ(counter.incr_deltas().get<handystats::statistics::tag::min>(), DELTA);
-	ASSERT_EQ(counter.incr_deltas().get<handystats::statistics::tag::max>(), DELTA);
-
-	ASSERT_EQ(counter.decr_deltas().get<handystats::statistics::tag::count>(), DELTA_STEPS);
-	ASSERT_EQ(counter.decr_deltas().get<handystats::statistics::tag::min>(), DELTA);
-	ASSERT_EQ(counter.decr_deltas().get<handystats::statistics::tag::max>(), DELTA);
-
-	ASSERT_EQ(counter.deltas().get<handystats::statistics::tag::count>(), 2 * DELTA_STEPS);
-	ASSERT_EQ(counter.deltas().get<handystats::statistics::tag::min>(), -(handystats::metrics::counter::value_type)DELTA);
-	ASSERT_EQ(counter.deltas().get<handystats::statistics::tag::max>(), DELTA);
-	ASSERT_EQ(counter.deltas().get<handystats::statistics::tag::sum>(), 0);
 }
 
 TEST_F(HandyProxyTest, TimerProxySingleInstance) {

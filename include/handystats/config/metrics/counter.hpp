@@ -11,9 +11,6 @@ namespace handystats { namespace config { namespace metrics {
 
 struct counter {
 	statistics values;
-	statistics incr_deltas;
-	statistics decr_deltas;
-	statistics deltas;
 
 	counter();
 	void configure(const rapidjson::Value& config);

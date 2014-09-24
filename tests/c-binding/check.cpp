@@ -31,14 +31,6 @@ TEST(CBindingTest, TestCounter) {
 
 	const auto& test_counter = boost::get<handystats::metrics::counter>(metrics_dump->at(TEST_COUNTER_NAME));
 
-	ASSERT_EQ(test_counter.incr_deltas().get<handystats::statistics::tag::count>(), TEST_COUNTER_INCR_COUNT);
-	ASSERT_NEAR(test_counter.incr_deltas().get<handystats::statistics::tag::min>(), TEST_COUNTER_INCR_DELTA, 1E-9);
-	ASSERT_NEAR(test_counter.incr_deltas().get<handystats::statistics::tag::max>(), TEST_COUNTER_INCR_DELTA, 1E-9);
-
-	ASSERT_EQ(test_counter.decr_deltas().get<handystats::statistics::tag::count>(), TEST_COUNTER_DECR_COUNT);
-	ASSERT_NEAR(test_counter.decr_deltas().get<handystats::statistics::tag::min>(), TEST_COUNTER_DECR_DELTA, 1E-9);
-	ASSERT_NEAR(test_counter.decr_deltas().get<handystats::statistics::tag::max>(), TEST_COUNTER_DECR_DELTA, 1E-9);
-
 	ASSERT_EQ(test_counter.values().get<handystats::statistics::tag::count>(), TEST_COUNTER_INCR_COUNT + TEST_COUNTER_DECR_COUNT + 1);
 }
 
@@ -51,14 +43,6 @@ TEST(CBindingTest, TestScopedCounter) {
 
 	ASSERT_EQ(test_scoped_counter.values().get<handystats::statistics::tag::count>(), TEST_SCOPED_COUNTER_COUNT * 2 + 1);
 	ASSERT_NEAR(test_scoped_counter.values().get<handystats::statistics::tag::value>(), 0, 1E-9);
-
-	ASSERT_EQ(test_scoped_counter.incr_deltas().get<handystats::statistics::tag::count>(), TEST_SCOPED_COUNTER_COUNT);
-	ASSERT_NEAR(test_scoped_counter.incr_deltas().get<handystats::statistics::tag::min>(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
-	ASSERT_NEAR(test_scoped_counter.incr_deltas().get<handystats::statistics::tag::max>(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
-
-	ASSERT_EQ(test_scoped_counter.decr_deltas().get<handystats::statistics::tag::count>(), TEST_SCOPED_COUNTER_COUNT);
-	ASSERT_NEAR(test_scoped_counter.decr_deltas().get<handystats::statistics::tag::min>(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
-	ASSERT_NEAR(test_scoped_counter.decr_deltas().get<handystats::statistics::tag::max>(), TEST_SCOPED_COUNTER_DELTA, 1E-9);
 }
 
 TEST(CBindingTest, TestTimer) {

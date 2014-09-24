@@ -25,15 +25,6 @@
  *         "counter": {
  *             "values": {
  *                 <statistics opts>
- *             },
- *             "incr-deltas": {
- *                 <statistics opts>
- *             },
- *             "decr-deltas": {
- *                 <statistics opts>
- *             },
- *             "deltas": {
- *                 <statistics opts>
  *             }
  *         },
  *         "timer": {

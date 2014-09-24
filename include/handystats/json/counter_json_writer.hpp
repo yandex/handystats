@@ -36,24 +36,6 @@ inline void write_to_json_value(const metrics::counter* const obj, rapidjson::Va
 	if (!values.IsNull()) {
 		json_value->AddMember("values", values, allocator);
 	}
-
-	rapidjson::Value incr_deltas;
-	write_to_json_value(&obj->incr_deltas(), &incr_deltas, allocator);
-	if (!incr_deltas.IsNull()) {
-		json_value->AddMember("incr-deltas", incr_deltas, allocator);
-	}
-
-	rapidjson::Value decr_deltas;
-	write_to_json_value(&obj->decr_deltas(), &decr_deltas, allocator);
-	if (!decr_deltas.IsNull()) {
-		json_value->AddMember("decr-deltas", decr_deltas, allocator);
-	}
-
-	rapidjson::Value deltas;
-	write_to_json_value(&obj->deltas(), &deltas, allocator);
-	if (!deltas.IsNull()) {
-		json_value->AddMember("deltas", deltas, allocator);
-	}
 }
 
 template<typename StringBuffer, typename Allocator>

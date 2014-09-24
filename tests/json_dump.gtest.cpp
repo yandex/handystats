@@ -44,9 +44,6 @@ static void check_full_json_dump(const std::string& string_dump) {
 //			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
 
 			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
-			ASSERT_TRUE(iter->value.FindMember("incr-deltas") != NULL);
-			ASSERT_TRUE(iter->value.FindMember("decr-deltas") != NULL);
-			ASSERT_TRUE(iter->value.FindMember("deltas") != NULL);
 		}
 		else if (type == "timer") {
 //			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
@@ -115,12 +112,6 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 						}\
 					},\
 					\"counter\": {\
-						\"incr-deltas\": {\
-							\"tags\": []\
-						},\
-						\"deltas\": {\
-							\"tags\": []\
-						}\
 					}\
 				},\
 				\"metrics-dump\": {\
@@ -150,9 +141,6 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 	ASSERT_FALSE(dump["test.gauge"].HasMember("values"));
 
 	ASSERT_TRUE(dump["test.counter"].HasMember("values"));
-	ASSERT_FALSE(dump["test.counter"].HasMember("incr-deltas"));
-	ASSERT_TRUE(dump["test.counter"].HasMember("decr-deltas"));
-	ASSERT_FALSE(dump["test.counter"].HasMember("deltas"));
 
 	ASSERT_TRUE(dump["test.timer"].HasMember("values"));
 

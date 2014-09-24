@@ -6,9 +6,6 @@ namespace handystats { namespace config { namespace metrics {
 
 counter::counter()
 	: values(statistics())
-	, incr_deltas(statistics())
-	, decr_deltas(statistics())
-	, deltas(statistics())
 {
 }
 
@@ -20,18 +17,6 @@ void counter::configure(const rapidjson::Value& config) {
 	if (config.HasMember("values")) {
 		const rapidjson::Value& values = config["values"];
 		this->values.configure(values);
-	}
-	if (config.HasMember("incr-deltas")) {
-		const rapidjson::Value& incr_deltas = config["incr-deltas"];
-		this->incr_deltas.configure(incr_deltas);
-	}
-	if (config.HasMember("decr-deltas")) {
-		const rapidjson::Value& decr_deltas = config["decr-deltas"];
-		this->decr_deltas.configure(decr_deltas);
-	}
-	if (config.HasMember("deltas")) {
-		const rapidjson::Value& deltas = config["deltas"];
-		this->deltas.configure(deltas);
 	}
 }
 

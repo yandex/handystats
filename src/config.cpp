@@ -72,9 +72,6 @@ bool config_json(const rapidjson::Value& config) {
 		config::metrics::gauge_opts.values.configure(statistics_config);
 
 		config::metrics::counter_opts.values.configure(statistics_config);
-		config::metrics::counter_opts.incr_deltas.configure(statistics_config);
-		config::metrics::counter_opts.decr_deltas.configure(statistics_config);
-		config::metrics::counter_opts.deltas.configure(statistics_config);
 
 		config::metrics::timer_opts.values.configure(statistics_config);
 	}

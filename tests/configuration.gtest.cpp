@@ -242,10 +242,8 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {
 	ASSERT_EQ(handystats::config::statistics_opts.histogram_bins, 25);
 
 	ASSERT_EQ(handystats::config::metrics::gauge_opts.values.histogram_bins, 25);
-	ASSERT_EQ(handystats::config::metrics::counter_opts.incr_deltas.histogram_bins, 25);
 
 	ASSERT_EQ(handystats::config::metrics::gauge_opts.values.tags, handystats::statistics::tag::histogram);
-	ASSERT_EQ(handystats::config::metrics::counter_opts.incr_deltas.tags, handystats::statistics::tag::histogram);
 
 	HANDY_INIT();
 
@@ -270,8 +268,8 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {
 
 	auto counter = boost::get<handystats::metrics::counter>(metrics_dump->at("test.counter"));
 
-	ASSERT_TRUE(counter.incr_deltas().enabled(handystats::statistics::tag::histogram));
-	ASSERT_EQ(counter.incr_deltas().get<handystats::statistics::tag::histogram>().size(), 25);
+	ASSERT_TRUE(counter.values().enabled(handystats::statistics::tag::histogram));
+	ASSERT_EQ(counter.values().get<handystats::statistics::tag::histogram>().size(), 25);
 }
 
 TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {

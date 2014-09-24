@@ -45,7 +45,6 @@ TEST(CounterTest, TestCounterInternalStats) {
 	sample_counter.increment(min_test_value);
 	sample_counter.increment(max_test_value - min_test_value);
 
-	ASSERT_EQ(sample_counter.incr_deltas().get<handystats::statistics::tag::count>(), 2);
 	ASSERT_EQ(sample_counter.values().get<handystats::statistics::tag::min>(), 0);
 	ASSERT_EQ(sample_counter.values().get<handystats::statistics::tag::max>(), max_test_value);
 
@@ -53,8 +52,6 @@ TEST(CounterTest, TestCounterInternalStats) {
 		sample_counter.decrement(1);
 	}
 
-	ASSERT_EQ(sample_counter.deltas().get<handystats::statistics::tag::count>(), 2 + max_test_value);
 	ASSERT_EQ(sample_counter.values().get<handystats::statistics::tag::min>(), 0);
-	ASSERT_EQ(sample_counter.decr_deltas().get<handystats::statistics::tag::max>(), 1);
 	ASSERT_EQ(sample_counter.values().get<handystats::statistics::tag::max>(), max_test_value);
 }

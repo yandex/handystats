@@ -28,15 +28,9 @@ struct counter
 	void update_statistics(const time_point& timestamp = clock::now());
 
 	const statistics& values() const;
-	const statistics& incr_deltas() const;
-	const statistics& decr_deltas() const;
-	const statistics& deltas() const;
 
 private:
 	statistics m_values;
-	statistics m_incr_deltas;
-	statistics m_decr_deltas;
-	statistics m_deltas;
 
 	value_type m_value;
 	time_point m_timestamp;

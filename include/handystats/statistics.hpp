@@ -55,6 +55,7 @@ public:
 		static const type quantile = 1 << 11;
 		static const type timestamp = 1 << 12;
 		static const type rate = 1 << 13;
+		static const type entropy = 1 << 14;
 
 		static type from_string(const std::string&);
 	};
@@ -79,6 +80,7 @@ public:
 		, enable_if_eq<Tag, tag::quantile, quantile_extractor>
 		, enable_if_eq<Tag, tag::timestamp, time_point>
 		, enable_if_eq<Tag, tag::rate, double>
+		, enable_if_eq<Tag, tag::entropy, double>
 	{};
 
 	// statistics is enabled from configuration

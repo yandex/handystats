@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iterator>
 #include <vector>
+#include <cmath>
 
 #include <handystats/common.h>
 #include <handystats/math_utils.hpp>
@@ -88,6 +89,7 @@ const statistics::tag::type statistics::tag::histogram;
 const statistics::tag::type statistics::tag::quantile;
 const statistics::tag::type statistics::tag::timestamp;
 const statistics::tag::type statistics::tag::rate;
+const statistics::tag::type statistics::tag::entropy;
 
 statistics::tag::type statistics::tag::from_string(const std::string& tag_name) {
 	if (strcmp("value", tag_name.c_str()) == 0) {
@@ -129,6 +131,9 @@ statistics::tag::type statistics::tag::from_string(const std::string& tag_name) 
 	if (strcmp("rate", tag_name.c_str()) == 0) {
 		return rate;
 	}
+	if (strcmp("entropy", tag_name.c_str()) == 0) {
+		return entropy;
+	}
 
 	throw invalid_tag_error();
 }
@@ -158,7 +163,7 @@ bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXC
 		return enabled(tag::avg);
 
 	case tag::moving_count:
-		return enabled(tag::moving_count) || computed(tag::moving_avg) || computed(tag::quantile);
+		return enabled(tag::moving_count) || computed(tag::moving_avg) || computed(tag::quantile) || computed(tag::entropy);
 
 	case tag::moving_sum:
 		return enabled(tag::moving_sum) || computed(tag::moving_avg);
@@ -167,7 +172,7 @@ bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXC
 		return enabled(tag::moving_avg);
 
 	case tag::histogram:
-		return enabled(tag::histogram) || computed(tag::quantile);
+		return enabled(tag::histogram) || computed(tag::quantile) || computed(tag::entropy);
 
 	case tag::quantile:
 		return enabled(tag::quantile);
@@ -180,6 +185,9 @@ bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXC
 
 	case tag::rate:
 		return enabled(tag::rate);
+
+	case tag::entropy:
+		return enabled(tag::entropy);
 
 	default:
 		return false;
@@ -611,6 +619,51 @@ statistics::get_impl<statistics::tag::rate>() const
 {
 	if (computed(tag::rate)) {
 		return double(m_rate) / m_moving_interval.count() * m_rate_unit.count();
+	}
+	else {
+		throw invalid_tag_error();
+	}
+}
+
+template <>
+statistics::result_type<statistics::tag::entropy>::type
+statistics::get_impl<statistics::tag::entropy>() const
+{
+	if (computed(tag::entropy)) {
+		const auto& histogram = m_histogram;
+
+		if (histogram.size() <= 1) {
+			return 0;
+		}
+
+		if (math_utils::cmp<double>(m_moving_count, 0) <= 0) {
+			return 0;
+		}
+
+		double H = 0;
+		for (size_t bin_index = 0; bin_index < histogram.size(); ++bin_index) {
+			const auto& bin = histogram[bin_index];
+			if (math_utils::cmp<double>(bin.second, 0) <= 0) {
+				continue;
+			}
+
+			double bin_width = 0;
+			if (bin_index > 0) {
+				bin_width +=
+					(bin.first - histogram[bin_index - 1].first) * bin.second / (bin.second + histogram[bin_index - 1].second);
+			}
+			if (bin_index < histogram.size() - 1) {
+				bin_width +=
+					(histogram[bin_index + 1].first - bin.first) * bin.second / (bin.second + histogram[bin_index + 1].second);
+			}
+			if (bin_index == 0 || bin_index == histogram.size() - 1) {
+				bin_width *= 2;
+			}
+
+			H -= bin.second / m_moving_count * log(bin.second / m_moving_count / bin_width);
+		}
+
+		return H;
 	}
 	else {
 		throw invalid_tag_error();

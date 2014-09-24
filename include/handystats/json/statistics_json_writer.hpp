@@ -88,6 +88,9 @@ inline void write_to_json_value(const statistics* const obj, rapidjson::Value* j
 	if (obj->enabled(statistics::tag::rate)) {
 		json_value->AddMember("rate", obj->get<statistics::tag::rate>(), allocator);
 	}
+	if (obj->enabled(statistics::tag::entropy)) {
+		json_value->AddMember("entropy", obj->get<statistics::tag::entropy>(), allocator);
+	}
 }
 
 template<typename StringBuffer, typename Allocator>

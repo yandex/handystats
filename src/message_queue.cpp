@@ -121,13 +121,12 @@ static void reset() {
 
 	config::metrics::counter pop_count_opts;
 
-	pop_count_opts.values.tags = statistics::tag::value;
+	pop_count_opts.values.tags = statistics::tag::rate | statistics::tag::value;
+	pop_count_opts.values.rate_unit = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+	pop_count_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
 
-	pop_count_opts.incr_deltas.tags = statistics::tag::moving_sum;
-	pop_count_opts.incr_deltas.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
-
+	pop_count_opts.incr_deltas.tags = statistics::tag::empty;
 	pop_count_opts.decr_deltas.tags = statistics::tag::empty;
-
 	pop_count_opts.deltas.tags = statistics::tag::empty;
 
 	pop_count = metrics::counter(pop_count_opts);

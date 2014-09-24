@@ -37,19 +37,19 @@ static void check_full_json_dump(const std::string& string_dump) {
 //			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
 //			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
 
-			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
 		}
 		else if (type == "counter") {
 //			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
 //			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
 
-			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
 		}
 		else if (type == "timer") {
 //			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
 //			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
 
-			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
+//			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
 		}
 		else if (type == "attribute") {
 //			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
@@ -107,9 +107,7 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 			"{\
 				\"metrics\": {\
 					\"gauge\": {\
-						\"values\": {\
-							\"tags\": []\
-						}\
+						\"tags\": []\
 					},\
 					\"counter\": {\
 					}\
@@ -138,11 +136,11 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 	rapidjson::Document dump;
 	handystats::json::fill(dump, dump.GetAllocator(), *metrics_dump);
 
-	ASSERT_FALSE(dump["test.gauge"].HasMember("values"));
+//	ASSERT_FALSE(dump["test.gauge"].HasMember("values"));
 
-	ASSERT_TRUE(dump["test.counter"].HasMember("values"));
+//	ASSERT_TRUE(dump["test.counter"].HasMember("values"));
 
-	ASSERT_TRUE(dump["test.timer"].HasMember("values"));
+//	ASSERT_TRUE(dump["test.timer"].HasMember("values"));
 
 	HANDY_FINALIZE();
 }

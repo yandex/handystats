@@ -315,9 +315,7 @@ TEST_F(HandyConfigurationTest, MetricsConfigOverwritesStatistcs) {
 				},\
 				\"metrics\": {\
 					\"gauge\": {\
-						\"values\": {\
-							\"tags\": []\
-						}\
+						\"tags\": []\
 					}\
 				},\
 				\"metrics-dump\": {\

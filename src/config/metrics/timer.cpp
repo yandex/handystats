@@ -31,10 +31,7 @@ void timer::configure(const rapidjson::Value& config) {
 		}
 	}
 
-	if (config.HasMember("values")) {
-		const rapidjson::Value& values = config["values"];
-		this->values.configure(values);
-	}
+	this->values.configure(config);
 }
 
 }}} // namespace handystats::config::metrics

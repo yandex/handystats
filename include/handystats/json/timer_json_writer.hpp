@@ -30,11 +30,7 @@ inline void write_to_json_value(const metrics::timer* const obj, rapidjson::Valu
 
 	json_value->AddMember("type", "timer", allocator);
 
-	rapidjson::Value values;
-	write_to_json_value(&obj->values(), &values, allocator);
-	if (!values.IsNull()) {
-		json_value->AddMember("values", values, allocator);
-	}
+	write_to_json_value(&obj->values(), json_value, allocator);
 }
 
 template<typename StringBuffer, typename Allocator>

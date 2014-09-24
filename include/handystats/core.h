@@ -18,20 +18,14 @@
  *     },
  *     "metrics": {
  *         "gauge": {
- *             "values": {
- *                 <statistics opts>
- *             }
+ *             <statistics opts>
  *         },
  *         "counter": {
- *             "values": {
- *                 <statistics opts>
- *             }
+ *             <statistics opts>
  *         },
  *         "timer": {
  *             "idle-timeout": <value in msec>,
- *             "values": {
- *                 <statistics opts>
- *             }
+ *             <statistics opts>
  *         }
  *     },
  *     "metrics-dump": {

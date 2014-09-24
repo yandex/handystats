@@ -14,10 +14,7 @@ void counter::configure(const rapidjson::Value& config) {
 		return;
 	}
 
-	if (config.HasMember("values")) {
-		const rapidjson::Value& values = config["values"];
-		this->values.configure(values);
-	}
+	this->values.configure(config);
 }
 
 }}} // namespace handystats::config::metrics

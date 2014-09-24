@@ -23,7 +23,7 @@ inline void write_to_json_value(const statistics* const obj, rapidjson::Value* j
 	if (!json_value) {
 		json_value = new rapidjson::Value(rapidjson::kObjectType);
 	}
-	else {
+	else if (!json_value->IsObject()) {
 		json_value->SetObject();
 	}
 

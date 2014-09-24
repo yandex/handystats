@@ -183,9 +183,24 @@ int main(int argc, char** argv) {
 		uint64_t step_rate = steps[step_index];
 		uint64_t step_time_limit = steps[step_index + 1];
 
-		if (step_rate == 0 || step_time_limit == 0) {
-			std::cerr << "ERROR: invalid step (" << step_rate << ", " << step_time_limit << ")" << std::endl;
-			return 1;
+		if (step_time_limit == 0) {
+			continue;
+		}
+
+		if (step_rate == 0) {
+			rate.store(0);
+			end_time.store(
+					(
+						handystats::chrono::clock::now() +
+						handystats::chrono::duration_cast<handystats::chrono::clock::duration>(
+							std::chrono::seconds(step_time_limit)
+						)
+					)
+					.time_since_epoch().count()
+				);
+
+			std::this_thread::sleep_for(std::chrono::seconds(step_time_limit));
+			continue;
 		}
 
 		std::chrono::nanoseconds command_time_limit =

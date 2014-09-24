@@ -18,13 +18,6 @@ handystats_config="{
 		\"counter\": {
 			\"values\": {
 				\"tags\": [\"value\", \"moving-avg\"]
-			},
-			\"deltas\": {
-			},
-			\"incr-deltas\": {
-				\"tags\": [\"moving-sum\"]
-			},
-			\"decr-deltas\": {
 			}
 		},
 		\"timer\": {

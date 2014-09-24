@@ -11,19 +11,13 @@ handystats_config="{
 	},
 	\"metrics\": {
 		\"gauge\": {
-			\"values\": {
-				\"tags\": [\"value\", \"moving-avg\"]
-			}
+			\"tags\": [\"value\", \"moving-avg\"]
 		},
 		\"counter\": {
-			\"values\": {
-				\"tags\": [\"value\", \"moving-avg\"]
-			}
+			\"tags\": [\"value\", \"moving-avg\"]
 		},
 		\"timer\": {
-			\"values\": {
-				\"tags\": [\"moving-avg\", \"quantile\"]
-			}
+			\"tags\": [\"moving-avg\", \"quantile\"]
 		}
 	}
 }"

@@ -7,6 +7,10 @@
 #include <vector>
 
 #include <boost/program_options.hpp>
+#include <boost/random/linear_congruential.hpp>
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/uniform_real.hpp>
+#include <boost/random/variate_generator.hpp>
 
 #include <handystats/math_utils.hpp>
 #include <handystats/core.hpp>
@@ -33,13 +37,15 @@ std::chrono::milliseconds output_interval = std::chrono::seconds(1);
 std::atomic<uint64_t> rate(0);
 std::atomic<int64_t> end_time(0);
 
+// command() function is executed in multiple threads
+// NOTE: rand() function may be not thread-safe.
 void command() {
 	// 0 .. counters .. counters + gauges .. counters + gauges + timers
 	const double total_metrics = counters + gauges + timers;
 
 	double counter_prob = double(counters) / total_metrics;
 	double gauge_prob = double(counters + gauges) / total_metrics;
-	double timer_prob = 1.0;
+//	double timer_prob = 1.0;
 
 	double choice = double(rand()) / RAND_MAX;
 

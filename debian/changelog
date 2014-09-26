@@ -1,3 +1,17 @@
+handystats (1.9.14) unstable; urgency=low
+
+  * benchmarks added.
+  * statistics: rate added.
+  * config: "statistics"->"rate-unit" option added (rate is computed per that time unit), default is second.
+  * message_queue: use 'values'->'rate' statistic for pop_count stats instead of 'incr_deltas'->'moving-sum'.
+  * benchmarks/load: step option supports 0 as rate (sleep for time_limit) and 0 as time_limit (skip this step).
+  * metrics: counter's incr_deltas, decr_deltas, deltas statistics removed.
+  * config: redundant json node "values" in "metrics"->"gauge", "metrics"->"counter", "metrics"->"timer" removed.
+  * json: redundant json node "values" in metrics json dump removed.
+  * statistics: entropy added.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 26 Sep 2014 16:23:44 +0400
+
 handystats (1.9.13) unstable; urgency=low
 
   * statistics: empty bins merge fixup.

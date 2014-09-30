@@ -5,6 +5,8 @@
 
 #include <limits>
 #include <cmath>
+#include <stdexcept>
+#include <vector>
 
 namespace handystats {
 
@@ -26,27 +28,56 @@ public:
 	template<class Value>
 	static long double sqrt(const Value& a)
 	{
-		if (cmp(a, static_cast<Value>(0)) <= 0) {
-			return 0;
+		if (cmp(a, static_cast<Value>(0)) < 0) {
+			throw std::logic_error("sqrt of negative number");
 		}
 		return std::sqrt(static_cast<long double>(a));
 	}
 
 	// a x^2 + b x + c = 0
-	static long double solve_equation(const double& a, const double& b, const double& c) {
+	static std::vector<long double>
+	solve_quadratic(const long double& a, const long double& b, const long double& c)
+	{
 		// b x + c = 0
-		if (cmp(a, 0.0) == 0) {
-			if (cmp(b, 0.0) == 0) {
-				return std::numeric_limits<double>::min();
+		if (cmp<long double>(a, 0.0) == 0) {
+			if (cmp<long double>(b, 0.0) == 0) {
+				return {};
 			}
 			else {
-				return - c / b;
+				return {- c / b};
 			}
 		}
 		else {
-			double d = sqrt(b * b - 4 * a * c);
-			return (d - b) / 2.0 / a;
+			double d = b * b - 4 * a * c;
+			if (cmp<long double>(d, 0.0) < 0) {
+				return {};
+			}
+			else if (cmp<long double>(d, 0.0) == 0) {
+				return { - b / 2.0 / a };
+			}
+			else {
+				d = sqrt(d);
+				return {(-d - b) / 2.0 / a, (d - b) / 2.0 / a};
+			}
 		}
+
+		return {};
+	}
+
+	static long double
+	weighted_average(
+			const long double& value1, const long double& weight1,
+			const long double& value2, const long double& weight2
+		)
+	{
+		const long double& total_weight = weight1 + weight2;
+		if (cmp<long double>(total_weight, 0) == 0) {
+			throw std::logic_error("weighted_average: zero total weight");
+		}
+
+		const long double& weighted_sum = value1 * weight1 + value2 * weight2;
+
+		return weighted_sum / total_weight;
 	}
 
 }; // class math_utils

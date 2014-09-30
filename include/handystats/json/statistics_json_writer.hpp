@@ -4,6 +4,7 @@
 #define HANDYSTATS_INCREMENTAL_STATISTICS_JSON_WRITER_HPP_
 
 #include <string>
+#include <algorithm>
 
 #include <handystats/rapidjson/document.h>
 #include <handystats/rapidjson/stringbuffer.h>
@@ -65,8 +66,8 @@ inline void write_to_json_value(const statistics* const obj, rapidjson::Value* j
 		for (auto bin = histogram.begin(); bin != histogram.end(); ++bin) {
 			histogram_value.PushBack(
 					rapidjson::Value().SetArray()
-					.PushBack(bin->first, allocator)
-					.PushBack(bin->second, allocator),
+					.PushBack(std::get<statistics::BIN_CENTER>(*bin), allocator)
+					.PushBack(std::get<statistics::BIN_COUNT>(*bin), allocator),
 					allocator
 				);
 		}

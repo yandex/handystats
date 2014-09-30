@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <exception>
+#include <tuple>
 
 #include <handystats/common.h>
 #include <handystats/chrono.hpp>
@@ -21,8 +22,13 @@ public:
 	typedef clock::duration duration;
 	typedef clock::time_point time_point;
 
+	// histogram bin
+	typedef std::tuple<value_type, double, time_point> bin_type;
+	static const size_t BIN_CENTER = 0;
+	static const size_t BIN_COUNT = 1;
+	static const size_t BIN_TIMESTAMP = 2;
+
 	// histogram
-	typedef std::pair<value_type, double> bin_type;
 	typedef std::vector<bin_type> histogram_type;
 
 	typedef std::exception invalid_tag_error;
@@ -147,10 +153,7 @@ public:
 
 private:
 	// configuration (internal form)
-	duration m_moving_interval;
-	size_t m_histogram_bins;
-	tag::type m_tags;
-	duration m_rate_unit;
+	config::statistics m_config;
 
 	template <tag::type Tag>
 	typename result_type<Tag>::type get_impl() const;
@@ -166,8 +169,20 @@ private:
 	time_point m_timestamp;
 	value_type m_rate;
 
-	duration m_actual_interval;
-	time_point m_actual_timestamp;
+	time_point m_data_timestamp;
+
+	// applicable for moving_sum, moving_count
+	double shift_interval_data(
+			const double& data, const time_point& data_timestamp,
+			const time_point& timestamp
+		);
+	double update_interval_data(
+			const double& data, const time_point& data_timestamp,
+			const value_type& value, const time_point& timestamp
+		);
+
+	void shift_histogram(const time_point& timestamp);
+	void update_histogram(const value_type& value, const time_point& timestamp);
 };
 
 } // namespace handystats

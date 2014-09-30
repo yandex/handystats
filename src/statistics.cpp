@@ -11,6 +11,22 @@
 
 #include <handystats/statistics.hpp>
 
+// a x^2 + b x + c == 0
+// z -- root in [0, 1]
+static long double
+find_z(const long double& a, const long double& b, const long double& c) {
+	const auto& roots = handystats::math_utils::solve_quadratic(a, b, c);
+	for (size_t index = 0; index < roots.size(); ++index) {
+		if (handystats::math_utils::cmp<double>(roots[index], 0.0) >= 0 &&
+				handystats::math_utils::cmp<double>(roots[index], 1.0) <= 0
+			)
+		{
+			return roots[index];
+		}
+	}
+	throw std::logic_error("find_z: not found (" + std::to_string(a) + ", " + std::to_string(b) + ", " + std::to_string(c) + ")");
+}
+
 namespace handystats {
 
 statistics::quantile_extractor::quantile_extractor(const statistics* const statistics)
@@ -28,51 +44,73 @@ double statistics::quantile_extractor::at(const double& probability) const {
 		return 0;
 	}
 
-	if (math_utils::cmp<double>(m_statistics->m_moving_count, 0) <= 0) {
+	double moving_count = 0;
+	for (auto bin = histogram.begin(); bin != histogram.end(); ++bin) {
+		moving_count += std::get<BIN_COUNT>(*bin);
+	}
+
+	if (math_utils::cmp<double>(moving_count, 0) <= 0) {
 		return 0;
 	}
 
 	if (histogram.size() == 1) {
-		return histogram[0].first;
+		return std::get<BIN_CENTER>(histogram[0]);
 	}
 
-	double required_count = m_statistics->m_moving_count * probability;
-	// estimate on left tail
-	if (math_utils::cmp(histogram[0].second / 2.0, required_count) > 0) {
-		double a = histogram[0].second;
-		double b = 0;
-		double c = - 2 * required_count;
-		double z = math_utils::solve_equation(a, b, c);
-		return histogram[0].first +
-			histogram[0].second / (histogram[0].second + histogram[1].second) * (histogram[1].first - histogram[0].first) * (z - 1);
-	}
-	required_count -= histogram[0].second / 2.0;
+	double required_count = moving_count * probability;
 
-	size_t bin_index;
-	for (bin_index = 0; bin_index < histogram.size() - 1; ++bin_index) {
-		double volume = (histogram[bin_index].second + histogram[bin_index + 1].second) / 2.0;
-		if (math_utils::cmp(volume, required_count) > 0) {
-			break;
-		}
+	int bin_index = -1;
+	for (; bin_index < (int)histogram.size(); ++bin_index) {
+		double volume =
+			(
+				(bin_index == -1 ? 0 : std::get<BIN_COUNT>(histogram[bin_index]))
+				+ (bin_index + 1 == histogram.size() ? 0 : std::get<BIN_COUNT>(histogram[bin_index + 1]))
+			) / 2.0;
+
+		if (math_utils::cmp(volume, required_count) > 0) break;
+
 		required_count -= volume;
 	}
 
-	// estimate on right tail
-	if (bin_index == histogram.size() - 1) {
-		double a = - histogram[bin_index].second;
-		double b = 2 * histogram[bin_index].second;
-		double c = - 2 * required_count;
-		double z = math_utils::solve_equation(a, b, c);
-		return histogram[bin_index].first +
-			histogram[bin_index].second / (histogram[bin_index - 1].second + histogram[bin_index].second) *
-			(histogram[bin_index].first - histogram[bin_index - 1].first) * z;
+	bin_type left_bin;
+	bin_type right_bin;
+
+	if (bin_index == -1) {
+		left_bin = bin_type{
+			2 * std::get<BIN_CENTER>(histogram[0]) -
+				math_utils::weighted_average(
+						std::get<BIN_CENTER>(histogram[0]), std::get<BIN_COUNT>(histogram[0]),
+						std::get<BIN_CENTER>(histogram[1]), std::get<BIN_COUNT>(histogram[1])
+					),
+			0,
+			time_point()
+		};
+		right_bin = histogram[0];
+	}
+	else if (bin_index + 1 < histogram.size()) {
+		left_bin = histogram[bin_index];
+		right_bin = histogram[bin_index + 1];
+	}
+	else {
+		left_bin = histogram[bin_index];
+		right_bin = bin_type{
+			2 * std::get<BIN_CENTER>(histogram[bin_index]) -
+				math_utils::weighted_average(
+						std::get<BIN_CENTER>(histogram[bin_index - 1]), std::get<BIN_COUNT>(histogram[bin_index - 1]),
+						std::get<BIN_CENTER>(histogram[bin_index]), std::get<BIN_COUNT>(histogram[bin_index])
+					),
+			0,
+			time_point()
+		};
 	}
 
-	double a = histogram[bin_index + 1].second - histogram[bin_index].second;
-	double b = 2 * histogram[bin_index].second;
-	double c = - 2 * required_count;
-	double z = math_utils::solve_equation(a, b, c);
-	return histogram[bin_index].first + (histogram[bin_index + 1].first - histogram[bin_index].first) * z;
+	const double& a = std::get<BIN_COUNT>(right_bin) - std::get<BIN_COUNT>(left_bin);
+	const double& b = 2 * std::get<BIN_COUNT>(left_bin);
+	const double& c = -2 * required_count;
+
+	const double& z = find_z(a, b, c);
+
+	return std::get<BIN_CENTER>(left_bin) + (std::get<BIN_CENTER>(right_bin) - std::get<BIN_CENTER>(left_bin)) * z;
 }
 
 const statistics::tag::type statistics::tag::empty;
@@ -139,7 +177,7 @@ statistics::tag::type statistics::tag::from_string(const std::string& tag_name) 
 }
 
 bool statistics::enabled(const statistics::tag::type& t) const HANDYSTATS_NOEXCEPT {
-	return m_tags & t;
+	return m_config.tags & t;
 }
 
 bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXCEPT {
@@ -163,7 +201,7 @@ bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXC
 		return enabled(tag::avg);
 
 	case tag::moving_count:
-		return enabled(tag::moving_count) || computed(tag::moving_avg) || computed(tag::quantile) || computed(tag::entropy);
+		return enabled(tag::moving_count) || computed(tag::moving_avg);
 
 	case tag::moving_sum:
 		return enabled(tag::moving_sum) || computed(tag::moving_avg);
@@ -195,16 +233,13 @@ bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXC
 }
 
 statistics::tag::type statistics::tags() const HANDYSTATS_NOEXCEPT {
-	return m_tags;
+	return m_config.tags;
 }
 
 statistics::statistics(
 			const config::statistics& opts
 		)
-	: m_moving_interval(opts.moving_interval)
-	, m_histogram_bins(opts.histogram_bins)
-	, m_tags(opts.tags)
-	, m_rate_unit(opts.rate_unit)
+	: m_config(opts)
 {
 	reset();
 }
@@ -218,14 +253,59 @@ void statistics::reset() {
 	m_moving_count = 0.0;
 	m_moving_sum = 0.0;
 	m_histogram.clear();
-	if (m_histogram_bins > 0) {
-		m_histogram.reserve(m_histogram_bins + 1);
+	if (m_config.histogram_bins > 0) {
+		m_histogram.reserve(m_config.histogram_bins + 1);
 	}
 	m_timestamp = time_point();
 	m_rate = 0;
 
-	m_actual_interval = duration(0);
-	m_actual_timestamp = time_point();
+	m_data_timestamp = time_point();
+}
+
+double statistics::shift_interval_data(
+		const double& data, const statistics::time_point& data_timestamp,
+		const statistics::time_point& timestamp
+	)
+{
+	if (timestamp <= m_timestamp) return data;
+
+	const auto& stale_interval = data_timestamp - (timestamp - m_config.moving_interval);
+
+	if (stale_interval.count() <= 0) return 0;
+
+	return data * stale_interval.count() / (m_config.moving_interval - (m_timestamp - data_timestamp)).count();
+}
+
+double statistics::update_interval_data(
+		const double& data, const statistics::time_point& data_timestamp,
+		const statistics::value_type& value, const statistics::time_point& timestamp
+	)
+{
+	if (timestamp <= m_timestamp) {
+		if (timestamp < m_timestamp - m_config.moving_interval) {
+			return data;
+		}
+		else {
+			return data + value;
+		}
+	}
+	else {
+		return value + shift_interval_data(data, data_timestamp, timestamp);
+	}
+
+	return data;
+}
+
+
+void statistics::shift_histogram(const statistics::time_point& timestamp) {
+	if (m_config.histogram_bins == 0) return;
+
+	for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
+		auto& bin_count = std::get<BIN_COUNT>(*bin);
+		const auto& bin_timestamp = std::get<BIN_TIMESTAMP>(*bin);
+
+		bin_count = shift_interval_data(bin_count, bin_timestamp, timestamp);
+	}
 }
 
 static double bin_merge_criteria(
@@ -234,129 +314,81 @@ static double bin_merge_criteria(
 	)
 {
 	// possible variants:
-	// * distance of bins' centers
+	// * distance between bins' centers
 	// * sum of bins' weights (number of elements)
 	// * other heuristics
 
-	// distance of bins' centers
-	// return right_bin.first - left_bin.first;
+	// distance between bins' centers
+	return std::get<statistics::BIN_CENTER>(right_bin) - std::get<statistics::BIN_CENTER>(left_bin);
 
 	// sum of bins' weights
-	return left_bin.second + right_bin.second;
+	//return std::get<statistics::BIN_COUNT>(left_bin) + std::get<statistics::BIN_COUNT>(right_bin);
 
-	// heuristic
-	//return (left_bin.second + right_bin.second) * (right_bin.first - left_bin.first);
+	// heuristic -- minimum resulted bin square
+	//return (std::get<statistics::BIN_COUNT>(left_bin) + std::get<statistics::BIN_COUNT>(right_bin)) *
+	//	(std::get<statistics::BIN_CENTER>(right_bin) - std::get<statistics::BIN_CENTER>(left_bin));
 }
 
-static void update_histogram(
-		statistics::histogram_type& histogram,
-		const size_t& histogram_bins,
-		const statistics::value_type& value
-	)
+void statistics::update_histogram(const statistics::value_type& value, const statistics::time_point& timestamp)
 {
-	if (histogram_bins == 0) {
-		// histogram is disabled
-		return;
-	}
+	if (m_config.histogram_bins == 0) return;
 
-	for (auto bin = histogram.begin(); bin != histogram.end(); ++bin) {
-		if (math_utils::cmp<statistics::value_type>(bin->first, value) == 0) {
-			bin->second += 1;
-			return;
-		}
-	}
+	statistics::bin_type new_bin(value, 1.0, timestamp);
 
-	statistics::bin_type new_bin(value, 1.0);
+	auto insert_iter = std::lower_bound(m_histogram.begin(), m_histogram.end(), new_bin);
+	m_histogram.insert(insert_iter, new_bin);
 
-	auto insert_iter = std::lower_bound(histogram.begin(), histogram.end(), new_bin);
-	histogram.insert(insert_iter, new_bin);
+	shift_histogram(timestamp);
 
-	if (histogram.size() <= histogram_bins) {
+	if (m_histogram.size() <= m_config.histogram_bins) {
 		return;
 	}
 
 	size_t best_merge_index = -1;
 	double best_merge_criteria = 0;
-	for (size_t index = 0; index < histogram.size() - 1; ++index) {
-		double merge_criteria = bin_merge_criteria(histogram[index], histogram[index + 1]);
+	for (size_t index = 0; index < m_histogram.size() - 1; ++index) {
+		double merge_criteria = bin_merge_criteria(m_histogram[index], m_histogram[index + 1]);
 		if (best_merge_index == -1 || math_utils::cmp(merge_criteria, best_merge_criteria) < 0) {
 			best_merge_index = index;
 			best_merge_criteria = merge_criteria;
 		}
 	}
 
-	if (math_utils::cmp<double>(histogram[best_merge_index].second + histogram[best_merge_index + 1].second, 0) <= 0) {
-		histogram[best_merge_index].first += histogram[best_merge_index + 1].first;
-		histogram[best_merge_index].first /= 2;
+	auto& left_bin = m_histogram[best_merge_index];
+	auto& right_bin = m_histogram[best_merge_index + 1];
 
-		histogram[best_merge_index].second = 0;
+	if (math_utils::cmp(std::get<BIN_COUNT>(left_bin), 0.0) <= 0 &&
+			math_utils::cmp(std::get<BIN_COUNT>(right_bin), 0.0) <= 0)
+	{
+		std::get<BIN_CENTER>(left_bin) =
+			math_utils::weighted_average(
+					std::get<BIN_CENTER>(left_bin), 1,
+					std::get<BIN_CENTER>(right_bin), 1
+				);
+
+		std::get<BIN_COUNT>(left_bin) = 0;
+
+		std::get<BIN_TIMESTAMP>(left_bin) = time_point();
 	}
 	else {
-		histogram[best_merge_index].first =
-			histogram[best_merge_index].first * histogram[best_merge_index].second +
-			histogram[best_merge_index + 1].first * histogram[best_merge_index + 1].second;
+		std::get<BIN_CENTER>(left_bin) =
+			math_utils::weighted_average(
+					std::get<BIN_CENTER>(left_bin), std::get<BIN_COUNT>(left_bin),
+					std::get<BIN_CENTER>(right_bin), std::get<BIN_COUNT>(right_bin)
+				);
 
-		histogram[best_merge_index].second += histogram[best_merge_index + 1].second;
+		std::get<BIN_COUNT>(left_bin) += std::get<BIN_COUNT>(right_bin);
 
-		histogram[best_merge_index].first /= histogram[best_merge_index].second;
+		std::get<BIN_TIMESTAMP>(left_bin) = std::max(std::get<BIN_TIMESTAMP>(left_bin), std::get<BIN_TIMESTAMP>(right_bin));
 	}
 
-	histogram.erase(histogram.begin() + best_merge_index + 1);
+	m_histogram.erase(m_histogram.begin() + best_merge_index + 1);
 }
 
 void statistics::update(const value_type& value, const time_point& timestamp) {
-	// moving statistics preparation
-	double stale_factor = 0;
-	bool out_of_interval = false;
-	if (computed(tag::timestamp)) {
-		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration >= m_moving_interval) {
-			stale_factor = 0;
-			m_actual_interval = duration(0);
-			m_actual_timestamp = timestamp;
-		}
-		else if (elapsed_duration.count() >= 0) {
-			duration actual_elapsed_duration = timestamp - m_actual_timestamp;
-			if (actual_elapsed_duration >= m_moving_interval) {
-				stale_factor = 0;
-				m_actual_interval = duration(0);
-				m_actual_timestamp = timestamp;
-			}
-			else if (actual_elapsed_duration.count() >= 0) {
-				duration actual_stale_duration = m_moving_interval - actual_elapsed_duration;
-				if (actual_stale_duration >= m_actual_interval) {
-					stale_factor = 1;
-					m_actual_interval += actual_elapsed_duration;
-					m_actual_timestamp = timestamp;
-				}
-				else {
-					stale_factor = double(actual_stale_duration.count()) / m_actual_interval.count();
-					m_actual_interval = m_moving_interval;
-					m_actual_timestamp = timestamp;
-				}
-			}
-			else {
-				// impossible branch
-			}
-		}
-		else if (elapsed_duration >= -m_moving_interval) {
-			stale_factor = 1;
-			if (timestamp > m_actual_timestamp) {
-				m_actual_interval += (timestamp - m_actual_timestamp);
-				m_actual_timestamp = timestamp;
-			}
-		}
-		else {
-			out_of_interval = true;
-		}
-	}
-
-
 	if (computed(tag::rate)) {
 		const value_type delta = value - m_value;
-		if (!out_of_interval) {
-			m_rate = m_rate * stale_factor + delta;
-		}
+		m_rate = update_interval_data(m_rate, m_data_timestamp, delta, timestamp);
 	}
 
 	if (computed(tag::value)) {
@@ -380,131 +412,45 @@ void statistics::update(const value_type& value, const time_point& timestamp) {
 	}
 
 	if (computed(tag::moving_count)) {
-		if (!out_of_interval) {
-			m_moving_count = m_moving_count * stale_factor + 1;
-		}
+		m_moving_count = update_interval_data(m_moving_count, m_data_timestamp, 1, timestamp);
 	}
 
 	if (computed(tag::moving_sum)) {
-		if (!out_of_interval) {
-			m_moving_sum = m_moving_sum * stale_factor + value;
-		}
+		m_moving_sum = update_interval_data(m_moving_sum, m_data_timestamp, value, timestamp);
 	}
 
 	if (computed(tag::histogram)) {
-		if (!out_of_interval) {
-			if (math_utils::cmp<double>(stale_factor, 0) <= 0) {
-				m_histogram.clear();
-			}
-			else if (math_utils::cmp<double>(stale_factor, 1.0) < 0) {
-				for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
-					bin->second *= stale_factor;
-					if (math_utils::cmp<double>(bin->second, 0) <= 0) {
-						bin->second = 0;
-					}
-				}
-			}
-			update_histogram(m_histogram, m_histogram_bins, value);
-		}
+		update_histogram(value, timestamp);
 	}
 
 	if (computed(tag::timestamp)) {
-		if (m_timestamp < timestamp) {
-			m_timestamp = timestamp;
-		}
+		m_timestamp = std::max(m_timestamp, timestamp);
+
+		m_data_timestamp = std::max(m_data_timestamp, timestamp);
 	}
 }
 
 void statistics::update_time(const time_point& timestamp) {
-	if (timestamp <= m_timestamp) {
-		return;
-	}
-
-	// moving statistics preparation
-	double stale_factor = 0;
-	bool out_of_interval = false;
-	if (computed(tag::timestamp)) {
-		duration elapsed_duration = timestamp - m_timestamp;
-		if (elapsed_duration >= m_moving_interval) {
-			stale_factor = 0;
-			m_actual_interval = duration(0);
-			m_actual_timestamp = time_point();
-		}
-		else if (elapsed_duration.count() >= 0) {
-			duration actual_elapsed_duration = timestamp - m_actual_timestamp;
-			if (actual_elapsed_duration >= m_moving_interval) {
-				stale_factor = 0;
-				m_actual_interval = duration(0);
-				m_actual_timestamp = time_point();
-			}
-			else if (actual_elapsed_duration.count() >= 0) {
-				duration actual_stale_duration = m_moving_interval - actual_elapsed_duration;
-				if (actual_stale_duration >= m_actual_interval) {
-					stale_factor = 1;
-				}
-				else {
-					stale_factor = double(actual_stale_duration.count()) / m_actual_interval.count();
-					m_actual_interval = actual_stale_duration;
-				}
-			}
-			else {
-				// impossible branch
-			}
-		}
-		else if (elapsed_duration >= -m_moving_interval) {
-			stale_factor = 1;
-		}
-		else {
-			out_of_interval = true;
-		}
-	}
-
+	if (timestamp <= m_timestamp) return;
 
 	if (computed(tag::rate)) {
-		if (!out_of_interval) {
-			m_rate *= stale_factor;
-			if (math_utils::cmp<double>(m_rate, 0) <= 0) {
-				m_rate = 0;
-			}
-		}
+		m_rate = shift_interval_data(m_rate, m_data_timestamp, timestamp);
 	}
 
 	if (computed(tag::moving_count)) {
-		if (!out_of_interval) {
-			m_moving_count *= stale_factor;
-			if (math_utils::cmp<double>(m_moving_count, 0) <= 0) {
-				m_moving_count = 0;
-			}
-		}
+		m_moving_count = shift_interval_data(m_moving_count, m_data_timestamp, timestamp);
 	}
 
 	if (computed(tag::moving_sum)) {
-		if (!out_of_interval) {
-			m_moving_sum *= stale_factor;
-			if (math_utils::cmp<double>(m_moving_sum, 0) <= 0) {
-				m_moving_sum = 0;
-			}
-		}
+		m_moving_sum = shift_interval_data(m_moving_sum, m_data_timestamp, timestamp);
 	}
 
 	if (computed(tag::histogram)) {
-		if (!out_of_interval) {
-			if (math_utils::cmp<double>(stale_factor, 0) <= 0) {
-				m_histogram.clear();
-			}
-			else if (math_utils::cmp<double>(stale_factor, 1) < 0) {
-				for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
-					bin->second *= stale_factor;
-					if (math_utils::cmp<double>(bin->second, 0) <= 0) {
-						bin->second = 0;
-					}
-				}
-			}
-		}
+		shift_histogram(timestamp);
 	}
 
 	if (computed(tag::timestamp)) {
-		m_timestamp = timestamp;
+		m_timestamp = std::max(m_timestamp, timestamp);
 	}
 }
 
@@ -668,7 +614,7 @@ statistics::result_type<statistics::tag::rate>::type
 statistics::get_impl<statistics::tag::rate>() const
 {
 	if (computed(tag::rate)) {
-		return double(m_rate) / m_moving_interval.count() * m_rate_unit.count();
+		return double(m_rate) * m_config.rate_unit.count() / m_config.moving_interval.count();
 	}
 	else {
 		throw invalid_tag_error();
@@ -686,31 +632,37 @@ statistics::get_impl<statistics::tag::entropy>() const
 			return 0;
 		}
 
-		if (math_utils::cmp<double>(m_moving_count, 0) <= 0) {
+		double moving_count = 0;
+		for (auto bin = histogram.begin(); bin != histogram.end(); ++bin) {
+			moving_count += std::get<BIN_COUNT>(*bin);
+		}
+		if (math_utils::cmp<double>(moving_count, 0) <= 0) {
 			return 0;
 		}
 
 		double H = 0;
 		for (size_t bin_index = 0; bin_index < histogram.size(); ++bin_index) {
 			const auto& bin = histogram[bin_index];
-			if (math_utils::cmp<double>(bin.second, 0) <= 0) {
+			if (math_utils::cmp<double>(std::get<BIN_COUNT>(bin), 0) <= 0) {
 				continue;
 			}
 
 			double bin_width = 0;
 			if (bin_index > 0) {
 				bin_width +=
-					(bin.first - histogram[bin_index - 1].first) * bin.second / (bin.second + histogram[bin_index - 1].second);
+					(std::get<BIN_CENTER>(bin) - std::get<BIN_CENTER>(histogram[bin_index - 1])) *
+						std::get<BIN_COUNT>(bin) / (std::get<BIN_COUNT>(bin) + std::get<BIN_COUNT>(histogram[bin_index - 1]));
 			}
 			if (bin_index < histogram.size() - 1) {
 				bin_width +=
-					(histogram[bin_index + 1].first - bin.first) * bin.second / (bin.second + histogram[bin_index + 1].second);
+					(std::get<BIN_CENTER>(histogram[bin_index + 1]) - std::get<BIN_CENTER>(bin)) *
+						std::get<BIN_COUNT>(bin) / (std::get<BIN_COUNT>(bin) + std::get<BIN_COUNT>(histogram[bin_index + 1]));
 			}
 			if (bin_index == 0 || bin_index == histogram.size() - 1) {
 				bin_width *= 2;
 			}
 
-			H -= bin.second / m_moving_count * log(bin.second / m_moving_count / bin_width);
+			H -= std::get<BIN_COUNT>(bin) * log(std::get<BIN_COUNT>(bin) / moving_count / bin_width) / moving_count ;
 		}
 
 		return H;

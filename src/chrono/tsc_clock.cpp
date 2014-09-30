@@ -189,15 +189,11 @@ tsc_clock::time_point& tsc_clock::time_point::operator-=(const duration& d) {
 /* Arithmetic operations with duration */
 
 tsc_clock::time_point tsc_clock::time_point::operator+(const duration& d) const {
-	time_point result(*this);
-	result += d;
-	return result;
+	return time_point(since_epoch + d);
 }
 
 tsc_clock::time_point tsc_clock::time_point::operator-(const duration& d) const {
-	time_point result(*this);
-	result -= d;
-	return result;
+	return time_point(since_epoch - d);
 }
 
 /* Arithmetic operations with duration */

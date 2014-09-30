@@ -107,6 +107,18 @@ void print_stats() {
 //		std::cout << "     timestamp: " << pop_count.incr_deltas().get<handystats::statistics::tag::timestamp>() << std::endl;
 		std::cout << std::endl;
 	}
+
+	{
+		const char* name = "load_test.timer.0";
+		const auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->at(name));
+		std::cout << name << ":" << std::endl;
+		std::cout << "          p25: " << timer.values().get<handystats::statistics::tag::quantile>().at(0.25) << std::endl;
+		std::cout << "          p50: " << timer.values().get<handystats::statistics::tag::quantile>().at(0.50) << std::endl;
+		std::cout << "          p75: " << timer.values().get<handystats::statistics::tag::quantile>().at(0.75) << std::endl;
+		std::cout << "          p95: " << timer.values().get<handystats::statistics::tag::quantile>().at(0.95) << std::endl;
+//		std::cout << "     timestamp: " << pop_count.incr_deltas().get<handystats::statistics::tag::timestamp>() << std::endl;
+		std::cout << std::endl;
+	}
 }
 
 int main(int argc, char** argv) {

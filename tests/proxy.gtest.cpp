@@ -1,3 +1,5 @@
+#include <chrono>
+
 #include <gtest/gtest.h>
 
 #include <handystats/chrono.hpp>
@@ -112,13 +114,15 @@ TEST_F(HandyProxyTest, TimerProxySingleInstance) {
 
 	ASSERT_GE(
 			timer.values().get<handystats::statistics::tag::value>(),
-			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count()
+			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+				handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 
 	ASSERT_EQ(timer.values().get<handystats::statistics::tag::count>(), SLEEP_COUNT);
 	ASSERT_GE(
 			timer.values().get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count()
+			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+				handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 }
 
@@ -151,12 +155,14 @@ TEST_F(HandyProxyTest, TimerProxyMultiInstance) {
 
 	ASSERT_GE(
 			timer.values().get<handystats::statistics::tag::value>(),
-			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count()
+			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+				handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 
 	ASSERT_EQ(timer.values().get<handystats::statistics::tag::count>(), SLEEP_COUNT);
 	ASSERT_GE(
 			timer.values().get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count()
+			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+				handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 }

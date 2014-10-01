@@ -1,4 +1,5 @@
 #include <thread>
+#include <chrono>
 
 #include <gtest/gtest.h>
 
@@ -19,7 +20,7 @@ protected:
 };
 
 TEST_F(IncrementalStatisticsTest, TestIntervalCount) {
-	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::milliseconds(1));
+	opts.moving_interval = handystats::chrono::duration(1, handystats::chrono::time_unit::MSEC);
 	opts.tags = handystats::statistics::tag::moving_count;
 
 	stats = handystats::statistics(opts);
@@ -36,12 +37,12 @@ TEST_F(IncrementalStatisticsTest, TestIntervalCount) {
 			stats.update(step);
 		}
 
-		ASSERT_NEAR(stats.get<handystats::statistics::tag::moving_count>(), STEP_COUNT, 0.05 * STEP_COUNT);
+		ASSERT_NEAR(stats.get<handystats::statistics::tag::moving_count>(), STEP_COUNT, 0.10 * STEP_COUNT);
 	}
 }
 
 TEST_F(IncrementalStatisticsTest, TestIntervalSum) {
-	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::milliseconds(1));
+	opts.moving_interval = handystats::chrono::duration(1, handystats::chrono::time_unit::MSEC);
 	opts.tags = handystats::statistics::tag::moving_sum;
 
 	stats = handystats::statistics(opts);
@@ -63,7 +64,7 @@ TEST_F(IncrementalStatisticsTest, TestIntervalSum) {
 }
 
 TEST_F(IncrementalStatisticsTest, TestIntervalMean) {
-	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::milliseconds(1));
+	opts.moving_interval = handystats::chrono::duration(1, handystats::chrono::time_unit::MSEC);
 	opts.tags = handystats::statistics::tag::moving_avg;
 
 	stats = handystats::statistics(opts);
@@ -96,7 +97,10 @@ TEST_F(IncrementalStatisticsTest, TestIntervalMean) {
 
 TEST_F(IncrementalStatisticsTest, Quantile25RightTailTest) {
 	opts.histogram_bins = 30;
-	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
+	opts.moving_interval = handystats::chrono::duration::convert_to(
+			handystats::chrono::time_unit::TICK,
+			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+		);
 	opts.tags = handystats::statistics::tag::quantile;
 
 	stats = handystats::statistics(opts);
@@ -105,10 +109,10 @@ TEST_F(IncrementalStatisticsTest, Quantile25RightTailTest) {
 	const double normal_value = 100;
 	const double right_tail_value = 1000;
 
-	const handystats::chrono::clock::duration time_span = opts.moving_interval / TOTAL_COUNT;
+	const handystats::chrono::duration time_span = opts.moving_interval / TOTAL_COUNT;
 
 	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
-		handystats::chrono::clock::time_point current_time(time_span * index);
+		handystats::chrono::time_point current_time(time_span * index, handystats::chrono::clock_type::TSC);
 
 		if (index % 100 <= 75) {
 			stats.update(normal_value + double(rand()) / RAND_MAX, current_time);
@@ -124,7 +128,10 @@ TEST_F(IncrementalStatisticsTest, Quantile25RightTailTest) {
 
 TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	opts.histogram_bins = 30;
-	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
+	opts.moving_interval = handystats::chrono::duration::convert_to(
+			handystats::chrono::time_unit::TICK,
+			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+		);
 	opts.tags = handystats::statistics::tag::quantile;
 
 	stats = handystats::statistics(opts);
@@ -132,10 +139,10 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	const size_t TOTAL_COUNT = 10000;
 	double normal_value = 100;
 
-	const handystats::chrono::clock::duration time_span = opts.moving_interval / TOTAL_COUNT;
+	const handystats::chrono::duration time_span = opts.moving_interval / TOTAL_COUNT;
 
 	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
-		handystats::chrono::clock::time_point current_time(time_span * index);
+		handystats::chrono::time_point current_time(time_span * index, handystats::chrono::clock_type::TSC);
 		stats.update(normal_value + double(rand()) / RAND_MAX, current_time);
 	}
 
@@ -145,7 +152,7 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	normal_value *= 2;
 
 	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
-		handystats::chrono::clock::time_point current_time(time_span * (TOTAL_COUNT + index));
+		handystats::chrono::time_point current_time(time_span * (TOTAL_COUNT + index), handystats::chrono::clock_type::TSC);
 		stats.update(normal_value + double(rand()) / RAND_MAX, current_time);
 	}
 
@@ -155,7 +162,10 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 
 TEST_F(IncrementalStatisticsTest, HistogramTest) {
 	opts.histogram_bins = 10;
-	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(30));
+	opts.moving_interval = handystats::chrono::duration::convert_to(
+			handystats::chrono::time_unit::TICK,
+			handystats::chrono::duration(30, handystats::chrono::time_unit::SEC)
+		);
 	opts.tags = handystats::statistics::tag::histogram;
 
 	stats = handystats::statistics(opts);
@@ -178,8 +188,11 @@ TEST_F(IncrementalStatisticsTest, HistogramTest) {
 }
 
 TEST_F(IncrementalStatisticsTest, RateMovingCountTest) {
-	opts.moving_interval = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
-	opts.rate_unit = opts.moving_interval;
+	opts.moving_interval = handystats::chrono::duration::convert_to(
+			handystats::chrono::time_unit::TICK,
+			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+		);
+	opts.rate_unit = handystats::chrono::time_unit::SEC;
 	opts.tags = handystats::statistics::tag::rate |
 		handystats::statistics::tag::moving_count |
 		handystats::statistics::tag::moving_sum;
@@ -201,7 +214,11 @@ TEST_F(IncrementalStatisticsTest, RateMovingCountTest) {
 }
 
 TEST_F(IncrementalStatisticsTest, ZeroRateTest) {
-	opts.rate_unit = handystats::chrono::duration_cast<handystats::chrono::clock::duration>(std::chrono::seconds(1));
+	opts.rate_unit = handystats::chrono::time_unit::SEC;
+	opts.moving_interval = handystats::chrono::duration::convert_to(
+			handystats::chrono::time_unit::TICK,
+			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+		);
 	opts.tags = handystats::statistics::tag::rate;
 
 	stats = handystats::statistics(opts);

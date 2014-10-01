@@ -15,83 +15,83 @@ namespace handystats { namespace measuring_points {
 
 void timer_init(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id,
-		const handystats::metrics::timer::time_point& timestamp
+		const metrics::timer::instance_id_type& instance_id,
+		const metrics::timer::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::timer::create_init_event(std::move(timer_name), instance_id, timestamp)
+	if (is_enabled()) {
+		message_queue::push(
+				events::timer::create_init_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
 }
 
 void timer_start(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id,
-		const handystats::metrics::timer::time_point& timestamp
+		const metrics::timer::instance_id_type& instance_id,
+		const metrics::timer::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::timer::create_start_event(std::move(timer_name), instance_id, timestamp)
+	if (is_enabled()) {
+		message_queue::push(
+				events::timer::create_start_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
 }
 
 void timer_stop(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id,
-		const handystats::metrics::timer::time_point& timestamp
+		const metrics::timer::instance_id_type& instance_id,
+		const metrics::timer::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::timer::create_stop_event(std::move(timer_name), instance_id, timestamp)
+	if (is_enabled()) {
+		message_queue::push(
+				events::timer::create_stop_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
 }
 
 void timer_discard(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id,
-		const handystats::metrics::timer::time_point& timestamp
+		const metrics::timer::instance_id_type& instance_id,
+		const metrics::timer::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::timer::create_discard_event(std::move(timer_name), instance_id, timestamp)
+	if (is_enabled()) {
+		message_queue::push(
+				events::timer::create_discard_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
 }
 
 void timer_heartbeat(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id,
-		const handystats::metrics::timer::time_point& timestamp
+		const metrics::timer::instance_id_type& instance_id,
+		const metrics::timer::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::timer::create_heartbeat_event(std::move(timer_name), instance_id, timestamp)
+	if (is_enabled()) {
+		message_queue::push(
+				events::timer::create_heartbeat_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
 }
 
 void timer_set(
 		std::string&& timer_name,
-		const handystats::metrics::timer::clock::duration& measurement,
-		const handystats::metrics::timer::time_point& timestamp
+		const metrics::timer::value_type& measurement,
+		const metrics::timer::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::timer::create_set_event(std::move(timer_name), measurement, timestamp)
+	if (is_enabled()) {
+		message_queue::push(
+				events::timer::create_set_event(std::move(timer_name), measurement, timestamp)
 			);
 	}
 }
 
-}} // namespace handystats::measuring_points
+}} // namespace measuring_points
 
 
 extern "C" {
@@ -141,7 +141,10 @@ void handystats_timer_set(
 		const int64_t measurement
 	)
 {
-	handystats::measuring_points::timer_set(timer_name, handystats::chrono::clock::duration(measurement));
+	handystats::measuring_points::timer_set(
+			timer_name,
+			handystats::chrono::duration(measurement, handystats::metrics::timer::value_unit)
+		);
 }
 
 } // extern "C"

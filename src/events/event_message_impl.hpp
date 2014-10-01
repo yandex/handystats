@@ -27,7 +27,7 @@ struct event_message : message_queue::node
 	char event_type;
 	std::string destination_name;
 
-	chrono::clock::time_point timestamp;
+	chrono::time_point timestamp;
 
 	void* event_data;
 };

@@ -1,5 +1,6 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
+#include <chrono>
 #include <algorithm>
 #include <thread>
 #include <sys/prctl.h>
@@ -27,13 +28,13 @@ bool is_enabled() {
 }
 
 
-chrono::clock::time_point last_message_timestamp;
+chrono::time_point last_message_timestamp;
 std::thread processor_thread;
 
 static void process_message_queue() {
 	auto* message = message_queue::pop();
 
-	chrono::clock::time_point timestamp;
+	chrono::time_point timestamp;
 
 	if (message) {
 		last_message_timestamp = std::max(last_message_timestamp, message->timestamp);
@@ -56,11 +57,11 @@ static void run_processor() {
 			process_message_queue();
 		}
 		else {
-			last_message_timestamp = std::max(last_message_timestamp, chrono::clock::now());
+			last_message_timestamp = std::max(last_message_timestamp, chrono::tsc_clock::now());
 			std::this_thread::sleep_for(std::chrono::microseconds(10));
 		}
 
-		metrics_dump::update(chrono::clock::now(), last_message_timestamp);
+		metrics_dump::update(chrono::tsc_clock::now(), last_message_timestamp);
 	}
 }
 
@@ -80,7 +81,7 @@ void initialize() {
 
 	enabled_flag.store(true, std::memory_order_release);
 
-	last_message_timestamp = chrono::clock::time_point();
+	last_message_timestamp = chrono::time_point();
 
 	processor_thread = std::thread(run_processor);
 }

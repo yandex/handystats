@@ -131,7 +131,7 @@ void delete_heartbeat_event(event_message* message) {
 
 event_message* create_set_event(
 		std::string&& timer_name,
-		const metrics::timer::clock::duration& measurement,
+		const metrics::timer::value_type& measurement,
 		const metrics::timer::time_point& timestamp
 	)
 {
@@ -143,7 +143,7 @@ event_message* create_set_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::SET;
-	new (&message->event_data) metrics::timer::clock::duration::rep(measurement.count());
+	new (&message->event_data) int64_t(measurement.count());
 
 	return message;
 }
@@ -205,8 +205,8 @@ void process_heartbeat_event(metrics::timer& timer, const event_message& message
 }
 
 void process_set_event(metrics::timer& timer, const event_message& message) {
-	const auto& duration_rep = reinterpret_cast<const metrics::timer::clock::duration::rep>(message.event_data);
-	timer.set(chrono::clock::duration(duration_rep), message.timestamp);
+	const auto& duration_rep = reinterpret_cast<const int64_t>(message.event_data);
+	timer.set(chrono::duration(duration_rep, metrics::timer::value_unit), message.timestamp);
 }
 
 

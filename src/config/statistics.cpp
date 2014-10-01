@@ -6,11 +6,7 @@
 namespace handystats { namespace config {
 
 statistics::statistics()
-	: moving_interval(
-		chrono::duration_cast<chrono::clock::duration>(
-			std::chrono::seconds(1)
-		)
-	)
+	: moving_interval(1, chrono::time_unit::SEC)
 	, histogram_bins(30)
 	, tags(
 		handystats::statistics::tag::value |
@@ -19,11 +15,7 @@ statistics::statistics()
 		handystats::statistics::tag::moving_count | handystats::statistics::tag::moving_sum | handystats::statistics::tag::moving_avg |
 		handystats::statistics::tag::timestamp
 	)
-	, rate_unit(
-		chrono::duration_cast<chrono::clock::duration>(
-			std::chrono::seconds(1)
-		)
-	)
+	, rate_unit(chrono::time_unit::SEC)
 {}
 
 void statistics::configure(const rapidjson::Value& config) {
@@ -34,10 +26,7 @@ void statistics::configure(const rapidjson::Value& config) {
 	if (config.HasMember("moving-interval")) {
 		const rapidjson::Value& moving_interval = config["moving-interval"];
 		if (moving_interval.IsUint64() && moving_interval.GetUint64() > 0) {
-			this->moving_interval =
-				chrono::duration_cast<chrono::clock::duration>(
-					std::chrono::milliseconds(moving_interval.GetUint64())
-				);
+			this->moving_interval = chrono::duration(moving_interval.GetUint64(), chrono::time_unit::MSEC);
 		}
 	}
 
@@ -66,46 +55,28 @@ void statistics::configure(const rapidjson::Value& config) {
 		const rapidjson::Value& rate_unit = config["rate-unit"];
 
 		if (rate_unit.IsString()) {
-			chrono::clock::duration rate_interval(0);
+			chrono::time_unit unit = chrono::time_unit::TICK;
 			if (strcmp(rate_unit.GetString(), "ns") == 0) {
-				rate_interval =
-					chrono::duration_cast<chrono::clock::duration>(
-						std::chrono::nanoseconds(1)
-					);
+				unit = chrono::time_unit::NSEC;
 			}
 			else if (strcmp(rate_unit.GetString(), "us") == 0) {
-				rate_interval =
-					chrono::duration_cast<chrono::clock::duration>(
-						std::chrono::microseconds(1)
-					);
+				unit = chrono::time_unit::USEC;
 			}
 			else if (strcmp(rate_unit.GetString(), "ms") == 0) {
-				rate_interval =
-					chrono::duration_cast<chrono::clock::duration>(
-						std::chrono::milliseconds(1)
-					);
+				unit = chrono::time_unit::MSEC;
 			}
 			else if (strcmp(rate_unit.GetString(), "s") == 0) {
-				rate_interval =
-					chrono::duration_cast<chrono::clock::duration>(
-						std::chrono::seconds(1)
-					);
+				unit = chrono::time_unit::SEC;
 			}
 			else if (strcmp(rate_unit.GetString(), "m") == 0) {
-				rate_interval =
-					chrono::duration_cast<chrono::clock::duration>(
-						std::chrono::minutes(1)
-					);
+				unit = chrono::time_unit::MIN;
 			}
 			else if (strcmp(rate_unit.GetString(), "h") == 0) {
-				rate_interval =
-					chrono::duration_cast<chrono::clock::duration>(
-						std::chrono::hours(1)
-					);
+				unit = chrono::time_unit::HOUR;
 			}
 
-			if (rate_interval.count() > 0) {
-				this->rate_unit = rate_interval;
+			if (unit != chrono::time_unit::TICK) {
+				this->rate_unit = unit;
 			}
 		}
 	}

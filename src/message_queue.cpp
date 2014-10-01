@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include <handystats/chrono.hpp>
+#include <handystats/metrics/timer.hpp>
 
 #include "events/event_message_impl.hpp"
 #include "config_impl.hpp"
@@ -94,7 +95,7 @@ metrics::gauge size;
 metrics::gauge message_wait_time;
 metrics::counter pop_count;
 
-void update(const chrono::clock::time_point& timestamp) {
+void update(const chrono::time_point& timestamp) {
 	size.update_statistics(timestamp);
 	message_wait_time.update_statistics(timestamp);
 	pop_count.update_statistics(timestamp);
@@ -106,7 +107,7 @@ static void reset() {
 		statistics::tag::value | statistics::tag::max |
 		statistics::tag::moving_avg
 		;
-	size_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+	size_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
 
 	size = metrics::gauge(size_opts);
 	size.set(0);
@@ -115,15 +116,15 @@ static void reset() {
 	message_wait_time_opts.values.tags =
 		statistics::tag::moving_avg
 		;
-	message_wait_time_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+	message_wait_time_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
 
 	message_wait_time = metrics::gauge(message_wait_time_opts);
 
 	config::metrics::counter pop_count_opts;
 
 	pop_count_opts.values.tags = statistics::tag::rate | statistics::tag::value;
-	pop_count_opts.values.rate_unit = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
-	pop_count_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+	pop_count_opts.values.rate_unit = chrono::time_unit::SEC;
+	pop_count_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
 
 	pop_count = metrics::counter(pop_count_opts);
 }
@@ -159,12 +160,12 @@ events::event_message* pop() {
 
 	if (message) {
 		--mq_size;
-		auto current_time = chrono::clock::now();
+		auto current_time = chrono::tsc_clock::now();
 		stats::size.set(size(), current_time);
 		stats::pop_count.increment(1, current_time);
 
 		stats::message_wait_time.set(
-				chrono::duration_cast<chrono::time_duration>(current_time - message->timestamp).count(),
+				chrono::duration::convert_to(metrics::timer::value_unit, current_time - message->timestamp).count(),
 				current_time
 			);
 	}

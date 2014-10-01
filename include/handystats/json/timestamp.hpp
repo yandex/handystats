@@ -10,20 +10,18 @@
 
 namespace handystats { namespace json {
 
-typedef std::chrono::milliseconds time_duration;
-
-inline void write_to_json_value(const chrono::clock::time_point& timestamp, rapidjson::Value* json_value) {
+inline void write_to_json_value(const chrono::time_point& timestamp, rapidjson::Value* json_value) {
 	if (!json_value) {
 		json_value = new rapidjson::Value();
 	}
 
-	std::chrono::system_clock::time_point system_timestamp = chrono::to_system_time(timestamp);
+	chrono::time_point system_timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM, timestamp);
 
-	json_value->SetUint64(chrono::duration_cast<time_duration>(system_timestamp.time_since_epoch()).count());
+	json_value->SetUint64(chrono::duration::convert_to(chrono::time_unit::MSEC, system_timestamp.time_since_epoch()).count());
 }
 
 template<typename StringBuffer, typename Allocator>
-inline void write_to_json_buffer(const chrono::clock::time_point& timestamp, StringBuffer* buffer, Allocator& allocator) {
+inline void write_to_json_buffer(const chrono::time_point& timestamp, StringBuffer* buffer, Allocator& allocator) {
 	rapidjson::Value json_value;
 	write_to_json_value(timestamp, &json_value, allocator);
 
@@ -36,7 +34,7 @@ inline void write_to_json_buffer(const chrono::clock::time_point& timestamp, Str
 }
 
 template<typename Allocator>
-inline std::string write_to_json_string(const chrono::clock::time_point& timestamp, Allocator&& allocator = Allocator()) {
+inline std::string write_to_json_string(const chrono::time_point& timestamp, Allocator&& allocator = Allocator()) {
 	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator> buffer(&allocator);
 	write_to_json_buffer(timestamp, &buffer, allocator);
 

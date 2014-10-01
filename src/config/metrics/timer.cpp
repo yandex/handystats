@@ -7,11 +7,7 @@
 namespace handystats { namespace config { namespace metrics {
 
 timer::timer()
-	: idle_timeout(
-		chrono::duration_cast<chrono::clock::duration>(
-			std::chrono::seconds(10)
-		)
-	)
+	: idle_timeout(10, chrono::time_unit::SEC)
 	, values(statistics())
 {
 }
@@ -24,10 +20,7 @@ void timer::configure(const rapidjson::Value& config) {
 	if (config.HasMember("idle-timeout")) {
 		const rapidjson::Value& idle_timeout = config["idle-timeout"];
 		if (idle_timeout.IsUint64()) {
-			this->idle_timeout =
-				chrono::duration_cast<chrono::clock::duration>(
-					std::chrono::milliseconds(idle_timeout.GetUint64())
-				);
+			this->idle_timeout = chrono::duration(idle_timeout.GetUint64(), chrono::time_unit::MSEC);
 		}
 	}
 

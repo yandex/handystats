@@ -89,7 +89,7 @@ public:
 	 * Proxy set event
 	 */
 	void set(
-			const metrics::timer::clock::duration& measurement,
+			const metrics::timer::value_type& measurement,
 			const metrics::timer::time_point& timestamp = metrics::timer::clock::now()
 		)
 	{

@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <chrono>
 
 #include <gtest/gtest.h>
 
@@ -84,7 +85,8 @@ TEST_F(MetricsDumpTest, SampleTimer) {
 	ASSERT_EQ(timer.values().get<handystats::statistics::tag::count>(), TIMER_INSTANCES);
 	ASSERT_TRUE(
 			timer.values().get<handystats::statistics::tag::min>() >=
-				handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_interval).count()
+				handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+					handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 }
 

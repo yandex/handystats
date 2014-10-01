@@ -10,7 +10,7 @@
 namespace handystats { namespace config { namespace metrics {
 
 struct timer {
-	chrono::clock::duration idle_timeout;
+	chrono::duration idle_timeout;
 	statistics values;
 
 	timer();

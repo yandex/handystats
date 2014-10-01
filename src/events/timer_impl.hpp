@@ -58,7 +58,7 @@ event_message* create_heartbeat_event(
 
 event_message* create_set_event(
 		std::string&& timer_name,
-		const metrics::timer::clock::duration& measurement,
+		const metrics::timer::value_type& measurement,
 		const metrics::timer::time_point& timestamp
 	);
 

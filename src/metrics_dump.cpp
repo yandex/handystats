@@ -22,14 +22,14 @@ namespace stats {
 
 metrics::gauge dump_time;
 
-void update(const chrono::clock::time_point& timestamp) {
+void update(const chrono::time_point& timestamp) {
 	dump_time.update_statistics(timestamp);
 }
 
 static void reset() {
 	config::metrics::gauge dump_time_opts;
 	dump_time_opts.values.tags = statistics::tag::moving_avg;
-	dump_time_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+	dump_time_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
 
 	dump_time = metrics::gauge(dump_time_opts);
 }
@@ -45,7 +45,7 @@ void finalize() {
 } // namespace stats
 
 
-chrono::clock::time_point dump_timestamp;
+chrono::time_point dump_timestamp;
 std::mutex dump_mutex;
 
 std::shared_ptr<const std::map<std::string, metrics::metric_variant>> dump(new std::map<std::string, metrics::metric_variant>());
@@ -61,7 +61,7 @@ static
 std::shared_ptr<const std::map<std::string, metrics::metric_variant>>
 create_dump()
 {
-	auto dump_start_time = chrono::clock::now();
+	auto dump_start_time = chrono::tsc_clock::now();
 
 	std::shared_ptr<std::map<std::string, metrics::metric_variant>> new_dump(new std::map<std::string, metrics::metric_variant>());
 
@@ -149,11 +149,13 @@ create_dump()
 	}
 
 	{
-		std::chrono::system_clock::time_point system_timestamp = chrono::to_system_time(chrono::clock::now());
+		// NOTE: possible call chrono::system_clock::now()
+		chrono::time_point system_timestamp =
+			chrono::time_point::convert_to(chrono::clock_type::SYSTEM, chrono::tsc_clock::now());
 
 		metrics::attribute timestamp_attr;
 		timestamp_attr.set(
-				chrono::duration_cast<std::chrono::milliseconds>(system_timestamp.time_since_epoch()).count()
+				chrono::duration::convert_to(chrono::time_unit::MSEC, system_timestamp.time_since_epoch()).count()
 			);
 
 		new_dump->insert(
@@ -164,10 +166,10 @@ create_dump()
 				);
 	}
 
-	auto dump_end_time = chrono::clock::now();
+	auto dump_end_time = chrono::tsc_clock::now();
 
 	stats::dump_time.set(
-			chrono::duration_cast<chrono::time_duration>(dump_end_time - dump_start_time).count(),
+			chrono::duration::convert_to(metrics::timer::value_unit, dump_end_time - dump_start_time).count(),
 			dump_end_time
 		);
 
@@ -183,7 +185,7 @@ create_dump()
 	return std::const_pointer_cast<const std::map<std::string, metrics::metric_variant>>(new_dump);
 }
 
-void update(const chrono::clock::time_point& system_time, const chrono::clock::time_point& internal_time) {
+void update(const chrono::time_point& system_time, const chrono::time_point& internal_time) {
 	if (config::metrics_dump_opts.interval.count() == 0) {
 		return;
 	}
@@ -211,7 +213,7 @@ void initialize() {
 	{
 		std::lock_guard<std::mutex> lock(dump_mutex);
 
-		dump_timestamp = chrono::clock::time_point();
+		dump_timestamp = chrono::time_point();
 		dump = std::shared_ptr<const std::map<std::string, metrics::metric_variant>>(new std::map<std::string, metrics::metric_variant>());
 	}
 }
@@ -222,7 +224,7 @@ void finalize() {
 	{
 		std::lock_guard<std::mutex> lock(dump_mutex);
 
-		dump_timestamp = chrono::clock::time_point();
+		dump_timestamp = chrono::time_point();
 		dump = std::shared_ptr<const std::map<std::string, metrics::metric_variant>>(new std::map<std::string, metrics::metric_variant>());
 	}
 }

@@ -23,7 +23,7 @@ namespace stats {
 metrics::gauge size;
 metrics::gauge process_time;
 
-void update(const chrono::clock::time_point& timestamp) {
+void update(const chrono::time_point& timestamp) {
 	size.update_statistics(timestamp);
 	process_time.update_statistics(timestamp);
 }
@@ -37,7 +37,7 @@ static void reset() {
 
 	config::metrics::gauge process_time_opts;
 	process_time_opts.values.tags = statistics::tag::moving_avg;
-	process_time_opts.values.moving_interval = chrono::duration_cast<chrono::clock::duration>(std::chrono::seconds(1));
+	process_time_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
 
 	process_time = metrics::gauge(process_time_opts);
 }
@@ -59,7 +59,7 @@ size_t size() {
 	return metrics_map.size();
 }
 
-void update_metrics(const chrono::clock::time_point& timestamp) {
+void update_metrics(const chrono::time_point& timestamp) {
 	for (auto metric_iter = metrics_map.begin(); metric_iter != metrics_map.end(); ++metric_iter) {
 		switch (metric_iter->second.which()) {
 			case metrics::metric_index::GAUGE:
@@ -106,7 +106,7 @@ void process_event_message(metrics::metric_ptr_variant& metric_ptr, const events
 }
 
 void process_event_message(const events::event_message& message) {
-	auto process_start_time = chrono::clock::now();
+	auto process_start_time = chrono::tsc_clock::now();
 
 	auto& metric_ptr = metrics_map[message.destination_name];
 
@@ -154,10 +154,10 @@ void process_event_message(const events::event_message& message) {
 
 	process_event_message(metric_ptr, message);
 
-	auto process_end_time = chrono::clock::now();
+	auto process_end_time = chrono::tsc_clock::now();
 
 	stats::process_time.set(
-			chrono::duration_cast<chrono::time_duration>(process_end_time - process_start_time).count(),
+			chrono::duration::convert_to(metrics::timer::value_unit, process_end_time - process_start_time).count(),
 			process_end_time
 		);
 

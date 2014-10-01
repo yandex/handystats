@@ -15,50 +15,50 @@ struct command_executor {
 	typedef std::function<void()> command_type;
 
 	static
-	std::chrono::nanoseconds
+	chrono::duration
 	run_command(
 			command_type command
 		)
 	{
-		auto start_time = chrono::clock::now();
+		auto start_time = chrono::tsc_clock::now();
 		command();
-		auto end_time = chrono::clock::now();
+		auto end_time = chrono::tsc_clock::now();
 
-		return chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time);
+		return end_time - start_time;
 	}
 
 	static
-	std::chrono::nanoseconds
+	chrono::duration
 	run_command_for(
 			command_type command,
-			std::chrono::nanoseconds time_limit
+			chrono::duration time_limit
 		)
 	{
-		auto start_time = chrono::clock::now();
+		auto start_time = chrono::tsc_clock::now();
 		auto call_time = run_command(command);
 
 		while (call_time < time_limit) {
-			if (time_limit - call_time > std::chrono::microseconds(100)) {
+			if (time_limit - call_time > chrono::duration(100, chrono::time_unit::USEC)) {
 				std::this_thread::sleep_for(std::chrono::microseconds(10));
 			}
 			else {
 				std::this_thread::yield();
 			}
-			call_time = chrono::duration_cast<std::chrono::nanoseconds>(chrono::clock::now() - start_time);
+			call_time = chrono::tsc_clock::now() - start_time;
 		}
 
 		return call_time;
 	}
 
 	static
-	std::chrono::nanoseconds
+	chrono::duration
 	run_for(
 			command_type command,
-			std::chrono::nanoseconds command_time_limit,
-			std::chrono::nanoseconds total_time_limit
+			chrono::duration command_time_limit,
+			chrono::duration total_time_limit
 		)
 	{
-		std::chrono::nanoseconds total_time(0);
+		chrono::duration total_time(0, chrono::time_unit::TICK);
 
 		while (total_time < total_time_limit) {
 			total_time += run_command_for(command, command_time_limit);

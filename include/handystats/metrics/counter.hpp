@@ -16,8 +16,8 @@ namespace handystats { namespace metrics {
 struct counter
 {
 	typedef int64_t value_type;
-	typedef chrono::clock clock;
-	typedef clock::time_point time_point;
+	typedef chrono::tsc_clock clock;
+	typedef chrono::time_point time_point;
 
 	counter(const config::metrics::counter& opts = config::metrics::counter());
 

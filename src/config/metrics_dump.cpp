@@ -3,11 +3,7 @@
 namespace handystats { namespace config {
 
 metrics_dump::metrics_dump()
-	: interval(
-		chrono::duration_cast<chrono::clock::duration>(
-			std::chrono::milliseconds(750)
-		)
-	)
+	: interval(750, chrono::time_unit::MSEC)
 {}
 
 void metrics_dump::configure(const rapidjson::Value& config) {
@@ -18,8 +14,7 @@ void metrics_dump::configure(const rapidjson::Value& config) {
 	if (config.HasMember("interval")) {
 		const rapidjson::Value& interval = config["interval"];
 		if (interval.IsUint64()) {
-			this->interval =
-				chrono::duration_cast<chrono::clock::duration>(std::chrono::milliseconds(interval.GetUint64()));
+			this->interval = chrono::duration(interval.GetUint64(), chrono::time_unit::MSEC);
 		}
 	}
 }

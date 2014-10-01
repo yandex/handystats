@@ -346,7 +346,7 @@
 		HANDY_MODULE_METRIC_OP(CXX, MODULE, TIMER, SET, \
 				( \
 					std::string&& timer_name, \
-					const handystats::metrics::timer::clock::duration& measurement, \
+					const handystats::metrics::timer::value_type& measurement, \
 					const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now() \
 				), \
 				(std::move(timer_name), measurement, timestamp) \

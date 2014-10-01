@@ -18,9 +18,9 @@ namespace handystats {
 class statistics {
 public:
 	typedef double value_type;
-	typedef chrono::clock clock;
-	typedef clock::duration duration;
-	typedef clock::time_point time_point;
+	typedef chrono::tsc_clock clock;
+	typedef chrono::duration duration;
+	typedef chrono::time_point time_point;
 
 	// histogram bin
 	typedef std::tuple<value_type, double, time_point> bin_type;

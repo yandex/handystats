@@ -614,7 +614,18 @@ statistics::result_type<statistics::tag::rate>::type
 statistics::get_impl<statistics::tag::rate>() const
 {
 	if (computed(tag::rate)) {
-		return double(m_rate) * m_config.rate_unit.count() / m_config.moving_interval.count();
+		if (std::less<chrono::time_unit>()(m_config.rate_unit, m_config.moving_interval.unit())) {
+			const double& rate_factor =
+				chrono::duration::convert_to(m_config.rate_unit, m_config.moving_interval).count();
+			return double(m_rate) / rate_factor;
+		}
+		else {
+			const double& rate_factor =
+				chrono::duration::convert_to(m_config.moving_interval.unit(),
+						chrono::duration(1, m_config.rate_unit)
+					).count();
+			return double(m_rate) * rate_factor / m_config.moving_interval.count();
+		}
 	}
 	else {
 		throw invalid_tag_error();

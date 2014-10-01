@@ -17,38 +17,38 @@ namespace handystats { namespace measuring_points {
 
 void timer_init(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
+		const chrono::time_point& timestamp = chrono::tsc_clock::now()
 	);
 
 void timer_start(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
+		const chrono::time_point& timestamp = chrono::tsc_clock::now()
 	);
 
 void timer_stop(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
+		const chrono::time_point& timestamp = chrono::tsc_clock::now()
 	);
 
 void timer_discard(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
+		const chrono::time_point& timestamp = chrono::tsc_clock::now()
 	);
 
 void timer_heartbeat(
 		std::string&& timer_name,
-		const handystats::metrics::timer::instance_id_type& instance_id = handystats::metrics::timer::DEFAULT_INSTANCE_ID,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
+		const chrono::time_point& timestamp = chrono::tsc_clock::now()
 	);
 
 void timer_set(
 		std::string&& timer_name,
-		const handystats::metrics::timer::clock::duration& measurement,
-		const handystats::metrics::timer::time_point& timestamp = handystats::metrics::timer::clock::now()
+		const metrics::timer::value_type& measurement,
+		const chrono::time_point& timestamp = chrono::tsc_clock::now()
 	);
 
 /*
@@ -58,15 +58,15 @@ void timer_set(
  */
 struct scoped_timer_helper {
 	const std::string timer_name;
-	const handystats::metrics::timer::clock::time_point start_time;
+	const chrono::time_point start_time;
 
-	scoped_timer_helper(std::string&& timer_name, const handystats::metrics::timer::clock::time_point& start_time)
+	scoped_timer_helper(std::string&& timer_name, const chrono::time_point& start_time)
 		: timer_name(std::move(timer_name)), start_time(start_time)
 	{
 	}
 
 	~scoped_timer_helper() {
-		auto end_time = handystats::chrono::clock::now();
+		auto end_time = chrono::tsc_clock::now();
 		timer_set(timer_name.substr(), end_time - start_time);
 	}
 };
@@ -116,7 +116,7 @@ struct scoped_timer_helper {
 #ifndef HANDYSTATS_DISABLE
 
 	#define HANDY_TIMER_SCOPE(timer_name) \
-	handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME (timer_name, handystats::chrono::clock::now())
+	handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME (timer_name, handystats::chrono::tsc_clock::now())
 
 #else
 

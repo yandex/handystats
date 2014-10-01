@@ -17,9 +17,11 @@ namespace handystats { namespace metrics {
 
 struct timer
 {
-	typedef chrono::time_duration value_type;
-	typedef chrono::clock clock;
-	typedef clock::time_point time_point;
+	typedef chrono::duration value_type;
+	static const chrono::time_unit value_unit;
+
+	typedef chrono::tsc_clock clock;
+	typedef chrono::time_point time_point;
 
 	typedef uint64_t instance_id_type;
 
@@ -35,7 +37,7 @@ struct timer
 		{
 		}
 
-		bool expired(const clock::duration& idle_timeout, const time_point& timestamp = clock::now()) {
+		bool expired(const chrono::duration& idle_timeout, const time_point& timestamp = clock::now()) {
 			return (timestamp > heartbeat_timestamp) && (timestamp - heartbeat_timestamp > idle_timeout);
 		}
 	};
@@ -63,7 +65,7 @@ struct timer
 		);
 
 	void set(
-			const clock::duration& measurement,
+			const value_type& measurement,
 			const time_point& timestamp = clock::now()
 		);
 
@@ -77,7 +79,7 @@ struct timer
 	const statistics& values() const;
 
 private:
-	clock::duration m_idle_timeout;
+	chrono::duration m_idle_timeout;
 
 	statistics m_values;
 

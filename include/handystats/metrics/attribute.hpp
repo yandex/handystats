@@ -35,8 +35,8 @@ struct attribute
 		STRING
 	};
 
-	typedef chrono::clock clock;
-	typedef clock::time_point time_point;
+	typedef chrono::tsc_clock clock;
+	typedef chrono::time_point time_point;
 
 	attribute();
 

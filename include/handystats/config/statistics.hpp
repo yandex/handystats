@@ -9,10 +9,10 @@
 namespace handystats { namespace config {
 
 struct statistics {
-	chrono::clock::duration moving_interval;
+	chrono::duration moving_interval;
 	size_t histogram_bins;
 	int tags;
-	chrono::clock::duration rate_unit;
+	chrono::time_unit rate_unit;
 
 	statistics();
 	void configure(const rapidjson::Value& config);

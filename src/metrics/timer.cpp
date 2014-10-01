@@ -5,6 +5,7 @@
 namespace handystats { namespace metrics {
 
 const timer::instance_id_type timer::DEFAULT_INSTANCE_ID = -1;
+const chrono::time_unit timer::value_unit = chrono::time_unit::USEC;
 
 timer::timer(
 		const config::metrics::timer& timer_opts
@@ -36,9 +37,10 @@ void timer::stop(const instance_id_type& instance_id, const time_point& timestam
 		return;
 	}
 
-	auto instance_value = timestamp - instance->second.start_timestamp;
+	const auto& instance_value =
+		chrono::duration::convert_to(value_unit, timestamp - instance->second.start_timestamp);
 
-	m_values.update(chrono::duration_cast<value_type>(instance_value).count(), timestamp);
+	m_values.update(instance_value.count(), timestamp);
 
 	m_instances.erase(instance);
 }
@@ -65,8 +67,8 @@ void timer::discard(const instance_id_type& instance_id, const time_point& times
 	m_instances.erase(instance_id);
 }
 
-void timer::set(const clock::duration& measurement, const time_point& timestamp) {
-	m_values.update(chrono::duration_cast<value_type>(measurement).count(), timestamp);
+void timer::set(const value_type& measurement, const time_point& timestamp) {
+	m_values.update(chrono::duration::convert_to(value_unit, measurement).count(), timestamp);
 }
 
 void timer::check_idle_timeout(const time_point& timestamp, const bool& force) {

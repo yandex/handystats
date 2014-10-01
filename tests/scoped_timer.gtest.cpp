@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <chrono>
 
 #include <gtest/gtest.h>
 
@@ -85,7 +86,8 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 }
 
@@ -134,11 +136,13 @@ TEST_F(HandyScopedTimerTest, TestMultipleNestedScopes) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), 3);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::max>(),
-			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count() * 3
+			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count() * 3
 		);
 }
 
@@ -190,13 +194,15 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count()
+			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 
 	ASSERT_EQ(double_agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			double_agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration_cast<handystats::chrono::time_duration>(sleep_time).count() * 2
+			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
+				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count() * 2
 		);
 }
 

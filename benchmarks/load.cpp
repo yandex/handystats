@@ -5,6 +5,7 @@
 #include <thread>
 #include <future>
 #include <vector>
+#include <chrono>
 
 #include <boost/program_options.hpp>
 #include <boost/random/linear_congruential.hpp>
@@ -75,8 +76,9 @@ void print_stats() {
 	std::cout << "============= "
 		<< " RPS: " << rate.load() << " "
 		<< " ETR: " <<
-			handystats::chrono::duration_cast<std::chrono::seconds>(
-				handystats::chrono::clock::duration(end_time.load()) - handystats::chrono::clock::now().time_since_epoch()
+			handystats::chrono::duration::convert_to(handystats::chrono::time_unit::SEC,
+				handystats::chrono::duration(end_time.load(), handystats::chrono::time_unit::TICK) -
+				handystats::chrono::tsc_clock::now().time_since_epoch()
 			)
 			.count()
 			<< "s "
@@ -186,12 +188,14 @@ int main(int argc, char** argv) {
 	std::thread stats_printer(
 			[&stop_flag] () {
 				while (!stop_flag.load()) {
-					auto start_time = handystats::chrono::clock::now();
+					const auto& start_time = handystats::chrono::tsc_clock::now();
 					print_stats();
-					auto end_time = handystats::chrono::clock::now();
+					const auto& end_time = handystats::chrono::tsc_clock::now();
 
-					auto call_time = handystats::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time);
-					std::this_thread::sleep_for(output_interval - call_time);
+					const auto& call_time = handystats::chrono::duration::convert_to(
+							handystats::chrono::time_unit::NSEC, end_time - start_time
+						);
+					std::this_thread::sleep_for(output_interval - std::chrono::nanoseconds(call_time.count()));
 				}
 			}
 		);
@@ -205,37 +209,25 @@ int main(int argc, char** argv) {
 			continue;
 		}
 
-		if (step_rate == 0) {
-			rate.store(0);
-			end_time.store(
-					(
-						handystats::chrono::clock::now() +
-						handystats::chrono::duration_cast<handystats::chrono::clock::duration>(
-							std::chrono::seconds(step_time_limit)
-						)
-					)
-					.time_since_epoch().count()
-				);
+		rate.store(step_rate);
+		end_time.store(
+				(
+					handystats::chrono::tsc_clock::now() +
+					handystats::chrono::duration(step_time_limit, handystats::chrono::time_unit::SEC)
+				).time_since_epoch().count()
+			);
 
+		if (step_rate == 0) {
 			std::this_thread::sleep_for(std::chrono::seconds(step_time_limit));
 			continue;
 		}
 
-		std::chrono::nanoseconds command_time_limit =
-			std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(1)) * threads / step_rate;
-		std::chrono::nanoseconds time_limit =
-			std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(step_time_limit));
-
-		rate.store(step_rate);
-		end_time.store(
-				(
-					handystats::chrono::clock::now() +
-					handystats::chrono::duration_cast<handystats::chrono::clock::duration>(
-						std::chrono::seconds(step_time_limit)
-					)
-				)
-				.time_since_epoch().count()
-			);
+		handystats::chrono::duration command_time_limit =
+			handystats::chrono::duration::convert_to(
+					handystats::chrono::time_unit::NSEC,
+					handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+				) * threads / step_rate;
+		handystats::chrono::duration time_limit(step_time_limit, handystats::chrono::time_unit::SEC);
 
 		for (auto& worker : workers) {
 			worker = std::thread(

@@ -59,7 +59,7 @@ TEST_F(IncrementalStatisticsTest, TestIntervalSum) {
 			stats.update(1);
 		}
 
-		ASSERT_NEAR(stats.get<handystats::statistics::tag::moving_sum>(), STEP_COUNT, 0.05 * STEP_COUNT);
+		ASSERT_NEAR(stats.get<handystats::statistics::tag::moving_sum>(), STEP_COUNT, 0.10 * STEP_COUNT);
 	}
 }
 

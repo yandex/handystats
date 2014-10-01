@@ -1,3 +1,16 @@
+handystats (1.10.0) unstable; urgency=low
+
+  * histogram: bin consists of center, volume and data timestamp.
+  * math_utils: weighted_average and solve_quadratic helper functions added.
+  * histogram: bin merge criteria changed to "distance between bins' centers".
+  * chrono: get rid of std::chrono interface.
+  * * chrono::time_unit enum added (TICK, NSEC, USEC, MSEC, SEC, MIN, HOUR, DAY).
+  * * chrono::clock_type enum added (TSC, SYSTEM).
+  * * chrono::duration added (stores integer value and time_unit).
+  * * chrono::time_point added (stores duration and clock_type which represents epoch).
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Wed, 01 Oct 2014 17:03:50 +0400
+
 handystats (1.9.14) unstable; urgency=low
 
   * benchmarks added.

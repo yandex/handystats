@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include <handystats/metrics/attribute.hpp>
+#include <handystats/attribute.hpp>
 
 #include <handystats/measuring_points/attribute.hpp>
 
@@ -24,8 +24,8 @@ public:
 	{}
 
 	void set(
-			const metrics::attribute::value_type& value,
-			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
+			const attribute::value_type& value,
+			const attribute::time_point& timestamp = attribute::clock::now()
 		)
 	{
 		HANDY_ATTRIBUTE_SET(name.substr(), value, timestamp);
@@ -33,7 +33,7 @@ public:
 
 	void set(
 			const bool& b,
-			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
+			const attribute::time_point& timestamp = attribute::clock::now()
 		)
 	{
 		HANDY_ATTRIBUTE_SET_BOOL(name.substr(), b, timestamp);
@@ -41,7 +41,7 @@ public:
 
 	void set(
 			const int& i,
-			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
+			const attribute::time_point& timestamp = attribute::clock::now()
 		)
 	{
 		HANDY_ATTRIBUTE_SET_INT(name.substr(), i, timestamp);
@@ -49,7 +49,7 @@ public:
 
 	void set(
 			const unsigned& u,
-			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
+			const attribute::time_point& timestamp = attribute::clock::now()
 		)
 	{
 		HANDY_ATTRIBUTE_SET_UINT(name.substr(), u, timestamp);
@@ -57,7 +57,7 @@ public:
 
 	void set(
 			const int64_t& i64,
-			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
+			const attribute::time_point& timestamp = attribute::clock::now()
 		)
 	{
 		HANDY_ATTRIBUTE_SET_INT64(name.substr(), i64, timestamp);
@@ -65,7 +65,7 @@ public:
 
 	void set(
 			const uint64_t& u64,
-			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
+			const attribute::time_point& timestamp = attribute::clock::now()
 		)
 	{
 		HANDY_ATTRIBUTE_SET_UINT64(name.substr(), u64, timestamp);
@@ -73,7 +73,7 @@ public:
 
 	void set(
 			const double& d,
-			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
+			const attribute::time_point& timestamp = attribute::clock::now()
 		)
 	{
 		HANDY_ATTRIBUTE_SET_DOUBLE(name.substr(), d, timestamp);
@@ -81,7 +81,7 @@ public:
 
 	void set(
 			const std::string& s,
-			const metrics::attribute::time_point& timestamp = metrics::attribute::clock::now()
+			const attribute::time_point& timestamp = attribute::clock::now()
 		)
 	{
 		HANDY_ATTRIBUTE_SET_STRING(name.substr(), s, timestamp);

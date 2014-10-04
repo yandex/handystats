@@ -5,15 +5,21 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 #include <map>
 
 #include <handystats/metrics.hpp>
+#include <handystats/attribute.hpp>
 
-const std::shared_ptr <
-	const std::map <
-		std::string, handystats::metrics::metric_variant
-		>
-	>
-HANDY_METRICS_DUMP();
+namespace handystats {
+
+typedef std::map<std::string, metrics::metric_variant> metric_variant_map;
+typedef std::map<std::string, attribute> attribute_map;
+
+typedef std::pair<metric_variant_map, attribute_map> metrics_dump_type;
+
+} // namespace handystats
+
+const std::shared_ptr<const handystats::metrics_dump_type> HANDY_METRICS_DUMP();
 
 #endif // HANDYSTATS_METRICS_DUMP_HPP_

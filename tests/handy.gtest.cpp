@@ -89,10 +89,10 @@ TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->find("swaps.count") != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find("swaps.count") != metrics_dump->first.end());
 
 	int handy_count =
-		boost::get<handystats::metrics::counter>(metrics_dump->at("swaps.count"))
+		boost::get<handystats::metrics::counter>(metrics_dump->first.at("swaps.count"))
 		.values()
 		.get<handystats::statistics::tag::value>();
 
@@ -125,10 +125,10 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->find("queue.size") != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find("queue.size") != metrics_dump->first.end());
 
 	int handy_max_size =
-			boost::get<handystats::metrics::gauge>(metrics_dump->at("queue.size"))
+			boost::get<handystats::metrics::gauge>(metrics_dump->first.at("queue.size"))
 			.values()
 			.get<handystats::statistics::tag::max>();
 

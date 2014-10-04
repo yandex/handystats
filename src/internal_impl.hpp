@@ -7,7 +7,7 @@
 #include <string>
 
 #include <handystats/metrics.hpp>
-#include <handystats/metrics/gauge.hpp>
+#include <handystats/attribute.hpp>
 
 
 namespace handystats { namespace events {
@@ -20,12 +20,11 @@ struct event_message;
 namespace handystats { namespace internal {
 
 extern std::map<std::string, metrics::metric_ptr_variant> metrics_map;
+extern std::map<std::string, attribute> attributes_map;
 
 void update_metrics(const chrono::time_point&);
 
 void process_event_message(const events::event_message&);
-
-size_t size();
 
 void initialize();
 void finalize();
@@ -33,7 +32,6 @@ void finalize();
 
 namespace stats {
 
-extern metrics::gauge size;
 extern metrics::gauge process_time;
 
 void update(const chrono::time_point&);

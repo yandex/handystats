@@ -4,12 +4,12 @@
 
 namespace handystats { namespace json {
 
-std::string to_string(const std::map<std::string, handystats::metrics::metric_variant>& metrics_map) {
+std::string to_string(const metrics_dump_type& metrics_dump) {
 	typedef rapidjson::MemoryPoolAllocator<> allocator_type;
 
 	rapidjson::Value dump;
 	allocator_type allocator;
-	fill(dump, allocator, metrics_map);
+	fill(dump, allocator, metrics_dump);
 
 	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type> buffer(&allocator);
 	rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type>> writer(buffer);

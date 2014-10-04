@@ -8,7 +8,6 @@
 #include <handystats/metrics/gauge.hpp>
 #include <handystats/metrics/counter.hpp>
 #include <handystats/metrics/timer.hpp>
-#include <handystats/metrics/attribute.hpp>
 
 namespace handystats { namespace metrics {
 
@@ -16,8 +15,7 @@ namespace handystats { namespace metrics {
 typedef boost::variant <
 		counter,
 		gauge,
-		timer,
-		attribute
+		timer
 	> metric_variant;
 
 
@@ -25,8 +23,7 @@ typedef boost::variant <
 typedef boost::variant <
 		counter*,
 		gauge*,
-		timer*,
-		attribute*
+		timer*
 	> metric_ptr_variant;
 
 
@@ -34,8 +31,7 @@ typedef boost::variant <
 enum metric_index {
 	COUNTER = 0,
 	GAUGE,
-	TIMER,
-	ATTRIBUTE
+	TIMER
 };
 
 }} // namespace handystats::metrics

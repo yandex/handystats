@@ -57,7 +57,7 @@ TEST_F(HandyDisabledModuleTest, CheckGauge) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->find(gauge_name) == metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find(gauge_name) == metrics_dump->first.end());
 }
 
 TEST_F(HandyDisabledModuleTest, CheckCounter) {
@@ -75,7 +75,7 @@ TEST_F(HandyDisabledModuleTest, CheckCounter) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->find(counter_name) == metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find(counter_name) == metrics_dump->first.end());
 }
 
 TEST_F(HandyDisabledModuleTest, CheckTimer) {
@@ -95,5 +95,5 @@ TEST_F(HandyDisabledModuleTest, CheckTimer) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->find(timer_name) == metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find(timer_name) == metrics_dump->first.end());
 }

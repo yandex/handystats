@@ -17,11 +17,12 @@ namespace handystats { namespace json {
 template<typename Allocator>
 void fill(
 		rapidjson::Value& dump, Allocator& allocator,
-		const std::map<std::string, handystats::metrics::metric_variant>& metrics_map
+		const metrics_dump_type& metrics_dump
 	)
 {
 	dump.SetObject();
 
+	const auto& metrics_map = metrics_dump.first;
 	for (auto metric_iter = metrics_map.cbegin(); metric_iter != metrics_map.cend(); ++metric_iter) {
 		rapidjson::Value metric_value;
 		switch (metric_iter->second.which()) {
@@ -34,16 +35,21 @@ void fill(
 			case metrics::metric_index::TIMER:
 				json::write_to_json_value(&boost::get<metrics::timer>(metric_iter->second), &metric_value, allocator);
 				break;
-			case metrics::metric_index::ATTRIBUTE:
-				json::write_to_json_value(&boost::get<metrics::attribute>(metric_iter->second), &metric_value, allocator);
-				break;
 		}
 
 		dump.AddMember(metric_iter->first.c_str(), allocator, metric_value, allocator);
 	}
+
+	const auto& attributes_map = metrics_dump.second;
+	for (auto attr_iter = attributes_map.cbegin(); attr_iter != attributes_map.cend(); ++attr_iter) {
+		rapidjson::Value attr_value;
+		json::write_to_json_value(&attr_iter->second, &attr_value, allocator);
+
+		dump.AddMember(attr_iter->first.c_str(), allocator, attr_value, allocator);
+	}
 }
 
-std::string to_string(const std::map<std::string, handystats::metrics::metric_variant>&);
+std::string to_string(const metrics_dump_type&);
 
 }} // namespace handystats::json
 

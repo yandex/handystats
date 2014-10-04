@@ -9,7 +9,7 @@
 
 #include <handystats/chrono.hpp>
 #include <handystats/metrics.hpp>
-#include <handystats/metrics/gauge.hpp>
+#include <handystats/metrics_dump.hpp>
 
 namespace handystats { namespace metrics_dump {
 
@@ -17,7 +17,7 @@ extern chrono::time_point dump_timestamp;
 
 void update(const chrono::time_point& system_time, const chrono::time_point& internal_time);
 
-const std::shared_ptr<const std::map<std::string, metrics::metric_variant>> get_dump();
+const std::shared_ptr<const metrics_dump_type> get_dump();
 
 void initialize();
 void finalize();

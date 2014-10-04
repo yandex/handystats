@@ -1,7 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#ifndef HANDYSTATS_METRICS_ATTRIBUTE_HPP_
-#define HANDYSTATS_METRICS_ATTRIBUTE_HPP_
+#ifndef HANDYSTATS_ATTRIBUTE_HPP_
+#define HANDYSTATS_ATTRIBUTE_HPP_
 
 #include <cstdint>
 #include <string>
@@ -10,7 +10,7 @@
 
 #include <handystats/chrono.hpp>
 
-namespace handystats { namespace metrics {
+namespace handystats {
 
 struct attribute
 {
@@ -61,7 +61,7 @@ private:
 
 }; // struct attribute
 
-}} // namespace handystats::metrics
+} // namespace handystats
 
 
-#endif // HANDYSTATS_METRICS_ATTRIBUTE_HPP_
+#endif // HANDYSTATS_ATTRIBUTE_HPP_

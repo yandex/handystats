@@ -7,7 +7,7 @@
 
 #include <handystats/json/attribute_json_writer.hpp>
 
-using namespace handystats::metrics;
+using namespace handystats;
 
 TEST(AttributeTest, TestAttributeConstruction) {
 	attribute sample_attr;

@@ -1,9 +1,9 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#include <handystats/metrics/attribute.hpp>
+#include <handystats/attribute.hpp>
 
 
-namespace handystats { namespace metrics {
+namespace handystats {
 
 attribute::attribute()
 	: m_value()
@@ -50,4 +50,4 @@ const attribute::value_type& attribute::value() const {
 	return m_value;
 }
 
-}} // namespace handystats::metrics
+} // namespace handystats

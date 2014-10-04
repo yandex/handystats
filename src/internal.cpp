@@ -20,21 +20,13 @@ namespace handystats { namespace internal {
 
 namespace stats {
 
-metrics::gauge size;
 metrics::gauge process_time;
 
 void update(const chrono::time_point& timestamp) {
-	size.update_statistics(timestamp);
 	process_time.update_statistics(timestamp);
 }
 
 static void reset() {
-	config::metrics::gauge size_opts;
-	size_opts.values.tags = statistics::tag::value;
-
-	size = metrics::gauge(size_opts);
-	size.set(0);
-
 	config::metrics::gauge process_time_opts;
 	process_time_opts.values.tags = statistics::tag::moving_avg;
 	process_time_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
@@ -54,10 +46,7 @@ void finalize() {
 
 
 std::map<std::string, metrics::metric_ptr_variant> metrics_map;
-
-size_t size() {
-	return metrics_map.size();
-}
+std::map<std::string, attribute> attributes_map;
 
 void update_metrics(const chrono::time_point& timestamp) {
 	for (auto metric_iter = metrics_map.begin(); metric_iter != metrics_map.end(); ++metric_iter) {
@@ -80,12 +69,11 @@ void update_metrics(const chrono::time_point& timestamp) {
 				timer->update_statistics(timestamp);
 				break;
 			}
-			case metrics::metric_index::ATTRIBUTE:
-				break;
 		}
 	}
 }
 
+static
 void process_event_message(metrics::metric_ptr_variant& metric_ptr, const events::event_message& message) {
 	switch (metric_ptr.which()) {
 		case metrics::metric_index::COUNTER:
@@ -97,62 +85,62 @@ void process_event_message(metrics::metric_ptr_variant& metric_ptr, const events
 		case metrics::metric_index::TIMER:
 			events::timer::process_event(*boost::get<metrics::timer*>(metric_ptr), message);
 			break;
-		case metrics::metric_index::ATTRIBUTE:
-			events::attribute::process_event(*boost::get<metrics::attribute*>(metric_ptr), message);
-			break;
 		default:
 			return;
 	}
 }
 
+static
+void process_event_message(attribute& attr, const events::event_message& message) {
+	events::attribute::process_event(attr, message);
+}
+
 void process_event_message(const events::event_message& message) {
 	auto process_start_time = chrono::tsc_clock::now();
 
-	auto& metric_ptr = metrics_map[message.destination_name];
-
-	bool empty_metric = false;
-
-	switch (metric_ptr.which()) {
-		case metrics::metric_index::COUNTER:
-			if (boost::get<metrics::counter*>(metric_ptr) == 0) {
-				empty_metric = true;
-			}
-			break;
-		case metrics::metric_index::GAUGE:
-			if (boost::get<metrics::gauge*>(metric_ptr) == 0) {
-				empty_metric = true;
-			}
-			break;
-		case metrics::metric_index::TIMER:
-			if (boost::get<metrics::timer*>(metric_ptr) == 0) {
-				empty_metric = true;
-			}
-			break;
-		case metrics::metric_index::ATTRIBUTE:
-			if (boost::get<metrics::attribute*>(metric_ptr) == 0) {
-				empty_metric = true;
-			}
-			break;
+	if (message.destination_type == events::event_destination_type::ATTRIBUTE) {
+		auto& attr = attributes_map[message.destination_name];
+		process_event_message(attr, message);
 	}
+	else {
+		auto& metric_ptr = metrics_map[message.destination_name];
 
-	if (empty_metric) {
-		switch (message.destination_type) {
-			case events::event_destination_type::COUNTER:
-				metric_ptr = new metrics::counter(config::metrics::counter_opts);
+		bool empty_metric = false;
+
+		switch (metric_ptr.which()) {
+			case metrics::metric_index::COUNTER:
+				if (boost::get<metrics::counter*>(metric_ptr) == 0) {
+					empty_metric = true;
+				}
 				break;
-			case events::event_destination_type::GAUGE:
-				metric_ptr = new metrics::gauge(config::metrics::gauge_opts);
+			case metrics::metric_index::GAUGE:
+				if (boost::get<metrics::gauge*>(metric_ptr) == 0) {
+					empty_metric = true;
+				}
 				break;
-			case events::event_destination_type::TIMER:
-				metric_ptr = new metrics::timer(config::metrics::timer_opts);
-				break;
-			case events::event_destination_type::ATTRIBUTE:
-				metric_ptr = new metrics::attribute();
+			case metrics::metric_index::TIMER:
+				if (boost::get<metrics::timer*>(metric_ptr) == 0) {
+					empty_metric = true;
+				}
 				break;
 		}
-	}
 
-	process_event_message(metric_ptr, message);
+		if (empty_metric) {
+			switch (message.destination_type) {
+				case events::event_destination_type::COUNTER:
+					metric_ptr = new metrics::counter(config::metrics::counter_opts);
+					break;
+				case events::event_destination_type::GAUGE:
+					metric_ptr = new metrics::gauge(config::metrics::gauge_opts);
+					break;
+				case events::event_destination_type::TIMER:
+					metric_ptr = new metrics::timer(config::metrics::timer_opts);
+					break;
+			}
+		}
+
+		process_event_message(metric_ptr, message);
+	}
 
 	auto process_end_time = chrono::tsc_clock::now();
 
@@ -160,8 +148,6 @@ void process_event_message(const events::event_message& message) {
 			chrono::duration::convert_to(metrics::timer::value_unit, process_end_time - process_start_time).count(),
 			process_end_time
 		);
-
-	stats::size.set(size(), process_end_time);
 }
 
 
@@ -181,15 +167,13 @@ void finalize() {
 			case metrics::metric_index::TIMER:
 				delete boost::get<metrics::timer*>(metric_iter->second);
 				break;
-			case metrics::metric_index::ATTRIBUTE:
-				delete boost::get<metrics::attribute*>(metric_iter->second);
-				break;
 			default:
 				break;
 		}
 	}
 
 	metrics_map.clear();
+	attributes_map.clear();
 
 	stats::finalize();
 }

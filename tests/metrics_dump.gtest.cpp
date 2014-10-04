@@ -55,9 +55,9 @@ TEST_F(MetricsDumpTest, SampleCounter) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->find("counter") != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find("counter") != metrics_dump->first.end());
 
-	auto& counter = boost::get<handystats::metrics::counter>(metrics_dump->at("counter"));
+	auto& counter = boost::get<handystats::metrics::counter>(metrics_dump->first.at("counter"));
 	ASSERT_EQ(counter.values().get<handystats::statistics::tag::value>(), INCR_COUNT * INCR_VALUE);
 }
 
@@ -80,9 +80,9 @@ TEST_F(MetricsDumpTest, SampleTimer) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->find("timer") != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find("timer") != metrics_dump->first.end());
 
-	auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->at("timer"));
+	auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->first.at("timer"));
 	ASSERT_EQ(timer.values().get<handystats::statistics::tag::count>(), TIMER_INSTANCES);
 	ASSERT_TRUE(
 			timer.values().get<handystats::statistics::tag::min>() >=
@@ -104,9 +104,9 @@ TEST_F(MetricsDumpTest, SampleGauge) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->find("gauge") != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find("gauge") != metrics_dump->first.end());
 
-	auto& gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at("gauge"));
+	auto& gauge = boost::get<handystats::metrics::gauge>(metrics_dump->first.at("gauge"));
 	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::count>(), MAX_VALUE - MIN_VALUE + 1);
 	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::min>(), MIN_VALUE);
 	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::max>(), MAX_VALUE);

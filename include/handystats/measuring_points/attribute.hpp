@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include <handystats/metrics/attribute.hpp>
+#include <handystats/attribute.hpp>
 
 
 namespace handystats { namespace measuring_points {
@@ -16,63 +16,63 @@ template <typename ValueType>
 void attribute_set(
 		std::string&& attribute_name,
 		const ValueType& value,
-		const handystats::metrics::attribute::time_point& timestamp = handystats::metrics::attribute::clock::now()
+		const handystats::attribute::time_point& timestamp = handystats::attribute::clock::now()
 	);
 
 template <>
-void attribute_set<handystats::metrics::attribute::value_type>(
+void attribute_set<handystats::attribute::value_type>(
 		std::string&& attribute_name,
-		const handystats::metrics::attribute::value_type& value,
-		const handystats::metrics::attribute::time_point& timestamp
+		const handystats::attribute::value_type& value,
+		const handystats::attribute::time_point& timestamp
 	);
 
 template <>
 void attribute_set<bool>(
 		std::string&& attribute_name,
 		const bool& b,
-		const handystats::metrics::attribute::time_point& timestamp
+		const handystats::attribute::time_point& timestamp
 	);
 
 template <>
 void attribute_set<int>(
 		std::string&& attribute_name,
 		const int& i,
-		const handystats::metrics::attribute::time_point& timestamp
+		const handystats::attribute::time_point& timestamp
 	);
 
 template <>
 void attribute_set<unsigned>(
 		std::string&& attribute_name,
 		const unsigned& u,
-		const handystats::metrics::attribute::time_point& timestamp
+		const handystats::attribute::time_point& timestamp
 	);
 
 template <>
 void attribute_set<int64_t>(
 		std::string&& attribute_name,
 		const int64_t& i64,
-		const handystats::metrics::attribute::time_point& timestamp
+		const handystats::attribute::time_point& timestamp
 	);
 
 template <>
 void attribute_set<uint64_t>(
 		std::string&& attribute_name,
 		const uint64_t& u64,
-		const handystats::metrics::attribute::time_point& timestamp
+		const handystats::attribute::time_point& timestamp
 	);
 
 template <>
 void attribute_set<double>(
 		std::string&& attribute_name,
 		const double& d,
-		const handystats::metrics::attribute::time_point& timestamp
+		const handystats::attribute::time_point& timestamp
 	);
 
 template <>
 void attribute_set<std::string>(
 		std::string&& attribute_name,
 		const std::string& s,
-		const handystats::metrics::attribute::time_point& timestamp
+		const handystats::attribute::time_point& timestamp
 	);
 
 }} // namespace handystats::measuring_points

@@ -50,9 +50,9 @@ TEST_F(HandyProxyTest, GaugeProxy) {
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
-	ASSERT_TRUE(metrics_dump->find(gauge_name) != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find(gauge_name) != metrics_dump->first.end());
 
-	auto& gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at(gauge_name));
+	auto& gauge = boost::get<handystats::metrics::gauge>(metrics_dump->first.at(gauge_name));
 	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::count>(), VALUE_MAX - VALUE_MIN + 1);
 	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::min>(), VALUE_MIN);
 	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::max>(), VALUE_MAX);
@@ -79,9 +79,9 @@ TEST_F(HandyProxyTest, CounterProxy) {
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
-	ASSERT_TRUE(metrics_dump->find(counter_name) != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find(counter_name) != metrics_dump->first.end());
 
-	auto& counter = boost::get<handystats::metrics::counter>(metrics_dump->at(counter_name));
+	auto& counter = boost::get<handystats::metrics::counter>(metrics_dump->first.at(counter_name));
 
 	ASSERT_EQ(counter.values().get<handystats::statistics::tag::value>(), INIT_VALUE);
 	ASSERT_EQ(counter.values().get<handystats::statistics::tag::count>(), 1 + DELTA_STEPS * 2);
@@ -107,9 +107,9 @@ TEST_F(HandyProxyTest, TimerProxySingleInstance) {
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
-	ASSERT_TRUE(metrics_dump->find(timer_name) != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find(timer_name) != metrics_dump->first.end());
 
-	auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->at(timer_name));
+	auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->first.at(timer_name));
 
 //	ASSERT_EQ(timer.instances.size(), 0);
 
@@ -148,9 +148,9 @@ TEST_F(HandyProxyTest, TimerProxyMultiInstance) {
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
-	ASSERT_TRUE(metrics_dump->find(timer_name) != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find(timer_name) != metrics_dump->first.end());
 
-	auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->at(timer_name));
+	auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->first.at(timer_name));
 
 //	ASSERT_EQ(timer.instances.size(), 0);
 

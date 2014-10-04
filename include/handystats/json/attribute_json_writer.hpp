@@ -12,12 +12,12 @@
 #include <handystats/rapidjson/prettywriter.h>
 
 #include <handystats/json/timestamp.hpp>
-#include <handystats/metrics/attribute.hpp>
+#include <handystats/attribute.hpp>
 
 namespace handystats { namespace json {
 
 template<typename Allocator>
-inline void write_to_json_value(const metrics::attribute* const obj, rapidjson::Value* json_value, Allocator& allocator) {
+inline void write_to_json_value(const attribute* const obj, rapidjson::Value* json_value, Allocator& allocator) {
 	if (!obj) {
 		json_value = new rapidjson::Value();
 		return;
@@ -33,32 +33,32 @@ inline void write_to_json_value(const metrics::attribute* const obj, rapidjson::
 	json_value->AddMember("type", "attribute", allocator);
 
 	switch (obj->value().which()) {
-		case metrics::attribute::value_index::BOOL:
+		case attribute::value_index::BOOL:
 			json_value->AddMember("value", boost::get<bool>(obj->value()), allocator);
 			break;
-		case metrics::attribute::value_index::INT:
+		case attribute::value_index::INT:
 			json_value->AddMember("value", boost::get<int>(obj->value()), allocator);
 			break;
-		case metrics::attribute::value_index::UINT:
+		case attribute::value_index::UINT:
 			json_value->AddMember("value", boost::get<unsigned>(obj->value()), allocator);
 			break;
-		case metrics::attribute::value_index::INT64:
+		case attribute::value_index::INT64:
 			json_value->AddMember("value", boost::get<int64_t>(obj->value()), allocator);
 			break;
-		case metrics::attribute::value_index::UINT64:
+		case attribute::value_index::UINT64:
 			json_value->AddMember("value", boost::get<uint64_t>(obj->value()), allocator);
 			break;
-		case metrics::attribute::value_index::DOUBLE:
+		case attribute::value_index::DOUBLE:
 			json_value->AddMember("value", boost::get<double>(obj->value()), allocator);
 			break;
-		case metrics::attribute::value_index::STRING:
+		case attribute::value_index::STRING:
 			json_value->AddMember("value", boost::get<std::string>(obj->value()).c_str(), allocator);
 			break;
 	}
 }
 
 template<typename StringBuffer, typename Allocator>
-inline void write_to_json_buffer(const metrics::attribute* const obj, StringBuffer* buffer, Allocator& allocator) {
+inline void write_to_json_buffer(const attribute* const obj, StringBuffer* buffer, Allocator& allocator) {
 	rapidjson::Value json_value;
 	write_to_json_value(obj, &json_value, allocator);
 
@@ -71,7 +71,7 @@ inline void write_to_json_buffer(const metrics::attribute* const obj, StringBuff
 }
 
 template<typename Allocator>
-inline std::string write_to_json_string(const metrics::attribute* const obj, Allocator&& allocator = Allocator()) {
+inline std::string write_to_json_string(const attribute* const obj, Allocator&& allocator = Allocator()) {
 	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, Allocator> buffer(&allocator);
 	write_to_json_buffer(obj, &buffer, allocator);
 

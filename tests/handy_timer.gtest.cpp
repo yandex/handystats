@@ -63,13 +63,13 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
 //	ASSERT_TRUE(
-//			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+//			boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
 //			.instances
 //			.empty()
 //		);
 
 	const auto& agg_stats =
-		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+		boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
 		.values();
 
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
@@ -96,13 +96,13 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
 //	ASSERT_TRUE(
-//			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+//			boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
 //			.instances
 //			.empty()
 //		);
 
 	const auto& agg_stats =
-		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+		boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
 		.values();
 
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
@@ -133,13 +133,13 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
 //	ASSERT_TRUE(
-//			boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+//			boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
 //			.instances
 //			.empty()
 //		);
 
 	const auto& agg_stats =
-		boost::get<handystats::metrics::timer>(metrics_dump->at("sleep.time"))
+		boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
 		.values();
 
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);

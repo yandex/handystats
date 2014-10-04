@@ -69,7 +69,7 @@ void command() {
 void print_stats() {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	if (!metrics_dump || metrics_dump->empty()) {
+	if (!metrics_dump || metrics_dump->first.empty() || metrics_dump->second.empty()) {
 		return;
 	}
 
@@ -85,7 +85,7 @@ void print_stats() {
 		<< " =============" << std::endl;
 	std::cout << "timestamp: "
 		<< boost::get<int64_t>(
-				boost::get<handystats::metrics::attribute>(metrics_dump->at("handystats.dump_timestamp")).value()
+				metrics_dump->second.at("handystats.dump_timestamp").value()
 			) / 1000
 		<< std::endl
 		;
@@ -93,7 +93,7 @@ void print_stats() {
 
 	{
 		const char* name = "handystats.message_queue.size";
-		const auto& message_queue_size = boost::get<handystats::metrics::gauge>(metrics_dump->at(name));
+		const auto& message_queue_size = boost::get<handystats::metrics::gauge>(metrics_dump->first.at(name));
 		std::cout << name << ":" << std::endl;
 		std::cout << "         value: " << message_queue_size.values().get<handystats::statistics::tag::value>() << std::endl;
 		std::cout << "    moving-avg: " << message_queue_size.values().get<handystats::statistics::tag::moving_avg>() << std::endl;
@@ -103,7 +103,7 @@ void print_stats() {
 
 	{
 		const char* name = "handystats.message_queue.pop_count";
-		const auto& pop_count = boost::get<handystats::metrics::counter>(metrics_dump->at(name));
+		const auto& pop_count = boost::get<handystats::metrics::counter>(metrics_dump->first.at(name));
 		std::cout << name << ":" << std::endl;
 		std::cout << "          rate: " << pop_count.values().get<handystats::statistics::tag::rate>() << std::endl;
 //		std::cout << "     timestamp: " << pop_count.incr_deltas().get<handystats::statistics::tag::timestamp>() << std::endl;
@@ -112,7 +112,7 @@ void print_stats() {
 
 	{
 		const char* name = "load_test.timer.0";
-		const auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->at(name));
+		const auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->first.at(name));
 		std::cout << name << ":" << std::endl;
 		std::cout << "          p25: " << timer.values().get<handystats::statistics::tag::quantile>().at(0.25) << std::endl;
 		std::cout << "          p50: " << timer.values().get<handystats::statistics::tag::quantile>().at(0.50) << std::endl;

@@ -70,7 +70,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->find("gauge.test") != metrics_dump->end());
+	ASSERT_TRUE(metrics_dump->first.find("gauge.test") != metrics_dump->first.end());
 
 	auto json_dump = HANDY_JSON_DUMP();
 
@@ -100,7 +100,7 @@ TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	ASSERT_TRUE(metrics_dump->empty());
+	ASSERT_TRUE(metrics_dump->first.empty());
 
 	auto json_dump = HANDY_JSON_DUMP();
 
@@ -144,13 +144,13 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_EQ(
-			boost::get<handystats::metrics::timer>(metrics_dump->at("dead-timer"))
+			boost::get<handystats::metrics::timer>(metrics_dump->first.at("dead-timer"))
 			.values()
 			.get<handystats::statistics::tag::count>(),
 			0
 		);
 	ASSERT_EQ(
-			boost::get<handystats::metrics::timer>(metrics_dump->at("alive-timer"))
+			boost::get<handystats::metrics::timer>(metrics_dump->first.at("alive-timer"))
 			.values()
 			.get<handystats::statistics::tag::count>(),
 			1
@@ -207,7 +207,7 @@ TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-	ASSERT_TRUE(HANDY_METRICS_DUMP()->empty());
+	ASSERT_TRUE(HANDY_METRICS_DUMP()->first.empty() && HANDY_METRICS_DUMP()->second.empty());
 	ASSERT_EQ(HANDY_JSON_DUMP(), "{}");
 }
 
@@ -244,15 +244,15 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {
 	handystats::message_queue::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
-	ASSERT_FALSE(HANDY_METRICS_DUMP()->empty());
+	ASSERT_FALSE(HANDY_METRICS_DUMP()->first.empty() && HANDY_METRICS_DUMP()->second.empty());
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at("test.gauge"));
+	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->first.at("test.gauge"));
 
 	ASSERT_TRUE(gauge.values().enabled(handystats::statistics::tag::histogram));
 	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::histogram>().size(), 10);
 
-	auto counter = boost::get<handystats::metrics::counter>(metrics_dump->at("test.counter"));
+	auto counter = boost::get<handystats::metrics::counter>(metrics_dump->first.at("test.counter"));
 
 	ASSERT_TRUE(counter.values().enabled(handystats::statistics::tag::histogram));
 	ASSERT_EQ(counter.values().get<handystats::statistics::tag::histogram>().size(), 25);
@@ -283,10 +283,10 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 	handystats::message_queue::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
-	ASSERT_FALSE(HANDY_METRICS_DUMP()->empty());
+	ASSERT_FALSE(HANDY_METRICS_DUMP()->first.empty() && HANDY_METRICS_DUMP()->second.empty());
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at("test.gauge"));
+	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->first.at("test.gauge"));
 
 	ASSERT_FALSE(gauge.values().computed(handystats::statistics::tag::histogram));
 }
@@ -321,10 +321,10 @@ TEST_F(HandyConfigurationTest, MetricsConfigOverwritesStatistcs) {
 	handystats::message_queue::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
-	ASSERT_FALSE(HANDY_METRICS_DUMP()->empty());
+	ASSERT_FALSE(HANDY_METRICS_DUMP()->first.empty() && HANDY_METRICS_DUMP()->second.empty());
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->at("test.gauge"));
+	auto gauge = boost::get<handystats::metrics::gauge>(metrics_dump->first.at("test.gauge"));
 
 	ASSERT_FALSE(gauge.values().computed(handystats::statistics::tag::histogram));
 }

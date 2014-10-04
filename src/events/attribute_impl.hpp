@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include <handystats/metrics/attribute.hpp>
+#include <handystats/attribute.hpp>
 
 #include "events/event_message_impl.hpp"
 
@@ -23,8 +23,8 @@ enum : char {
  */
 event_message* create_set_event(
 		std::string&& attribute_name,
-		const metrics::attribute::value_type& value,
-		const metrics::attribute::time_point& timestamp
+		const handystats::attribute::value_type& value,
+		const handystats::attribute::time_point& timestamp
 	);
 
 /*
@@ -36,10 +36,9 @@ void delete_event(event_message* message);
 /*
  * Event processing function
  */
-void process_event(metrics::attribute& counter, const event_message& message);
+void process_event(handystats::attribute& attr, const event_message& message);
 
 }}} // namespace handystats::events::attribute
 
 
 #endif // HANDYSTATS_ATTRIBUTE_EVENT_HPP_
-

@@ -14,31 +14,31 @@
 namespace handystats { namespace measuring_points {
 
 template <>
-void attribute_set<handystats::metrics::attribute::value_type>(
-		std::string&& attribute_name,
-		const handystats::metrics::attribute::value_type& value,
-		const handystats::metrics::attribute::time_point& timestamp
+void attribute_set<attribute::value_type>(
+		std::string&& attr_name,
+		const attribute::value_type& value,
+		const attribute::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(std::move(attribute_name), value, timestamp)
+	if (is_enabled()) {
+		message_queue::push(
+				events::attribute::create_set_event(std::move(attr_name), value, timestamp)
 			);
 	}
 }
 
 template <>
 void attribute_set<bool>(
-		std::string&& attribute_name,
+		std::string&& attr_name,
 		const bool& b,
-		const handystats::metrics::attribute::time_point& timestamp
+		const attribute::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(
-					std::move(attribute_name),
-					handystats::metrics::attribute::value_type(b),
+	if (is_enabled()) {
+		message_queue::push(
+				events::attribute::create_set_event(
+					std::move(attr_name),
+					attribute::value_type(b),
 					timestamp
 				)
 			);
@@ -47,16 +47,16 @@ void attribute_set<bool>(
 
 template <>
 void attribute_set<int>(
-		std::string&& attribute_name,
+		std::string&& attr_name,
 		const int& i,
-		const handystats::metrics::attribute::time_point& timestamp
+		const attribute::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(
-					std::move(attribute_name),
-					handystats::metrics::attribute::value_type(i),
+	if (is_enabled()) {
+		message_queue::push(
+				events::attribute::create_set_event(
+					std::move(attr_name),
+					attribute::value_type(i),
 					timestamp
 				)
 			);
@@ -65,16 +65,16 @@ void attribute_set<int>(
 
 template <>
 void attribute_set<unsigned>(
-		std::string&& attribute_name,
+		std::string&& attr_name,
 		const unsigned& u,
-		const handystats::metrics::attribute::time_point& timestamp
+		const attribute::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(
-					std::move(attribute_name),
-					handystats::metrics::attribute::value_type(u),
+	if (is_enabled()) {
+		message_queue::push(
+				events::attribute::create_set_event(
+					std::move(attr_name),
+					attribute::value_type(u),
 					timestamp
 				)
 			);
@@ -83,16 +83,16 @@ void attribute_set<unsigned>(
 
 template <>
 void attribute_set<int64_t>(
-		std::string&& attribute_name,
+		std::string&& attr_name,
 		const int64_t& i64,
-		const handystats::metrics::attribute::time_point& timestamp
+		const attribute::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(
-					std::move(attribute_name),
-					handystats::metrics::attribute::value_type(i64),
+	if (is_enabled()) {
+		message_queue::push(
+				events::attribute::create_set_event(
+					std::move(attr_name),
+					attribute::value_type(i64),
 					timestamp
 				)
 			);
@@ -101,16 +101,16 @@ void attribute_set<int64_t>(
 
 template <>
 void attribute_set<uint64_t>(
-		std::string&& attribute_name,
+		std::string&& attr_name,
 		const uint64_t& u64,
-		const handystats::metrics::attribute::time_point& timestamp
+		const attribute::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(
-					std::move(attribute_name),
-					handystats::metrics::attribute::value_type(u64),
+	if (is_enabled()) {
+		message_queue::push(
+				events::attribute::create_set_event(
+					std::move(attr_name),
+					attribute::value_type(u64),
 					timestamp
 				)
 			);
@@ -119,16 +119,16 @@ void attribute_set<uint64_t>(
 
 template <>
 void attribute_set<double>(
-		std::string&& attribute_name,
+		std::string&& attr_name,
 		const double& d,
-		const handystats::metrics::attribute::time_point& timestamp
+		const attribute::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(
-					std::move(attribute_name),
-					handystats::metrics::attribute::value_type(d),
+	if (is_enabled()) {
+		message_queue::push(
+				events::attribute::create_set_event(
+					std::move(attr_name),
+					attribute::value_type(d),
 					timestamp
 				)
 			);
@@ -137,16 +137,16 @@ void attribute_set<double>(
 
 template <>
 void attribute_set<std::string>(
-		std::string&& attribute_name,
+		std::string&& attr_name,
 		const std::string& s,
-		const handystats::metrics::attribute::time_point& timestamp
+		const attribute::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
-				handystats::events::attribute::create_set_event(
-					std::move(attribute_name),
-					handystats::metrics::attribute::value_type(s),
+	if (is_enabled()) {
+		message_queue::push(
+				events::attribute::create_set_event(
+					std::move(attr_name),
+					attribute::value_type(s),
 					timestamp
 				)
 			);
@@ -159,59 +159,59 @@ void attribute_set<std::string>(
 extern "C" {
 
 void handystats_attribute_set_bool(
-		const char* attribute_name,
+		const char* attr_name,
 		const char b
 	)
 {
-	handystats::measuring_points::attribute_set<bool>(attribute_name, (bool)b);
+	handystats::measuring_points::attribute_set<bool>(attr_name, (bool)b);
 }
 
 void handystats_attribute_set_int(
-		const char* attribute_name,
+		const char* attr_name,
 		const int i
 	)
 {
-	handystats::measuring_points::attribute_set<int>(attribute_name, i);
+	handystats::measuring_points::attribute_set<int>(attr_name, i);
 }
 
 void handystats_attribute_set_uint(
-		const char* attribute_name,
+		const char* attr_name,
 		const unsigned u
 	)
 {
-	handystats::measuring_points::attribute_set<unsigned>(attribute_name, u);
+	handystats::measuring_points::attribute_set<unsigned>(attr_name, u);
 }
 
 void handystats_attribute_set_int64(
-		const char* attribute_name,
+		const char* attr_name,
 		const int64_t i64
 	)
 {
-	handystats::measuring_points::attribute_set<int64_t>(attribute_name, i64);
+	handystats::measuring_points::attribute_set<int64_t>(attr_name, i64);
 }
 
 void handystats_attribute_set_uint64(
-		const char* attribute_name,
+		const char* attr_name,
 		const uint64_t u64
 	)
 {
-	handystats::measuring_points::attribute_set<uint64_t>(attribute_name, u64);
+	handystats::measuring_points::attribute_set<uint64_t>(attr_name, u64);
 }
 
 void handystats_attribute_set_double(
-		const char* attribute_name,
+		const char* attr_name,
 		const double d
 	)
 {
-	handystats::measuring_points::attribute_set<double>(attribute_name, d);
+	handystats::measuring_points::attribute_set<double>(attr_name, d);
 }
 
 void handystats_attribute_set_string(
-		const char* attribute_name,
+		const char* attr_name,
 		const char* s
 	)
 {
-	handystats::measuring_points::attribute_set<std::string>(attribute_name, s);
+	handystats::measuring_points::attribute_set<std::string>(attr_name, s);
 }
 
 } // extern "C"

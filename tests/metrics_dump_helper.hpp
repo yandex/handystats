@@ -40,12 +40,13 @@ struct dump_timestamp_visitor : public boost::static_visitor<int64_t>
 void wait_until(const chrono::time_point& timestamp) {
 	while (true) {
 		const auto& dump = get_dump();
-		if (dump->find("handystats.dump_timestamp") != dump->cend()) {
+		const auto& attributes = dump->second;
+		if (attributes.find("handystats.dump_timestamp") != attributes.cend()) {
 			dump_timestamp_visitor visitor;
 			const auto& dump_timestamp_ms =
 				boost::apply_visitor(
 						visitor,
-						boost::get<handystats::metrics::attribute>(dump->at("handystats.dump_timestamp")).value()
+						attributes.at("handystats.dump_timestamp").value()
 					);
 
 			chrono::time_point dump_timestamp(chrono::duration(dump_timestamp_ms, chrono::time_unit::MSEC), chrono::clock_type::SYSTEM);

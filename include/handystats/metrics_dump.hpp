@@ -8,15 +8,15 @@
 #include <utility>
 #include <map>
 
-#include <handystats/metrics.hpp>
+#include <handystats/statistics.hpp>
 #include <handystats/attribute.hpp>
 
 namespace handystats {
 
-typedef std::map<std::string, metrics::metric_variant> metric_variant_map;
+typedef std::map<std::string, statistics> metric_map;
 typedef std::map<std::string, attribute> attribute_map;
 
-typedef std::pair<metric_variant_map, attribute_map> metrics_dump_type;
+typedef std::pair<metric_map, attribute_map> metrics_dump_type;
 
 } // namespace handystats
 

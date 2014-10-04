@@ -52,11 +52,11 @@ TEST_F(HandyProxyTest, GaugeProxy) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_TRUE(metrics_dump->first.find(gauge_name) != metrics_dump->first.end());
 
-	auto& gauge = boost::get<handystats::metrics::gauge>(metrics_dump->first.at(gauge_name));
-	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::count>(), VALUE_MAX - VALUE_MIN + 1);
-	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::min>(), VALUE_MIN);
-	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::max>(), VALUE_MAX);
-	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::avg>(), (VALUE_MIN + VALUE_MAX) / 2);
+	auto& gauge_values = metrics_dump->first.at(gauge_name);
+	ASSERT_EQ(gauge_values.get<handystats::statistics::tag::count>(), VALUE_MAX - VALUE_MIN + 1);
+	ASSERT_EQ(gauge_values.get<handystats::statistics::tag::min>(), VALUE_MIN);
+	ASSERT_EQ(gauge_values.get<handystats::statistics::tag::max>(), VALUE_MAX);
+	ASSERT_EQ(gauge_values.get<handystats::statistics::tag::avg>(), (VALUE_MIN + VALUE_MAX) / 2);
 }
 
 TEST_F(HandyProxyTest, CounterProxy) {
@@ -81,12 +81,12 @@ TEST_F(HandyProxyTest, CounterProxy) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_TRUE(metrics_dump->first.find(counter_name) != metrics_dump->first.end());
 
-	auto& counter = boost::get<handystats::metrics::counter>(metrics_dump->first.at(counter_name));
+	auto& counter_values = metrics_dump->first.at(counter_name);
 
-	ASSERT_EQ(counter.values().get<handystats::statistics::tag::value>(), INIT_VALUE);
-	ASSERT_EQ(counter.values().get<handystats::statistics::tag::count>(), 1 + DELTA_STEPS * 2);
-	ASSERT_EQ(counter.values().get<handystats::statistics::tag::min>(), INIT_VALUE);
-	ASSERT_EQ(counter.values().get<handystats::statistics::tag::max>(), INIT_VALUE + DELTA * DELTA_STEPS);
+	ASSERT_EQ(counter_values.get<handystats::statistics::tag::value>(), INIT_VALUE);
+	ASSERT_EQ(counter_values.get<handystats::statistics::tag::count>(), 1 + DELTA_STEPS * 2);
+	ASSERT_EQ(counter_values.get<handystats::statistics::tag::min>(), INIT_VALUE);
+	ASSERT_EQ(counter_values.get<handystats::statistics::tag::max>(), INIT_VALUE + DELTA * DELTA_STEPS);
 }
 
 TEST_F(HandyProxyTest, TimerProxySingleInstance) {
@@ -109,19 +109,19 @@ TEST_F(HandyProxyTest, TimerProxySingleInstance) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_TRUE(metrics_dump->first.find(timer_name) != metrics_dump->first.end());
 
-	auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->first.at(timer_name));
+	auto& timer_values = metrics_dump->first.at(timer_name);
 
 //	ASSERT_EQ(timer.instances.size(), 0);
 
 	ASSERT_GE(
-			timer.values().get<handystats::statistics::tag::value>(),
+			timer_values.get<handystats::statistics::tag::value>(),
 			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
 				handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 
-	ASSERT_EQ(timer.values().get<handystats::statistics::tag::count>(), SLEEP_COUNT);
+	ASSERT_EQ(timer_values.get<handystats::statistics::tag::count>(), SLEEP_COUNT);
 	ASSERT_GE(
-			timer.values().get<handystats::statistics::tag::min>(),
+			timer_values.get<handystats::statistics::tag::min>(),
 			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
 				handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
@@ -150,19 +150,19 @@ TEST_F(HandyProxyTest, TimerProxyMultiInstance) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_TRUE(metrics_dump->first.find(timer_name) != metrics_dump->first.end());
 
-	auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->first.at(timer_name));
+	auto& timer_values = metrics_dump->first.at(timer_name);
 
 //	ASSERT_EQ(timer.instances.size(), 0);
 
 	ASSERT_GE(
-			timer.values().get<handystats::statistics::tag::value>(),
+			timer_values.get<handystats::statistics::tag::value>(),
 			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
 				handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
 
-	ASSERT_EQ(timer.values().get<handystats::statistics::tag::count>(), SLEEP_COUNT);
+	ASSERT_EQ(timer_values.get<handystats::statistics::tag::count>(), SLEEP_COUNT);
 	ASSERT_GE(
-			timer.values().get<handystats::statistics::tag::min>(),
+			timer_values.get<handystats::statistics::tag::min>(),
 			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
 				handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);

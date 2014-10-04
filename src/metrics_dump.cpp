@@ -9,14 +9,11 @@
 
 #include "internal_impl.hpp"
 #include "message_queue_impl.hpp"
-
 #include "config_impl.hpp"
-
 #include "metrics_dump_impl.hpp"
 
 
 namespace handystats { namespace metrics_dump {
-
 
 namespace stats {
 
@@ -70,25 +67,25 @@ create_dump()
 		switch (metric_iter->second.which()) {
 			case metrics::metric_index::GAUGE:
 				metrics_dump.insert(
-						std::pair<std::string, metrics::metric_variant>(
+						std::pair<std::string, statistics>(
 							metric_iter->first,
-							*boost::get<metrics::gauge*>(metric_iter->second)
+							boost::get<metrics::gauge*>(metric_iter->second)->values()
 						)
 					);
 				break;
 			case metrics::metric_index::COUNTER:
 				metrics_dump.insert(
-						std::pair<std::string, metrics::metric_variant>(
+						std::pair<std::string, statistics>(
 							metric_iter->first,
-							*boost::get<metrics::counter*>(metric_iter->second)
+							boost::get<metrics::counter*>(metric_iter->second)->values()
 						)
 					);
 				break;
 			case metrics::metric_index::TIMER:
 				metrics_dump.insert(
-						std::pair<std::string, metrics::metric_variant>(
+						std::pair<std::string, statistics>(
 							metric_iter->first,
-							*boost::get<metrics::timer*>(metric_iter->second)
+							boost::get<metrics::timer*>(metric_iter->second)->values()
 						)
 					);
 				break;
@@ -103,9 +100,9 @@ create_dump()
 		// internal
 		{
 			metrics_dump.insert(
-					std::pair<std::string, metrics::metric_variant>(
+					std::pair<std::string, statistics>(
 						"handystats.internal.process_time",
-						internal::stats::process_time
+						internal::stats::process_time.values()
 						)
 					);
 		}
@@ -113,23 +110,23 @@ create_dump()
 		// message queue
 		{
 			metrics_dump.insert(
-					std::pair<std::string, metrics::metric_variant>(
+					std::pair<std::string, statistics>(
 						"handystats.message_queue.size",
-						message_queue::stats::size
+						message_queue::stats::size.values()
 						)
 					);
 
 			metrics_dump.insert(
-					std::pair<std::string, metrics::metric_variant>(
+					std::pair<std::string, statistics>(
 						"handystats.message_queue.message_wait_time",
-						message_queue::stats::message_wait_time
+						message_queue::stats::message_wait_time.values()
 						)
 					);
 
 			metrics_dump.insert(
-					std::pair<std::string, metrics::metric_variant>(
+					std::pair<std::string, statistics>(
 						"handystats.message_queue.pop_count",
-						message_queue::stats::pop_count
+						message_queue::stats::pop_count.values()
 						)
 					);
 		}
@@ -162,9 +159,9 @@ create_dump()
 
 	{
 		metrics_dump.insert(
-				std::pair<std::string, metrics::metric_variant>(
+				std::pair<std::string, statistics>(
 					"handystats.metrics_dump.dump_time",
-					stats::dump_time
+					stats::dump_time.values()
 				)
 			);
 	}

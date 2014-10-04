@@ -13,15 +13,15 @@ TEST(CBindingTest, TestGauge) {
 
 	ASSERT_TRUE(metrics_dump->first.find(TEST_GAUGE_NAME) != metrics_dump->first.end());
 
-	const auto& test_gauge = boost::get<handystats::metrics::gauge>(metrics_dump->first.at(TEST_GAUGE_NAME));
+	const auto& test_gauge_values = metrics_dump->first.at(TEST_GAUGE_NAME);
 
-	ASSERT_NEAR(test_gauge.values().get<handystats::statistics::tag::min>(), TEST_GAUGE_MIN, 1E-9);
+	ASSERT_NEAR(test_gauge_values.get<handystats::statistics::tag::min>(), TEST_GAUGE_MIN, 1E-9);
 
-	ASSERT_NEAR(test_gauge.values().get<handystats::statistics::tag::max>(), TEST_GAUGE_MAX, 1E-9);
+	ASSERT_NEAR(test_gauge_values.get<handystats::statistics::tag::max>(), TEST_GAUGE_MAX, 1E-9);
 
-	ASSERT_EQ(test_gauge.values().get<handystats::statistics::tag::count>(), TEST_GAUGE_MAX - TEST_GAUGE_MIN + 1);
+	ASSERT_EQ(test_gauge_values.get<handystats::statistics::tag::count>(), TEST_GAUGE_MAX - TEST_GAUGE_MIN + 1);
 
-	ASSERT_NEAR(test_gauge.values().get<handystats::statistics::tag::avg>(), (TEST_GAUGE_MIN + TEST_GAUGE_MAX) / 2.0, 1E-9);
+	ASSERT_NEAR(test_gauge_values.get<handystats::statistics::tag::avg>(), (TEST_GAUGE_MIN + TEST_GAUGE_MAX) / 2.0, 1E-9);
 }
 
 TEST(CBindingTest, TestCounter) {
@@ -29,9 +29,9 @@ TEST(CBindingTest, TestCounter) {
 
 	ASSERT_TRUE(metrics_dump->first.find(TEST_COUNTER_NAME) != metrics_dump->first.end());
 
-	const auto& test_counter = boost::get<handystats::metrics::counter>(metrics_dump->first.at(TEST_COUNTER_NAME));
+	const auto& test_counter_values = metrics_dump->first.at(TEST_COUNTER_NAME);
 
-	ASSERT_EQ(test_counter.values().get<handystats::statistics::tag::count>(), TEST_COUNTER_INCR_COUNT + TEST_COUNTER_DECR_COUNT + 1);
+	ASSERT_EQ(test_counter_values.get<handystats::statistics::tag::count>(), TEST_COUNTER_INCR_COUNT + TEST_COUNTER_DECR_COUNT + 1);
 }
 
 TEST(CBindingTest, TestScopedCounter) {
@@ -39,10 +39,10 @@ TEST(CBindingTest, TestScopedCounter) {
 
 	ASSERT_TRUE(metrics_dump->first.find(TEST_SCOPED_COUNTER_NAME) != metrics_dump->first.end());
 
-	const auto& test_scoped_counter = boost::get<handystats::metrics::counter>(metrics_dump->first.at(TEST_SCOPED_COUNTER_NAME));
+	const auto& test_scoped_counter = metrics_dump->first.at(TEST_SCOPED_COUNTER_NAME);
 
-	ASSERT_EQ(test_scoped_counter.values().get<handystats::statistics::tag::count>(), TEST_SCOPED_COUNTER_COUNT * 2 + 1);
-	ASSERT_NEAR(test_scoped_counter.values().get<handystats::statistics::tag::value>(), 0, 1E-9);
+	ASSERT_EQ(test_scoped_counter.get<handystats::statistics::tag::count>(), TEST_SCOPED_COUNTER_COUNT * 2 + 1);
+	ASSERT_NEAR(test_scoped_counter.get<handystats::statistics::tag::value>(), 0, 1E-9);
 }
 
 TEST(CBindingTest, TestTimer) {
@@ -50,10 +50,10 @@ TEST(CBindingTest, TestTimer) {
 
 	ASSERT_TRUE(metrics_dump->first.find(TEST_TIMER_NAME) != metrics_dump->first.end());
 
-	const auto& test_timer = boost::get<handystats::metrics::timer>(metrics_dump->first.at(TEST_TIMER_NAME));
+	const auto& test_timer_values = metrics_dump->first.at(TEST_TIMER_NAME);
 
-	ASSERT_EQ(test_timer.values().get<handystats::statistics::tag::count>(), TEST_TIMER_NANOSLEEP_COUNT);
-	ASSERT_GE(test_timer.values().get<handystats::statistics::tag::min>(), TEST_TIMER_NANOSLEEP_COUNT / 1000.0);
+	ASSERT_EQ(test_timer_values.get<handystats::statistics::tag::count>(), TEST_TIMER_NANOSLEEP_COUNT);
+	ASSERT_GE(test_timer_values.get<handystats::statistics::tag::min>(), TEST_TIMER_NANOSLEEP_COUNT / 1000.0);
 }
 
 TEST(CBindingTest, TestScopedTimer) {
@@ -61,10 +61,10 @@ TEST(CBindingTest, TestScopedTimer) {
 
 	ASSERT_TRUE(metrics_dump->first.find(TEST_SCOPED_TIMER_NAME) != metrics_dump->first.end());
 
-	const auto& test_scoped_timer = boost::get<handystats::metrics::timer>(metrics_dump->first.at(TEST_SCOPED_TIMER_NAME));
+	const auto& test_scoped_timer = metrics_dump->first.at(TEST_SCOPED_TIMER_NAME);
 
-	ASSERT_EQ(test_scoped_timer.values().get<handystats::statistics::tag::count>(), TEST_SCOPED_TIMER_NANOSLEEP_COUNT);
-	ASSERT_GE(test_scoped_timer.values().get<handystats::statistics::tag::min>(), TEST_SCOPED_TIMER_NANOSLEEP_COUNT / 1000.0);
+	ASSERT_EQ(test_scoped_timer.get<handystats::statistics::tag::count>(), TEST_SCOPED_TIMER_NANOSLEEP_COUNT);
+	ASSERT_GE(test_scoped_timer.get<handystats::statistics::tag::min>(), TEST_SCOPED_TIMER_NANOSLEEP_COUNT / 1000.0);
 }
 
 TEST(CBindingTest, TestBoolAttr) {

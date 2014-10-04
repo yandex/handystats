@@ -8,7 +8,8 @@
 #include <map>
 
 #include <handystats/chrono.hpp>
-#include <handystats/metrics.hpp>
+#include <handystats/statistics.hpp>
+#include <handystats/metrics/gauge.hpp>
 #include <handystats/metrics_dump.hpp>
 
 namespace handystats { namespace metrics_dump {

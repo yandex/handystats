@@ -57,8 +57,8 @@ TEST_F(MetricsDumpTest, SampleCounter) {
 
 	ASSERT_TRUE(metrics_dump->first.find("counter") != metrics_dump->first.end());
 
-	auto& counter = boost::get<handystats::metrics::counter>(metrics_dump->first.at("counter"));
-	ASSERT_EQ(counter.values().get<handystats::statistics::tag::value>(), INCR_COUNT * INCR_VALUE);
+	auto& counter_values = metrics_dump->first.at("counter");
+	ASSERT_EQ(counter_values.get<handystats::statistics::tag::value>(), INCR_COUNT * INCR_VALUE);
 }
 
 TEST_F(MetricsDumpTest, SampleTimer) {
@@ -82,10 +82,10 @@ TEST_F(MetricsDumpTest, SampleTimer) {
 
 	ASSERT_TRUE(metrics_dump->first.find("timer") != metrics_dump->first.end());
 
-	auto& timer = boost::get<handystats::metrics::timer>(metrics_dump->first.at("timer"));
-	ASSERT_EQ(timer.values().get<handystats::statistics::tag::count>(), TIMER_INSTANCES);
+	auto& timer_values = metrics_dump->first.at("timer");
+	ASSERT_EQ(timer_values.get<handystats::statistics::tag::count>(), TIMER_INSTANCES);
 	ASSERT_TRUE(
-			timer.values().get<handystats::statistics::tag::min>() >=
+			timer_values.get<handystats::statistics::tag::min>() >=
 				handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
 					handystats::chrono::duration(sleep_interval.count(), handystats::chrono::time_unit::MSEC)).count()
 		);
@@ -106,9 +106,9 @@ TEST_F(MetricsDumpTest, SampleGauge) {
 
 	ASSERT_TRUE(metrics_dump->first.find("gauge") != metrics_dump->first.end());
 
-	auto& gauge = boost::get<handystats::metrics::gauge>(metrics_dump->first.at("gauge"));
-	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::count>(), MAX_VALUE - MIN_VALUE + 1);
-	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::min>(), MIN_VALUE);
-	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::max>(), MAX_VALUE);
-	ASSERT_EQ(gauge.values().get<handystats::statistics::tag::avg>(), (MAX_VALUE + MIN_VALUE) / 2.0);
+	auto& gauge_values = metrics_dump->first.at("gauge");
+	ASSERT_EQ(gauge_values.get<handystats::statistics::tag::count>(), MAX_VALUE - MIN_VALUE + 1);
+	ASSERT_EQ(gauge_values.get<handystats::statistics::tag::min>(), MIN_VALUE);
+	ASSERT_EQ(gauge_values.get<handystats::statistics::tag::max>(), MAX_VALUE);
+	ASSERT_EQ(gauge_values.get<handystats::statistics::tag::avg>(), (MAX_VALUE + MIN_VALUE) / 2.0);
 }

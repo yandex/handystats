@@ -73,9 +73,7 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 //			.empty()
 //		);
 
-	const auto& agg_stats =
-		boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
-		.values();
+	const auto& agg_stats = metrics_dump->first.at("sleep.time");
 
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
@@ -116,9 +114,7 @@ TEST_F(HandyScopedTimerTest, TestMultipleNestedScopes) {
 //			.empty()
 //		);
 
-	const auto& agg_stats =
-		boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
-		.values();
+	const auto& agg_stats = metrics_dump->first.at("sleep.time");
 
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), 3);
 	ASSERT_GE(
@@ -152,24 +148,8 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 	ASSERT_TRUE(metrics_dump->first.find("sleep.time") != metrics_dump->first.end());
 	ASSERT_TRUE(metrics_dump->first.find("double.sleep.time") != metrics_dump->first.end());
 
-//	ASSERT_TRUE(
-//			boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
-//			.instances
-//			.empty()
-//		);
-//	ASSERT_TRUE(
-//			boost::get<handystats::metrics::timer>(metrics_dump->first.at("double.sleep.time"))
-//			.instances
-//			.empty()
-//		);
-
-	const auto& agg_stats =
-		boost::get<handystats::metrics::timer>(metrics_dump->first.at("sleep.time"))
-		.values();
-
-	const auto& double_agg_stats =
-		boost::get<handystats::metrics::timer>(metrics_dump->first.at("double.sleep.time"))
-		.values();
+	const auto& agg_stats = metrics_dump->first.at("sleep.time");
+	const auto& double_agg_stats = metrics_dump->first.at("double.sleep.time");
 
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
@@ -185,4 +165,3 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count() * 2
 		);
 }
-

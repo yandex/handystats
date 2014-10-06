@@ -8,7 +8,11 @@ namespace handystats { namespace chrono {
 inline uint64_t rdtsc() {
 	uint64_t tsc;
 	asm volatile (
+#if defined(_HANDYSTATS_USE_RDTSCP) && _HANDYSTATS_USE_RDTSCP > 0
 			"rdtscp; "
+#else // fallback to mfence; rdtsc
+			"mfence; rdtsc; "
+#endif
 			"shl $32,%%rdx; "
 			"or %%rdx,%%rax "
 			: "=a"(tsc)

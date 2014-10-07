@@ -6,7 +6,7 @@ metrics_dump::metrics_dump()
 	: interval(750, chrono::time_unit::MSEC)
 {}
 
-void metrics_dump::configure(const rapidjson::Value& config) {
+void apply(const rapidjson::Value& config, metrics_dump& metrics_dump_opts) {
 	if (!config.IsObject()) {
 		return;
 	}
@@ -14,7 +14,7 @@ void metrics_dump::configure(const rapidjson::Value& config) {
 	if (config.HasMember("interval")) {
 		const rapidjson::Value& interval = config["interval"];
 		if (interval.IsUint64()) {
-			this->interval = chrono::duration(interval.GetUint64(), chrono::time_unit::MSEC);
+			metrics_dump_opts.interval = chrono::duration(interval.GetUint64(), chrono::time_unit::MSEC);
 		}
 	}
 }

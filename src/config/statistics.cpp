@@ -1,7 +1,8 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
 #include <handystats/statistics.hpp>
-#include <handystats/config/statistics.hpp>
+
+#include "config/statistics_impl.hpp"
 
 namespace handystats { namespace config {
 
@@ -18,7 +19,7 @@ statistics::statistics()
 	, rate_unit(chrono::time_unit::SEC)
 {}
 
-void statistics::configure(const rapidjson::Value& config) {
+void apply(const rapidjson::Value& config, statistics& statistics_opts) {
 	if (!config.IsObject()) {
 		return;
 	}
@@ -26,14 +27,14 @@ void statistics::configure(const rapidjson::Value& config) {
 	if (config.HasMember("moving-interval")) {
 		const rapidjson::Value& moving_interval = config["moving-interval"];
 		if (moving_interval.IsUint64() && moving_interval.GetUint64() > 0) {
-			this->moving_interval = chrono::duration(moving_interval.GetUint64(), chrono::time_unit::MSEC);
+			statistics_opts.moving_interval = chrono::duration(moving_interval.GetUint64(), chrono::time_unit::MSEC);
 		}
 	}
 
 	if (config.HasMember("histogram-bins")) {
 		const rapidjson::Value& histogram_bins = config["histogram-bins"];
 		if (histogram_bins.IsUint64() && histogram_bins.GetUint64() > 0) {
-			this->histogram_bins = histogram_bins.GetUint64();
+			statistics_opts.histogram_bins = histogram_bins.GetUint64();
 		}
 	}
 
@@ -41,11 +42,11 @@ void statistics::configure(const rapidjson::Value& config) {
 		const rapidjson::Value& tags = config["tags"];
 
 		if (tags.IsArray()) {
-			this->tags = handystats::statistics::tag::empty;
+			statistics_opts.tags = handystats::statistics::tag::empty;
 			for (size_t index = 0; index < tags.Size(); ++index) {
 				const rapidjson::Value& tag = tags[index];
 				if (tag.IsString()) {
-					this->tags |= handystats::statistics::tag::from_string(tag.GetString());
+					statistics_opts.tags |= handystats::statistics::tag::from_string(tag.GetString());
 				}
 			}
 		}
@@ -76,7 +77,7 @@ void statistics::configure(const rapidjson::Value& config) {
 			}
 
 			if (unit != chrono::time_unit::TICK) {
-				this->rate_unit = unit;
+				statistics_opts.rate_unit = unit;
 			}
 		}
 	}

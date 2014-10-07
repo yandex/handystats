@@ -9,6 +9,11 @@
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
 #include <handystats/json_dump.hpp>
+#include <handystats/utils/rapidjson_writer.hpp>
+
+#include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/prettywriter.h"
 
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
@@ -17,15 +22,6 @@
 #define _HAVE_HANDY_MODULE_TEST 1
 #endif
 HANDY_MODULE(TEST)
-
-static void check_full_json_dump(const std::string& string_dump) {
-	rapidjson::Document dump;
-	dump.Parse<0>(string_dump.c_str());
-
-	for (rapidjson::Value::MemberIterator iter = dump.MemberBegin(); iter != dump.MemberEnd(); ++iter) {
-		ASSERT_TRUE(iter->value.IsObject());
-	}
-}
 
 TEST(JsonDumpTest, TestJsonDumpMethods) {
 	HANDY_CONFIG_JSON(
@@ -52,7 +48,7 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
 	rapidjson::Document dump;
-	handystats::json::fill(dump, dump.GetAllocator(), *metrics_dump);
+	handystats::utils::rapidjson::fill_value(static_cast<rapidjson::Value&>(dump), *metrics_dump, dump.GetAllocator());
 
 	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, rapidjson::Document::AllocatorType> buffer(&dump.GetAllocator());
 	rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, rapidjson::Document::AllocatorType>> writer(buffer);
@@ -60,13 +56,14 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 
 	std::string string_dump(buffer.GetString(), buffer.GetSize());
 
-	std::string to_string_dump = handystats::json::to_string(*metrics_dump);
+	std::string to_string_dump =
+		handystats::utils::rapidjson::to_string<
+				rapidjson::Value,
+				rapidjson::StringBuffer,
+				rapidjson::PrettyWriter<rapidjson::StringBuffer>
+			>(static_cast<rapidjson::Value&>(dump));
 
 	ASSERT_EQ(to_string_dump, string_dump);
-
-	check_full_json_dump(to_string_dump);
-
-	check_full_json_dump(HANDY_JSON_DUMP());
 
 	HANDY_FINALIZE();
 }
@@ -103,7 +100,7 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
 	rapidjson::Document dump;
-	handystats::json::fill(dump, dump.GetAllocator(), *metrics_dump);
+	handystats::utils::rapidjson::fill_value(static_cast<rapidjson::Value&>(dump), *metrics_dump, dump.GetAllocator());
 
 //	ASSERT_FALSE(dump["test.gauge"].HasMember("values"));
 

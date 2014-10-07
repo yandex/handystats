@@ -2,6 +2,9 @@
 
 #include <handystats/config/metrics/counter.hpp>
 
+#include "config/statistics_impl.hpp"
+#include "config/metrics/counter_impl.hpp"
+
 namespace handystats { namespace config { namespace metrics {
 
 counter::counter()
@@ -9,12 +12,13 @@ counter::counter()
 {
 }
 
-void counter::configure(const rapidjson::Value& config) {
-	if (!config.IsObject()) {
-		return;
-	}
+}}} // namespace handystats::config::metrics
 
-	this->values.configure(config);
+
+namespace handystats { namespace config {
+
+void apply(const rapidjson::Value& config, metrics::counter& counter_opts) {
+	apply(config, counter_opts.values);
 }
 
-}}} // namespace handystats::config::metrics
+}} // namespace handystats::config

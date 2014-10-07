@@ -1,26 +1,21 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
+#include <handystats/metrics_dump.hpp>
 #include <handystats/json_dump.hpp>
 
-namespace handystats { namespace json {
+#include <handystats/utils/rapidjson_writer.hpp>
+#include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/prettywriter.h"
 
-std::string to_string(const metrics_dump_type& metrics_dump) {
-	typedef rapidjson::MemoryPoolAllocator<> allocator_type;
-
-	rapidjson::Value dump;
-	allocator_type allocator;
-	fill(dump, allocator, metrics_dump);
-
-	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type> buffer(&allocator);
-	rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type>> writer(buffer);
-	dump.Accept(writer);
-
-	return std::string(buffer.GetString(), buffer.GetSize());
-}
-
-}} // namespace handystats::json
+using namespace rapidjson;
 
 std::string HANDY_JSON_DUMP() {
-	return handystats::json::to_string(*HANDY_METRICS_DUMP());
+	Value json_dump;
+	MemoryPoolAllocator<> allocator;
+
+	handystats::utils::rapidjson::fill_value(json_dump, *HANDY_METRICS_DUMP(), allocator);
+
+	return handystats::utils::rapidjson::to_string<Value, StringBuffer, PrettyWriter<StringBuffer>>(json_dump);
 }
 

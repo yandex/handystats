@@ -5,8 +5,6 @@
 
 #include <gtest/gtest.h>
 
-#include <handystats/rapidjson/document.h>
-
 #include <handystats/core.hpp>
 #include <handystats/module.h>
 #include <handystats/metrics_dump.hpp>

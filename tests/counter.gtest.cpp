@@ -1,11 +1,7 @@
 #include <gtest/gtest.h>
 
-#include <handystats/rapidjson/allocators.h>
-
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/counter.hpp>
-
-#include <handystats/json/counter_json_writer.hpp>
 
 using namespace handystats::metrics;
 

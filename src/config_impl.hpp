@@ -3,10 +3,10 @@
 #ifndef HANDYSTATS_CONFIG_IMPL_HPP_
 #define HANDYSTATS_CONFIG_IMPL_HPP_
 
-#include <handystats/config/statistics.hpp>
-#include <handystats/config/metrics/gauge.hpp>
-#include <handystats/config/metrics/counter.hpp>
-#include <handystats/config/metrics/timer.hpp>
+#include "config/statistics_impl.hpp"
+#include "config/metrics/gauge_impl.hpp"
+#include "config/metrics/counter_impl.hpp"
+#include "config/metrics/timer_impl.hpp"
 
 #include "config/metrics_dump_impl.hpp"
 #include "config/core_impl.hpp"

@@ -6,7 +6,7 @@ core::core()
 	: enable(true)
 {}
 
-void core::configure(const rapidjson::Value& config) {
+void apply(const rapidjson::Value& config, core& core_opts) {
 	if (!config.IsObject()) {
 		return;
 	}
@@ -14,7 +14,7 @@ void core::configure(const rapidjson::Value& config) {
 	if (config.HasMember("enable")) {
 		const rapidjson::Value& enable = config["enable"];
 		if (enable.IsBool()) {
-			this->enable = enable.GetBool();
+			core_opts.enable = enable.GetBool();
 		}
 	}
 }

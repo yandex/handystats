@@ -3,8 +3,6 @@
 #ifndef HANDYSTATS_CORE_HPP_
 #define HANDYSTATS_CORE_HPP_
 
-#include <handystats/rapidjson/document.h>
-
 /*
  * {
  *     "core": {
@@ -43,7 +41,6 @@ void finalize();
 
 bool config_file(const char* filename);
 bool config_json(const char* config);
-bool config_json(const rapidjson::Value& config);
 
 } // namespace handystats
 

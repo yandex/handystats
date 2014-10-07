@@ -9,6 +9,7 @@
 #include <handystats/core.h>
 
 #include "core_impl.hpp"
+#include "rapidjson/document.h"
 
 #include "config_impl.hpp"
 
@@ -54,6 +55,7 @@ void finalize() {
 
 namespace handystats {
 
+static
 bool config_json(const rapidjson::Value& config) {
 	std::lock_guard<std::mutex> lock(handystats::operation_mutex);
 	if (handystats::is_enabled()) {
@@ -67,37 +69,32 @@ bool config_json(const rapidjson::Value& config) {
 	if (config.HasMember("statistics")) {
 		const rapidjson::Value& statistics_config = config["statistics"];
 
-		config::statistics_opts.configure(statistics_config);
-
-		config::metrics::gauge_opts.values.configure(statistics_config);
-
-		config::metrics::counter_opts.values.configure(statistics_config);
-
-		config::metrics::timer_opts.values.configure(statistics_config);
+		config::apply(statistics_config, config::statistics_opts);
+		config::apply(statistics_config, config::metrics::gauge_opts.values);
+		config::apply(statistics_config, config::metrics::counter_opts.values);
+		config::apply(statistics_config, config::metrics::timer_opts.values);
 	}
 
 	if (config.HasMember("metrics")) {
 		const rapidjson::Value& metrics_config = config["metrics"];
 
 		if (metrics_config.HasMember("gauge")) {
-			config::metrics::gauge_opts.configure(metrics_config["gauge"]);
+			config::apply(metrics_config["gauge"], config::metrics::gauge_opts);
 		}
 		if (metrics_config.HasMember("counter")) {
-			config::metrics::counter_opts.configure(metrics_config["counter"]);
+			config::apply(metrics_config["counter"], config::metrics::counter_opts);
 		}
 		if (metrics_config.HasMember("timer")) {
-			config::metrics::timer_opts.configure(metrics_config["timer"]);
+			config::apply(metrics_config["timer"], config::metrics::timer_opts);
 		}
 	}
 
 	if (config.HasMember("metrics-dump")) {
-		const rapidjson::Value& metrics_dump_config = config["metrics-dump"];
-		config::metrics_dump_opts.configure(metrics_dump_config);
+		config::apply(config["metrics-dump"], config::metrics_dump_opts);
 	}
 
 	if (config.HasMember("core")) {
-		const rapidjson::Value& core_config = config["core"];
-		config::core_opts.configure(core_config);
+		config::apply(config["core"], config::core_opts);
 	}
 
 	return true;

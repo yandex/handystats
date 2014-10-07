@@ -1,11 +1,7 @@
 #include <gtest/gtest.h>
 
-#include <handystats/rapidjson/allocators.h>
-
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/gauge.hpp>
-
-#include <handystats/json/gauge_json_writer.hpp>
 
 using namespace handystats::metrics;
 

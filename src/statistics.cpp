@@ -303,9 +303,14 @@ void statistics::shift_histogram(const statistics::time_point& timestamp) {
 
 	for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
 		auto& bin_count = std::get<BIN_COUNT>(*bin);
-		const auto& bin_timestamp = std::get<BIN_TIMESTAMP>(*bin);
+		auto& bin_timestamp = std::get<BIN_TIMESTAMP>(*bin);
 
 		bin_count = shift_interval_data(bin_count, bin_timestamp, timestamp);
+
+		if (math_utils::cmp<double>(bin_count, 0) == 0) {
+			bin_count = 0;
+			bin_timestamp = time_point();
+		}
 	}
 }
 

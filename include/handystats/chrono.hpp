@@ -3,10 +3,12 @@
 #ifndef HANDYSTATS_CHRONO_HPP_
 #define HANDYSTATS_CHRONO_HPP_
 
+#include <cstring>
 #include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <algorithm>
+#include <stdexcept>
 
 namespace handystats { namespace chrono {
 
@@ -20,6 +22,61 @@ enum class time_unit {
 	HOUR,
 	DAY
 };
+
+inline
+const char* time_unit_as_string(const time_unit& unit) {
+	switch (unit) {
+	case time_unit::TICK:
+		return "c";
+	case time_unit::NSEC:
+		return "ns";
+	case time_unit::USEC:
+		return "us";
+	case time_unit::MSEC:
+		return "ms";
+	case time_unit::SEC:
+		return "s";
+	case time_unit::MIN:
+		return "m";
+	case time_unit::HOUR:
+		return "h";
+	case time_unit::DAY:
+		return "d";
+	}
+
+	return "";
+}
+
+inline
+time_unit time_unit_from_string(const std::string& unit_str) {
+	if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::TICK)) == 0) {
+		return time_unit::TICK;
+	}
+	else if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::NSEC)) == 0) {
+		return time_unit::NSEC;
+	}
+	else if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::USEC)) == 0) {
+		return time_unit::USEC;
+	}
+	else if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::MSEC)) == 0) {
+		return time_unit::MSEC;
+	}
+	else if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::SEC)) == 0) {
+		return time_unit::SEC;
+	}
+	else if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::MIN)) == 0) {
+		return time_unit::MIN;
+	}
+	else if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::HOUR)) == 0) {
+		return time_unit::HOUR;
+	}
+	else if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::DAY)) == 0) {
+		return time_unit::DAY;
+	}
+	else {
+		throw std::logic_error("time_unit_from_string: unknown time_unit");
+	}
+}
 
 enum class clock_type {
 	TSC, // epoch - unspecified point in time (usually boot-time), machine-specific

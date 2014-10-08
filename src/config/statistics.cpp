@@ -56,28 +56,10 @@ void apply(const rapidjson::Value& config, statistics& statistics_opts) {
 		const rapidjson::Value& rate_unit = config["rate-unit"];
 
 		if (rate_unit.IsString()) {
-			chrono::time_unit unit = chrono::time_unit::TICK;
-			if (strcmp(rate_unit.GetString(), "ns") == 0) {
-				unit = chrono::time_unit::NSEC;
+			try {
+				statistics_opts.rate_unit = chrono::time_unit_from_string(rate_unit.GetString());
 			}
-			else if (strcmp(rate_unit.GetString(), "us") == 0) {
-				unit = chrono::time_unit::USEC;
-			}
-			else if (strcmp(rate_unit.GetString(), "ms") == 0) {
-				unit = chrono::time_unit::MSEC;
-			}
-			else if (strcmp(rate_unit.GetString(), "s") == 0) {
-				unit = chrono::time_unit::SEC;
-			}
-			else if (strcmp(rate_unit.GetString(), "m") == 0) {
-				unit = chrono::time_unit::MIN;
-			}
-			else if (strcmp(rate_unit.GetString(), "h") == 0) {
-				unit = chrono::time_unit::HOUR;
-			}
-
-			if (unit != chrono::time_unit::TICK) {
-				statistics_opts.rate_unit = unit;
+			catch (const std::logic_error&) {
 			}
 		}
 	}

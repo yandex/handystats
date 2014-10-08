@@ -1,0 +1,30 @@
+{
+	"enable": true,
+
+	"dump-interval": 500,
+
+	"defaults": {
+		"stats": ["count", "avg", "moving-avg", "quantile", "rate"],
+		"histogram-bins": 20,
+		"moving-interval": 1000,
+		"rate-unit": "s"
+	},
+
+	"metrics": {
+		"gauge": {
+			"stats": ["moving-avg"],
+			"moving-interval": 5000
+		},
+
+		"counter": {
+			"stats": ["value", "moving-avg", "rate"],
+			"rate-unit": "m"
+		},
+
+		"timer": {
+			"stats": ["max", "moving-avg", "quantile"],
+			"histogram-bins": 30,
+			"moving-interval": 60000
+		}
+	}
+}

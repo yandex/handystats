@@ -26,9 +26,7 @@ HANDY_MODULE(TEST)
 TEST(JsonDumpTest, TestJsonDumpMethods) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"dump-interval\": 1\
 			}"
 		);
 
@@ -73,14 +71,12 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 			"{\
 				\"metrics\": {\
 					\"gauge\": {\
-						\"tags\": []\
+						\"stats\": []\
 					},\
 					\"counter\": {\
 					}\
 				},\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"dump-interval\": 1\
 			}"
 		);
 

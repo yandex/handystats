@@ -66,8 +66,8 @@ bool config_json(const rapidjson::Value& config) {
 		return false;
 	}
 
-	if (config.HasMember("statistics")) {
-		const rapidjson::Value& statistics_config = config["statistics"];
+	if (config.HasMember("defaults")) {
+		const rapidjson::Value& statistics_config = config["defaults"];
 
 		config::apply(statistics_config, config::statistics_opts);
 		config::apply(statistics_config, config::metrics::gauge_opts.values);
@@ -89,13 +89,9 @@ bool config_json(const rapidjson::Value& config) {
 		}
 	}
 
-	if (config.HasMember("metrics-dump")) {
-		config::apply(config["metrics-dump"], config::metrics_dump_opts);
-	}
+	config::apply(config, config::metrics_dump_opts);
 
-	if (config.HasMember("core")) {
-		config::apply(config["core"], config::core_opts);
-	}
+	config::apply(config, config::core_opts);
 
 	return true;
 }

@@ -118,7 +118,7 @@ void run_test_attr(void) {
 }
 
 int main(int argc, char** argv) {
-	HANDY_CONFIG_JSON("{\"metrics-dump\":{\"interval\": 20}}");
+	HANDY_CONFIG_JSON("{\"dump-interval\": 20}");
 	HANDY_INIT();
 
 	run_test_gauge();

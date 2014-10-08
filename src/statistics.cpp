@@ -337,7 +337,7 @@ void statistics::update_histogram(const statistics::value_type& value, const sta
 	statistics::bin_type new_bin(value, 1.0, timestamp);
 
 	auto insert_iter = std::lower_bound(m_histogram.begin(), m_histogram.end(), new_bin);
-	m_histogram.insert(insert_iter, new_bin);
+	m_histogram.insert(insert_iter, std::move(new_bin));
 
 	shift_histogram(timestamp);
 

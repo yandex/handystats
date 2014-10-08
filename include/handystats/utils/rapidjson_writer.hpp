@@ -176,7 +176,8 @@ JsonValue& fill_value(JsonValue& json_value, const metric_map& metrics, Allocato
 		JsonValue metric_value;
 		fill_value(metric_value, metric_iter->second, allocator);
 
-		json_value.AddMember(metric_iter->first.c_str(), allocator, metric_value, allocator);
+		JsonValue metric_name(metric_iter->first.c_str(), metric_iter->first.size(), allocator);
+		json_value.AddMember(metric_name, metric_value, allocator);
 	}
 
 	return json_value;
@@ -194,7 +195,8 @@ JsonValue& fill_value(JsonValue& json_value, const attribute_map& attributes, Al
 		JsonValue attr_value;
 		fill_value(attr_value, attr_iter->second, allocator);
 
-		json_value.AddMember(attr_iter->first.c_str(), allocator, attr_value, allocator);
+		JsonValue attr_name(attr_iter->first.c_str(), attr_iter->first.size(), allocator);
+		json_value.AddMember(attr_name, attr_value, allocator);
 	}
 
 	return json_value;

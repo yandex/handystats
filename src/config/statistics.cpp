@@ -38,8 +38,8 @@ void apply(const rapidjson::Value& config, statistics& statistics_opts) {
 		}
 	}
 
-	if (config.HasMember("tags")) {
-		const rapidjson::Value& tags = config["tags"];
+	if (config.HasMember("stats")) {
+		const rapidjson::Value& tags = config["stats"];
 
 		if (tags.IsArray()) {
 			statistics_opts.tags = handystats::statistics::tag::empty;

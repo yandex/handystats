@@ -7,13 +7,11 @@
 
 /*
  * {
- *     "core": {
- *         "enable": <boolean value>
- *     },
- *     "statistics": {
+ *     "enable": <boolean value>,
+ *     "defaults": {
  *         "moving-interval": <value in msec>,
  *         "histogram-bins": <integer value>,
- *         "tags": ["<tag name>", "<tag name>", ...],
+ *         "stats": ["<statistic name>", "<statistic name>", ...],
  *         "rate-unit": <"ns" | "us" | "ms" | "s" | "m" | "h">
  *     },
  *     "metrics": {
@@ -28,9 +26,7 @@
  *             <statistics opts>
  *         }
  *     },
- *     "metrics-dump": {
- *         "interval": <value in msec>
- *     }
+ *     "dump-interval": <value in msec>
  * }
  */
 

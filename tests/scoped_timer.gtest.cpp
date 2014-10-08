@@ -38,9 +38,7 @@ protected:
 	virtual void SetUp() {
 		HANDY_CONFIG_JSON(
 				"{\
-					\"metrics-dump\": {\
-						\"interval\": 10\
-					}\
+					\"dump-interval\": 10\
 				}"
 			);
 

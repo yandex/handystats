@@ -17,6 +17,7 @@
 #include <handystats/module.h>
 
 #include "message_queue_helper.hpp"
+#include "metrics_dump_helper.hpp"
 
 #ifndef _HAVE_HANDY_MODULE_TEST
 #define _HAVE_HANDY_MODULE_TEST 1
@@ -57,7 +58,7 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
@@ -90,7 +91,7 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
@@ -127,7 +128,7 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 

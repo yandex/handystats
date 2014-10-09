@@ -144,7 +144,7 @@ int check_tests(int argc, char** argv) {
 	while (!handystats::message_queue::empty()) {
 		std::this_thread::sleep_for(std::chrono::microseconds(1));
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
 	return RUN_ALL_TESTS();
 }

@@ -90,7 +90,7 @@ TEST_F(IncrementalStatisticsTest, TestIntervalMean) {
 		ASSERT_NEAR(
 				stats.get<handystats::statistics::tag::moving_avg>(),
 				mean_stats.get<handystats::statistics::tag::avg>(),
-				0.05 * mean_stats.get<handystats::statistics::tag::avg>()
+				0.10 * mean_stats.get<handystats::statistics::tag::avg>()
 			);
 	}
 }
@@ -98,7 +98,7 @@ TEST_F(IncrementalStatisticsTest, TestIntervalMean) {
 TEST_F(IncrementalStatisticsTest, Quantile25RightTailTest) {
 	opts.histogram_bins = 30;
 	opts.moving_interval = handystats::chrono::duration::convert_to(
-			handystats::chrono::time_unit::TICK,
+			handystats::chrono::time_unit::NSEC,
 			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
 		);
 	opts.tags = handystats::statistics::tag::quantile;
@@ -122,14 +122,14 @@ TEST_F(IncrementalStatisticsTest, Quantile25RightTailTest) {
 		}
 	}
 
-	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.5), normal_value, normal_value * 0.05);
-	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.99), right_tail_value, right_tail_value * 0.05);
+	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.5), normal_value, normal_value * 0.10);
+	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.99), right_tail_value, right_tail_value * 0.10);
 }
 
 TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	opts.histogram_bins = 30;
 	opts.moving_interval = handystats::chrono::duration::convert_to(
-			handystats::chrono::time_unit::TICK,
+			handystats::chrono::time_unit::NSEC,
 			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
 		);
 	opts.tags = handystats::statistics::tag::quantile;
@@ -146,8 +146,8 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 		stats.update(normal_value + double(rand()) / RAND_MAX, current_time);
 	}
 
-	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.5), normal_value, normal_value * 0.05);
-	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.99), normal_value, normal_value * 0.05);
+	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.5), normal_value, normal_value * 0.10);
+	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.99), normal_value, normal_value * 0.10);
 
 	normal_value *= 2;
 
@@ -156,14 +156,14 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 		stats.update(normal_value + double(rand()) / RAND_MAX, current_time);
 	}
 
-	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.5), normal_value, normal_value * 0.05);
-	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.99), normal_value, normal_value * 0.05);
+	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.5), normal_value, normal_value * 0.10);
+	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.99), normal_value, normal_value * 0.10);
 }
 
 TEST_F(IncrementalStatisticsTest, HistogramTest) {
 	opts.histogram_bins = 10;
 	opts.moving_interval = handystats::chrono::duration::convert_to(
-			handystats::chrono::time_unit::TICK,
+			handystats::chrono::time_unit::NSEC,
 			handystats::chrono::duration(30, handystats::chrono::time_unit::SEC)
 		);
 	opts.tags = handystats::statistics::tag::histogram;
@@ -183,13 +183,13 @@ TEST_F(IncrementalStatisticsTest, HistogramTest) {
 	ASSERT_EQ(histogram.size(), 10);
 	for (size_t index = 0; index < 10; ++index) {
 		ASSERT_NEAR(std::get<handystats::statistics::BIN_CENTER>(histogram[index]), index, 1E-3);
-		ASSERT_NEAR(std::get<handystats::statistics::BIN_COUNT>(histogram[index]), BIN_COUNT, 0.05 * BIN_COUNT);
+		ASSERT_NEAR(std::get<handystats::statistics::BIN_COUNT>(histogram[index]), BIN_COUNT, 0.10 * BIN_COUNT);
 	}
 }
 
 TEST_F(IncrementalStatisticsTest, RateMovingCountTest) {
 	opts.moving_interval = handystats::chrono::duration::convert_to(
-			handystats::chrono::time_unit::TICK,
+			handystats::chrono::time_unit::NSEC,
 			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
 		);
 	opts.rate_unit = handystats::chrono::time_unit::SEC;
@@ -216,7 +216,7 @@ TEST_F(IncrementalStatisticsTest, RateMovingCountTest) {
 TEST_F(IncrementalStatisticsTest, ZeroRateTest) {
 	opts.rate_unit = handystats::chrono::time_unit::SEC;
 	opts.moving_interval = handystats::chrono::duration::convert_to(
-			handystats::chrono::time_unit::TICK,
+			handystats::chrono::time_unit::NSEC,
 			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
 		);
 	opts.tags = handystats::statistics::tag::rate;
@@ -233,7 +233,7 @@ TEST_F(IncrementalStatisticsTest, ZeroRateTest) {
 	ASSERT_NEAR(
 			stats.get<handystats::statistics::tag::rate>(),
 			COUNT - 1,
-			0.05 * (COUNT - 1)
+			0.10 * (COUNT - 1)
 		);
 
 	for (int value = COUNT - 1; value >= 0; --value) {
@@ -244,7 +244,7 @@ TEST_F(IncrementalStatisticsTest, ZeroRateTest) {
 	ASSERT_NEAR(
 			stats.get<handystats::statistics::tag::rate>(),
 			0,
-			0.05 * (COUNT - 1)
+			0.10 * (COUNT - 1)
 		);
 }
 

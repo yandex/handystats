@@ -9,6 +9,7 @@
 #include <handystats/metrics_dump.hpp>
 
 #include "message_queue_helper.hpp"
+#include "metrics_dump_helper.hpp"
 
 
 class HandyProxyTest : public ::testing::Test {
@@ -46,7 +47,7 @@ TEST_F(HandyProxyTest, GaugeProxy) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_TRUE(metrics_dump->find(gauge_name) != metrics_dump->end());
@@ -75,7 +76,7 @@ TEST_F(HandyProxyTest, CounterProxy) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_TRUE(metrics_dump->find(counter_name) != metrics_dump->end());
@@ -103,7 +104,7 @@ TEST_F(HandyProxyTest, TimerProxySingleInstance) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_TRUE(metrics_dump->find(timer_name) != metrics_dump->end());
@@ -144,7 +145,7 @@ TEST_F(HandyProxyTest, TimerProxyMultiInstance) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_TRUE(metrics_dump->find(timer_name) != metrics_dump->end());

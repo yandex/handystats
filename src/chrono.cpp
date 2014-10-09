@@ -7,8 +7,6 @@
 #include <handystats/chrono.h>
 #include <handystats/chrono.hpp>
 
-#include "chrono/tsc_impl.hpp"
-
 namespace handystats { namespace chrono {
 
 static
@@ -33,6 +31,8 @@ inline uint64_t nsec_factor(const time_unit& unit) {
 	return 0ull;
 }
 
+extern long double cycles_per_nanosec;
+
 duration duration::convert_to(const time_unit& to_unit, const duration& d) {
 	if (d.m_unit == to_unit) return d;
 
@@ -54,16 +54,18 @@ time_point to_system_time(const time_point& t) {
 	static std::atomic<int64_t> offset_timestamp(0);
 	static std::atomic_flag lock = ATOMIC_FLAG_INIT;
 
-	static const duration OFFSET_TIMEOUT (15 * (int64_t)1E9, time_unit::TICK);
-	static const duration CLOSE_DISTANCE (15 * (int64_t)1E3, time_unit::TICK);
+	static const duration OFFSET_TIMEOUT (15 * (int64_t)1E9, time_unit::NSEC);
+	static const duration CLOSE_DISTANCE (15 * (int64_t)1E3, time_unit::NSEC);
 	static const uint64_t MAX_UPDATE_TRIES (100);
 
 	time_point current_tsc_time = tsc_clock::now();
+	time_unit tsc_unit = current_tsc_time.time_since_epoch().unit();
 
 	int64_t offset_ts = offset_timestamp.load(std::memory_order_acquire);
 
 	if (offset_ts == 0 ||
-			current_tsc_time.time_since_epoch() - duration(offset_ts, time_unit::TICK) > OFFSET_TIMEOUT)
+			current_tsc_time.time_since_epoch() - duration(offset_ts, tsc_unit) > OFFSET_TIMEOUT
+		)
 	{
 		if (!lock.test_and_set(std::memory_order_acquire)) {
 			time_point cycles_start, cycles_end;
@@ -120,25 +122,21 @@ time_point time_point::convert_to(const clock_type& to_clock, const time_point& 
 	}
 }
 
-time_point tsc_clock::now() {
-	return time_point(duration(rdtsc(), time_unit::TICK), clock_type::TSC);
-}
-
-time_point system_clock::now() {
-	struct timespec ts;
-	clock_gettime(CLOCK_REALTIME, &ts);
-
-	return time_point(duration(ts.tv_sec * 1000ull * 1000ull * 1000ull + ts.tv_nsec, time_unit::NSEC), clock_type::SYSTEM);
-}
-
 }} // namespace handystats::chrono
 
 HANDYSTATS_EXTERN_C
 int64_t handystats_now(void) {
-	return (int64_t)handystats::chrono::rdtsc();
+	return (int64_t)handystats::chrono::tsc_clock::now().time_since_epoch().count();
 }
 
 HANDYSTATS_EXTERN_C
 double handystats_difftime(int64_t end, int64_t start) {
-	return double(end - start) / handystats::chrono::cycles_per_nanosec / 1E9;
+	const auto& tsc_unit = handystats::chrono::tsc_clock::now().time_since_epoch().unit();
+	const auto& duration = handystats::chrono::duration(end - start, tsc_unit);
+	const auto& ns_duration =
+		handystats::chrono::duration::convert_to(
+				handystats::chrono::time_unit::NSEC,
+				duration
+			);
+	return (double)ns_duration.count() / 1E9;
 }

@@ -16,6 +16,7 @@
 #include "metrics_dump_impl.hpp"
 
 #include "message_queue_helper.hpp"
+#include "metrics_dump_helper.hpp"
 
 #ifndef _HAVE_HANDY_MODULE_TEST
 #define _HAVE_HANDY_MODULE_TEST 1
@@ -65,7 +66,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 	TEST_GAUGE_SET("gauge.test", 15);
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
@@ -139,7 +140,7 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 	TEST_TIMER_STOP("alive-timer");
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 	ASSERT_EQ(
@@ -241,7 +242,7 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	ASSERT_FALSE(HANDY_METRICS_DUMP()->empty());
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -280,7 +281,7 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	ASSERT_FALSE(HANDY_METRICS_DUMP()->empty());
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -318,7 +319,7 @@ TEST_F(HandyConfigurationTest, MetricsConfigOverwritesStatistcs) {
 	}
 
 	handystats::message_queue::wait_until_empty();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	ASSERT_FALSE(HANDY_METRICS_DUMP()->empty());
 	auto metrics_dump = HANDY_METRICS_DUMP();

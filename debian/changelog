@@ -1,3 +1,9 @@
+handystats (1.10.2) unstable; urgency=low
+
+  * chrono: choose clock source (RDTSC, RDTSCP, CLOCK_MONOTONIC, CLOCK_REALTIME) for tsc_clock in runtime.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 10 Oct 2014 00:29:19 +0400
+
 handystats (1.10.1) unstable; urgency=low
 
   * chrono: fallback to "mfence; rdtsc;" call to get TSC value if rdtscp instruction is not supported.

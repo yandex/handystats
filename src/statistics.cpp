@@ -6,11 +6,14 @@
 #include <iterator>
 #include <vector>
 #include <cmath>
+#include <utility>
 
 #include <handystats/common.h>
 #include <handystats/math_utils.hpp>
 
 #include <handystats/statistics.hpp>
+
+#include "statistics_impl.hpp"
 
 // a x^2 + b x + c == 0
 // z -- root in [0, 1]
@@ -30,6 +33,295 @@ find_z(const long double& a, const long double& b, const long double& c) {
 
 namespace handystats {
 
+// statistics::data
+
+statistics::data::data(const config::statistics& config)
+	: m_moving_interval(config.moving_interval)
+	, m_histogram_bins(config.histogram_bins)
+{
+	m_tags = tag::empty;
+
+	if (config.tags & tag::value) {
+		m_tags |= tag::value;
+	}
+
+	if (config.tags & tag::min) {
+		m_tags |= tag::min;
+	}
+
+	if (config.tags & tag::max) {
+		m_tags |= tag::max;
+	}
+
+	if (config.tags & tag::count) {
+		m_tags |= tag::count;
+	}
+
+	if (config.tags & tag::sum) {
+		m_tags |= tag::sum;
+	}
+
+	if (config.tags & tag::avg) {
+		m_tags |= tag::avg | tag::count | tag::sum;
+	}
+
+	if (config.tags & tag::moving_count) {
+		m_tags |= tag::moving_count | tag::timestamp;
+	}
+
+	if (config.tags & tag::moving_sum) {
+		m_tags |= tag::moving_sum | tag::timestamp;
+	}
+
+	if (config.tags & tag::moving_avg) {
+		m_tags |= tag::moving_avg | tag::moving_count | tag::moving_sum | tag::timestamp;
+	}
+
+	if (config.tags & tag::histogram) {
+		m_tags |= tag::histogram | tag::timestamp;
+	}
+
+	if (config.tags & tag::quantile) {
+		m_tags |= tag::quantile | tag::histogram | tag::timestamp;
+	}
+
+	if (config.tags & tag::entropy) {
+		m_tags |= tag::entropy | tag::histogram | tag::timestamp;
+	}
+
+	if (config.tags & tag::rate) {
+		m_tags |= tag::rate | tag::value | tag::timestamp;
+	}
+
+	if (config.tags & tag::timestamp) {
+		m_tags |= tag::timestamp;
+	}
+
+	reset();
+}
+
+void statistics::data::reset() {
+	m_value = value_type(0);
+	m_min = std::numeric_limits<value_type>::max();
+	m_max = std::numeric_limits<value_type>::min();
+	m_sum = value_type(0);
+	m_count = 0;
+	m_moving_count = 0.0;
+	m_moving_sum = 0.0;
+	m_histogram.clear();
+	if (m_histogram_bins > 0) {
+		m_histogram.reserve(m_histogram_bins + 1);
+	}
+	m_data_timestamp = time_point();
+	m_rate = 0;
+
+	m_timestamp = time_point();
+}
+
+double statistics::data::shift_interval_data(
+		const double& data, const time_point& data_timestamp,
+		const time_point& timestamp
+	)
+	const
+{
+	if (timestamp <= m_timestamp) return data;
+
+	const auto& stale_interval = data_timestamp - (timestamp - m_moving_interval);
+
+	if (stale_interval.count() <= 0) return 0;
+
+	return data * stale_interval.count() / (m_moving_interval - (m_timestamp - data_timestamp)).count();
+}
+
+double statistics::data::update_interval_data(
+		const double& data, const time_point& data_timestamp,
+		const value_type& value, const time_point& timestamp
+	)
+	const
+{
+	if (timestamp <= m_timestamp) {
+		if (timestamp < m_timestamp - m_moving_interval) {
+			return data;
+		}
+		else {
+			return data + value;
+		}
+	}
+	else {
+		return value + shift_interval_data(data, data_timestamp, timestamp);
+	}
+
+	return data;
+}
+
+void statistics::data::shift_histogram(const time_point& timestamp) {
+	if (m_histogram_bins == 0) return;
+
+	for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
+		auto& bin_count = std::get<BIN_COUNT>(*bin);
+		auto& bin_timestamp = std::get<BIN_TIMESTAMP>(*bin);
+
+		bin_count = shift_interval_data(bin_count, bin_timestamp, timestamp);
+
+		if (math_utils::cmp<double>(bin_count, 0) == 0) {
+			bin_count = 0;
+			bin_timestamp = time_point();
+		}
+	}
+}
+
+static
+double bin_merge_criteria(
+		const statistics::bin_type& left_bin,
+		const statistics::bin_type& right_bin
+	)
+{
+	// possible variants:
+	// * distance between bins' centers
+	// * sum of bins' weights (number of elements)
+	// * other heuristics
+
+	// distance between bins' centers
+	return std::get<statistics::BIN_CENTER>(right_bin) - std::get<statistics::BIN_CENTER>(left_bin);
+
+	// sum of bins' weights
+	//return std::get<statistics::BIN_COUNT>(left_bin) + std::get<statistics::BIN_COUNT>(right_bin);
+
+	// heuristic -- minimum resulted bin square
+	//return (std::get<statistics::BIN_COUNT>(left_bin) + std::get<statistics::BIN_COUNT>(right_bin)) *
+	//	(std::get<statistics::BIN_CENTER>(right_bin) - std::get<statistics::BIN_CENTER>(left_bin));
+}
+
+void statistics::data::update_histogram(const value_type& value, const time_point& timestamp)
+{
+	if (m_histogram_bins == 0) return;
+
+	statistics::bin_type new_bin(value, 1.0, timestamp);
+
+	auto insert_iter = std::lower_bound(m_histogram.begin(), m_histogram.end(), new_bin);
+	m_histogram.insert(insert_iter, std::move(new_bin));
+
+	shift_histogram(timestamp);
+
+	if (m_histogram.size() <= m_histogram_bins) {
+		return;
+	}
+
+	size_t best_merge_index = -1;
+	double best_merge_criteria = 0;
+	for (size_t index = 0; index < m_histogram.size() - 1; ++index) {
+		double merge_criteria = bin_merge_criteria(m_histogram[index], m_histogram[index + 1]);
+		if (best_merge_index == -1 || math_utils::cmp(merge_criteria, best_merge_criteria) < 0) {
+			best_merge_index = index;
+			best_merge_criteria = merge_criteria;
+		}
+	}
+
+	auto& left_bin = m_histogram[best_merge_index];
+	auto& right_bin = m_histogram[best_merge_index + 1];
+
+	if (math_utils::cmp(std::get<BIN_COUNT>(left_bin), 0.0) <= 0 &&
+			math_utils::cmp(std::get<BIN_COUNT>(right_bin), 0.0) <= 0)
+	{
+		std::get<BIN_CENTER>(left_bin) =
+			math_utils::weighted_average(
+					std::get<BIN_CENTER>(left_bin), 1,
+					std::get<BIN_CENTER>(right_bin), 1
+				);
+
+		std::get<BIN_COUNT>(left_bin) = 0;
+
+		std::get<BIN_TIMESTAMP>(left_bin) = time_point();
+	}
+	else {
+		std::get<BIN_CENTER>(left_bin) =
+			math_utils::weighted_average(
+					std::get<BIN_CENTER>(left_bin), std::get<BIN_COUNT>(left_bin),
+					std::get<BIN_CENTER>(right_bin), std::get<BIN_COUNT>(right_bin)
+				);
+
+		std::get<BIN_COUNT>(left_bin) += std::get<BIN_COUNT>(right_bin);
+
+		std::get<BIN_TIMESTAMP>(left_bin) =
+			std::max(
+					std::get<BIN_TIMESTAMP>(left_bin),
+					std::get<BIN_TIMESTAMP>(right_bin)
+				);
+	}
+
+	m_histogram.erase(m_histogram.begin() + best_merge_index + 1);
+}
+
+void statistics::data::update(const value_type& value, const time_point& timestamp) {
+	if (m_tags & tag::rate) {
+		const value_type delta = value - m_value;
+		m_rate = update_interval_data(m_rate, m_data_timestamp, delta, timestamp);
+	}
+
+	if (m_tags & tag::value) {
+		m_value = value;
+	}
+
+	if (m_tags & tag::min) {
+		m_min = std::min(m_min, value);
+	}
+
+	if (m_tags & tag::max) {
+		m_max = std::max(m_max, value);
+	}
+
+	if (m_tags & tag::sum) {
+		m_sum += value;
+	}
+
+	if (m_tags & tag::count) {
+		++m_count;
+	}
+
+	if (m_tags & tag::moving_count) {
+		m_moving_count = update_interval_data(m_moving_count, m_data_timestamp, 1, timestamp);
+	}
+
+	if (m_tags & tag::moving_sum) {
+		m_moving_sum = update_interval_data(m_moving_sum, m_data_timestamp, value, timestamp);
+	}
+
+	if (m_tags & tag::histogram) {
+		update_histogram(value, timestamp);
+	}
+
+	if (m_tags & tag::timestamp) {
+		m_timestamp = std::max(m_timestamp, timestamp);
+
+		m_data_timestamp = std::max(m_data_timestamp, timestamp);
+	}
+}
+
+void statistics::data::update_time(const time_point& timestamp) {
+	if (timestamp <= m_timestamp) return;
+
+	if (m_tags & tag::rate) {
+		m_rate = shift_interval_data(m_rate, m_data_timestamp, timestamp);
+	}
+
+	if (m_tags & tag::moving_count) {
+		m_moving_count = shift_interval_data(m_moving_count, m_data_timestamp, timestamp);
+	}
+
+	if (m_tags & tag::moving_sum) {
+		m_moving_sum = shift_interval_data(m_moving_sum, m_data_timestamp, timestamp);
+	}
+
+	if (m_tags & tag::histogram) {
+		shift_histogram(timestamp);
+	}
+
+	if (m_tags & tag::timestamp) {
+		m_timestamp = std::max(m_timestamp, timestamp);
+	}
+}
+
+
 statistics::quantile_extractor::quantile_extractor(const statistics* const statistics)
 	: m_statistics(statistics)
 {}
@@ -39,7 +331,7 @@ double statistics::quantile_extractor::at(const double& probability) const {
 		return 0;
 	}
 
-	const auto& histogram = m_statistics->m_histogram;
+	const auto& histogram = m_statistics->m_data->m_histogram;
 
 	if (histogram.size() == 0) {
 		return 0;
@@ -174,7 +466,7 @@ statistics::tag::type statistics::tag::from_string(const std::string& tag_name) 
 		return entropy;
 	}
 
-	throw invalid_tag_error();
+	throw invalid_tag_error("tag::from_string: invalid tag");
 }
 
 bool statistics::enabled(const statistics::tag::type& t) const HANDYSTATS_NOEXCEPT {
@@ -182,55 +474,7 @@ bool statistics::enabled(const statistics::tag::type& t) const HANDYSTATS_NOEXCE
 }
 
 bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXCEPT {
-	switch (t) {
-	case tag::value:
-		return enabled(tag::value) || computed(tag::rate);
-
-	case tag::min:
-		return enabled(tag::min);
-
-	case tag::max:
-		return enabled(tag::max);
-
-	case tag::count:
-		return enabled(tag::count) || computed(tag::avg);
-
-	case tag::sum:
-		return enabled(tag::sum) || computed(tag::avg);
-
-	case tag::avg:
-		return enabled(tag::avg);
-
-	case tag::moving_count:
-		return enabled(tag::moving_count) || computed(tag::moving_avg);
-
-	case tag::moving_sum:
-		return enabled(tag::moving_sum) || computed(tag::moving_avg);
-
-	case tag::moving_avg:
-		return enabled(tag::moving_avg);
-
-	case tag::histogram:
-		return enabled(tag::histogram) || computed(tag::quantile) || computed(tag::entropy);
-
-	case tag::quantile:
-		return enabled(tag::quantile);
-
-	case tag::timestamp:
-		return enabled(tag::timestamp) ||
-			computed(tag::moving_count) || computed(tag::moving_sum) || computed(tag::moving_avg) ||
-			computed(tag::histogram) || computed(tag::quantile) ||
-			computed(tag::rate);
-
-	case tag::rate:
-		return enabled(tag::rate);
-
-	case tag::entropy:
-		return enabled(tag::entropy);
-
-	default:
-		return false;
-	};
+	return m_data->m_tags & t;
 }
 
 statistics::tag::type statistics::tags() const HANDYSTATS_NOEXCEPT {
@@ -241,223 +485,54 @@ statistics::statistics(
 			const config::statistics& opts
 		)
 	: m_config(opts)
+	, m_data(new data(opts))
 {
 	reset();
 }
 
+statistics::statistics(statistics&& stats)
+	: m_config(std::move(stats.m_config))
+	, m_data(std::move(stats.m_data))
+{
+}
+
+statistics::statistics(const statistics& stats)
+	: m_config(stats.m_config)
+	, m_data(new data(*stats.m_data)) // deep copy
+{
+}
+
+statistics::~statistics()
+{
+	m_data.reset();
+}
+
+statistics& statistics::operator= (const statistics& stats) {
+	m_config = stats.m_config;
+	m_data = std::unique_ptr<data>(new data(*stats.m_data));
+
+	return *this;
+}
+
+statistics& statistics::operator= (statistics&& stats) {
+	m_config = std::move(stats.m_config);
+	m_data.swap(stats.m_data);
+
+	stats.m_data.reset();
+
+	return *this;
+}
+
 void statistics::reset() {
-	m_value = value_type(0);
-	m_min = std::numeric_limits<value_type>::max();
-	m_max = std::numeric_limits<value_type>::min();
-	m_sum = value_type(0);
-	m_count = 0;
-	m_moving_count = 0.0;
-	m_moving_sum = 0.0;
-	m_histogram.clear();
-	if (m_config.histogram_bins > 0) {
-		m_histogram.reserve(m_config.histogram_bins + 1);
-	}
-	m_timestamp = time_point();
-	m_rate = 0;
-
-	m_data_timestamp = time_point();
-}
-
-double statistics::shift_interval_data(
-		const double& data, const statistics::time_point& data_timestamp,
-		const statistics::time_point& timestamp
-	)
-{
-	if (timestamp <= m_timestamp) return data;
-
-	const auto& stale_interval = data_timestamp - (timestamp - m_config.moving_interval);
-
-	if (stale_interval.count() <= 0) return 0;
-
-	return data * stale_interval.count() / (m_config.moving_interval - (m_timestamp - data_timestamp)).count();
-}
-
-double statistics::update_interval_data(
-		const double& data, const statistics::time_point& data_timestamp,
-		const statistics::value_type& value, const statistics::time_point& timestamp
-	)
-{
-	if (timestamp <= m_timestamp) {
-		if (timestamp < m_timestamp - m_config.moving_interval) {
-			return data;
-		}
-		else {
-			return data + value;
-		}
-	}
-	else {
-		return value + shift_interval_data(data, data_timestamp, timestamp);
-	}
-
-	return data;
-}
-
-
-void statistics::shift_histogram(const statistics::time_point& timestamp) {
-	if (m_config.histogram_bins == 0) return;
-
-	for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
-		auto& bin_count = std::get<BIN_COUNT>(*bin);
-		auto& bin_timestamp = std::get<BIN_TIMESTAMP>(*bin);
-
-		bin_count = shift_interval_data(bin_count, bin_timestamp, timestamp);
-
-		if (math_utils::cmp<double>(bin_count, 0) == 0) {
-			bin_count = 0;
-			bin_timestamp = time_point();
-		}
-	}
-}
-
-static double bin_merge_criteria(
-		const statistics::bin_type& left_bin,
-		const statistics::bin_type& right_bin
-	)
-{
-	// possible variants:
-	// * distance between bins' centers
-	// * sum of bins' weights (number of elements)
-	// * other heuristics
-
-	// distance between bins' centers
-	return std::get<statistics::BIN_CENTER>(right_bin) - std::get<statistics::BIN_CENTER>(left_bin);
-
-	// sum of bins' weights
-	//return std::get<statistics::BIN_COUNT>(left_bin) + std::get<statistics::BIN_COUNT>(right_bin);
-
-	// heuristic -- minimum resulted bin square
-	//return (std::get<statistics::BIN_COUNT>(left_bin) + std::get<statistics::BIN_COUNT>(right_bin)) *
-	//	(std::get<statistics::BIN_CENTER>(right_bin) - std::get<statistics::BIN_CENTER>(left_bin));
-}
-
-void statistics::update_histogram(const statistics::value_type& value, const statistics::time_point& timestamp)
-{
-	if (m_config.histogram_bins == 0) return;
-
-	statistics::bin_type new_bin(value, 1.0, timestamp);
-
-	auto insert_iter = std::lower_bound(m_histogram.begin(), m_histogram.end(), new_bin);
-	m_histogram.insert(insert_iter, std::move(new_bin));
-
-	shift_histogram(timestamp);
-
-	if (m_histogram.size() <= m_config.histogram_bins) {
-		return;
-	}
-
-	size_t best_merge_index = -1;
-	double best_merge_criteria = 0;
-	for (size_t index = 0; index < m_histogram.size() - 1; ++index) {
-		double merge_criteria = bin_merge_criteria(m_histogram[index], m_histogram[index + 1]);
-		if (best_merge_index == -1 || math_utils::cmp(merge_criteria, best_merge_criteria) < 0) {
-			best_merge_index = index;
-			best_merge_criteria = merge_criteria;
-		}
-	}
-
-	auto& left_bin = m_histogram[best_merge_index];
-	auto& right_bin = m_histogram[best_merge_index + 1];
-
-	if (math_utils::cmp(std::get<BIN_COUNT>(left_bin), 0.0) <= 0 &&
-			math_utils::cmp(std::get<BIN_COUNT>(right_bin), 0.0) <= 0)
-	{
-		std::get<BIN_CENTER>(left_bin) =
-			math_utils::weighted_average(
-					std::get<BIN_CENTER>(left_bin), 1,
-					std::get<BIN_CENTER>(right_bin), 1
-				);
-
-		std::get<BIN_COUNT>(left_bin) = 0;
-
-		std::get<BIN_TIMESTAMP>(left_bin) = time_point();
-	}
-	else {
-		std::get<BIN_CENTER>(left_bin) =
-			math_utils::weighted_average(
-					std::get<BIN_CENTER>(left_bin), std::get<BIN_COUNT>(left_bin),
-					std::get<BIN_CENTER>(right_bin), std::get<BIN_COUNT>(right_bin)
-				);
-
-		std::get<BIN_COUNT>(left_bin) += std::get<BIN_COUNT>(right_bin);
-
-		std::get<BIN_TIMESTAMP>(left_bin) = std::max(std::get<BIN_TIMESTAMP>(left_bin), std::get<BIN_TIMESTAMP>(right_bin));
-	}
-
-	m_histogram.erase(m_histogram.begin() + best_merge_index + 1);
+	m_data->reset();
 }
 
 void statistics::update(const value_type& value, const time_point& timestamp) {
-	if (computed(tag::rate)) {
-		const value_type delta = value - m_value;
-		m_rate = update_interval_data(m_rate, m_data_timestamp, delta, timestamp);
-	}
-
-	if (computed(tag::value)) {
-		m_value = value;
-	}
-
-	if (computed(tag::min)) {
-		m_min = std::min(m_min, value);
-	}
-
-	if (computed(tag::max)) {
-		m_max = std::max(m_max, value);
-	}
-
-	if (computed(tag::sum)) {
-		m_sum += value;
-	}
-
-	if (computed(tag::count)) {
-		++m_count;
-	}
-
-	if (computed(tag::moving_count)) {
-		m_moving_count = update_interval_data(m_moving_count, m_data_timestamp, 1, timestamp);
-	}
-
-	if (computed(tag::moving_sum)) {
-		m_moving_sum = update_interval_data(m_moving_sum, m_data_timestamp, value, timestamp);
-	}
-
-	if (computed(tag::histogram)) {
-		update_histogram(value, timestamp);
-	}
-
-	if (computed(tag::timestamp)) {
-		m_timestamp = std::max(m_timestamp, timestamp);
-
-		m_data_timestamp = std::max(m_data_timestamp, timestamp);
-	}
+	m_data->update(value, timestamp);
 }
 
 void statistics::update_time(const time_point& timestamp) {
-	if (timestamp <= m_timestamp) return;
-
-	if (computed(tag::rate)) {
-		m_rate = shift_interval_data(m_rate, m_data_timestamp, timestamp);
-	}
-
-	if (computed(tag::moving_count)) {
-		m_moving_count = shift_interval_data(m_moving_count, m_data_timestamp, timestamp);
-	}
-
-	if (computed(tag::moving_sum)) {
-		m_moving_sum = shift_interval_data(m_moving_sum, m_data_timestamp, timestamp);
-	}
-
-	if (computed(tag::histogram)) {
-		shift_histogram(timestamp);
-	}
-
-	if (computed(tag::timestamp)) {
-		m_timestamp = std::max(m_timestamp, timestamp);
-	}
+	m_data->update_time(timestamp);
 }
 
 // get_impl
@@ -466,10 +541,10 @@ statistics::result_type<statistics::tag::value>::type
 statistics::get_impl<statistics::tag::value>() const
 {
 	if (computed(tag::value)) {
-		return m_value;
+		return m_data->m_value;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: value");
 	}
 }
 
@@ -478,10 +553,10 @@ statistics::result_type<statistics::tag::min>::type
 statistics::get_impl<statistics::tag::min>() const
 {
 	if (computed(tag::min)) {
-		return m_min;
+		return m_data->m_min;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: min");
 	}
 }
 
@@ -490,10 +565,10 @@ statistics::result_type<statistics::tag::max>::type
 statistics::get_impl<statistics::tag::max>() const
 {
 	if (computed(tag::max)) {
-		return m_max;
+		return m_data->m_max;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: max");
 	}
 }
 
@@ -502,10 +577,10 @@ statistics::result_type<statistics::tag::count>::type
 statistics::get_impl<statistics::tag::count>() const
 {
 	if (computed(tag::count)) {
-		return m_count;
+		return m_data->m_count;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: count");
 	}
 }
 
@@ -514,10 +589,10 @@ statistics::result_type<statistics::tag::sum>::type
 statistics::get_impl<statistics::tag::sum>() const
 {
 	if (computed(tag::sum)) {
-		return m_sum;
+		return m_data->m_sum;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: sum");
 	}
 }
 
@@ -526,15 +601,15 @@ statistics::result_type<statistics::tag::avg>::type
 statistics::get_impl<statistics::tag::avg>() const
 {
 	if (computed(tag::avg)) {
-		if (m_count == 0) {
+		if (m_data->m_count == 0) {
 			return 0;
 		}
 		else {
-			return result_type<tag::avg>::type(m_sum) / m_count;
+			return result_type<tag::avg>::type(m_data->m_sum) / m_data->m_count;
 		}
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: avg");
 	}
 }
 
@@ -543,10 +618,10 @@ statistics::result_type<statistics::tag::moving_count>::type
 statistics::get_impl<statistics::tag::moving_count>() const
 {
 	if (computed(tag::moving_count)) {
-		return m_moving_count;
+		return m_data->m_moving_count;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: moving_count");
 	}
 }
 
@@ -555,10 +630,10 @@ statistics::result_type<statistics::tag::moving_sum>::type
 statistics::get_impl<statistics::tag::moving_sum>() const
 {
 	if (computed(tag::moving_sum)) {
-		return m_moving_sum;
+		return m_data->m_moving_sum;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: moving_sum");
 	}
 }
 
@@ -567,15 +642,15 @@ statistics::result_type<statistics::tag::moving_avg>::type
 statistics::get_impl<statistics::tag::moving_avg>() const
 {
 	if (computed(tag::moving_avg)) {
-		if (math_utils::cmp<result_type<tag::moving_count>::type>(m_moving_count, 0) <= 0) {
+		if (math_utils::cmp<result_type<tag::moving_count>::type>(m_data->m_moving_count, 0) <= 0) {
 			return 0;
 		}
 		else {
-			return result_type<tag::moving_avg>::type(m_moving_sum) / m_moving_count;
+			return result_type<tag::moving_avg>::type(m_data->m_moving_sum) / m_data->m_moving_count;
 		}
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: moving_avg");
 	}
 }
 
@@ -584,10 +659,10 @@ statistics::result_type<statistics::tag::histogram>::type
 statistics::get_impl<statistics::tag::histogram>() const
 {
 	if (computed(tag::histogram)) {
-		return m_histogram;
+		return m_data->m_histogram;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: histogram");
 	}
 }
 
@@ -599,7 +674,7 @@ statistics::get_impl<statistics::tag::quantile>() const
 		return result_type<tag::quantile>::type(this);
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: quantile");
 	}
 }
 
@@ -608,10 +683,10 @@ statistics::result_type<statistics::tag::timestamp>::type
 statistics::get_impl<statistics::tag::timestamp>() const
 {
 	if (computed(tag::timestamp)) {
-		return m_timestamp;
+		return m_data->m_timestamp;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: timestamp");
 	}
 }
 
@@ -623,18 +698,18 @@ statistics::get_impl<statistics::tag::rate>() const
 		if (std::less<chrono::time_unit>()(m_config.rate_unit, m_config.moving_interval.unit())) {
 			const double& rate_factor =
 				chrono::duration::convert_to(m_config.rate_unit, m_config.moving_interval).count();
-			return double(m_rate) / rate_factor;
+			return double(m_data->m_rate) / rate_factor;
 		}
 		else {
 			const double& rate_factor =
 				chrono::duration::convert_to(m_config.moving_interval.unit(),
 						chrono::duration(1, m_config.rate_unit)
 					).count();
-			return double(m_rate) * rate_factor / m_config.moving_interval.count();
+			return double(m_data->m_rate) * rate_factor / m_config.moving_interval.count();
 		}
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: rate");
 	}
 }
 
@@ -643,7 +718,7 @@ statistics::result_type<statistics::tag::entropy>::type
 statistics::get_impl<statistics::tag::entropy>() const
 {
 	if (computed(tag::entropy)) {
-		const auto& histogram = m_histogram;
+		const auto& histogram = m_data->m_histogram;
 
 		if (histogram.size() <= 1) {
 			return 0;
@@ -685,7 +760,7 @@ statistics::get_impl<statistics::tag::entropy>() const
 		return H;
 	}
 	else {
-		throw invalid_tag_error();
+		throw invalid_tag_error("invalid tag: entropy");
 	}
 }
 

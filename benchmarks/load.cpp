@@ -85,7 +85,7 @@ void print_stats() {
 		<< " =============" << std::endl;
 	std::cout << "timestamp: "
 		<< boost::get<int64_t>(
-				metrics_dump->second.at("handystats.dump_timestamp").value()
+				metrics_dump->second.at("handystats.system_timestamp").value()
 			) / 1000
 		<< std::endl
 		;

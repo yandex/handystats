@@ -47,6 +47,7 @@ public:
 		typedef int type;
 
 		static const type empty = 0;
+		static const type all = ~0;
 
 		static const type value = 1 << 1;
 		static const type min = 1 << 2;

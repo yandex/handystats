@@ -8,6 +8,7 @@
 #include <string>
 #include <exception>
 #include <tuple>
+#include <memory>
 
 #include <handystats/common.h>
 #include <handystats/chrono.hpp>
@@ -15,8 +16,7 @@
 
 namespace handystats {
 
-class statistics {
-public:
+struct statistics {
 	typedef double value_type;
 	typedef chrono::tsc_clock clock;
 	typedef chrono::duration duration;
@@ -31,7 +31,7 @@ public:
 	// histogram
 	typedef std::vector<bin_type> histogram_type;
 
-	typedef std::exception invalid_tag_error;
+	typedef std::logic_error invalid_tag_error;
 
 	// quantile extractor
 	// result of statistics::get<tag::quantile>
@@ -98,9 +98,15 @@ public:
 	tag::type tags() const HANDYSTATS_NOEXCEPT;
 
 	// Ctor
-	statistics(
-			const config::statistics& opts = config::statistics()
-		);
+	statistics(const config::statistics& opts = config::statistics());
+	statistics(statistics&&);
+	statistics(const statistics&);
+
+	// Dtor
+	~statistics();
+
+	statistics& operator= (const statistics&);
+	statistics& operator= (statistics&&);
 
 	void reset();
 
@@ -126,12 +132,7 @@ public:
 	typename result_type<Tag>::type
 	get() const
 	{
-		if (computed(Tag)) {
-			return get_impl<Tag>();
-		}
-		else {
-			throw invalid_tag_error();
-		}
+		return get_impl<Tag>();
 	}
 
 	// Method will not throw if statistics tag is not computed
@@ -144,46 +145,21 @@ public:
 		)
 		const HANDYSTATS_NOEXCEPT
 	{
-		if (computed(Tag)) {
+		try {
 			return get_impl<Tag>();
 		}
-		else {
+		catch (const invalid_tag_error&) {
 			return default_value;
 		}
 	}
 
-private:
-	// configuration (internal form)
 	config::statistics m_config;
+
+	class data;
+	std::unique_ptr<data> m_data;
 
 	template <tag::type Tag>
 	typename result_type<Tag>::type get_impl() const;
-
-	value_type m_value;
-	value_type m_min;
-	value_type m_max;
-	value_type m_sum;
-	size_t m_count;
-	value_type m_moving_count;
-	value_type m_moving_sum;
-	histogram_type m_histogram;
-	time_point m_timestamp;
-	value_type m_rate;
-
-	time_point m_data_timestamp;
-
-	// applicable for moving_sum, moving_count
-	double shift_interval_data(
-			const double& data, const time_point& data_timestamp,
-			const time_point& timestamp
-		);
-	double update_interval_data(
-			const double& data, const time_point& data_timestamp,
-			const value_type& value, const time_point& timestamp
-		);
-
-	void shift_histogram(const time_point& timestamp);
-	void update_histogram(const value_type& value, const time_point& timestamp);
 };
 
 } // namespace handystats

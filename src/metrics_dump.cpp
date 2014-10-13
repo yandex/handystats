@@ -56,7 +56,7 @@ get_dump()
 
 static
 std::shared_ptr<const metrics_dump_type>
-create_dump()
+create_dump(const chrono::time_point& current_time, const chrono::time_point& internal_time)
 {
 	auto dump_start_time = chrono::tsc_clock::now();
 
@@ -132,19 +132,36 @@ create_dump()
 		}
 	}
 
+	// current system time
 	{
 		// NOTE: possible call chrono::system_clock::now()
-		chrono::time_point system_timestamp =
-			chrono::time_point::convert_to(chrono::clock_type::SYSTEM, chrono::tsc_clock::now());
+		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM, current_time);
 
 		attribute timestamp_attr;
 		timestamp_attr.set(
-				chrono::duration::convert_to(chrono::time_unit::MSEC, system_timestamp.time_since_epoch()).count()
+				chrono::duration::convert_to(chrono::time_unit::MSEC, timestamp.time_since_epoch()).count()
 			);
 
 		attrs_dump.insert(
 				std::pair<std::string, attribute>(
-					"handystats.dump_timestamp",
+					"handystats.system_timestamp",
+					timestamp_attr
+				)
+			);
+	}
+
+	// current internal time
+	{
+		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM, internal_time);
+
+		attribute timestamp_attr;
+		timestamp_attr.set(
+				chrono::duration::convert_to(chrono::time_unit::MSEC, timestamp.time_since_epoch()).count()
+			);
+
+		attrs_dump.insert(
+				std::pair<std::string, attribute>(
+					"handystats.internal_timestamp",
 					timestamp_attr
 				)
 			);
@@ -169,25 +186,25 @@ create_dump()
 	return std::const_pointer_cast<const metrics_dump_type>(new_dump);
 }
 
-void update(const chrono::time_point& system_time, const chrono::time_point& internal_time) {
+void update(const chrono::time_point& current_time, const chrono::time_point& internal_time) {
 	if (config::metrics_dump_opts.interval.count() == 0) {
 		return;
 	}
 
-	if (system_time - dump_timestamp > config::metrics_dump_opts.interval) {
+	if (current_time - dump_timestamp > config::metrics_dump_opts.interval) {
 		internal::update_metrics(internal_time);
 
-		internal::stats::update(system_time);
-		message_queue::stats::update(system_time);
-		stats::update(system_time);
+		internal::stats::update(current_time);
+		message_queue::stats::update(current_time);
+		stats::update(current_time);
 
-		auto new_dump = create_dump();
+		auto new_dump = create_dump(current_time, internal_time);
 		{
 			std::lock_guard<std::mutex> lock(dump_mutex);
 			dump = new_dump;
 		}
 
-		dump_timestamp = system_time;
+		dump_timestamp = current_time;
 	}
 }
 

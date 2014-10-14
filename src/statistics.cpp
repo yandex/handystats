@@ -381,6 +381,62 @@ void statistics::data::truncate_time(const time_point& timestamp) {
 	}
 }
 
+void statistics::data::append(data d) {
+	if (d.m_timestamp <= m_timestamp || d.m_data_timestamp <= m_data_timestamp) {
+		return;
+	}
+
+	d.truncate_time(m_timestamp);
+
+	if (d.m_tags & tag::value) {
+		m_value = d.m_value;
+		m_tags |= tag::value;
+	}
+	if (d.m_tags & tag::min) {
+		m_min = d.m_min;
+		m_tags |= tag::min;
+	}
+	if (d.m_tags & tag::max) {
+		m_max = d.m_max;
+		m_tags |= tag::max;
+	}
+	if (d.m_tags & tag::sum) {
+		m_sum = d.m_sum;
+		m_tags |= tag::sum;
+	}
+	if (d.m_tags & tag::count) {
+		m_count = d.m_count;
+		m_tags |= tag::count;
+	}
+
+	if (d.m_tags & tag::moving_count) {
+		m_moving_count += d.m_moving_count;
+		m_tags |= tag::moving_count;
+	}
+	if (d.m_tags & tag::moving_sum) {
+		m_moving_sum += d.m_moving_sum;
+		m_tags |= tag::moving_sum;
+	}
+	if (d.m_tags & tag::rate) {
+		m_rate += d.m_rate;
+		m_tags |= tag::rate;
+	}
+
+	if (d.m_tags & tag::histogram) {
+		m_histogram.reserve(m_histogram.size() + d.m_histogram.size());
+		m_histogram.insert(m_histogram.end(), d.m_histogram.begin(), d.m_histogram.end());
+		std::sort(m_histogram.begin(), m_histogram.end());
+		compress_histogram(m_histogram, m_histogram_bins);
+
+		m_tags |= tag::histogram;
+	}
+
+	m_moving_interval += d.m_timestamp - m_timestamp;
+
+	m_timestamp = d.m_timestamp;
+	m_data_timestamp = d.m_data_timestamp;
+}
+
 statistics::quantile_extractor::quantile_extractor(const statistics* const statistics)
 	: m_statistics(statistics)
 {}

@@ -20,6 +20,11 @@ struct statistics::data {
 			const time_point& timestamp
 		)
 		const;
+	double truncate_interval_data(
+			const double& data, const time_point& data_timestamp,
+			const time_point& timestamp
+		)
+		const;
 	double update_interval_data(
 			const double& data, const time_point& data_timestamp,
 			const value_type& value, const time_point& timestamp
@@ -28,12 +33,14 @@ struct statistics::data {
 
 	// histogram (in-place)
 	void shift_histogram(const time_point& timestamp);
+	void truncate_histogram(const time_point& timestamp);
 	void update_histogram(const value_type& value, const time_point& timestamp);
 
 	void reset();
 
 	void update(const value_type& value, const time_point& timestamp = clock::now());
 	void update_time(const time_point& timestamp = clock::now());
+	void truncate_time(const time_point& timestamp);
 
 	value_type m_value;
 	value_type m_min;

@@ -437,6 +437,96 @@ void statistics::data::append(data d) {
 	m_data_timestamp = d.m_data_timestamp;
 }
 
+void statistics::data::fulfill_dependencies() {
+	// timestamp - no dependency
+	// value - no dependency
+	// min - no dependency
+	// max - no dependency
+	// count - no dependency
+	// sum - no dependecy
+
+	// avg - depends on sum & count
+	if ((m_tags & tag::count) && (m_tags & tag::sum)) {
+		m_tags |= tag::avg;
+	}
+	else {
+		m_tags &= ~tag::avg;
+	}
+
+	// moving_count - depends on timestamp and moving_interval
+	if ((m_tags & tag::moving_count) &&
+			(m_tags & tag::timestamp) &&
+			(m_moving_interval.count() > 0)
+		)
+	{
+		m_tags |= tag::moving_count;
+	}
+	else {
+		m_tags &= ~tag::moving_count;
+	}
+
+	// moving_sum - depends on timestamp and moving_interval
+	if ((m_tags & tag::moving_sum) &&
+			(m_tags & tag::timestamp) &&
+			(m_moving_interval.count() > 0)
+		)
+	{
+		m_tags |= tag::moving_sum;
+	}
+	else {
+		m_tags &= ~tag::moving_sum;
+	}
+
+	// moving_avg - depends on moving_count and moving_sum
+	if ((m_tags & tag::moving_count) && (m_tags & tag::moving_sum)) {
+		m_tags |= tag::moving_avg;
+	}
+	else {
+		m_tags &= ~tag::moving_avg;
+	}
+
+	// histogram - depends on timestamp and moving_interval
+	if ((m_tags & tag::histogram) &&
+			(m_tags & tag::timestamp) &&
+			(m_moving_interval.count() > 0)
+		)
+	{
+		m_tags |= tag::histogram;
+	}
+	else {
+		m_tags &= ~tag::histogram;
+	}
+
+	// quantile - depends on histogram
+	if (m_tags & tag::histogram) {
+		m_tags |= tag::quantile;
+	}
+	else {
+		m_tags &= ~tag::quantile;
+	}
+
+	// entropy - depends on histogram
+	if (m_tags & tag::histogram) {
+		m_tags |= tag::entropy;
+	}
+	else {
+		m_tags &= ~tag::entropy;
+	}
+
+	// rate - depends on value, timestamp and moving_interval
+	if ((m_tags & tag::rate) &&
+			(m_tags & tag::value) &&
+			(m_tags & tag::timestamp) &&
+			(m_moving_interval.count() > 0)
+		)
+	{
+		m_tags |= tag::rate;
+	}
+	else {
+		m_tags &= ~tag::rate;
+	}
+}
+
 statistics::quantile_extractor::quantile_extractor(const statistics* const statistics)
 	: m_statistics(statistics)
 {}

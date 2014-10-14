@@ -44,6 +44,8 @@ struct statistics::data {
 
 	void append(data);
 
+	void fulfill_dependencies();
+
 	value_type m_value;
 	value_type m_min;
 	value_type m_max;

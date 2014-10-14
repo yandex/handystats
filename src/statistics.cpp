@@ -675,7 +675,7 @@ statistics::tag::type statistics::tag::from_string(const std::string& tag_name) 
 }
 
 bool statistics::enabled(const statistics::tag::type& t) const HANDYSTATS_NOEXCEPT {
-	return m_config.tags & t;
+	return (m_config.tags & t) && computed(t);
 }
 
 bool statistics::computed(const statistics::tag::type& t) const HANDYSTATS_NOEXCEPT {

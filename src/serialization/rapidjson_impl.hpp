@@ -3,6 +3,9 @@
 #ifndef HANDYSTATS_SERIALIZATION_RAPIDJSON_IMPL_HPP_
 #define HANDYSTATS_SERIALIZATION_RAPIDJSON_IMPL_HPP_
 
+#include <utility>
+
+#include <handystats/common.h>
 #include <handystats/statistics.hpp>
 #include <handystats/utils/rapidjson_writer.hpp>
 #include <handystats/metrics_dump.hpp>
@@ -127,6 +130,223 @@ JsonValue& fill_value(JsonValue& json_value, const metric_map& metrics, Allocato
 	}
 
 	return json_value;
+}
+
+
+template <typename JsonValue>
+inline
+statistics::data& load_value(statistics::data& data, const JsonValue& json_value) {
+	if (!json_value.IsObject()) {
+		return data;
+	}
+
+	{
+		typename JsonValue::ConstMemberIterator timestamp_iter = json_value.FindMember("ts");
+		if (timestamp_iter) {
+			const auto& timestamp_json = timestamp_iter->value;
+			if (timestamp_json.IsUint64()) {
+				data.m_timestamp =
+					chrono::time_point(
+							chrono::duration(timestamp_json.GetUint64(), chrono::time_unit::MSEC),
+							chrono::clock_type::SYSTEM
+						);
+				data.m_tags |= statistics::tag::timestamp;
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator data_timestamp_iter = json_value.FindMember("data-ts");
+		if (data_timestamp_iter) {
+			const auto& data_timestamp_json = data_timestamp_iter->value;
+			if (data_timestamp_json.IsUint64()) {
+				data.m_data_timestamp =
+					chrono::time_point(
+							chrono::duration(data_timestamp_json.GetUint64(), chrono::time_unit::MSEC),
+							chrono::clock_type::SYSTEM
+						);
+				if (!(data.m_tags & statistics::tag::timestamp)) {
+					data.m_timestamp = data.m_data_timestamp;
+					data.m_tags |= statistics::tag::timestamp;
+				}
+			}
+		}
+		else if (data.m_tags & statistics::tag::timestamp) {
+			data.m_data_timestamp = data.m_timestamp;
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator mint_iter = json_value.FindMember("m-int");
+		if (mint_iter) {
+			const auto& mint_json = mint_iter->value;
+			if (mint_json.IsUint64()) {
+				data.m_moving_interval = chrono::duration(mint_json.GetUint64(), chrono::time_unit::MSEC);
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator value_iter = json_value.FindMember("val");
+		if (value_iter) {
+			const auto& value_json = value_iter->value;
+			if (value_json.IsNumber()) {
+				data.m_value = (statistics::value_type)value_json.GetDouble();
+				data.m_tags |= statistics::tag::value;
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator min_iter = json_value.FindMember("min");
+		if (min_iter) {
+			const auto& min_json = min_iter->value;
+			if (min_json.IsNumber()) {
+				data.m_min = (statistics::value_type)min_json.GetDouble();
+				data.m_tags |= statistics::tag::min;
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator max_iter = json_value.FindMember("max");
+		if (max_iter) {
+			const auto& max_json = max_iter->value;
+			if (max_json.IsNumber()) {
+				data.m_max = (statistics::value_type)max_json.GetDouble();
+				data.m_tags |= statistics::tag::max;
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator cnt_iter = json_value.FindMember("cnt");
+		if (cnt_iter) {
+			const auto& cnt_json = cnt_iter->value;
+			if (cnt_json.IsUint64()) {
+				data.m_count = cnt_json.GetUint64();
+				data.m_tags |= statistics::tag::count;
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator sum_iter = json_value.FindMember("sum");
+		if (sum_iter) {
+			const auto& sum_json = sum_iter->value;
+			if (sum_json.IsNumber()) {
+				data.m_sum = (statistics::value_type)sum_json.GetDouble();
+				data.m_tags |= statistics::tag::sum;
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator mcnt_iter = json_value.FindMember("m-cnt");
+		if (mcnt_iter) {
+			const auto& mcnt_json = mcnt_iter->value;
+			if (mcnt_json.IsNumber()) {
+				data.m_moving_count = mcnt_json.GetDouble();
+				data.m_tags |= statistics::tag::moving_count;
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator msum_iter = json_value.FindMember("m-sum");
+		if (msum_iter) {
+			const auto& msum_json = msum_iter->value;
+			if (msum_json.IsNumber()) {
+				data.m_moving_sum = msum_json.GetDouble();
+				data.m_tags |= statistics::tag::moving_sum;
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator hist_iter = json_value.FindMember("hist");
+		if (hist_iter) {
+			const auto& hist_json = hist_iter->value;
+			if (hist_json.IsArray()) {
+				statistics::histogram_type hist;
+				hist.reserve(hist_json.Size());
+
+				for (size_t index = 0; index < hist_json.Size(); ++index) {
+					const auto& hist_bin_json = hist_json[index];
+					if (hist_bin_json.IsArray()) {
+						statistics::bin_type hist_bin;
+						if (hist_bin_json.Size() > 0) {
+							const auto& bin_center_json = hist_bin_json[0u];
+							if (bin_center_json.IsNumber()) {
+								std::get<statistics::BIN_CENTER>(hist_bin) = (statistics::value_type)bin_center_json.GetDouble();
+							}
+						}
+						if (hist_bin_json.Size() > 1) {
+							const auto& bin_count_json = hist_bin_json[1u];
+							if (bin_count_json.IsNumber()) {
+								std::get<statistics::BIN_COUNT>(hist_bin) = bin_count_json.GetDouble();
+							}
+						}
+						if (hist_bin_json.Size() > 2) {
+							const auto& bin_ts_json = hist_bin_json[2u];
+							if (bin_ts_json.IsUint64()) {
+								std::get<statistics::BIN_TIMESTAMP>(hist_bin) =
+									chrono::time_point(
+											chrono::duration(bin_ts_json.GetUint64(), chrono::time_unit::MSEC),
+											chrono::clock_type::SYSTEM
+										);
+							}
+						}
+
+						if (std::get<statistics::BIN_TIMESTAMP>(hist_bin) == chrono::time_point()) {
+							if (data.m_tags & statistics::tag::timestamp) {
+								std::get<statistics::BIN_TIMESTAMP>(hist_bin) = data.m_timestamp;
+							}
+						}
+
+						hist.push_back(hist_bin);
+					}
+				}
+
+				data.m_histogram = hist;
+				data.m_histogram_bins = hist.size();
+				data.m_tags |= statistics::tag::histogram;
+			}
+		}
+	}
+	{
+		typename JsonValue::ConstMemberIterator rate_iter = json_value.FindMember("rate");
+		if (rate_iter) {
+			const auto& rate_json = rate_iter->value;
+			if (rate_json.IsNumber()) {
+				data.m_rate = rate_json.GetDouble();
+				data.m_tags |= statistics::tag::rate;
+			}
+		}
+	}
+
+	return data;
+}
+
+template <typename JsonValue>
+inline
+stats_data_map& load_dump(stats_data_map& metrics, const chrono::time_point& dump_timestamp, const JsonValue& dump_value) {
+	if (!dump_value.IsObject()) {
+		return metrics;
+	}
+
+	config::statistics empty_config;
+	empty_config.moving_interval = chrono::duration(0, chrono::time_unit::NSEC);
+	empty_config.histogram_bins = 0;
+	empty_config.tags = statistics::tag::empty;
+	empty_config.rate_unit = chrono::time_unit::SEC;
+
+	for (auto member_iter = dump_value.MemberBegin(); member_iter != dump_value.MemberEnd(); ++member_iter) {
+		statistics::data& data =
+			metrics.insert(
+				std::make_pair(std::string(member_iter->name.GetString()), statistics::data(empty_config))
+			)
+			.first
+			->second;
+
+		data.m_timestamp = dump_timestamp;
+		data.m_data_timestamp = dump_timestamp;
+		data.m_tags |= statistics::tag::timestamp;
+
+		load_value(data, member_iter->value);
+	}
+
+	return metrics;
 }
 
 }}} // namespace handystats::serialization::rapidjson

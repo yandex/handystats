@@ -31,6 +31,10 @@ timers=5
 # Stats printing interval (ms)
 output_interval=1000
 
+# File logger
+log_file="metrics.log"
+log_period=1000
+
 # Array of pairs (rate, time_limit), time_limit in seconds
 steps=(
 1000 10
@@ -56,4 +60,6 @@ $exe_path \
 --timers $timers \
 --step ${steps[*]} \
 --output-interval $output_interval \
+--log-file $log_file \
+--log-period $log_period \
 

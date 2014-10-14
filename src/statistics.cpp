@@ -154,6 +154,24 @@ double statistics::data::update_interval_data(
 	return data;
 }
 
+double statistics::data::truncate_interval_data(
+		const double& data, const time_point& data_timestamp,
+		const time_point& timestamp
+	)
+	const
+{
+	if (math_utils::cmp<double>(data, 0) == 0) return 0;
+
+	if (timestamp >= data_timestamp) return 0;
+
+	if (timestamp <= m_timestamp - m_moving_interval) return data;
+
+	const auto& stale_interval = timestamp - (m_timestamp - m_moving_interval);
+	const auto& data_interval = data_timestamp - (m_timestamp - m_moving_interval);
+
+	return data * (data_interval - stale_interval).count() / data_interval.count();
+}
+
 void statistics::data::shift_histogram(const time_point& timestamp) {
 	if (m_histogram_bins == 0) return;
 
@@ -162,6 +180,22 @@ void statistics::data::shift_histogram(const time_point& timestamp) {
 		auto& bin_timestamp = std::get<BIN_TIMESTAMP>(*bin);
 
 		bin_count = shift_interval_data(bin_count, bin_timestamp, timestamp);
+
+		if (math_utils::cmp<double>(bin_count, 0) == 0) {
+			bin_count = 0;
+			bin_timestamp = time_point();
+		}
+	}
+}
+
+void statistics::data::truncate_histogram(const time_point& timestamp) {
+	if (m_histogram_bins == 0) return;
+
+	for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
+		auto& bin_count = std::get<BIN_COUNT>(*bin);
+		auto& bin_timestamp = std::get<BIN_TIMESTAMP>(*bin);
+
+		bin_count = truncate_interval_data(bin_count, bin_timestamp, timestamp);
 
 		if (math_utils::cmp<double>(bin_count, 0) == 0) {
 			bin_count = 0;
@@ -321,6 +355,28 @@ void statistics::data::update_time(const time_point& timestamp) {
 	}
 }
 
+void statistics::data::truncate_time(const time_point& timestamp) {
+	if (timestamp >= m_data_timestamp) {
+		reset();
+		return;
+	}
+
+	if (m_tags & tag::rate) {
+		m_rate = truncate_interval_data(m_rate, m_data_timestamp, timestamp);
+	}
+
+	if (m_tags & tag::moving_count) {
+		m_moving_count = truncate_interval_data(m_moving_count, m_data_timestamp, timestamp);
+	}
+
+	if (m_tags & tag::moving_sum) {
+		m_moving_sum = truncate_interval_data(m_moving_sum, m_data_timestamp, timestamp);
+	}
+
+	if (m_tags & tag::histogram) {
+		truncate_histogram(timestamp);
+	}
+}
 
 statistics::quantile_extractor::quantile_extractor(const statistics* const statistics)
 	: m_statistics(statistics)

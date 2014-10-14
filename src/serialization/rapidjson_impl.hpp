@@ -315,6 +315,8 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 		}
 	}
 
+	data.fulfill_dependencies();
+
 	return data;
 }
 

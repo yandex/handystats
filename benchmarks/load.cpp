@@ -18,6 +18,8 @@
 #include <handystats/metrics_dump.hpp>
 #include <handystats/measuring_points.hpp>
 
+#include <handystats/backends/file_logger.hpp>
+
 #include <handystats/module.h>
 
 #include "command_executor.hpp"
@@ -149,6 +151,12 @@ int main(int argc, char** argv) {
 		("output-interval", po::value<uint64_t>()->default_value(output_interval.count()),
 			"Stats output interval (in milliseconds)"
 		)
+		("log-file", po::value<std::string>(),
+			"Metrics log filename (if not specified file_logger will not run)"
+		)
+		("log-period", po::value<uint64_t>(),
+			"Metrics log period (in milliseconds, if not specified or zero file_logger will not run)"
+		)
 	;
 
 	po::variables_map vm;
@@ -199,6 +207,24 @@ int main(int argc, char** argv) {
 				}
 			}
 		);
+
+	handystats::backends::file_logger* file_logger = nullptr;
+	if (vm.count("log-file") && vm.count("log-period")) {
+		std::string log_filename = vm["log-file"].as<std::string>();
+		uint64_t log_period_ms = vm["log-period"].as<uint64_t>();
+		if (log_period_ms > 0) {
+			const auto& log_period = handystats::chrono::duration(log_period_ms, handystats::chrono::time_unit::MSEC);
+			file_logger = new handystats::backends::file_logger(log_filename, log_period);
+			if (!file_logger->run()) {
+				std::cerr << "Unable to start file_logger with"
+					<< " log file (" << log_filename << ")"
+					<< " and period (" << log_period_ms << ", ms)"
+					<< std::endl;
+				HANDY_FINALIZE();
+				return 1;
+			}
+		}
+	}
 
 	std::vector<std::thread> workers(threads);
 	for (size_t step_index = 0; step_index < steps.size(); step_index += 2) {
@@ -251,6 +277,10 @@ int main(int argc, char** argv) {
 
 	stop_flag.store(true);
 	stats_printer.join();
+
+	if (file_logger) {
+		file_logger->stop();
+	}
 
 	HANDY_FINALIZE();
 }

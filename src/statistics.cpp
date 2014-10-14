@@ -707,6 +707,18 @@ statistics::statistics(const statistics& stats)
 {
 }
 
+statistics::statistics(const data& d)
+	: m_config()
+	, m_data(new data(d))
+{
+	m_config.moving_interval = m_data->m_moving_interval;
+	m_config.histogram_bins = m_data->m_histogram_bins;
+
+	m_config.tags = tag::empty;
+
+	m_data->fulfill_dependencies();
+}
+
 statistics::~statistics()
 {
 	m_data.reset();

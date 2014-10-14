@@ -226,6 +226,55 @@ double bin_merge_criteria(
 	//	(std::get<statistics::BIN_CENTER>(right_bin) - std::get<statistics::BIN_CENTER>(left_bin));
 }
 
+static
+void compress_histogram(statistics::histogram_type& histogram, const size_t& histogram_bins) {
+	while (histogram.size() > histogram_bins) {
+		size_t best_merge_index = -1;
+		double best_merge_criteria = 0;
+		for (size_t index = 0; index < histogram.size() - 1; ++index) {
+			double merge_criteria = bin_merge_criteria(histogram[index], histogram[index + 1]);
+			if (best_merge_index == -1 || math_utils::cmp(merge_criteria, best_merge_criteria) < 0) {
+				best_merge_index = index;
+				best_merge_criteria = merge_criteria;
+			}
+		}
+
+		auto& left_bin = histogram[best_merge_index];
+		auto& right_bin = histogram[best_merge_index + 1];
+
+		if (math_utils::cmp(std::get<statistics::BIN_COUNT>(left_bin), 0.0) <= 0 &&
+				math_utils::cmp(std::get<statistics::BIN_COUNT>(right_bin), 0.0) <= 0)
+		{
+			std::get<statistics::BIN_CENTER>(left_bin) =
+				math_utils::weighted_average(
+						std::get<statistics::BIN_CENTER>(left_bin), 1,
+						std::get<statistics::BIN_CENTER>(right_bin), 1
+						);
+
+			std::get<statistics::BIN_COUNT>(left_bin) = 0;
+
+			std::get<statistics::BIN_TIMESTAMP>(left_bin) = statistics::time_point();
+		}
+		else {
+			std::get<statistics::BIN_CENTER>(left_bin) =
+				math_utils::weighted_average(
+						std::get<statistics::BIN_CENTER>(left_bin), std::get<statistics::BIN_COUNT>(left_bin),
+						std::get<statistics::BIN_CENTER>(right_bin), std::get<statistics::BIN_COUNT>(right_bin)
+						);
+
+			std::get<statistics::BIN_COUNT>(left_bin) += std::get<statistics::BIN_COUNT>(right_bin);
+
+			std::get<statistics::BIN_TIMESTAMP>(left_bin) =
+				std::max(
+						std::get<statistics::BIN_TIMESTAMP>(left_bin),
+						std::get<statistics::BIN_TIMESTAMP>(right_bin)
+					);
+		}
+
+		histogram.erase(histogram.begin() + best_merge_index + 1);
+	}
+}
+
 void statistics::data::update_histogram(const value_type& value, const time_point& timestamp)
 {
 	if (m_histogram_bins == 0) return;
@@ -237,53 +286,7 @@ void statistics::data::update_histogram(const value_type& value, const time_poin
 
 	shift_histogram(timestamp);
 
-	if (m_histogram.size() <= m_histogram_bins) {
-		return;
-	}
-
-	size_t best_merge_index = -1;
-	double best_merge_criteria = 0;
-	for (size_t index = 0; index < m_histogram.size() - 1; ++index) {
-		double merge_criteria = bin_merge_criteria(m_histogram[index], m_histogram[index + 1]);
-		if (best_merge_index == -1 || math_utils::cmp(merge_criteria, best_merge_criteria) < 0) {
-			best_merge_index = index;
-			best_merge_criteria = merge_criteria;
-		}
-	}
-
-	auto& left_bin = m_histogram[best_merge_index];
-	auto& right_bin = m_histogram[best_merge_index + 1];
-
-	if (math_utils::cmp(std::get<BIN_COUNT>(left_bin), 0.0) <= 0 &&
-			math_utils::cmp(std::get<BIN_COUNT>(right_bin), 0.0) <= 0)
-	{
-		std::get<BIN_CENTER>(left_bin) =
-			math_utils::weighted_average(
-					std::get<BIN_CENTER>(left_bin), 1,
-					std::get<BIN_CENTER>(right_bin), 1
-				);
-
-		std::get<BIN_COUNT>(left_bin) = 0;
-
-		std::get<BIN_TIMESTAMP>(left_bin) = time_point();
-	}
-	else {
-		std::get<BIN_CENTER>(left_bin) =
-			math_utils::weighted_average(
-					std::get<BIN_CENTER>(left_bin), std::get<BIN_COUNT>(left_bin),
-					std::get<BIN_CENTER>(right_bin), std::get<BIN_COUNT>(right_bin)
-				);
-
-		std::get<BIN_COUNT>(left_bin) += std::get<BIN_COUNT>(right_bin);
-
-		std::get<BIN_TIMESTAMP>(left_bin) =
-			std::max(
-					std::get<BIN_TIMESTAMP>(left_bin),
-					std::get<BIN_TIMESTAMP>(right_bin)
-				);
-	}
-
-	m_histogram.erase(m_histogram.begin() + best_merge_index + 1);
+	compress_histogram(m_histogram, m_histogram_bins);
 }
 
 void statistics::data::update(const value_type& value, const time_point& timestamp) {

@@ -156,6 +156,8 @@ struct statistics {
 	config::statistics m_config;
 
 	class data;
+	statistics(const data&);
+
 	std::unique_ptr<data> m_data;
 
 	template <tag::type Tag>

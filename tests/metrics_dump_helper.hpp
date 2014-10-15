@@ -6,7 +6,6 @@
 #include <thread>
 #include <chrono>
 
-#include <handystats/metrics/attribute.hpp>
 #include <handystats/chrono.hpp>
 #include "metrics_dump_impl.hpp"
 

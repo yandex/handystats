@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <handystats/metrics/attribute.hpp>
+#include <handystats/attribute.hpp>
 
 #include "events/event_message_impl.hpp"
 #include "events/attribute_impl.hpp"
@@ -13,14 +13,14 @@ using namespace handystats::events::attribute;
 TEST(AttributeEventsTest, TestAttributeSetDoubleEvent) {
 	const char* attribute_name = "attr.test";
 	const double value = 0.75;
-	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
 	ASSERT_NEAR(
-			boost::get<double>(*reinterpret_cast<handystats::metrics::attribute::value_type*>(message->event_data)),
+			boost::get<double>(*reinterpret_cast<handystats::attribute::value_type*>(message->event_data)),
 			value,
 			1E-6
 		);
@@ -31,14 +31,14 @@ TEST(AttributeEventsTest, TestAttributeSetDoubleEvent) {
 TEST(AttributeEventsTest, TestAttributeSetBoolEvent) {
 	const char* attribute_name = "attr.test";
 	const bool value = true;
-	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
 	ASSERT_EQ(
-			boost::get<bool>(*reinterpret_cast<handystats::metrics::attribute::value_type*>(message->event_data)),
+			boost::get<bool>(*reinterpret_cast<handystats::attribute::value_type*>(message->event_data)),
 			value
 		);
 
@@ -48,14 +48,14 @@ TEST(AttributeEventsTest, TestAttributeSetBoolEvent) {
 TEST(AttributeEventsTest, TestAttributeSetIntEvent) {
 	const char* attribute_name = "attr.test";
 	const int value = -123;
-	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
 	ASSERT_EQ(
-			boost::get<int>(*reinterpret_cast<handystats::metrics::attribute::value_type*>(message->event_data)),
+			boost::get<int>(*reinterpret_cast<handystats::attribute::value_type*>(message->event_data)),
 			value
 		);
 
@@ -65,14 +65,14 @@ TEST(AttributeEventsTest, TestAttributeSetIntEvent) {
 TEST(AttributeEventsTest, TestAttributeSetUintEvent) {
 	const char* attribute_name = "attr.test";
 	const unsigned value = 123;
-	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
 	ASSERT_EQ(
-			boost::get<unsigned>(*reinterpret_cast<handystats::metrics::attribute::value_type*>(message->event_data)),
+			boost::get<unsigned>(*reinterpret_cast<handystats::attribute::value_type*>(message->event_data)),
 			value
 		);
 
@@ -82,14 +82,14 @@ TEST(AttributeEventsTest, TestAttributeSetUintEvent) {
 TEST(AttributeEventsTest, TestAttributeSetInt64Event) {
 	const char* attribute_name = "attr.test";
 	const int64_t value = -1e13;
-	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
 	ASSERT_EQ(
-			boost::get<int64_t>(*reinterpret_cast<handystats::metrics::attribute::value_type*>(message->event_data)),
+			boost::get<int64_t>(*reinterpret_cast<handystats::attribute::value_type*>(message->event_data)),
 			value
 		);
 
@@ -99,14 +99,14 @@ TEST(AttributeEventsTest, TestAttributeSetInt64Event) {
 TEST(AttributeEventsTest, TestAttributeSetUint64Event) {
 	const char* attribute_name = "attr.test";
 	const uint64_t value = 1e13;
-	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(value), handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
 	ASSERT_EQ(
-			boost::get<uint64_t>(*reinterpret_cast<handystats::metrics::attribute::value_type*>(message->event_data)),
+			boost::get<uint64_t>(*reinterpret_cast<handystats::attribute::value_type*>(message->event_data)),
 			value
 		);
 
@@ -116,14 +116,14 @@ TEST(AttributeEventsTest, TestAttributeSetUint64Event) {
 TEST(AttributeEventsTest, TestAttributeSetStringEvent) {
 	const char* attribute_name = "attr.test";
 	const char* value = "attr.test.value";
-	auto message = create_set_event(attribute_name, handystats::metrics::attribute::value_type(std::string(value)), handystats::metrics::attribute::clock::now());
+	auto message = create_set_event(attribute_name, handystats::attribute::value_type(std::string(value)), handystats::attribute::clock::now());
 
 	ASSERT_EQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
 	ASSERT_EQ(
-			boost::get<std::string>(*reinterpret_cast<handystats::metrics::attribute::value_type*>(message->event_data)),
+			boost::get<std::string>(*reinterpret_cast<handystats::attribute::value_type*>(message->event_data)),
 			value
 		);
 

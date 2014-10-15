@@ -35,6 +35,14 @@ namespace handystats {
 
 // statistics::data
 
+statistics::data::data()
+	: m_moving_interval(chrono::duration(0, chrono::time_unit::NSEC))
+	, m_histogram_bins(0)
+	, m_tags(tag::empty)
+{
+	reset();
+}
+
 statistics::data::data(const config::statistics& config)
 	: m_moving_interval(config.moving_interval)
 	, m_histogram_bins(config.histogram_bins)

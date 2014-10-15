@@ -12,6 +12,7 @@
 namespace handystats {
 
 struct statistics::data {
+	data();
 	data(const config::statistics& config);
 
 	// applicable for moving_sum, moving_count, etc.

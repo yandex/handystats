@@ -191,7 +191,6 @@ void statistics::data::shift_histogram(const time_point& timestamp) {
 
 		if (math_utils::cmp<double>(bin_count, 0) == 0) {
 			bin_count = 0;
-			bin_timestamp = time_point();
 		}
 	}
 }
@@ -207,7 +206,6 @@ void statistics::data::truncate_histogram(const time_point& timestamp) {
 
 		if (math_utils::cmp<double>(bin_count, 0) == 0) {
 			bin_count = 0;
-			bin_timestamp = time_point();
 		}
 	}
 }
@@ -261,7 +259,11 @@ void compress_histogram(statistics::histogram_type& histogram, const size_t& his
 
 			std::get<statistics::BIN_COUNT>(left_bin) = 0;
 
-			std::get<statistics::BIN_TIMESTAMP>(left_bin) = statistics::time_point();
+			std::get<statistics::BIN_TIMESTAMP>(left_bin) =
+				std::max(
+						std::get<statistics::BIN_TIMESTAMP>(left_bin),
+						std::get<statistics::BIN_TIMESTAMP>(right_bin)
+					);
 		}
 		else {
 			std::get<statistics::BIN_CENTER>(left_bin) =
@@ -607,7 +609,7 @@ double statistics::quantile_extractor::at(const double& probability) const {
 						std::get<BIN_CENTER>(histogram[1]), std::get<BIN_COUNT>(histogram[1])
 					),
 			0,
-			time_point()
+			std::get<BIN_TIMESTAMP>(histogram[0]) // don't care
 		};
 		right_bin = histogram[0];
 	}
@@ -624,7 +626,7 @@ double statistics::quantile_extractor::at(const double& probability) const {
 						std::get<BIN_CENTER>(histogram[bin_index]), std::get<BIN_COUNT>(histogram[bin_index])
 					),
 			0,
-			time_point()
+			std::get<BIN_TIMESTAMP>(histogram[bin_index]) // don't care
 		};
 	}
 

@@ -120,10 +120,18 @@ void statistics::data::reset() {
 	if (m_histogram_bins > 0) {
 		m_histogram.reserve(m_histogram_bins + 1);
 	}
-	m_data_timestamp = time_point();
+	m_data_timestamp =
+		time_point(
+				chrono::duration(0, chrono::time_unit::NSEC),
+				chrono::clock_type::SYSTEM
+			);
 	m_rate = 0;
 
-	m_timestamp = time_point();
+	m_timestamp =
+		time_point(
+				chrono::duration(0, chrono::time_unit::NSEC),
+				chrono::clock_type::SYSTEM
+			);
 }
 
 double statistics::data::shift_interval_data(

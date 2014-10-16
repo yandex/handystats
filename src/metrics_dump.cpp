@@ -212,7 +212,7 @@ static
 void reset_dump() {
 	std::lock_guard<std::mutex> lock(dump_mutex);
 
-	dump_timestamp = chrono::time_point();
+	dump_timestamp = chrono::time_point(chrono::duration(0, chrono::time_unit::NSEC), chrono::clock_type::SYSTEM);
 	dump = std::shared_ptr<const metrics_dump_type>(new metrics_dump_type());
 }
 

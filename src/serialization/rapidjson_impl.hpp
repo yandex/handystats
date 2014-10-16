@@ -264,7 +264,14 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 				for (size_t index = 0; index < hist_json.Size(); ++index) {
 					const auto& hist_bin_json = hist_json[index];
 					if (hist_bin_json.IsArray()) {
-						statistics::bin_type hist_bin;
+						statistics::bin_type hist_bin(
+									0,
+									0,
+									chrono::time_point(
+										chrono::duration(0, chrono::time_unit::NSEC),
+										chrono::clock_type::SYSTEM
+									)
+								);
 						if (hist_bin_json.Size() > 0) {
 							const auto& bin_center_json = hist_bin_json[0u];
 							if (bin_center_json.IsNumber()) {
@@ -288,7 +295,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 							}
 						}
 
-						if (std::get<statistics::BIN_TIMESTAMP>(hist_bin) == chrono::time_point()) {
+						if (std::get<statistics::BIN_TIMESTAMP>(hist_bin).time_since_epoch().count() == 0) {
 							if (data.m_tags & statistics::tag::timestamp) {
 								std::get<statistics::BIN_TIMESTAMP>(hist_bin) = data.m_timestamp;
 							}

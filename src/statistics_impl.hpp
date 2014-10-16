@@ -41,7 +41,6 @@ struct statistics::data {
 
 	void update(const value_type& value, const time_point& timestamp = clock::now());
 	void update_time(const time_point& timestamp = clock::now());
-	void truncate_time(const time_point& timestamp);
 
 	void append(data);
 

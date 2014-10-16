@@ -242,6 +242,22 @@ double bin_merge_criteria(
 
 static
 void compress_histogram(statistics::histogram_type& histogram, const size_t& histogram_bins) {
+	if (histogram.size() > histogram_bins) {
+		// look for empty bins
+		auto bin_iter = histogram.rbegin();
+		while (bin_iter != histogram.rend() && histogram.size() > histogram_bins) {
+			if (math_utils::cmp<double>(std::get<statistics::BIN_COUNT>(*bin_iter), 0) == 0) {
+				auto empty_bin_iter = std::next(bin_iter).base();
+				++bin_iter;
+
+				histogram.erase(empty_bin_iter);
+			}
+			else {
+				++bin_iter;
+			}
+		}
+	}
+
 	while (histogram.size() > histogram_bins) {
 		size_t best_merge_index = -1;
 		double best_merge_criteria = 0;

@@ -347,14 +347,23 @@ void statistics::data::update_time(const time_point& timestamp) {
 
 	if (m_tags & tag::rate) {
 		m_rate = shift_interval_data(m_rate, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_rate, 0) == 0) {
+			m_rate = 0;
+		}
 	}
 
 	if (m_tags & tag::moving_count) {
 		m_moving_count = shift_interval_data(m_moving_count, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_moving_count, 0) == 0) {
+			m_moving_count = 0;
+		}
 	}
 
 	if (m_tags & tag::moving_sum) {
 		m_moving_sum = shift_interval_data(m_moving_sum, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_moving_sum, 0) == 0) {
+			m_moving_sum = 0;
+		}
 	}
 
 	if (m_tags & tag::histogram) {
@@ -374,14 +383,23 @@ void statistics::data::truncate_time(const time_point& timestamp) {
 
 	if (m_tags & tag::rate) {
 		m_rate = truncate_interval_data(m_rate, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_rate, 0) == 0) {
+			m_rate = 0;
+		}
 	}
 
 	if (m_tags & tag::moving_count) {
 		m_moving_count = truncate_interval_data(m_moving_count, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_moving_count, 0) == 0) {
+			m_moving_count = 0;
+		}
 	}
 
 	if (m_tags & tag::moving_sum) {
 		m_moving_sum = truncate_interval_data(m_moving_sum, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_moving_sum, 0) == 0) {
+			m_moving_sum = 0;
+		}
 	}
 
 	if (m_tags & tag::histogram) {

@@ -43,6 +43,7 @@ struct statistics::data {
 	void update_time(const time_point& timestamp = clock::now());
 
 	void append(data);
+	void merge(const data&);
 
 	void fulfill_dependencies();
 

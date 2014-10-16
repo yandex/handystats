@@ -8,7 +8,7 @@ namespace handystats { namespace metrics {
 counter::counter(const config::metrics::counter& opts)
 	: m_values(opts.values)
 	, m_value()
-	, m_timestamp()
+	, m_timestamp(chrono::duration(0, chrono::time_unit::NSEC), chrono::clock_type::SYSTEM)
 {
 }
 
@@ -23,7 +23,7 @@ void counter::init(const value_type& init_value, const time_point& timestamp) {
 }
 
 void counter::increment(const value_type& incr_value, const time_point& timestamp) {
-	if (m_timestamp == time_point()) {
+	if (m_timestamp.time_since_epoch().count() == 0) {
 		init(0, timestamp);
 	}
 
@@ -36,7 +36,7 @@ void counter::increment(const value_type& incr_value, const time_point& timestam
 }
 
 void counter::decrement(const value_type& decr_value, const time_point& timestamp) {
-	if (m_timestamp == time_point()) {
+	if (m_timestamp.time_since_epoch().count() == 0) {
 		init(0, timestamp);
 	}
 

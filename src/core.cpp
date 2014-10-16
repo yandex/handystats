@@ -34,8 +34,6 @@ std::thread processor_thread;
 static void process_message_queue() {
 	auto* message = message_queue::pop();
 
-	chrono::time_point timestamp;
-
 	if (message) {
 		last_message_timestamp = std::max(last_message_timestamp, message->timestamp);
 		internal::process_event_message(*message);
@@ -81,7 +79,7 @@ void initialize() {
 
 	enabled_flag.store(true, std::memory_order_release);
 
-	last_message_timestamp = chrono::time_point();
+	last_message_timestamp = chrono::time_point(chrono::duration(0, chrono::time_unit::NSEC), chrono::clock_type::SYSTEM);
 
 	processor_thread = std::thread(run_processor);
 }

@@ -66,13 +66,13 @@ int main() {
 		for (auto metric_iter = current_metrics.begin(); metric_iter != current_metrics.end(); ++metric_iter) {
 			auto agg_metric_iter = agg_metrics.find(metric_iter->first);
 			if (agg_metric_iter == agg_metrics.end()) {
-				metric_iter->second.truncate_time(start_timestamp);
-				metric_iter->second.m_histogram_bins = 30;
-				agg_metrics.insert(std::move(*metric_iter));
+				agg_metric_iter = agg_metrics.insert(std::make_pair(metric_iter->first, statistics::data())).first;
+
+				agg_metric_iter->second.m_timestamp = start_timestamp;
+				agg_metric_iter->second.m_histogram_bins = 30;
 			}
-			else {
-				agg_metric_iter->second.append(metric_iter->second);
-			}
+
+			agg_metric_iter->second.append(metric_iter->second);
 		}
 
 		prev_dump_timestamp = dump_timestamp;

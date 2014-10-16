@@ -377,44 +377,18 @@ void statistics::data::update_time(const time_point& timestamp) {
 	}
 }
 
-void statistics::data::truncate_time(const time_point& timestamp) {
-	if (timestamp >= m_data_timestamp) {
-		reset();
-		return;
-	}
-
-	if (m_tags & tag::rate) {
-		m_rate = truncate_interval_data(m_rate, m_data_timestamp, timestamp);
-		if (math_utils::cmp<double>(m_rate, 0) == 0) {
-			m_rate = 0;
-		}
-	}
-
-	if (m_tags & tag::moving_count) {
-		m_moving_count = truncate_interval_data(m_moving_count, m_data_timestamp, timestamp);
-		if (math_utils::cmp<double>(m_moving_count, 0) == 0) {
-			m_moving_count = 0;
-		}
-	}
-
-	if (m_tags & tag::moving_sum) {
-		m_moving_sum = truncate_interval_data(m_moving_sum, m_data_timestamp, timestamp);
-		if (math_utils::cmp<double>(m_moving_sum, 0) == 0) {
-			m_moving_sum = 0;
-		}
-	}
-
-	if (m_tags & tag::histogram) {
-		truncate_histogram(timestamp);
-	}
-}
-
 void statistics::data::append(data d) {
-	if (d.m_timestamp <= m_timestamp || d.m_data_timestamp <= m_data_timestamp) {
+	if (d.m_timestamp <= m_timestamp) {
+		// data to append is too old
 		return;
 	}
-
-	d.truncate_time(m_timestamp);
+	if (d.m_data_timestamp <= m_data_timestamp) {
+		// data to append is too old
+		// but timestamp should be updated along with moving_interval
+		m_moving_interval += d.m_timestamp - m_timestamp;
+		m_timestamp = d.m_timestamp;
+		return;
+	}
 
 	if (d.m_tags & tag::value) {
 		m_value = d.m_value;
@@ -438,19 +412,20 @@ void statistics::data::append(data d) {
 	}
 
 	if (d.m_tags & tag::moving_count) {
-		m_moving_count += d.m_moving_count;
+		m_moving_count += d.truncate_interval_data(d.m_moving_count, d.m_data_timestamp, m_timestamp);
 		m_tags |= tag::moving_count;
 	}
 	if (d.m_tags & tag::moving_sum) {
-		m_moving_sum += d.m_moving_sum;
+		m_moving_sum += d.truncate_interval_data(d.m_moving_sum, d.m_data_timestamp, m_timestamp);
 		m_tags |= tag::moving_sum;
 	}
 	if (d.m_tags & tag::rate) {
-		m_rate += d.m_rate;
+		m_rate += d.truncate_interval_data(d.m_rate, d.m_data_timestamp, m_timestamp);
 		m_tags |= tag::rate;
 	}
 
 	if (d.m_tags & tag::histogram) {
+		d.truncate_histogram(m_timestamp);
 		m_histogram.reserve(m_histogram.size() + d.m_histogram.size());
 		m_histogram.insert(m_histogram.end(), d.m_histogram.begin(), d.m_histogram.end());
 		std::sort(m_histogram.begin(), m_histogram.end());

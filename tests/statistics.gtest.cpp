@@ -284,7 +284,7 @@ static bool check_independent_tag(handystats::statistics& stats) {
 	opts.tags = Tag;
 	stats = handystats::statistics(opts);
 
-	return stats.computed(Tag) && count_computed_tags(stats) == 1;
+	return stats.computed(Tag);
 }
 
 TEST_F(StatisticsTagDependency, IndependentStatisticsCheck) {
@@ -303,8 +303,8 @@ TEST_F(StatisticsTagDependency, AvgStatisticsCheck) {
 	ASSERT_TRUE(stats.enabled(handystats::statistics::tag::avg));
 	ASSERT_TRUE(stats.computed(handystats::statistics::tag::count));
 	ASSERT_TRUE(stats.computed(handystats::statistics::tag::sum));
+	ASSERT_TRUE(stats.computed(handystats::statistics::tag::timestamp));
 
-	ASSERT_FALSE(stats.computed(handystats::statistics::tag::timestamp));
 	ASSERT_FALSE(stats.computed(handystats::statistics::tag::value));
 	ASSERT_FALSE(stats.computed(handystats::statistics::tag::min));
 	ASSERT_FALSE(stats.computed(handystats::statistics::tag::moving_count));

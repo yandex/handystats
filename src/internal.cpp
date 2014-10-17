@@ -96,7 +96,7 @@ void process_event_message(attribute& attr, const events::event_message& message
 }
 
 void process_event_message(const events::event_message& message) {
-	auto process_start_time = chrono::tsc_clock::now();
+	auto process_start_time = chrono::internal_clock::now();
 
 	if (message.destination_type == events::event_destination_type::ATTRIBUTE) {
 		auto& attr = attributes_map[message.destination_name];
@@ -142,7 +142,7 @@ void process_event_message(const events::event_message& message) {
 		process_event_message(metric_ptr, message);
 	}
 
-	auto process_end_time = chrono::tsc_clock::now();
+	auto process_end_time = chrono::internal_clock::now();
 
 	stats::process_time.set(
 			chrono::duration::convert_to(metrics::timer::value_unit, process_end_time - process_start_time).count(),

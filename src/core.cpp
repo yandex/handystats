@@ -55,11 +55,11 @@ static void run_processor() {
 			process_message_queue();
 		}
 		else {
-			last_message_timestamp = std::max(last_message_timestamp, chrono::tsc_clock::now());
+			last_message_timestamp = std::max(last_message_timestamp, chrono::internal_clock::now());
 			std::this_thread::sleep_for(std::chrono::microseconds(10));
 		}
 
-		metrics_dump::update(chrono::tsc_clock::now(), last_message_timestamp);
+		metrics_dump::update(chrono::internal_clock::now(), last_message_timestamp);
 	}
 }
 

@@ -58,7 +58,7 @@ time_point to_system_time(const time_point& t) {
 	static const duration CLOSE_DISTANCE (15 * (int64_t)1E3, time_unit::NSEC);
 	static const uint64_t MAX_UPDATE_TRIES (100);
 
-	time_point current_tsc_time = tsc_clock::now();
+	time_point current_tsc_time = internal_clock::now();
 	time_unit tsc_unit = current_tsc_time.time_since_epoch().unit();
 
 	int64_t offset_ts = offset_timestamp.load(std::memory_order_acquire);
@@ -73,9 +73,9 @@ time_point to_system_time(const time_point& t) {
 
 			bool close_pair_found = false;
 			for (uint64_t update_try = 0; update_try < MAX_UPDATE_TRIES; ++update_try) {
-				cycles_start = tsc_clock::now();
+				cycles_start = internal_clock::now();
 				current_system_time = system_clock::now();
-				cycles_end = tsc_clock::now();
+				cycles_end = internal_clock::now();
 
 				if (cycles_end - cycles_start < CLOSE_DISTANCE) {
 					close_pair_found = true;
@@ -117,8 +117,8 @@ time_point time_point::convert_to(const clock_type& to_clock, const time_point& 
 		return to_system_time(t);
 	}
 	else {
-		// to_clock == clock_type::TSC
-		throw std::logic_error("SYSTEM to TSC clock conversion is not implemented");
+		// to_clock == clock_type::INTERNAL
+		throw std::logic_error("SYSTEM to INTERNAL clock conversion is not implemented");
 	}
 }
 
@@ -126,12 +126,12 @@ time_point time_point::convert_to(const clock_type& to_clock, const time_point& 
 
 HANDYSTATS_EXTERN_C
 int64_t handystats_now(void) {
-	return (int64_t)handystats::chrono::tsc_clock::now().time_since_epoch().count();
+	return (int64_t)handystats::chrono::internal_clock::now().time_since_epoch().count();
 }
 
 HANDYSTATS_EXTERN_C
 double handystats_difftime(int64_t end, int64_t start) {
-	const auto& tsc_unit = handystats::chrono::tsc_clock::now().time_since_epoch().unit();
+	const auto& tsc_unit = handystats::chrono::internal_clock::now().time_since_epoch().unit();
 	const auto& duration = handystats::chrono::duration(end - start, tsc_unit);
 	const auto& ns_duration =
 		handystats::chrono::duration::convert_to(

@@ -14,7 +14,7 @@ namespace handystats { namespace metrics {
 struct gauge
 {
 	typedef double value_type;
-	typedef chrono::tsc_clock clock;
+	typedef chrono::internal_clock clock;
 	typedef chrono::time_point time_point;
 
 	gauge(const config::metrics::gauge& opts = config::metrics::gauge());

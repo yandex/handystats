@@ -20,9 +20,9 @@ struct command_executor {
 			command_type command
 		)
 	{
-		auto start_time = chrono::tsc_clock::now();
+		auto start_time = chrono::internal_clock::now();
 		command();
-		auto end_time = chrono::tsc_clock::now();
+		auto end_time = chrono::internal_clock::now();
 
 		return end_time - start_time;
 	}
@@ -34,7 +34,7 @@ struct command_executor {
 			chrono::duration time_limit
 		)
 	{
-		auto start_time = chrono::tsc_clock::now();
+		auto start_time = chrono::internal_clock::now();
 		auto call_time = run_command(command);
 
 		while (call_time < time_limit) {
@@ -44,7 +44,7 @@ struct command_executor {
 			else {
 				std::this_thread::yield();
 			}
-			call_time = chrono::tsc_clock::now() - start_time;
+			call_time = chrono::internal_clock::now() - start_time;
 		}
 
 		return call_time;

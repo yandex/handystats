@@ -160,7 +160,7 @@ events::event_message* pop() {
 
 	if (message) {
 		--mq_size;
-		auto current_time = chrono::tsc_clock::now();
+		auto current_time = chrono::internal_clock::now();
 		stats::size.set(size(), current_time);
 		stats::pop_count.increment(1, current_time);
 

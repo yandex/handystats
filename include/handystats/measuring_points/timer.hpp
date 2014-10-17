@@ -18,37 +18,37 @@ namespace handystats { namespace measuring_points {
 void timer_init(
 		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
-		const chrono::time_point& timestamp = chrono::tsc_clock::now()
+		const chrono::time_point& timestamp = chrono::internal_clock::now()
 	);
 
 void timer_start(
 		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
-		const chrono::time_point& timestamp = chrono::tsc_clock::now()
+		const chrono::time_point& timestamp = chrono::internal_clock::now()
 	);
 
 void timer_stop(
 		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
-		const chrono::time_point& timestamp = chrono::tsc_clock::now()
+		const chrono::time_point& timestamp = chrono::internal_clock::now()
 	);
 
 void timer_discard(
 		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
-		const chrono::time_point& timestamp = chrono::tsc_clock::now()
+		const chrono::time_point& timestamp = chrono::internal_clock::now()
 	);
 
 void timer_heartbeat(
 		std::string&& timer_name,
 		const metrics::timer::instance_id_type& instance_id = metrics::timer::DEFAULT_INSTANCE_ID,
-		const chrono::time_point& timestamp = chrono::tsc_clock::now()
+		const chrono::time_point& timestamp = chrono::internal_clock::now()
 	);
 
 void timer_set(
 		std::string&& timer_name,
 		const metrics::timer::value_type& measurement,
-		const chrono::time_point& timestamp = chrono::tsc_clock::now()
+		const chrono::time_point& timestamp = chrono::internal_clock::now()
 	);
 
 /*
@@ -66,7 +66,7 @@ struct scoped_timer_helper {
 	}
 
 	~scoped_timer_helper() {
-		auto end_time = chrono::tsc_clock::now();
+		auto end_time = chrono::internal_clock::now();
 		timer_set(timer_name.substr(), end_time - start_time);
 	}
 };
@@ -116,7 +116,7 @@ struct scoped_timer_helper {
 #ifndef HANDYSTATS_DISABLE
 
 	#define HANDY_TIMER_SCOPE(timer_name) \
-	handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME (timer_name, handystats::chrono::tsc_clock::now())
+	handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME (timer_name, handystats::chrono::internal_clock::now())
 
 #else
 

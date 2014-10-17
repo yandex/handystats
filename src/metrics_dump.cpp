@@ -58,7 +58,7 @@ static
 std::shared_ptr<const metrics_dump_type>
 create_dump(const chrono::time_point& current_time, const chrono::time_point& internal_time)
 {
-	auto dump_start_time = chrono::tsc_clock::now();
+	auto dump_start_time = chrono::internal_clock::now();
 
 	std::shared_ptr<metrics_dump_type> new_dump(new metrics_dump_type());
 
@@ -167,7 +167,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 			);
 	}
 
-	auto dump_end_time = chrono::tsc_clock::now();
+	auto dump_end_time = chrono::internal_clock::now();
 
 	stats::dump_time.set(
 			chrono::duration::convert_to(metrics::timer::value_unit, dump_end_time - dump_start_time).count(),

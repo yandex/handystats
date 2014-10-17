@@ -20,7 +20,7 @@ struct timer
 	typedef chrono::duration value_type;
 	static const chrono::time_unit value_unit;
 
-	typedef chrono::tsc_clock clock;
+	typedef chrono::internal_clock clock;
 	typedef chrono::time_point time_point;
 
 	typedef uint64_t instance_id_type;

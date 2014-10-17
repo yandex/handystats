@@ -79,7 +79,7 @@ time_unit time_unit_from_string(const std::string& unit_str) {
 }
 
 enum class clock_type {
-	TSC, // epoch - unspecified point in time (usually boot-time), machine-specific
+	INTERNAL, // epoch - unspecified point in time (usually boot-time), machine-specific
 	SYSTEM // epoch - 1970 00:00:00 UT
 };
 
@@ -127,8 +127,8 @@ namespace handystats { namespace chrono {
 struct duration;
 struct time_point;
 
-struct tsc_clock {
-	// will return time_point with TSC clock type and CYCLE time unit
+struct internal_clock {
+	// will return time_point with INTERNAL clock type and CYCLE time unit
 	static time_point now();
 };
 
@@ -338,13 +338,12 @@ private:
 
 struct time_point {
 	// if clock types are the same nothing will be done
-	// if target clock type is TSC resulted duration will be CYCLE
 	// if target clock type is SYSTEM resulted duration will be NSEC
 	static time_point convert_to(const clock_type&, const time_point&);
 
 	time_point()
 		: m_since_epoch()
-		, m_clock(clock_type::TSC)
+		, m_clock(clock_type::INTERNAL)
 	{}
 
 	time_point(const duration& d, const clock_type& clock)
@@ -358,7 +357,7 @@ struct time_point {
 
 	/* Compound assignments */
 	time_point& operator+=(const duration& d) {
-		if (m_clock == clock_type::TSC) {
+		if (m_clock == clock_type::INTERNAL) {
 			m_since_epoch += d;
 		}
 		else {
@@ -372,7 +371,7 @@ struct time_point {
 		return *this;
 	}
 	time_point& operator-=(const duration& d) {
-		if (m_clock == clock_type::TSC) {
+		if (m_clock == clock_type::INTERNAL) {
 			m_since_epoch -= d;
 		}
 		else {
@@ -404,7 +403,7 @@ struct time_point {
 			return m_since_epoch - t.m_since_epoch;
 		}
 		else {
-			if (m_clock == clock_type::TSC) {
+			if (m_clock == clock_type::INTERNAL) {
 				return convert_to(clock_type::SYSTEM, *this).m_since_epoch - t.m_since_epoch;
 			}
 			else {
@@ -419,7 +418,7 @@ struct time_point {
 			return m_since_epoch == t.m_since_epoch;
 		}
 		else {
-			if (m_clock == clock_type::TSC) {
+			if (m_clock == clock_type::INTERNAL) {
 				return convert_to(clock_type::SYSTEM, *this) == t;
 			}
 			else {
@@ -432,7 +431,7 @@ struct time_point {
 			return m_since_epoch != t.m_since_epoch;
 		}
 		else {
-			if (m_clock == clock_type::TSC) {
+			if (m_clock == clock_type::INTERNAL) {
 				return convert_to(clock_type::SYSTEM, *this) != t;
 			}
 			else {
@@ -445,7 +444,7 @@ struct time_point {
 			return m_since_epoch < t.m_since_epoch;
 		}
 		else {
-			if (m_clock == clock_type::TSC) {
+			if (m_clock == clock_type::INTERNAL) {
 				return convert_to(clock_type::SYSTEM, *this) < t;
 			}
 			else {
@@ -458,7 +457,7 @@ struct time_point {
 			return m_since_epoch <= t.m_since_epoch;
 		}
 		else {
-			if (m_clock == clock_type::TSC) {
+			if (m_clock == clock_type::INTERNAL) {
 				return convert_to(clock_type::SYSTEM, *this) <= t;
 			}
 			else {
@@ -471,7 +470,7 @@ struct time_point {
 			return m_since_epoch > t.m_since_epoch;
 		}
 		else {
-			if (m_clock == clock_type::TSC) {
+			if (m_clock == clock_type::INTERNAL) {
 				return convert_to(clock_type::SYSTEM, *this) > t;
 			}
 			else {
@@ -484,7 +483,7 @@ struct time_point {
 			return m_since_epoch >= t.m_since_epoch;
 		}
 		else {
-			if (m_clock == clock_type::TSC) {
+			if (m_clock == clock_type::INTERNAL) {
 				return convert_to(clock_type::SYSTEM, *this) >= t;
 			}
 			else {

@@ -635,7 +635,7 @@ double statistics::quantile_extractor::at(const double& probability) const {
 	double required_count = moving_count * probability;
 
 	int bin_index = -1;
-	for (; bin_index < (int)histogram.size(); ++bin_index) {
+	for (; bin_index < (int)histogram.size() - 1; ++bin_index) {
 		double volume =
 			(
 				(bin_index == -1 ? 0 : std::get<BIN_COUNT>(histogram[bin_index]))

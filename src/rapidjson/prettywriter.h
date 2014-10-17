@@ -142,8 +142,8 @@ protected:
 				RAPIDJSON_ASSERT(type == kStringType);  // if it's in object, then even number should be a name
 			level->valueCount++;
 		}
-		else
-			RAPIDJSON_ASSERT(type == kObjectType || type == kArrayType);
+//		else
+//			RAPIDJSON_ASSERT(type == kObjectType || type == kArrayType);
 	}
 
 	void WriteIndent()  {

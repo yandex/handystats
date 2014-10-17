@@ -166,11 +166,11 @@ time_point tsc_clock::now() {
 	switch (clock_source) {
 	case CS_RDTSC:
 		{
-			return time_point(duration(rdtsc(), time_unit::TICK), clock_type::TSC);
+			return time_point(duration(rdtsc(), time_unit::CYCLE), clock_type::TSC);
 		}
 	case CS_RDTSCP:
 		{
-			return time_point(duration(rdtscp(), time_unit::TICK), clock_type::TSC);
+			return time_point(duration(rdtscp(), time_unit::CYCLE), clock_type::TSC);
 		}
 	case CS_CLOCK_MONOTONIC:
 		{

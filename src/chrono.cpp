@@ -36,11 +36,11 @@ extern long double cycles_per_nanosec;
 duration duration::convert_to(const time_unit& to_unit, const duration& d) {
 	if (d.m_unit == to_unit) return d;
 
-	if (to_unit == time_unit::TICK) {
+	if (to_unit == time_unit::CYCLE) {
 		return duration(int64_t(cycles_per_nanosec * nsec_factor(d.m_unit) * d.m_rep), to_unit);
 	}
 
-	if (d.m_unit == time_unit::TICK) {
+	if (d.m_unit == time_unit::CYCLE) {
 		return duration(int64_t(double(d.m_rep) / nsec_factor(to_unit) / cycles_per_nanosec), to_unit);
 	}
 

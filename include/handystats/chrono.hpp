@@ -13,7 +13,7 @@
 namespace handystats { namespace chrono {
 
 enum class time_unit {
-	TICK,
+	CYCLE,
 	NSEC,
 	USEC,
 	MSEC,
@@ -26,7 +26,7 @@ enum class time_unit {
 inline
 const char* time_unit_as_string(const time_unit& unit) {
 	switch (unit) {
-	case time_unit::TICK:
+	case time_unit::CYCLE:
 		return "c";
 	case time_unit::NSEC:
 		return "ns";
@@ -49,8 +49,8 @@ const char* time_unit_as_string(const time_unit& unit) {
 
 inline
 time_unit time_unit_from_string(const std::string& unit_str) {
-	if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::TICK)) == 0) {
-		return time_unit::TICK;
+	if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::CYCLE)) == 0) {
+		return time_unit::CYCLE;
 	}
 	else if (strcmp(unit_str.c_str(), time_unit_as_string(time_unit::NSEC)) == 0) {
 		return time_unit::NSEC;
@@ -97,7 +97,7 @@ struct less<handystats::chrono::time_unit> {
 private:
 	static unsigned precision_class(const handystats::chrono::time_unit& unit) {
 		switch (unit) {
-		case handystats::chrono::time_unit::TICK:
+		case handystats::chrono::time_unit::CYCLE:
 			return 1 << 0;
 		case handystats::chrono::time_unit::NSEC:
 			return 1 << 1;
@@ -128,7 +128,7 @@ struct duration;
 struct time_point;
 
 struct tsc_clock {
-	// will return time_point with TSC clock type and TICK time unit
+	// will return time_point with TSC clock type and CYCLE time unit
 	static time_point now();
 };
 
@@ -142,7 +142,7 @@ struct duration {
 
 	duration()
 		: m_rep(0)
-		, m_unit(time_unit::TICK)
+		, m_unit(time_unit::CYCLE)
 	{}
 
 	duration(const int64_t& d, const time_unit& u)
@@ -338,7 +338,7 @@ private:
 
 struct time_point {
 	// if clock types are the same nothing will be done
-	// if target clock type is TSC resulted duration will be TICK
+	// if target clock type is TSC resulted duration will be CYCLE
 	// if target clock type is SYSTEM resulted duration will be NSEC
 	static time_point convert_to(const clock_type&, const time_point&);
 
@@ -362,7 +362,7 @@ struct time_point {
 			m_since_epoch += d;
 		}
 		else {
-			if (d.m_unit == time_unit::TICK) {
+			if (d.m_unit == time_unit::CYCLE) {
 				m_since_epoch += duration::convert_to(m_since_epoch.m_unit, d);
 			}
 			else {
@@ -376,7 +376,7 @@ struct time_point {
 			m_since_epoch -= d;
 		}
 		else {
-			if (d.m_unit == time_unit::TICK) {
+			if (d.m_unit == time_unit::CYCLE) {
 				m_since_epoch -= duration::convert_to(m_since_epoch.m_unit, d);
 			}
 			else {

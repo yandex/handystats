@@ -40,6 +40,7 @@ statistics::data::data()
 	, m_histogram_bins(0)
 	, m_tags(tag::empty)
 {
+	m_tags |= tag::timestamp;
 	reset();
 }
 
@@ -48,6 +49,7 @@ statistics::data::data(const config::statistics& config)
 	, m_histogram_bins(config.histogram_bins)
 {
 	m_tags = tag::empty;
+	m_tags |= tag::timestamp;
 
 	if (config.tags & tag::value) {
 		m_tags |= tag::value;
@@ -74,35 +76,31 @@ statistics::data::data(const config::statistics& config)
 	}
 
 	if (config.tags & tag::moving_count) {
-		m_tags |= tag::moving_count | tag::timestamp;
+		m_tags |= tag::moving_count;
 	}
 
 	if (config.tags & tag::moving_sum) {
-		m_tags |= tag::moving_sum | tag::timestamp;
+		m_tags |= tag::moving_sum;
 	}
 
 	if (config.tags & tag::moving_avg) {
-		m_tags |= tag::moving_avg | tag::moving_count | tag::moving_sum | tag::timestamp;
+		m_tags |= tag::moving_avg | tag::moving_count | tag::moving_sum;
 	}
 
 	if (config.tags & tag::histogram) {
-		m_tags |= tag::histogram | tag::timestamp;
+		m_tags |= tag::histogram;
 	}
 
 	if (config.tags & tag::quantile) {
-		m_tags |= tag::quantile | tag::histogram | tag::timestamp;
+		m_tags |= tag::quantile | tag::histogram;
 	}
 
 	if (config.tags & tag::entropy) {
-		m_tags |= tag::entropy | tag::histogram | tag::timestamp;
+		m_tags |= tag::entropy | tag::histogram;
 	}
 
 	if (config.tags & tag::rate) {
-		m_tags |= tag::rate | tag::value | tag::timestamp;
-	}
-
-	if (config.tags & tag::timestamp) {
-		m_tags |= tag::timestamp;
+		m_tags |= tag::rate | tag::value;
 	}
 
 	reset();
@@ -361,11 +359,8 @@ void statistics::data::update(const value_type& value, const time_point& timesta
 		update_histogram(value, timestamp);
 	}
 
-	if (m_tags & tag::timestamp) {
-		m_timestamp = std::max(m_timestamp, timestamp);
-
-		m_data_timestamp = std::max(m_data_timestamp, timestamp);
-	}
+	m_timestamp = std::max(m_timestamp, timestamp);
+	m_data_timestamp = std::max(m_data_timestamp, timestamp);
 }
 
 void statistics::data::update_time(const time_point& timestamp) {
@@ -396,9 +391,7 @@ void statistics::data::update_time(const time_point& timestamp) {
 		shift_histogram(timestamp);
 	}
 
-	if (m_tags & tag::timestamp) {
-		m_timestamp = std::max(m_timestamp, timestamp);
-	}
+	m_timestamp = std::max(m_timestamp, timestamp);
 }
 
 void statistics::data::append(data d) {
@@ -541,9 +534,8 @@ void statistics::data::fulfill_dependencies() {
 		m_tags &= ~tag::avg;
 	}
 
-	// moving_count - depends on timestamp and moving_interval
+	// moving_count - depends on moving_interval
 	if ((m_tags & tag::moving_count) &&
-			(m_tags & tag::timestamp) &&
 			(m_moving_interval.count() > 0)
 		)
 	{
@@ -553,9 +545,8 @@ void statistics::data::fulfill_dependencies() {
 		m_tags &= ~tag::moving_count;
 	}
 
-	// moving_sum - depends on timestamp and moving_interval
+	// moving_sum - depends on moving_interval
 	if ((m_tags & tag::moving_sum) &&
-			(m_tags & tag::timestamp) &&
 			(m_moving_interval.count() > 0)
 		)
 	{
@@ -573,9 +564,8 @@ void statistics::data::fulfill_dependencies() {
 		m_tags &= ~tag::moving_avg;
 	}
 
-	// histogram - depends on timestamp and moving_interval
+	// histogram - depends on moving_interval
 	if ((m_tags & tag::histogram) &&
-			(m_tags & tag::timestamp) &&
 			(m_moving_interval.count() > 0)
 		)
 	{
@@ -601,10 +591,9 @@ void statistics::data::fulfill_dependencies() {
 		m_tags &= ~tag::entropy;
 	}
 
-	// rate - depends on value, timestamp and moving_interval
+	// rate - depends on value and moving_interval
 	if ((m_tags & tag::rate) &&
 			(m_tags & tag::value) &&
-			(m_tags & tag::timestamp) &&
 			(m_moving_interval.count() > 0)
 		)
 	{

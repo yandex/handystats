@@ -162,15 +162,15 @@ void init_cycles_per_nanosec() {
 
 namespace handystats { namespace chrono {
 
-time_point tsc_clock::now() {
+time_point internal_clock::now() {
 	switch (clock_source) {
 	case CS_RDTSC:
 		{
-			return time_point(duration(rdtsc(), time_unit::CYCLE), clock_type::TSC);
+			return time_point(duration(rdtsc(), time_unit::CYCLE), clock_type::INTERNAL);
 		}
 	case CS_RDTSCP:
 		{
-			return time_point(duration(rdtscp(), time_unit::CYCLE), clock_type::TSC);
+			return time_point(duration(rdtscp(), time_unit::CYCLE), clock_type::INTERNAL);
 		}
 	case CS_CLOCK_MONOTONIC:
 		{
@@ -178,7 +178,7 @@ time_point tsc_clock::now() {
 
 			clock_gettime(CLOCK_MONOTONIC, &tm);
 
-			return time_point(duration((int64_t)tm.tv_sec * (int64_t)1E9 + tm.tv_nsec, time_unit::NSEC), clock_type::TSC);
+			return time_point(duration((int64_t)tm.tv_sec * (int64_t)1E9 + tm.tv_nsec, time_unit::NSEC), clock_type::INTERNAL);
 		}
 	case CS_CLOCK_REALTIME:
 		{
@@ -186,11 +186,11 @@ time_point tsc_clock::now() {
 
 			clock_gettime(CLOCK_REALTIME, &tm);
 
-			return time_point(duration((int64_t)tm.tv_sec * (int64_t)1E9 + tm.tv_nsec, time_unit::NSEC), clock_type::TSC);
+			return time_point(duration((int64_t)tm.tv_sec * (int64_t)1E9 + tm.tv_nsec, time_unit::NSEC), clock_type::INTERNAL);
 		}
 	default:
 		{
-			return time_point(duration(0, time_unit::NSEC), clock_type::TSC);
+			return time_point(duration(0, time_unit::NSEC), clock_type::INTERNAL);
 		}
 	}
 }

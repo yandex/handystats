@@ -80,7 +80,7 @@ void print_stats() {
 		<< " ETR: " <<
 			handystats::chrono::duration::convert_to(handystats::chrono::time_unit::SEC,
 				handystats::chrono::duration(end_time.load(), handystats::chrono::time_unit::CYCLE) -
-				handystats::chrono::tsc_clock::now().time_since_epoch()
+				handystats::chrono::internal_clock::now().time_since_epoch()
 			)
 			.count()
 			<< "s "
@@ -196,9 +196,9 @@ int main(int argc, char** argv) {
 	std::thread stats_printer(
 			[&stop_flag] () {
 				while (!stop_flag.load()) {
-					const auto& start_time = handystats::chrono::tsc_clock::now();
+					const auto& start_time = handystats::chrono::internal_clock::now();
 					print_stats();
-					const auto& end_time = handystats::chrono::tsc_clock::now();
+					const auto& end_time = handystats::chrono::internal_clock::now();
 
 					const auto& call_time = handystats::chrono::duration::convert_to(
 							handystats::chrono::time_unit::NSEC, end_time - start_time
@@ -238,7 +238,7 @@ int main(int argc, char** argv) {
 		rate.store(step_rate);
 		end_time.store(
 				(
-					handystats::chrono::tsc_clock::now() +
+					handystats::chrono::internal_clock::now() +
 					handystats::chrono::duration(step_time_limit, handystats::chrono::time_unit::SEC)
 				).time_since_epoch().count()
 			);

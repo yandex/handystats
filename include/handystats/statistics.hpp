@@ -18,7 +18,7 @@ namespace handystats {
 
 struct statistics {
 	typedef double value_type;
-	typedef chrono::tsc_clock clock;
+	typedef chrono::internal_clock clock;
 	typedef chrono::duration duration;
 	typedef chrono::time_point time_point;
 

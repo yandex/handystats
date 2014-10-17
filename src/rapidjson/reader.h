@@ -172,7 +172,7 @@ inline const char *SkipWhitespace_SIMD(const char* p) {
 
 #ifdef RAPIDJSON_SIMD
 //! Template function specialization for InsituStringStream
-template<> inline void SkipWhitespace(InsituStringStream& is) { 
+template<> inline void SkipWhitespace(InsituStringStream& is) {
 	is.src_ = const_cast<char*>(SkipWhitespace_SIMD(is.src_));
 }
 
@@ -186,17 +186,17 @@ template<> inline void SkipWhitespace(StringStream& is) {
 // GenericReader
 
 //! SAX-style JSON parser. Use Reader for UTF8 encoding and default allocator.
-/*! GenericReader parses JSON text from a stream, and send events synchronously to an 
+/*! GenericReader parses JSON text from a stream, and send events synchronously to an
     object implementing Handler concept.
 
-    It needs to allocate a stack for storing a single decoded string during 
+    It needs to allocate a stack for storing a single decoded string during
     non-destructive parsing.
 
-    For in-situ parsing, the decoded string is directly written to the source 
+    For in-situ parsing, the decoded string is directly written to the source
     text string, no temporary buffer is required.
 
     A GenericReader object can be reused for parsing multiple JSON text.
-    
+
     \tparam SourceEncoding Encoding of the input stream.
 	\tparam TargetEncoding Encoding of the parse output.
     \tparam Allocator Allocator type for stack.
@@ -213,7 +213,7 @@ public:
 	GenericReader(Allocator* allocator = 0, size_t stackCapacity = kDefaultStackCapacity) : stack_(allocator, stackCapacity), parseError_(0), errorOffset_(0) {}
 
 	//! Parse JSON text.
-	/*! \tparam parseFlags Combination of ParseFlag. 
+	/*! \tparam parseFlags Combination of ParseFlag.
 		 \tparam InputStream Type of input stream.
 		 \tparam Handler Type of handler which must implement Handler concept.
 		 \param stream Input stream to be parsed.
@@ -424,10 +424,10 @@ private:
 	RAPIDJSON_FORCEINLINE void ParseStringToStream(InputStream& is, OutputStream& os) {
 #define Z16 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 		static const char escape[256] = {
-			Z16, Z16, 0, 0,'\"', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,'/', 
-			Z16, Z16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,'\\', 0, 0, 0, 
-			0, 0,'\b', 0, 0, 0,'\f', 0, 0, 0, 0, 0, 0, 0,'\n', 0, 
-			0, 0,'\r', 0,'\t', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+			Z16, Z16, 0, 0,'\"', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,'/',
+			Z16, Z16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,'\\', 0, 0, 0,
+			0, 0,'\b', 0, 0, 0,'\f', 0, 0, 0, 0, 0, 0, 0,'\n', 0,
+			0, 0,'\r', 0,'\t', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			Z16, Z16, Z16, Z16, Z16, Z16, Z16, Z16
 		};
 #undef Z16
@@ -468,8 +468,8 @@ private:
 			else if ((unsigned)c < 0x20) // RFC 4627: unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
 				RAPIDJSON_PARSE_ERROR("Incorrect unescaped character in string", is.Tell() - 1);
 			else {
-				if (parseFlags & kParseValidateEncodingFlag ? 
-					!Transcoder<SEncoding, TEncoding>::Validate(is, os) : 
+				if (parseFlags & kParseValidateEncodingFlag ?
+					!Transcoder<SEncoding, TEncoding>::Validate(is, os) :
 					!Transcoder<SEncoding, TEncoding>::Transcode(is, os))
 					RAPIDJSON_PARSE_ERROR("Invalid encoding", is.Tell());
 			}
@@ -525,8 +525,8 @@ private:
 		bool useDouble = false;
 		if (try64bit) {
 			i64 = i;
-			if (minus) 
-				while (s.Peek() >= '0' && s.Peek() <= '9') {					
+			if (minus)
+				while (s.Peek() >= '0' && s.Peek() <= '9') {
 					if (i64 >= 922337203685477580uLL) // 2^63 = 9223372036854775808
 						if (i64 != 922337203685477580uLL || s.Peek() > '8') {
 							useDouble = true;
@@ -535,7 +535,7 @@ private:
 					i64 = i64 * 10 + (s.Take() - '0');
 				}
 			else
-				while (s.Peek() >= '0' && s.Peek() <= '9') {					
+				while (s.Peek() >= '0' && s.Peek() <= '9') {
 					if (i64 >= 1844674407370955161uLL) // 2^64 - 1 = 18446744073709551615
 						if (i64 != 1844674407370955161uLL || s.Peek() > '5') {
 							useDouble = true;
@@ -656,7 +656,7 @@ private:
 		}
 	}
 
-	static const size_t kDefaultStackCapacity = 256;	//!< Default stack capacity in bytes for storing a single decoded string. 
+	static const size_t kDefaultStackCapacity = 256;	//!< Default stack capacity in bytes for storing a single decoded string.
 	internal::Stack<Allocator> stack_;	//!< A stack for storing decoded string temporarily during non-destructive parsing.
 	jmp_buf jmpbuf_;					//!< setjmp buffer for fast exit from nested parsing function calls.
 	const char* parseError_;

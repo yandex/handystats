@@ -118,7 +118,7 @@ template<int x> struct StaticAssertTest {};
 ///////////////////////////////////////////////////////////////////////////////
 // Helpers
 
-#define RAPIDJSON_MULTILINEMACRO_BEGIN do {  
+#define RAPIDJSON_MULTILINEMACRO_BEGIN do {
 #define RAPIDJSON_MULTILINEMACRO_END \
 } while((void)0, 0)
 
@@ -246,7 +246,7 @@ enum Type {
 	kFalseType = 1,		//!< false
 	kTrueType = 2,		//!< true
 	kObjectType = 3,	//!< object
-	kArrayType = 4,		//!< array 
+	kArrayType = 4,		//!< array
 	kStringType = 5,	//!< string
 	kNumberType = 6,	//!< number
 };

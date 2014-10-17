@@ -14,11 +14,11 @@ class FileWriteStream {
 public:
 	typedef char Ch;	//!< Character type. Only support char.
 
-	FileWriteStream(FILE* fp, char* buffer, size_t bufferSize) : fp_(fp), buffer_(buffer), bufferEnd_(buffer + bufferSize), current_(buffer_) { 
+	FileWriteStream(FILE* fp, char* buffer, size_t bufferSize) : fp_(fp), buffer_(buffer), bufferEnd_(buffer + bufferSize), current_(buffer_) {
 		RAPIDJSON_ASSERT(fp_ != 0);
 	}
 
-	void Put(char c) { 
+	void Put(char c) {
 		if (current_ >= bufferEnd_)
 			Flush();
 

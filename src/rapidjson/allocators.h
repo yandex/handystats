@@ -10,10 +10,10 @@ namespace rapidjson {
 
 /*! \class rapidjson::Allocator
 	\brief Concept for allocating, resizing and freeing memory block.
-	
+
 	Note that Malloc() and Realloc() are non-static but Free() is static.
-	
-	So if an allocator need to support Free(), it needs to put its pointer in 
+
+	So if an allocator need to support Free(), it needs to put its pointer in
 	the header of memory block.
 
 \code
@@ -57,7 +57,7 @@ public:
 // MemoryPoolAllocator
 
 //! Default memory allocator used by the parser and DOM.
-/*! This allocator allocate memory blocks from pre-allocated memory chunks. 
+/*! This allocator allocate memory blocks from pre-allocated memory chunks.
 
     It does not free memory blocks. And Realloc() only allocate new memory.
 
@@ -81,7 +81,7 @@ public:
 	/*! \param chunkSize The size of memory chunk. The default is kDefaultChunkSize.
 		\param baseAllocator The allocator for allocating memory chunks.
 	*/
-	MemoryPoolAllocator(size_t chunkSize = kDefaultChunkCapacity, BaseAllocator* baseAllocator = 0) : 
+	MemoryPoolAllocator(size_t chunkSize = kDefaultChunkCapacity, BaseAllocator* baseAllocator = 0) :
 		chunkHead_(0), chunk_capacity_(chunkSize), userBuffer_(0), baseAllocator_(baseAllocator), ownBaseAllocator_(0)
 	{
 		if (!baseAllocator_)

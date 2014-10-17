@@ -79,7 +79,7 @@ void print_stats() {
 		<< " RPS: " << rate.load() << " "
 		<< " ETR: " <<
 			handystats::chrono::duration::convert_to(handystats::chrono::time_unit::SEC,
-				handystats::chrono::duration(end_time.load(), handystats::chrono::time_unit::TICK) -
+				handystats::chrono::duration(end_time.load(), handystats::chrono::time_unit::CYCLE) -
 				handystats::chrono::tsc_clock::now().time_since_epoch()
 			)
 			.count()

@@ -58,7 +58,7 @@ struct command_executor {
 			chrono::duration total_time_limit
 		)
 	{
-		chrono::duration total_time(0, chrono::time_unit::TICK);
+		chrono::duration total_time(0, chrono::time_unit::CYCLE);
 
 		while (total_time < total_time_limit) {
 			total_time += run_command_for(command, command_time_limit);

@@ -140,194 +140,55 @@ struct system_clock {
 struct duration {
 	static duration convert_to(const time_unit&, const duration&);
 
-	duration()
-		: m_rep(0)
-		, m_unit(time_unit::CYCLE)
-	{}
-
-	duration(const int64_t& d, const time_unit& u)
-		: m_rep(d)
-		, m_unit(u)
-	{}
-
+	duration();
+	duration(const int64_t& d, const time_unit& u);
 	duration(const duration&) = default;
 
 	/* Assign operator */
 	duration& operator= (const duration&) = default;
 
 	/* Access ticks count and time unit */
-	int64_t count() const {
-		return m_rep;
-	}
-	time_unit unit() const {
-		return m_unit;
-	}
+	int64_t count() const;
+	time_unit unit() const;
 
 	/* Unary operators */
-	duration operator+() const {
-		return *this;
-	}
-	duration operator-() const {
-		return duration(-m_rep, m_unit);
-	}
+	duration operator+() const;
+	duration operator-() const;
 
 	/* Increment/decrement operators */
-	duration& operator++() {
-		++m_rep;
-		return *this;
-	}
-	duration operator++(int) {
-		return duration(m_rep++, m_unit);
-	}
-	duration& operator--() {
-		--m_rep;
-		return *this;
-	}
-	duration operator--(int) {
-		return duration(m_rep--, m_unit);
-	}
+	duration& operator++();
+	duration operator++(int);
+	duration& operator--();
+	duration operator--(int);
 
 	/* Compound assignments */
-	duration& operator+=(const duration& d) {
-		if (m_unit == d.m_unit) {
-			m_rep += d.m_rep;
-		}
-		else {
-			m_rep += convert_to(m_unit, d).m_rep;
-		}
-		return *this;
-	}
-	duration& operator-=(const duration& d) {
-		if (m_unit == d.m_unit) {
-			m_rep -= d.m_rep;
-		}
-		else {
-			m_rep -= convert_to(m_unit, d).m_rep;
-		}
-		return *this;
-	}
-	duration& operator%=(const duration& d) {
-		if (m_unit == d.m_unit) {
-			m_rep %= d.m_rep;
-		}
-		else {
-			m_rep %= convert_to(m_unit, d).m_rep;
-		}
-		return *this;
-	}
+	duration& operator+=(const duration& d);
+	duration& operator-=(const duration& d);
+	duration& operator%=(const duration& d);
 
-	duration& operator+=(const int64_t& d) {
-		m_rep += d;
-		return *this;
-	}
-	duration& operator-=(const int64_t& d) {
-		m_rep -= d;
-		return *this;
-	}
-	duration& operator*=(const int64_t& d) {
-		m_rep *= d;
-		return *this;
-	}
-	duration& operator/=(const int64_t& d) {
-		m_rep /= d;
-		return *this;
-	}
-	duration& operator%=(const int64_t& d) {
-		m_rep %= d;
-		return *this;
-	}
+	duration& operator+=(const int64_t& d);
+	duration& operator-=(const int64_t& d);
+	duration& operator*=(const int64_t& d);
+	duration& operator/=(const int64_t& d);
+	duration& operator%=(const int64_t& d);
 
 	/* Arithmetic operations with duration */
-	duration operator+(const duration& d) const {
-		if (m_unit == d.m_unit) {
-			return duration(m_rep + d.m_rep, m_unit);
-		}
-		else {
-			const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
-			return duration(convert_to(common_unit, *this).m_rep + convert_to(common_unit, d).m_rep, common_unit);
-		}
-	}
-	duration operator-(const duration& d) const {
-		if (m_unit == d.m_unit) {
-			return duration(m_rep - d.m_rep, m_unit);
-		}
-		else {
-			const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
-			return duration(convert_to(common_unit, *this).m_rep - convert_to(common_unit, d).m_rep, common_unit);
-		}
-	}
+	duration operator+(const duration& d) const;
+	duration operator-(const duration& d) const;
 
-	duration operator+(const int64_t& d) const {
-		return duration(m_rep + d, m_unit);
-	}
-	duration operator-(const int64_t& d) const {
-		return duration(m_rep - d, m_unit);
-	}
-	duration operator*(const int64_t& d) const {
-		return duration(m_rep * d, m_unit);
-	}
-	duration operator/(const int64_t& d) const {
-		return duration(m_rep / d, m_unit);
-	}
-	duration operator%(const int64_t& d) const {
-		return duration(m_rep % d, m_unit);
-	}
+	duration operator+(const int64_t& d) const;
+	duration operator-(const int64_t& d) const;
+	duration operator*(const int64_t& d) const;
+	duration operator/(const int64_t& d) const;
+	duration operator%(const int64_t& d) const;
 
 	/* Comparison operators */
-	bool operator==(const duration& d) const {
-		if (m_unit == d.m_unit) {
-			return m_rep == d.m_rep;
-		}
-		else {
-			const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
-			return convert_to(common_unit, *this).m_rep == convert_to(common_unit, d).m_rep;
-		}
-	}
-	bool operator!=(const duration& d) const {
-		if (m_unit == d.m_unit) {
-			return m_rep != d.m_rep;
-		}
-		else {
-			const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
-			return convert_to(common_unit, *this).m_rep != convert_to(common_unit, d).m_rep;
-		}
-	}
-	bool operator<(const duration& d) const {
-		if (m_unit == d.m_unit) {
-			return m_rep < d.m_rep;
-		}
-		else {
-			const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
-			return convert_to(common_unit, *this).m_rep < convert_to(common_unit, d).m_rep;
-		}
-	}
-	bool operator<=(const duration& d) const {
-		if (m_unit == d.m_unit) {
-			return m_rep <= d.m_rep;
-		}
-		else {
-			const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
-			return convert_to(common_unit, *this).m_rep <= convert_to(common_unit, d).m_rep;
-		}
-	}
-	bool operator>(const duration& d) const {
-		if (m_unit == d.m_unit) {
-			return m_rep > d.m_rep;
-		}
-		else {
-			const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
-			return convert_to(common_unit, *this).m_rep > convert_to(common_unit, d).m_rep;
-		}
-	}
-	bool operator>=(const duration& d) const {
-		if (m_unit == d.m_unit) {
-			return m_rep >= d.m_rep;
-		}
-		else {
-			const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
-			return convert_to(common_unit, *this).m_rep >= convert_to(common_unit, d).m_rep;
-		}
-	}
+	bool operator==(const duration& d) const;
+	bool operator!=(const duration& d) const;
+	bool operator<(const duration& d) const;
+	bool operator<=(const duration& d) const;
+	bool operator>(const duration& d) const;
+	bool operator>=(const duration& d) const;
 
 	friend struct time_point;
 
@@ -337,160 +198,31 @@ private:
 };
 
 struct time_point {
-	// if clock types are the same nothing will be done
-	// if target clock type is SYSTEM resulted duration will be NSEC
 	static time_point convert_to(const clock_type&, const time_point&);
 
-	time_point()
-		: m_since_epoch()
-		, m_clock(clock_type::INTERNAL)
-	{}
+	time_point();
+	time_point(const duration& d, const clock_type& clock);
 
-	time_point(const duration& d, const clock_type& clock)
-		: m_since_epoch(d)
-		, m_clock(clock)
-	{}
-
-	duration time_since_epoch() const {
-		return m_since_epoch;
-	}
+	duration time_since_epoch() const;
 
 	/* Compound assignments */
-	time_point& operator+=(const duration& d) {
-		if (m_clock == clock_type::INTERNAL) {
-			m_since_epoch += d;
-		}
-		else {
-			if (d.m_unit == time_unit::CYCLE) {
-				m_since_epoch += duration::convert_to(m_since_epoch.m_unit, d);
-			}
-			else {
-				m_since_epoch += d;
-			}
-		}
-		return *this;
-	}
-	time_point& operator-=(const duration& d) {
-		if (m_clock == clock_type::INTERNAL) {
-			m_since_epoch -= d;
-		}
-		else {
-			if (d.m_unit == time_unit::CYCLE) {
-				m_since_epoch -= duration::convert_to(m_since_epoch.m_unit, d);
-			}
-			else {
-				m_since_epoch -= d;
-			}
-		}
-		return *this;
-	}
+	time_point& operator+=(const duration& d);
+	time_point& operator-=(const duration& d);
 
 	/* Arithmetic operations with duration */
-	time_point operator+(const duration& d) const {
-		time_point ret(*this);
-		ret += d;
-		return ret;
-	}
-	time_point operator-(const duration& d) const {
-		time_point ret(*this);
-		ret -= d;
-		return ret;
-	}
+	time_point operator+(const duration& d) const;
+	time_point operator-(const duration& d) const;
 
 	/* Arithmetic operations with time_point */
-	duration operator-(const time_point& t) const {
-		if (m_clock == t.m_clock) {
-			return m_since_epoch - t.m_since_epoch;
-		}
-		else {
-			if (m_clock == clock_type::INTERNAL) {
-				return convert_to(clock_type::SYSTEM, *this).m_since_epoch - t.m_since_epoch;
-			}
-			else {
-				return m_since_epoch - convert_to(clock_type::SYSTEM, t).m_since_epoch;
-			}
-		}
-	}
+	duration operator-(const time_point& t) const;
 
 	/* Comparison operators */
-	bool operator==(const time_point& t) const {
-		if (m_clock == t.m_clock) {
-			return m_since_epoch == t.m_since_epoch;
-		}
-		else {
-			if (m_clock == clock_type::INTERNAL) {
-				return convert_to(clock_type::SYSTEM, *this) == t;
-			}
-			else {
-				return *this == convert_to(clock_type::SYSTEM, t);
-			}
-		}
-	}
-	bool operator!=(const time_point& t) const {
-		if (m_clock == t.m_clock) {
-			return m_since_epoch != t.m_since_epoch;
-		}
-		else {
-			if (m_clock == clock_type::INTERNAL) {
-				return convert_to(clock_type::SYSTEM, *this) != t;
-			}
-			else {
-				return *this != convert_to(clock_type::SYSTEM, t);
-			}
-		}
-	}
-	bool operator<(const time_point& t) const {
-		if (m_clock == t.m_clock) {
-			return m_since_epoch < t.m_since_epoch;
-		}
-		else {
-			if (m_clock == clock_type::INTERNAL) {
-				return convert_to(clock_type::SYSTEM, *this) < t;
-			}
-			else {
-				return *this < convert_to(clock_type::SYSTEM, t);
-			}
-		}
-	}
-	bool operator<=(const time_point& t) const {
-		if (m_clock == t.m_clock) {
-			return m_since_epoch <= t.m_since_epoch;
-		}
-		else {
-			if (m_clock == clock_type::INTERNAL) {
-				return convert_to(clock_type::SYSTEM, *this) <= t;
-			}
-			else {
-				return *this <= convert_to(clock_type::SYSTEM, t);
-			}
-		}
-	}
-	bool operator>(const time_point& t) const {
-		if (m_clock == t.m_clock) {
-			return m_since_epoch > t.m_since_epoch;
-		}
-		else {
-			if (m_clock == clock_type::INTERNAL) {
-				return convert_to(clock_type::SYSTEM, *this) > t;
-			}
-			else {
-				return *this > convert_to(clock_type::SYSTEM, t);
-			}
-		}
-	}
-	bool operator>=(const time_point& t) const {
-		if (m_clock == t.m_clock) {
-			return m_since_epoch >= t.m_since_epoch;
-		}
-		else {
-			if (m_clock == clock_type::INTERNAL) {
-				return convert_to(clock_type::SYSTEM, *this) >= t;
-			}
-			else {
-				return *this >= convert_to(clock_type::SYSTEM, t);
-			}
-		}
-	}
+	bool operator==(const time_point& t) const;
+	bool operator!=(const time_point& t) const;
+	bool operator<(const time_point& t) const;
+	bool operator<=(const time_point& t) const;
+	bool operator>(const time_point& t) const;
+	bool operator>=(const time_point& t) const;
 
 private:
 	duration m_since_epoch;

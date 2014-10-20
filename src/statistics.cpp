@@ -702,9 +702,15 @@ double statistics::quantile_extractor::at(const double& probability) const {
 	const double& b = 2 * std::get<BIN_COUNT>(left_bin);
 	const double& c = -2 * required_count;
 
-	const double& z = find_z(a, b, c);
+	try {
+		const double& z = find_z(a, b, c);
 
-	return std::get<BIN_CENTER>(left_bin) + (std::get<BIN_CENTER>(right_bin) - std::get<BIN_CENTER>(left_bin)) * z;
+		return std::get<BIN_CENTER>(left_bin) + (std::get<BIN_CENTER>(right_bin) - std::get<BIN_CENTER>(left_bin)) * z;
+	}
+	catch (const std::logic_error&) {
+		// z is not found
+		return 0;
+	}
 }
 
 const statistics::tag::type statistics::tag::empty;

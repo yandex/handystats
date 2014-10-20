@@ -79,7 +79,7 @@ void print_stats() {
 		<< " RPS: " << rate.load() << " "
 		<< " ETR: " <<
 			handystats::chrono::duration::convert_to(handystats::chrono::time_unit::SEC,
-				handystats::chrono::duration(end_time.load(), handystats::chrono::time_unit::CYCLE) -
+				handystats::chrono::duration(end_time.load(), handystats::chrono::time_unit::NSEC) -
 				handystats::chrono::internal_clock::now().time_since_epoch()
 			)
 			.count()
@@ -237,10 +237,15 @@ int main(int argc, char** argv) {
 
 		rate.store(step_rate);
 		end_time.store(
-				(
-					handystats::chrono::internal_clock::now() +
-					handystats::chrono::duration(step_time_limit, handystats::chrono::time_unit::SEC)
-				).time_since_epoch().count()
+				handystats::chrono::duration::convert_to(
+					handystats::chrono::time_unit::NSEC,
+					(
+						handystats::chrono::internal_clock::now() +
+						handystats::chrono::duration(step_time_limit, handystats::chrono::time_unit::SEC)
+					)
+					.time_since_epoch()
+				)
+				.count()
 			);
 
 		if (step_rate == 0) {

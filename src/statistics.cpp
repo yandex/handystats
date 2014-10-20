@@ -118,18 +118,10 @@ void statistics::data::reset() {
 	if (m_histogram_bins > 0) {
 		m_histogram.reserve(m_histogram_bins + 1);
 	}
-	m_data_timestamp =
-		time_point(
-				chrono::duration(0, chrono::time_unit::NSEC),
-				chrono::clock_type::SYSTEM
-			);
-	m_rate = 0;
+	m_data_timestamp = time_point();
+	m_rate = 0.0;
 
-	m_timestamp =
-		time_point(
-				chrono::duration(0, chrono::time_unit::NSEC),
-				chrono::clock_type::SYSTEM
-			);
+	m_timestamp = time_point();
 }
 
 double statistics::data::shift_interval_data(
@@ -138,6 +130,9 @@ double statistics::data::shift_interval_data(
 	)
 	const
 {
+	// data is uninitialized
+	if (data_timestamp == time_point()) return 0;
+
 	if (timestamp <= m_timestamp) return data;
 
 	const auto& stale_interval = data_timestamp - (timestamp - m_moving_interval);
@@ -153,6 +148,9 @@ double statistics::data::update_interval_data(
 	)
 	const
 {
+	// data is uninitialized
+	if (data_timestamp == time_point()) return value;
+
 	if (timestamp <= m_timestamp) {
 		if (timestamp < m_timestamp - m_moving_interval) {
 			return data;
@@ -174,6 +172,9 @@ double statistics::data::truncate_interval_data(
 	)
 	const
 {
+	// data is uninitialized
+	if (data_timestamp == time_point()) return 0;
+
 	if (math_utils::cmp<double>(data, 0) == 0) return 0;
 
 	if (timestamp >= data_timestamp) return 0;
@@ -395,6 +396,17 @@ void statistics::data::update_time(const time_point& timestamp) {
 }
 
 void statistics::data::append(data d) {
+	if (m_timestamp == time_point()) {
+		// this is uninitialized
+		*this = d;
+		return;
+	}
+
+	if (d.m_timestamp == time_point()) {
+		// data is uninitialized
+		return;
+	}
+
 	if (d.m_timestamp <= m_timestamp) {
 		// data to append is too old
 		return;
@@ -458,10 +470,17 @@ void statistics::data::append(data d) {
 }
 
 void statistics::data::merge(const data& d) {
-	if (m_tags == tag::empty) {
+	if (m_timestamp == time_point()) {
+		// this is uninitialized
 		*this = d;
 		return;
 	}
+
+	if (d.m_timestamp == time_point()) {
+		// data is uninitialized
+		return;
+	}
+
 	if (d.m_tags & tag::value) {
 		if (
 			((m_tags & tag::value) && d.m_data_timestamp > m_data_timestamp) ||

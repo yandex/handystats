@@ -190,7 +190,7 @@ time_point internal_clock::now() {
 		}
 	default:
 		{
-			return time_point(duration(0, time_unit::NSEC), clock_type::INTERNAL);
+			return time_point();
 		}
 	}
 }

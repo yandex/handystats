@@ -147,7 +147,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 			if (timestamp_json.IsUint64()) {
 				data.m_timestamp =
 					chrono::time_point(
-							chrono::duration(timestamp_json.GetUint64(), chrono::time_unit::MSEC),
+							chrono::milliseconds(timestamp_json.GetUint64()),
 							chrono::clock_type::SYSTEM
 						);
 				data.m_tags |= statistics::tag::timestamp;
@@ -161,7 +161,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 			if (data_timestamp_json.IsUint64()) {
 				data.m_data_timestamp =
 					chrono::time_point(
-							chrono::duration(data_timestamp_json.GetUint64(), chrono::time_unit::MSEC),
+							chrono::milliseconds(data_timestamp_json.GetUint64()),
 							chrono::clock_type::SYSTEM
 						);
 				if (!(data.m_tags & statistics::tag::timestamp)) {
@@ -179,7 +179,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 		if (mint_iter) {
 			const auto& mint_json = mint_iter->value;
 			if (mint_json.IsUint64()) {
-				data.m_moving_interval = chrono::duration(mint_json.GetUint64(), chrono::time_unit::MSEC);
+				data.m_moving_interval = chrono::milliseconds(mint_json.GetUint64());
 			}
 		}
 	}
@@ -268,7 +268,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 									0,
 									0,
 									chrono::time_point(
-										chrono::duration(0, chrono::time_unit::NSEC),
+										chrono::nanoseconds(0),
 										chrono::clock_type::SYSTEM
 									)
 								);
@@ -289,7 +289,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 							if (bin_ts_json.IsUint64()) {
 								std::get<statistics::BIN_TIMESTAMP>(hist_bin) =
 									chrono::time_point(
-											chrono::duration(bin_ts_json.GetUint64(), chrono::time_unit::MSEC),
+											chrono::milliseconds(bin_ts_json.GetUint64()),
 											chrono::clock_type::SYSTEM
 										);
 							}
@@ -335,7 +335,7 @@ stats_data_map& load_dump(stats_data_map& metrics, const chrono::time_point& dum
 	}
 
 	config::statistics empty_config;
-	empty_config.moving_interval = chrono::duration(0, chrono::time_unit::NSEC);
+	empty_config.moving_interval = chrono::nanoseconds(0);
 	empty_config.histogram_bins = 0;
 	empty_config.tags = statistics::tag::empty;
 	empty_config.rate_unit = chrono::time_unit::SEC;

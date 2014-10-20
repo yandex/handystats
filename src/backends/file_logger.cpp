@@ -67,7 +67,7 @@ void run_file_logger(std::atomic<bool>& running_flag, std::ofstream& log, const 
 				continue;
 			}
 			chrono::time_point dump_timestamp(
-					chrono::duration(boost::get<int64_t>(dump_timestamp_iter->second.value()), chrono::time_unit::MSEC),
+					chrono::milliseconds(boost::get<int64_t>(dump_timestamp_iter->second.value())),
 					chrono::clock_type::SYSTEM
 				);
 			if (dump_timestamp == last_dump_timestamp) {

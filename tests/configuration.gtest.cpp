@@ -38,7 +38,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpConfiguration) {
 		);
 
 	ASSERT_NEAR(handystats::config::metrics_dump_opts.interval.count(),
-			handystats::chrono::duration(750, handystats::chrono::time_unit::MSEC).count(),
+			handystats::chrono::milliseconds(750).count(),
 			1E-6
 		);
 }
@@ -51,7 +51,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 		);
 
 	ASSERT_NEAR(handystats::config::metrics_dump_opts.interval.count(),
-			handystats::chrono::duration(2, handystats::chrono::time_unit::MSEC).count(),
+			handystats::chrono::milliseconds(2).count(),
 			1E-6
 		);
 
@@ -79,7 +79,7 @@ TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 		);
 
 	ASSERT_NEAR(handystats::config::metrics_dump_opts.interval.count(),
-			handystats::chrono::duration(0, handystats::chrono::time_unit::MSEC).count(),
+			handystats::chrono::milliseconds(0).count(),
 			1E-6
 		);
 
@@ -112,7 +112,7 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 		);
 
 	ASSERT_NEAR(handystats::config::metrics::timer_opts.idle_timeout.count(),
-			handystats::chrono::duration(100, handystats::chrono::time_unit::MSEC).count(),
+			handystats::chrono::milliseconds(100).count(),
 			1E-6
 		);
 
@@ -165,7 +165,7 @@ TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
 		);
 
 	ASSERT_NEAR(handystats::config::statistics_opts.moving_interval.count(),
-			handystats::chrono::duration(1234, handystats::chrono::time_unit::MSEC).count(),
+			handystats::chrono::milliseconds(1234).count(),
 			1E-6
 		);
 	ASSERT_EQ(handystats::config::statistics_opts.histogram_bins, 200);

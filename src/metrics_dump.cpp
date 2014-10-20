@@ -26,7 +26,7 @@ void update(const chrono::time_point& timestamp) {
 static void reset() {
 	config::metrics::gauge dump_time_opts;
 	dump_time_opts.values.tags = statistics::tag::moving_avg;
-	dump_time_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
+	dump_time_opts.values.moving_interval = chrono::seconds(1);
 
 	dump_time = metrics::gauge(dump_time_opts);
 }
@@ -212,7 +212,7 @@ static
 void reset_dump() {
 	std::lock_guard<std::mutex> lock(dump_mutex);
 
-	dump_timestamp = chrono::time_point(chrono::duration(0, chrono::time_unit::NSEC), chrono::clock_type::SYSTEM);
+	dump_timestamp = chrono::time_point(chrono::nanoseconds(0), chrono::clock_type::SYSTEM);
 	dump = std::shared_ptr<const metrics_dump_type>(new metrics_dump_type());
 }
 

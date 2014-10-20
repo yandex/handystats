@@ -107,7 +107,7 @@ static void reset() {
 		statistics::tag::value | statistics::tag::max |
 		statistics::tag::moving_avg
 		;
-	size_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
+	size_opts.values.moving_interval = chrono::seconds(1);
 
 	size = metrics::gauge(size_opts);
 	size.set(0);
@@ -116,7 +116,7 @@ static void reset() {
 	message_wait_time_opts.values.tags =
 		statistics::tag::moving_avg
 		;
-	message_wait_time_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
+	message_wait_time_opts.values.moving_interval = chrono::seconds(1);
 
 	message_wait_time = metrics::gauge(message_wait_time_opts);
 
@@ -124,7 +124,7 @@ static void reset() {
 
 	pop_count_opts.values.tags = statistics::tag::rate | statistics::tag::value;
 	pop_count_opts.values.rate_unit = chrono::time_unit::SEC;
-	pop_count_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
+	pop_count_opts.values.moving_interval = chrono::seconds(1);
 
 	pop_count = metrics::counter(pop_count_opts);
 }

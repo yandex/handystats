@@ -8,7 +8,7 @@ namespace handystats { namespace metrics {
 counter::counter(const config::metrics::counter& opts)
 	: m_values(opts.values)
 	, m_value()
-	, m_timestamp(chrono::duration(0, chrono::time_unit::NSEC), chrono::clock_type::SYSTEM)
+	, m_timestamp(chrono::nanoseconds(0), chrono::clock_type::SYSTEM)
 {
 }
 

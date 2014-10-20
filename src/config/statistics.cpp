@@ -27,7 +27,7 @@ void apply(const rapidjson::Value& config, statistics& statistics_opts) {
 	if (config.HasMember("moving-interval")) {
 		const rapidjson::Value& moving_interval = config["moving-interval"];
 		if (moving_interval.IsUint64() && moving_interval.GetUint64() > 0) {
-			statistics_opts.moving_interval = chrono::duration(moving_interval.GetUint64(), chrono::time_unit::MSEC);
+			statistics_opts.moving_interval = chrono::milliseconds(moving_interval.GetUint64());
 		}
 	}
 

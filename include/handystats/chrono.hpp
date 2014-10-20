@@ -156,6 +156,15 @@ private:
 	time_unit m_unit;
 };
 
+// duration helpers
+duration nanoseconds(const int64_t&);
+duration microseconds(const int64_t&);
+duration milliseconds(const int64_t&);
+duration seconds(const int64_t&);
+duration minutes(const int64_t&);
+duration hours(const int64_t&);
+duration days(const int64_t&);
+
 struct time_point {
 	static time_point convert_to(const clock_type&, const time_point&);
 

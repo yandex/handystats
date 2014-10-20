@@ -20,7 +20,7 @@ protected:
 };
 
 TEST_F(IncrementalStatisticsTest, TestIntervalCount) {
-	opts.moving_interval = handystats::chrono::duration(1, handystats::chrono::time_unit::MSEC);
+	opts.moving_interval = handystats::chrono::milliseconds(1);
 	opts.tags = handystats::statistics::tag::moving_count;
 
 	stats = handystats::statistics(opts);
@@ -42,7 +42,7 @@ TEST_F(IncrementalStatisticsTest, TestIntervalCount) {
 }
 
 TEST_F(IncrementalStatisticsTest, TestIntervalSum) {
-	opts.moving_interval = handystats::chrono::duration(1, handystats::chrono::time_unit::MSEC);
+	opts.moving_interval = handystats::chrono::milliseconds(1);
 	opts.tags = handystats::statistics::tag::moving_sum;
 
 	stats = handystats::statistics(opts);
@@ -64,7 +64,7 @@ TEST_F(IncrementalStatisticsTest, TestIntervalSum) {
 }
 
 TEST_F(IncrementalStatisticsTest, TestIntervalMean) {
-	opts.moving_interval = handystats::chrono::duration(1, handystats::chrono::time_unit::MSEC);
+	opts.moving_interval = handystats::chrono::milliseconds(1);
 	opts.tags = handystats::statistics::tag::moving_avg;
 
 	stats = handystats::statistics(opts);
@@ -99,7 +99,7 @@ TEST_F(IncrementalStatisticsTest, Quantile25RightTailTest) {
 	opts.histogram_bins = 30;
 	opts.moving_interval = handystats::chrono::duration::convert_to(
 			handystats::chrono::time_unit::NSEC,
-			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+			handystats::chrono::seconds(1)
 		);
 	opts.tags = handystats::statistics::tag::quantile;
 
@@ -130,7 +130,7 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	opts.histogram_bins = 30;
 	opts.moving_interval = handystats::chrono::duration::convert_to(
 			handystats::chrono::time_unit::NSEC,
-			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+			handystats::chrono::seconds(1)
 		);
 	opts.tags = handystats::statistics::tag::quantile;
 
@@ -164,7 +164,7 @@ TEST_F(IncrementalStatisticsTest, HistogramTest) {
 	opts.histogram_bins = 10;
 	opts.moving_interval = handystats::chrono::duration::convert_to(
 			handystats::chrono::time_unit::NSEC,
-			handystats::chrono::duration(30, handystats::chrono::time_unit::SEC)
+			handystats::chrono::seconds(30)
 		);
 	opts.tags = handystats::statistics::tag::histogram;
 
@@ -190,7 +190,7 @@ TEST_F(IncrementalStatisticsTest, HistogramTest) {
 TEST_F(IncrementalStatisticsTest, RateMovingCountTest) {
 	opts.moving_interval = handystats::chrono::duration::convert_to(
 			handystats::chrono::time_unit::NSEC,
-			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+			handystats::chrono::seconds(1)
 		);
 	opts.rate_unit = handystats::chrono::time_unit::SEC;
 	opts.tags = handystats::statistics::tag::rate |
@@ -217,7 +217,7 @@ TEST_F(IncrementalStatisticsTest, ZeroRateTest) {
 	opts.rate_unit = handystats::chrono::time_unit::SEC;
 	opts.moving_interval = handystats::chrono::duration::convert_to(
 			handystats::chrono::time_unit::NSEC,
-			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+			handystats::chrono::seconds(1)
 		);
 	opts.tags = handystats::statistics::tag::rate;
 

@@ -36,7 +36,7 @@ namespace handystats {
 // statistics::data
 
 statistics::data::data()
-	: m_moving_interval(chrono::duration(0, chrono::time_unit::NSEC))
+	: m_moving_interval(chrono::nanoseconds(0))
 	, m_histogram_bins(0)
 	, m_tags(tag::empty)
 {

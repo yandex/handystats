@@ -38,7 +38,7 @@ struct command_executor {
 		auto call_time = run_command(command);
 
 		while (call_time < time_limit) {
-			if (time_limit - call_time > chrono::duration(100, chrono::time_unit::USEC)) {
+			if (time_limit - call_time > chrono::microseconds(100)) {
 				std::this_thread::sleep_for(std::chrono::microseconds(10));
 			}
 			else {

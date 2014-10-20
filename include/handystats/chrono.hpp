@@ -83,47 +83,6 @@ enum class clock_type {
 	SYSTEM // epoch - 1970 00:00:00 UT
 };
 
-}} // namespace handystats::chrono
-
-
-namespace std {
-
-template <>
-struct less<handystats::chrono::time_unit> {
-	bool operator() (const handystats::chrono::time_unit& x, const handystats::chrono::time_unit& y) {
-		return precision_class(x) < precision_class(y);
-	}
-
-private:
-	static unsigned precision_class(const handystats::chrono::time_unit& unit) {
-		switch (unit) {
-		case handystats::chrono::time_unit::CYCLE:
-			return 1 << 0;
-		case handystats::chrono::time_unit::NSEC:
-			return 1 << 1;
-		case handystats::chrono::time_unit::USEC:
-			return 1 << 2;
-		case handystats::chrono::time_unit::MSEC:
-			return 1 << 3;
-		case handystats::chrono::time_unit::SEC:
-			return 1 << 4;
-		case handystats::chrono::time_unit::MIN:
-			return 1 << 5;
-		case handystats::chrono::time_unit::HOUR:
-			return 1 << 6;
-		case handystats::chrono::time_unit::DAY:
-			return 1 << 7;
-		}
-
-		return 0;
-	}
-};
-
-} // namespace std
-
-
-namespace handystats { namespace chrono {
-
 struct duration;
 struct time_point;
 

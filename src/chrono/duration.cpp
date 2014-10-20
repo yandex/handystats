@@ -4,6 +4,37 @@
 
 namespace handystats { namespace chrono {
 
+struct time_unit_less {
+	bool operator() (const handystats::chrono::time_unit& x, const handystats::chrono::time_unit& y) {
+		return precision_class(x) < precision_class(y);
+	}
+
+private:
+	static
+	unsigned precision_class(const handystats::chrono::time_unit& unit) {
+		switch (unit) {
+		case handystats::chrono::time_unit::CYCLE:
+			return 1 << 0;
+		case handystats::chrono::time_unit::NSEC:
+			return 1 << 1;
+		case handystats::chrono::time_unit::USEC:
+			return 1 << 2;
+		case handystats::chrono::time_unit::MSEC:
+			return 1 << 3;
+		case handystats::chrono::time_unit::SEC:
+			return 1 << 4;
+		case handystats::chrono::time_unit::MIN:
+			return 1 << 5;
+		case handystats::chrono::time_unit::HOUR:
+			return 1 << 6;
+		case handystats::chrono::time_unit::DAY:
+			return 1 << 7;
+		}
+
+		return 0;
+	}
+};
+
 duration::duration()
 	: m_rep(0)
 	, m_unit(time_unit::NSEC)
@@ -97,7 +128,7 @@ duration duration::operator+(const duration& d) const {
 		return duration(m_rep + d.m_rep, m_unit);
 	}
 	else {
-		const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
+		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
 		return duration(convert_to(common_unit, *this).m_rep + convert_to(common_unit, d).m_rep, common_unit);
 	}
 }
@@ -106,7 +137,7 @@ duration duration::operator-(const duration& d) const {
 		return duration(m_rep - d.m_rep, m_unit);
 	}
 	else {
-		const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
+		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
 		return duration(convert_to(common_unit, *this).m_rep - convert_to(common_unit, d).m_rep, common_unit);
 	}
 }
@@ -132,7 +163,7 @@ bool duration::operator==(const duration& d) const {
 		return m_rep == d.m_rep;
 	}
 	else {
-		const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
+		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
 		return convert_to(common_unit, *this).m_rep == convert_to(common_unit, d).m_rep;
 	}
 }
@@ -141,7 +172,7 @@ bool duration::operator!=(const duration& d) const {
 		return m_rep != d.m_rep;
 	}
 	else {
-		const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
+		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
 		return convert_to(common_unit, *this).m_rep != convert_to(common_unit, d).m_rep;
 	}
 }
@@ -150,7 +181,7 @@ bool duration::operator<(const duration& d) const {
 		return m_rep < d.m_rep;
 	}
 	else {
-		const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
+		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
 		return convert_to(common_unit, *this).m_rep < convert_to(common_unit, d).m_rep;
 	}
 }
@@ -159,7 +190,7 @@ bool duration::operator<=(const duration& d) const {
 		return m_rep <= d.m_rep;
 	}
 	else {
-		const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
+		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
 		return convert_to(common_unit, *this).m_rep <= convert_to(common_unit, d).m_rep;
 	}
 }
@@ -168,7 +199,7 @@ bool duration::operator>(const duration& d) const {
 		return m_rep > d.m_rep;
 	}
 	else {
-		const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
+		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
 		return convert_to(common_unit, *this).m_rep > convert_to(common_unit, d).m_rep;
 	}
 }
@@ -177,7 +208,7 @@ bool duration::operator>=(const duration& d) const {
 		return m_rep >= d.m_rep;
 	}
 	else {
-		const auto& common_unit = std::min(m_unit, d.m_unit, std::less<time_unit>());
+		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
 		return convert_to(common_unit, *this).m_rep >= convert_to(common_unit, d).m_rep;
 	}
 }

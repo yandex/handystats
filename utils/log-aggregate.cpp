@@ -18,7 +18,7 @@ using namespace handystats;
 
 int main() {
 	stats_data_map agg_metrics;
-	chrono::time_point start_timestamp(chrono::duration(0, chrono::time_unit::NSEC), chrono::clock_type::SYSTEM);
+	chrono::time_point start_timestamp(chrono::nanoseconds(0), chrono::clock_type::SYSTEM);
 	chrono::time_point prev_dump_timestamp = start_timestamp;
 
 	while (!std::cin.eof()) {
@@ -38,7 +38,7 @@ int main() {
 			log_line_stream >> timestamp_ms;
 			dump_timestamp =
 				chrono::time_point(
-						chrono::duration(timestamp_ms, chrono::time_unit::MSEC),
+						chrono::milliseconds(timestamp_ms),
 						chrono::clock_type::SYSTEM
 					);
 
@@ -57,7 +57,7 @@ int main() {
 		}
 
 		if (start_timestamp.time_since_epoch().count() == 0) {
-			start_timestamp = dump_timestamp - chrono::duration(1, chrono::time_unit::SEC);
+			start_timestamp = dump_timestamp - chrono::seconds(1);
 		}
 
 		stats_data_map current_metrics;

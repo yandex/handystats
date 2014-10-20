@@ -76,8 +76,10 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
-				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count()
+			handystats::chrono::duration::convert_to(
+				handystats::metrics::timer::value_unit,
+				handystats::chrono::milliseconds(sleep_time.count())
+			).count()
 		);
 }
 
@@ -117,13 +119,17 @@ TEST_F(HandyScopedTimerTest, TestMultipleNestedScopes) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), 3);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
-				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count()
+			handystats::chrono::duration::convert_to(
+				handystats::metrics::timer::value_unit,
+				handystats::chrono::milliseconds(sleep_time.count())
+			).count()
 		);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::max>(),
-			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
-				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count() * 3
+			handystats::chrono::duration::convert_to(
+				handystats::metrics::timer::value_unit,
+				handystats::chrono::milliseconds(sleep_time.count())
+			).count() * 3
 		);
 }
 
@@ -152,14 +158,18 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
-				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count()
+			handystats::chrono::duration::convert_to(
+				handystats::metrics::timer::value_unit,
+				handystats::chrono::milliseconds(sleep_time.count())
+			).count()
 		);
 
 	ASSERT_EQ(double_agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			double_agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
-				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count() * 2
+			handystats::chrono::duration::convert_to(
+				handystats::metrics::timer::value_unit,
+				handystats::chrono::milliseconds(sleep_time.count())
+			).count() * 2
 		);
 }

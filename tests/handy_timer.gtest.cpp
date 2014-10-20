@@ -65,8 +65,10 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
-				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count()
+			handystats::chrono::duration::convert_to(
+				handystats::metrics::timer::value_unit,
+				handystats::chrono::milliseconds(sleep_time.count())
+			).count()
 		);
 }
 
@@ -90,8 +92,10 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
-				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count()
+			handystats::chrono::duration::convert_to(
+				handystats::metrics::timer::value_unit,
+				handystats::chrono::milliseconds(sleep_time.count())
+			).count()
 		);
 }
 
@@ -119,7 +123,9 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(handystats::metrics::timer::value_unit,
-				handystats::chrono::duration(sleep_time.count(), handystats::chrono::time_unit::MSEC)).count()
+			handystats::chrono::duration::convert_to(
+				handystats::metrics::timer::value_unit,
+				handystats::chrono::milliseconds(sleep_time.count())
+			).count()
 		);
 }

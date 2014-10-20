@@ -26,7 +26,7 @@ void apply(const rapidjson::Value& config, metrics::timer& timer_opts) {
 	if (config.HasMember("idle-timeout")) {
 		const rapidjson::Value& idle_timeout = config["idle-timeout"];
 		if (idle_timeout.IsUint64()) {
-			timer_opts.idle_timeout = chrono::duration(idle_timeout.GetUint64(), chrono::time_unit::MSEC);
+			timer_opts.idle_timeout = chrono::milliseconds(idle_timeout.GetUint64());
 		}
 	}
 

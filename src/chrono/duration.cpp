@@ -251,4 +251,33 @@ duration duration::convert_to(const time_unit& to_unit, const duration& d) {
 	return duration(nsec_factor(d.m_unit) * d.m_rep / nsec_factor(to_unit), to_unit);
 }
 
+// duration helpers
+duration nanoseconds(const int64_t& d) {
+	return duration(d, time_unit::NSEC);
+}
+
+duration microseconds(const int64_t& d) {
+	return duration(d, time_unit::USEC);
+}
+
+duration milliseconds(const int64_t& d) {
+	return duration(d, time_unit::MSEC);
+}
+
+duration seconds(const int64_t& d) {
+	return duration(d, time_unit::SEC);
+}
+
+duration minutes(const int64_t& d) {
+	return duration(d, time_unit::MIN);
+}
+
+duration hours(const int64_t& d) {
+	return duration(d, time_unit::HOUR);
+}
+
+duration days(const int64_t& d) {
+	return duration(d, time_unit::DAY);
+}
+
 }} // namespace handystats::chrono

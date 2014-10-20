@@ -79,7 +79,7 @@ void initialize() {
 
 	enabled_flag.store(true, std::memory_order_release);
 
-	last_message_timestamp = chrono::time_point(chrono::duration(0, chrono::time_unit::NSEC), chrono::clock_type::SYSTEM);
+	last_message_timestamp = chrono::time_point(chrono::nanoseconds(0), chrono::clock_type::SYSTEM);
 
 	processor_thread = std::thread(run_processor);
 }

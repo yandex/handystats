@@ -79,7 +79,7 @@ void print_stats() {
 		<< " RPS: " << rate.load() << " "
 		<< " ETR: " <<
 			handystats::chrono::duration::convert_to(handystats::chrono::time_unit::SEC,
-				handystats::chrono::duration(end_time.load(), handystats::chrono::time_unit::NSEC) -
+				handystats::chrono::nanoseconds(end_time.load()) -
 				handystats::chrono::internal_clock::now().time_since_epoch()
 			)
 			.count()
@@ -213,7 +213,7 @@ int main(int argc, char** argv) {
 		std::string log_filename = vm["log-file"].as<std::string>();
 		uint64_t log_period_ms = vm["log-period"].as<uint64_t>();
 		if (log_period_ms > 0) {
-			const auto& log_period = handystats::chrono::duration(log_period_ms, handystats::chrono::time_unit::MSEC);
+			const auto& log_period = handystats::chrono::milliseconds(log_period_ms);
 			file_logger = new handystats::backends::file_logger(log_filename, log_period);
 			if (!file_logger->run()) {
 				std::cerr << "Unable to start file_logger with"
@@ -241,7 +241,7 @@ int main(int argc, char** argv) {
 					handystats::chrono::time_unit::NSEC,
 					(
 						handystats::chrono::internal_clock::now() +
-						handystats::chrono::duration(step_time_limit, handystats::chrono::time_unit::SEC)
+						handystats::chrono::seconds(step_time_limit)
 					)
 					.time_since_epoch()
 				)
@@ -256,9 +256,9 @@ int main(int argc, char** argv) {
 		handystats::chrono::duration command_time_limit =
 			handystats::chrono::duration::convert_to(
 					handystats::chrono::time_unit::NSEC,
-					handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+					handystats::chrono::seconds(1)
 				) * threads / step_rate;
-		handystats::chrono::duration time_limit(step_time_limit, handystats::chrono::time_unit::SEC);
+		handystats::chrono::duration time_limit = handystats::chrono::seconds(step_time_limit);
 
 		for (auto& worker : workers) {
 			worker = std::thread(

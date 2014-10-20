@@ -14,7 +14,7 @@ void apply(const rapidjson::Value& config, metrics_dump& metrics_dump_opts) {
 	if (config.HasMember("dump-interval")) {
 		const rapidjson::Value& interval = config["dump-interval"];
 		if (interval.IsUint64()) {
-			metrics_dump_opts.interval = chrono::duration(interval.GetUint64(), chrono::time_unit::MSEC);
+			metrics_dump_opts.interval = chrono::milliseconds(interval.GetUint64());
 		}
 	}
 }

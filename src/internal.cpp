@@ -29,7 +29,7 @@ void update(const chrono::time_point& timestamp) {
 static void reset() {
 	config::metrics::gauge process_time_opts;
 	process_time_opts.values.tags = statistics::tag::moving_avg;
-	process_time_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
+	process_time_opts.values.moving_interval = chrono::seconds(1);
 
 	process_time = metrics::gauge(process_time_opts);
 }

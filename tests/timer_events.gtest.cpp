@@ -96,7 +96,7 @@ TEST(TimerEventsTest, TestTimerHeartbeatEvent) {
 
 TEST(TimerEventsTest, TestTimerSetEvent) {
 	const char* timer_name = "queue.push";
-	handystats::chrono::duration duration(123456, handystats::chrono::time_unit::NSEC);
+	handystats::chrono::duration duration = handystats::chrono::nanoseconds(123456);
 	auto message = create_set_event(timer_name, duration, handystats::metrics::timer::clock::now());
 
 	ASSERT_EQ(message->destination_name, timer_name);

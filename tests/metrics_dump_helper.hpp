@@ -49,7 +49,7 @@ void wait_until(const chrono::time_point& timestamp) {
 						attributes.at(timestamp_name).value()
 					);
 
-			chrono::time_point dump_timestamp(chrono::milliseconds(dump_timestamp_ms), chrono::clock_type::SYSTEM);
+			chrono::time_point dump_timestamp(chrono::milliseconds(dump_timestamp_ms), chrono::clock_type::SYSTEM_CLOCK);
 
 			if (dump_timestamp >= timestamp) {
 				return;

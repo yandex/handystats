@@ -166,11 +166,11 @@ time_point internal_clock::now() {
 	switch (clock_source) {
 	case CS_RDTSC:
 		{
-			return time_point(duration(rdtsc(), time_unit::CYCLE), clock_type::INTERNAL);
+			return time_point(duration(rdtsc(), time_unit::CYCLE), clock_type::INTERNAL_CLOCK);
 		}
 	case CS_RDTSCP:
 		{
-			return time_point(duration(rdtscp(), time_unit::CYCLE), clock_type::INTERNAL);
+			return time_point(duration(rdtscp(), time_unit::CYCLE), clock_type::INTERNAL_CLOCK);
 		}
 	case CS_CLOCK_MONOTONIC:
 		{
@@ -178,7 +178,7 @@ time_point internal_clock::now() {
 
 			clock_gettime(CLOCK_MONOTONIC, &tm);
 
-			return time_point(duration((int64_t)tm.tv_sec * (int64_t)1E9 + tm.tv_nsec, time_unit::NSEC), clock_type::INTERNAL);
+			return time_point(duration((int64_t)tm.tv_sec * (int64_t)1E9 + tm.tv_nsec, time_unit::NSEC), clock_type::INTERNAL_CLOCK);
 		}
 	case CS_CLOCK_REALTIME:
 		{
@@ -186,7 +186,7 @@ time_point internal_clock::now() {
 
 			clock_gettime(CLOCK_REALTIME, &tm);
 
-			return time_point(duration((int64_t)tm.tv_sec * (int64_t)1E9 + tm.tv_nsec, time_unit::NSEC), clock_type::INTERNAL);
+			return time_point(duration((int64_t)tm.tv_sec * (int64_t)1E9 + tm.tv_nsec, time_unit::NSEC), clock_type::INTERNAL_CLOCK);
 		}
 	default:
 		{

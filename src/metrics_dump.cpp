@@ -135,7 +135,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 	// current system time
 	{
 		// NOTE: possible call chrono::system_clock::now()
-		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM, current_time);
+		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, current_time);
 
 		attribute timestamp_attr;
 		timestamp_attr.set(
@@ -152,7 +152,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 
 	// current internal time
 	{
-		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM, internal_time);
+		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, internal_time);
 
 		attribute timestamp_attr;
 		timestamp_attr.set(
@@ -212,7 +212,7 @@ static
 void reset_dump() {
 	std::lock_guard<std::mutex> lock(dump_mutex);
 
-	dump_timestamp = chrono::time_point(chrono::nanoseconds(0), chrono::clock_type::SYSTEM);
+	dump_timestamp = chrono::time_point(chrono::nanoseconds(0), chrono::clock_type::SYSTEM_CLOCK);
 	dump = std::shared_ptr<const metrics_dump_type>(new metrics_dump_type());
 }
 

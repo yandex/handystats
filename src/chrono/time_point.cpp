@@ -9,7 +9,7 @@ namespace handystats { namespace chrono {
 
 time_point::time_point()
 	: m_since_epoch()
-	, m_clock(clock_type::INTERNAL)
+	, m_clock(clock_type::INTERNAL_CLOCK)
 {}
 
 time_point::time_point(const duration& d, const clock_type& clock)
@@ -22,7 +22,7 @@ duration time_point::time_since_epoch() const {
 }
 
 time_point& time_point::operator+=(const duration& d) {
-	if (m_clock == clock_type::INTERNAL) {
+	if (m_clock == clock_type::INTERNAL_CLOCK) {
 		m_since_epoch += d;
 	}
 	else {
@@ -36,7 +36,7 @@ time_point& time_point::operator+=(const duration& d) {
 	return *this;
 }
 time_point& time_point::operator-=(const duration& d) {
-	if (m_clock == clock_type::INTERNAL) {
+	if (m_clock == clock_type::INTERNAL_CLOCK) {
 		m_since_epoch -= d;
 	}
 	else {
@@ -66,11 +66,11 @@ duration time_point::operator-(const time_point& t) const {
 		return m_since_epoch - t.m_since_epoch;
 	}
 	else {
-		if (m_clock == clock_type::INTERNAL) {
-			return convert_to(clock_type::SYSTEM, *this).m_since_epoch - t.m_since_epoch;
+		if (m_clock == clock_type::INTERNAL_CLOCK) {
+			return convert_to(clock_type::SYSTEM_CLOCK, *this).m_since_epoch - t.m_since_epoch;
 		}
 		else {
-			return m_since_epoch - convert_to(clock_type::SYSTEM, t).m_since_epoch;
+			return m_since_epoch - convert_to(clock_type::SYSTEM_CLOCK, t).m_since_epoch;
 		}
 	}
 }
@@ -80,11 +80,11 @@ bool time_point::operator==(const time_point& t) const {
 		return m_since_epoch == t.m_since_epoch;
 	}
 	else {
-		if (m_clock == clock_type::INTERNAL) {
-			return convert_to(clock_type::SYSTEM, *this) == t;
+		if (m_clock == clock_type::INTERNAL_CLOCK) {
+			return convert_to(clock_type::SYSTEM_CLOCK, *this) == t;
 		}
 		else {
-			return *this == convert_to(clock_type::SYSTEM, t);
+			return *this == convert_to(clock_type::SYSTEM_CLOCK, t);
 		}
 	}
 }
@@ -93,11 +93,11 @@ bool time_point::operator!=(const time_point& t) const {
 		return m_since_epoch != t.m_since_epoch;
 	}
 	else {
-		if (m_clock == clock_type::INTERNAL) {
-			return convert_to(clock_type::SYSTEM, *this) != t;
+		if (m_clock == clock_type::INTERNAL_CLOCK) {
+			return convert_to(clock_type::SYSTEM_CLOCK, *this) != t;
 		}
 		else {
-			return *this != convert_to(clock_type::SYSTEM, t);
+			return *this != convert_to(clock_type::SYSTEM_CLOCK, t);
 		}
 	}
 }
@@ -106,11 +106,11 @@ bool time_point::operator<(const time_point& t) const {
 		return m_since_epoch < t.m_since_epoch;
 	}
 	else {
-		if (m_clock == clock_type::INTERNAL) {
-			return convert_to(clock_type::SYSTEM, *this) < t;
+		if (m_clock == clock_type::INTERNAL_CLOCK) {
+			return convert_to(clock_type::SYSTEM_CLOCK, *this) < t;
 		}
 		else {
-			return *this < convert_to(clock_type::SYSTEM, t);
+			return *this < convert_to(clock_type::SYSTEM_CLOCK, t);
 		}
 	}
 }
@@ -119,11 +119,11 @@ bool time_point::operator<=(const time_point& t) const {
 		return m_since_epoch <= t.m_since_epoch;
 	}
 	else {
-		if (m_clock == clock_type::INTERNAL) {
-			return convert_to(clock_type::SYSTEM, *this) <= t;
+		if (m_clock == clock_type::INTERNAL_CLOCK) {
+			return convert_to(clock_type::SYSTEM_CLOCK, *this) <= t;
 		}
 		else {
-			return *this <= convert_to(clock_type::SYSTEM, t);
+			return *this <= convert_to(clock_type::SYSTEM_CLOCK, t);
 		}
 	}
 }
@@ -132,11 +132,11 @@ bool time_point::operator>(const time_point& t) const {
 		return m_since_epoch > t.m_since_epoch;
 	}
 	else {
-		if (m_clock == clock_type::INTERNAL) {
-			return convert_to(clock_type::SYSTEM, *this) > t;
+		if (m_clock == clock_type::INTERNAL_CLOCK) {
+			return convert_to(clock_type::SYSTEM_CLOCK, *this) > t;
 		}
 		else {
-			return *this > convert_to(clock_type::SYSTEM, t);
+			return *this > convert_to(clock_type::SYSTEM_CLOCK, t);
 		}
 	}
 }
@@ -145,11 +145,11 @@ bool time_point::operator>=(const time_point& t) const {
 		return m_since_epoch >= t.m_since_epoch;
 	}
 	else {
-		if (m_clock == clock_type::INTERNAL) {
-			return convert_to(clock_type::SYSTEM, *this) >= t;
+		if (m_clock == clock_type::INTERNAL_CLOCK) {
+			return convert_to(clock_type::SYSTEM_CLOCK, *this) >= t;
 		}
 		else {
-			return *this >= convert_to(clock_type::SYSTEM, t);
+			return *this >= convert_to(clock_type::SYSTEM_CLOCK, t);
 		}
 	}
 }
@@ -213,19 +213,19 @@ time_point to_system_time(const time_point& t) {
 				time_unit::NSEC,
 				t.time_since_epoch() + duration(ns_offset.load(std::memory_order_acquire), time_unit::NSEC)
 			),
-			clock_type::SYSTEM
+			clock_type::SYSTEM_CLOCK
 		);
 }
 
 time_point time_point::convert_to(const clock_type& to_clock, const time_point& t) {
 	if (t.m_clock == to_clock) return t;
 
-	if (to_clock == clock_type::SYSTEM) {
+	if (to_clock == clock_type::SYSTEM_CLOCK) {
 		return to_system_time(t);
 	}
 	else {
-		// to_clock == clock_type::INTERNAL
-		throw std::logic_error("SYSTEM to INTERNAL clock conversion is not implemented");
+		// to_clock == clock_type::INTERNAL_CLOCK
+		throw std::logic_error("SYSTEM_CLOCK to INTERNAL_CLOCK clock conversion is not implemented");
 	}
 }
 

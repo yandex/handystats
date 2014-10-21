@@ -112,7 +112,7 @@ TEST_F(IncrementalStatisticsTest, Quantile25RightTailTest) {
 	const handystats::chrono::duration time_span = opts.moving_interval / TOTAL_COUNT;
 
 	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
-		handystats::chrono::time_point current_time(time_span * index, handystats::chrono::clock_type::INTERNAL);
+		handystats::chrono::time_point current_time(time_span * index, handystats::chrono::clock_type::INTERNAL_CLOCK);
 
 		if (index % 100 <= 75) {
 			stats.update(normal_value + double(rand()) / RAND_MAX, current_time);
@@ -142,7 +142,7 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	const handystats::chrono::duration time_span = opts.moving_interval / TOTAL_COUNT;
 
 	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
-		handystats::chrono::time_point current_time(time_span * index, handystats::chrono::clock_type::INTERNAL);
+		handystats::chrono::time_point current_time(time_span * index, handystats::chrono::clock_type::INTERNAL_CLOCK);
 		stats.update(normal_value + double(rand()) / RAND_MAX, current_time);
 	}
 
@@ -152,7 +152,7 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	normal_value *= 2;
 
 	for (size_t index = 1; index <= TOTAL_COUNT; ++index) {
-		handystats::chrono::time_point current_time(time_span * (TOTAL_COUNT + index), handystats::chrono::clock_type::INTERNAL);
+		handystats::chrono::time_point current_time(time_span * (TOTAL_COUNT + index), handystats::chrono::clock_type::INTERNAL_CLOCK);
 		stats.update(normal_value + double(rand()) / RAND_MAX, current_time);
 	}
 

@@ -148,7 +148,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 				data.m_timestamp =
 					chrono::time_point(
 							chrono::milliseconds(timestamp_json.GetUint64()),
-							chrono::clock_type::SYSTEM
+							chrono::clock_type::SYSTEM_CLOCK
 						);
 				data.m_tags |= statistics::tag::timestamp;
 			}
@@ -162,7 +162,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 				data.m_data_timestamp =
 					chrono::time_point(
 							chrono::milliseconds(data_timestamp_json.GetUint64()),
-							chrono::clock_type::SYSTEM
+							chrono::clock_type::SYSTEM_CLOCK
 						);
 				if (!(data.m_tags & statistics::tag::timestamp)) {
 					data.m_timestamp = data.m_data_timestamp;
@@ -269,7 +269,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 									0,
 									chrono::time_point(
 										chrono::nanoseconds(0),
-										chrono::clock_type::SYSTEM
+										chrono::clock_type::SYSTEM_CLOCK
 									)
 								);
 						if (hist_bin_json.Size() > 0) {
@@ -290,7 +290,7 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 								std::get<statistics::BIN_TIMESTAMP>(hist_bin) =
 									chrono::time_point(
 											chrono::milliseconds(bin_ts_json.GetUint64()),
-											chrono::clock_type::SYSTEM
+											chrono::clock_type::SYSTEM_CLOCK
 										);
 							}
 						}

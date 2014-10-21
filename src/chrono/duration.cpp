@@ -35,6 +35,30 @@ private:
 	}
 };
 
+static
+inline uint64_t nsec_factor(const time_unit& unit) {
+	switch (unit) {
+	case time_unit::NSEC:
+		return 1ull;
+	case time_unit::USEC:
+		return 1000ull;
+	case time_unit::MSEC:
+		return 1000ull * 1000ull;
+	case time_unit::SEC:
+		return 1000ull * 1000ull * 1000ull;
+	case time_unit::MIN:
+		return 60ull * 1000ull * 1000ull * 1000ull;
+	case time_unit::HOUR:
+		return 60ull * 60ull * 1000ull * 1000ull * 1000ull;
+	case time_unit::DAY:
+		return 24ull * 60ull * 60ull * 1000ull * 1000ull * 1000ull;
+	}
+
+	return 0ull;
+}
+
+extern long double cycles_per_nanosec;
+
 duration::duration()
 	: m_rep(0)
 	, m_unit(time_unit::NSEC)
@@ -50,6 +74,20 @@ int64_t duration::count() const {
 }
 time_unit duration::unit() const {
 	return m_unit;
+}
+
+int64_t duration::count(const time_unit& unit) const {
+	if (m_unit == unit) return m_rep;
+
+	if (unit == time_unit::CYCLE) {
+		return int64_t(cycles_per_nanosec * nsec_factor(m_unit) * m_rep);
+	}
+
+	if (m_unit == time_unit::CYCLE) {
+		return int64_t(double(m_rep) / nsec_factor(unit) / cycles_per_nanosec);
+	}
+
+	return nsec_factor(m_unit) * m_rep / nsec_factor(unit);
 }
 
 duration duration::operator+() const {
@@ -79,7 +117,7 @@ duration& duration::operator+=(const duration& d) {
 		m_rep += d.m_rep;
 	}
 	else {
-		m_rep += convert_to(m_unit, d).m_rep;
+		m_rep += d.count(m_unit);
 	}
 	return *this;
 }
@@ -88,7 +126,7 @@ duration& duration::operator-=(const duration& d) {
 		m_rep -= d.m_rep;
 	}
 	else {
-		m_rep -= convert_to(m_unit, d).m_rep;
+		m_rep -= d.count(m_unit);
 	}
 	return *this;
 }
@@ -97,7 +135,7 @@ duration& duration::operator%=(const duration& d) {
 		m_rep %= d.m_rep;
 	}
 	else {
-		m_rep %= convert_to(m_unit, d).m_rep;
+		m_rep %= d.count(m_unit);
 	}
 	return *this;
 }
@@ -129,7 +167,7 @@ duration duration::operator+(const duration& d) const {
 	}
 	else {
 		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
-		return duration(convert_to(common_unit, *this).m_rep + convert_to(common_unit, d).m_rep, common_unit);
+		return duration(count(common_unit) + d.count(common_unit), common_unit);
 	}
 }
 duration duration::operator-(const duration& d) const {
@@ -138,7 +176,7 @@ duration duration::operator-(const duration& d) const {
 	}
 	else {
 		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
-		return duration(convert_to(common_unit, *this).m_rep - convert_to(common_unit, d).m_rep, common_unit);
+		return duration(count(common_unit) - d.count(common_unit), common_unit);
 	}
 }
 
@@ -164,7 +202,7 @@ bool duration::operator==(const duration& d) const {
 	}
 	else {
 		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
-		return convert_to(common_unit, *this).m_rep == convert_to(common_unit, d).m_rep;
+		return count(common_unit) == d.count(common_unit);
 	}
 }
 bool duration::operator!=(const duration& d) const {
@@ -173,7 +211,7 @@ bool duration::operator!=(const duration& d) const {
 	}
 	else {
 		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
-		return convert_to(common_unit, *this).m_rep != convert_to(common_unit, d).m_rep;
+		return count(common_unit) != d.count(common_unit);
 	}
 }
 bool duration::operator<(const duration& d) const {
@@ -182,7 +220,7 @@ bool duration::operator<(const duration& d) const {
 	}
 	else {
 		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
-		return convert_to(common_unit, *this).m_rep < convert_to(common_unit, d).m_rep;
+		return count(common_unit) < d.count(common_unit);
 	}
 }
 bool duration::operator<=(const duration& d) const {
@@ -191,7 +229,7 @@ bool duration::operator<=(const duration& d) const {
 	}
 	else {
 		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
-		return convert_to(common_unit, *this).m_rep <= convert_to(common_unit, d).m_rep;
+		return count(common_unit) <= d.count(common_unit);
 	}
 }
 bool duration::operator>(const duration& d) const {
@@ -200,7 +238,7 @@ bool duration::operator>(const duration& d) const {
 	}
 	else {
 		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
-		return convert_to(common_unit, *this).m_rep > convert_to(common_unit, d).m_rep;
+		return count(common_unit) > d.count(common_unit);
 	}
 }
 bool duration::operator>=(const duration& d) const {
@@ -209,46 +247,12 @@ bool duration::operator>=(const duration& d) const {
 	}
 	else {
 		const auto& common_unit = std::min(m_unit, d.m_unit, time_unit_less());
-		return convert_to(common_unit, *this).m_rep >= convert_to(common_unit, d).m_rep;
+		return count(common_unit) >= d.count(common_unit);
 	}
 }
-
-static
-inline uint64_t nsec_factor(const time_unit& unit) {
-	switch (unit) {
-	case time_unit::NSEC:
-		return 1ull;
-	case time_unit::USEC:
-		return 1000ull;
-	case time_unit::MSEC:
-		return 1000ull * 1000ull;
-	case time_unit::SEC:
-		return 1000ull * 1000ull * 1000ull;
-	case time_unit::MIN:
-		return 60ull * 1000ull * 1000ull * 1000ull;
-	case time_unit::HOUR:
-		return 60ull * 60ull * 1000ull * 1000ull * 1000ull;
-	case time_unit::DAY:
-		return 24ull * 60ull * 60ull * 1000ull * 1000ull * 1000ull;
-	}
-
-	return 0ull;
-}
-
-extern long double cycles_per_nanosec;
 
 duration duration::convert_to(const time_unit& to_unit, const duration& d) {
-	if (d.m_unit == to_unit) return d;
-
-	if (to_unit == time_unit::CYCLE) {
-		return duration(int64_t(cycles_per_nanosec * nsec_factor(d.m_unit) * d.m_rep), to_unit);
-	}
-
-	if (d.m_unit == time_unit::CYCLE) {
-		return duration(int64_t(double(d.m_rep) / nsec_factor(to_unit) / cycles_per_nanosec), to_unit);
-	}
-
-	return duration(nsec_factor(d.m_unit) * d.m_rep / nsec_factor(to_unit), to_unit);
+	return duration(d.count(to_unit), to_unit);
 }
 
 // duration helpers

@@ -1015,15 +1015,13 @@ statistics::get_impl<statistics::tag::rate>() const
 {
 	if (computed(tag::rate)) {
 		if (std::less<chrono::time_unit>()(m_config.rate_unit, m_config.moving_interval.unit())) {
-			const double& rate_factor =
-				chrono::duration::convert_to(m_config.rate_unit, m_config.moving_interval).count();
+			const double& rate_factor = m_config.moving_interval.count(m_config.rate_unit);
 			return double(m_data->m_rate) / rate_factor;
 		}
 		else {
 			const double& rate_factor =
-				chrono::duration::convert_to(m_config.moving_interval.unit(),
-						chrono::duration(1, m_config.rate_unit)
-					).count();
+				chrono::duration(1, m_config.rate_unit)
+				.count(m_config.moving_interval.unit());
 			return double(m_data->m_rate) * rate_factor / m_config.moving_interval.count();
 		}
 	}

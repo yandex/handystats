@@ -83,13 +83,9 @@ void run_file_logger(std::atomic<bool>& running_flag, std::ofstream& log, const 
 			log.flush();
 		}
 
-		const chrono::duration& sleep_time =
-			chrono::duration::convert_to(
-					chrono::time_unit::MSEC,
-					period - (current_time - last_timestamp)
-				);
+		const auto& sleep_time = (period - (current_time - last_timestamp)).count(chrono::time_unit::MSEC);
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time.count()));
+		std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
 	}
 }
 

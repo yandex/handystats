@@ -78,11 +78,11 @@ void print_stats() {
 	std::cout << "============= "
 		<< " RPS: " << rate.load() << " "
 		<< " ETR: " <<
-			handystats::chrono::duration::convert_to(handystats::chrono::time_unit::SEC,
+			(
 				handystats::chrono::nanoseconds(end_time.load()) -
 				handystats::chrono::internal_clock::now().time_since_epoch()
 			)
-			.count()
+			.count(handystats::chrono::time_unit::SEC)
 			<< "s "
 		<< " =============" << std::endl;
 	std::cout << "timestamp: "
@@ -200,10 +200,8 @@ int main(int argc, char** argv) {
 					print_stats();
 					const auto& end_time = handystats::chrono::internal_clock::now();
 
-					const auto& call_time = handystats::chrono::duration::convert_to(
-							handystats::chrono::time_unit::NSEC, end_time - start_time
-						);
-					std::this_thread::sleep_for(output_interval - std::chrono::nanoseconds(call_time.count()));
+					const auto& call_time = (end_time - start_time).count(handystats::chrono::time_unit::NSEC);
+					std::this_thread::sleep_for(output_interval - std::chrono::nanoseconds(call_time));
 				}
 			}
 		);
@@ -237,15 +235,12 @@ int main(int argc, char** argv) {
 
 		rate.store(step_rate);
 		end_time.store(
-				handystats::chrono::duration::convert_to(
-					handystats::chrono::time_unit::NSEC,
-					(
-						handystats::chrono::internal_clock::now() +
-						handystats::chrono::seconds(step_time_limit)
-					)
-					.time_since_epoch()
+				(
+					handystats::chrono::internal_clock::now() +
+					handystats::chrono::seconds(step_time_limit)
 				)
-				.count()
+				.time_since_epoch()
+				.count(handystats::chrono::time_unit::NSEC)
 			);
 
 		if (step_rate == 0) {

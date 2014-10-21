@@ -18,10 +18,7 @@ TEST(TimerTest, CheckTimerCountsRunningTimeCorrectly) {
 	inter.stop();
 
 	ASSERT_GT(inter.values().get<handystats::statistics::tag::value>(),
-			handystats::chrono::duration::convert_to(
-				handystats::metrics::timer::value_unit,
-				handystats::chrono::microseconds(sleep_time.count())
-			).count()
+			handystats::chrono::microseconds(sleep_time.count()).count(handystats::metrics::timer::value_unit)
 		);
 }
 

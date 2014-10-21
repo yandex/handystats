@@ -110,6 +110,8 @@ struct duration {
 	int64_t count() const;
 	time_unit unit() const;
 
+	int64_t count(const time_unit& unit) const;
+
 	/* Unary operators */
 	duration operator+() const;
 	duration operator-() const;

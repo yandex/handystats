@@ -76,10 +76,7 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(
-				handystats::metrics::timer::value_unit,
-				handystats::chrono::milliseconds(sleep_time.count())
-			).count()
+			handystats::chrono::milliseconds(sleep_time.count()).count(handystats::metrics::timer::value_unit)
 		);
 }
 
@@ -119,17 +116,11 @@ TEST_F(HandyScopedTimerTest, TestMultipleNestedScopes) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), 3);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(
-				handystats::metrics::timer::value_unit,
-				handystats::chrono::milliseconds(sleep_time.count())
-			).count()
+			handystats::chrono::milliseconds(sleep_time.count()).count(handystats::metrics::timer::value_unit)
 		);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::max>(),
-			handystats::chrono::duration::convert_to(
-				handystats::metrics::timer::value_unit,
-				handystats::chrono::milliseconds(sleep_time.count())
-			).count() * 3
+			3 * handystats::chrono::milliseconds(sleep_time.count()).count(handystats::metrics::timer::value_unit)
 		);
 }
 
@@ -158,18 +149,12 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 	ASSERT_EQ(agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(
-				handystats::metrics::timer::value_unit,
-				handystats::chrono::milliseconds(sleep_time.count())
-			).count()
+			handystats::chrono::milliseconds(sleep_time.count()).count(handystats::metrics::timer::value_unit)
 		);
 
 	ASSERT_EQ(double_agg_stats.get<handystats::statistics::tag::count>(), COUNT);
 	ASSERT_GE(
 			double_agg_stats.get<handystats::statistics::tag::min>(),
-			handystats::chrono::duration::convert_to(
-				handystats::metrics::timer::value_unit,
-				handystats::chrono::milliseconds(sleep_time.count())
-			).count() * 2
+			2 * handystats::chrono::milliseconds(sleep_time.count()).count(handystats::metrics::timer::value_unit)
 		);
 }

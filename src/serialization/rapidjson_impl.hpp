@@ -82,11 +82,7 @@ JsonValue& fill_value(JsonValue& json_value, const statistics::data& stats_data,
 	if (stats_data.m_tags & moving_stats) {
 		json_value.AddMember(
 				"m-int",
-				chrono::duration::convert_to(
-						chrono::time_unit::MSEC,
-						stats_data.m_moving_interval
-					)
-					.count(),
+				stats_data.m_moving_interval.count(chrono::time_unit::MSEC),
 				allocator
 			);
 	}

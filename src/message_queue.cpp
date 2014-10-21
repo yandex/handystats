@@ -165,7 +165,7 @@ events::event_message* pop() {
 		stats::pop_count.increment(1, current_time);
 
 		stats::message_wait_time.set(
-				chrono::duration::convert_to(metrics::timer::value_unit, current_time - message->timestamp).count(),
+				(current_time - message->timestamp).count(metrics::timer::value_unit),
 				current_time
 			);
 	}

@@ -138,9 +138,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, current_time);
 
 		attribute timestamp_attr;
-		timestamp_attr.set(
-				chrono::duration::convert_to(chrono::time_unit::MSEC, timestamp.time_since_epoch()).count()
-			);
+		timestamp_attr.set(timestamp.time_since_epoch().count(chrono::time_unit::MSEC));
 
 		attrs_dump.insert(
 				std::pair<std::string, attribute>(
@@ -155,9 +153,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, internal_time);
 
 		attribute timestamp_attr;
-		timestamp_attr.set(
-				chrono::duration::convert_to(chrono::time_unit::MSEC, timestamp.time_since_epoch()).count()
-			);
+		timestamp_attr.set(timestamp.time_since_epoch().count(chrono::time_unit::MSEC));
 
 		attrs_dump.insert(
 				std::pair<std::string, attribute>(
@@ -170,7 +166,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 	auto dump_end_time = chrono::internal_clock::now();
 
 	stats::dump_time.set(
-			chrono::duration::convert_to(metrics::timer::value_unit, dump_end_time - dump_start_time).count(),
+			(dump_end_time - dump_start_time).count(metrics::timer::value_unit),
 			dump_end_time
 		);
 

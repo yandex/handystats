@@ -84,10 +84,7 @@ TEST_F(MetricsDumpTest, SampleTimer) {
 	ASSERT_EQ(timer_values.get<handystats::statistics::tag::count>(), TIMER_INSTANCES);
 	ASSERT_TRUE(
 			timer_values.get<handystats::statistics::tag::min>() >=
-				handystats::chrono::duration::convert_to(
-					handystats::metrics::timer::value_unit,
-					handystats::chrono::milliseconds(sleep_interval.count())
-				).count()
+				handystats::chrono::milliseconds(sleep_interval.count()).count(handystats::metrics::timer::value_unit)
 		);
 }
 

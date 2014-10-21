@@ -193,11 +193,8 @@ time_point to_system_time(const time_point& t) {
 			if (close_pair_found) {
 				time_point cycles_middle = cycles_start + (cycles_end - cycles_start) / 2;
 				int64_t new_offset =
-					duration::convert_to(
-						time_unit::NSEC,
-						current_system_time.time_since_epoch() - cycles_middle.time_since_epoch()
-					)
-					.count();
+						(current_system_time.time_since_epoch() - cycles_middle.time_since_epoch())
+						.count(time_unit::NSEC);
 
 				ns_offset.store(new_offset, std::memory_order_release);
 				offset_timestamp.store(cycles_middle.time_since_epoch().count(), std::memory_order_release);

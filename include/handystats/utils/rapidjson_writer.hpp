@@ -18,13 +18,7 @@ inline
 JsonValue& fill_value(JsonValue& json_value, const chrono::time_point& timestamp, Allocator&) {
 	const auto& system_timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, timestamp);
 
-	json_value.SetUint64(
-			chrono::duration::convert_to(
-				chrono::time_unit::MSEC,
-				system_timestamp.time_since_epoch()
-			)
-			.count()
-		);
+	json_value.SetUint64(system_timestamp.time_since_epoch().count(chrono::time_unit::MSEC));
 
 	return json_value;
 }

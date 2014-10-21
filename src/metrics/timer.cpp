@@ -37,10 +37,9 @@ void timer::stop(const instance_id_type& instance_id, const time_point& timestam
 		return;
 	}
 
-	const auto& instance_value =
-		chrono::duration::convert_to(value_unit, timestamp - instance->second.start_timestamp);
+	const auto& instance_value = (timestamp - instance->second.start_timestamp).count(value_unit);
 
-	m_values.update(instance_value.count(), timestamp);
+	m_values.update(instance_value, timestamp);
 
 	m_instances.erase(instance);
 }
@@ -68,7 +67,7 @@ void timer::discard(const instance_id_type& instance_id, const time_point& times
 }
 
 void timer::set(const value_type& measurement, const time_point& timestamp) {
-	m_values.update(chrono::duration::convert_to(value_unit, measurement).count(), timestamp);
+	m_values.update(measurement.count(value_unit), timestamp);
 }
 
 void timer::check_idle_timeout(const time_point& timestamp, const bool& force) {

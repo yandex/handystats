@@ -145,7 +145,7 @@ void process_event_message(const events::event_message& message) {
 	auto process_end_time = chrono::internal_clock::now();
 
 	stats::process_time.set(
-			chrono::duration::convert_to(metrics::timer::value_unit, process_end_time - process_start_time).count(),
+			(process_end_time - process_start_time).count(metrics::timer::value_unit),
 			process_end_time
 		);
 }

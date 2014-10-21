@@ -12,8 +12,8 @@
 
 namespace handystats { namespace chrono {
 
-enum class time_unit {
-	CYCLE,
+enum time_unit {
+	CYCLE = 0,
 	NSEC,
 	USEC,
 	MSEC,
@@ -78,21 +78,21 @@ time_unit time_unit_from_string(const std::string& unit_str) {
 	}
 }
 
-enum class clock_type {
-	INTERNAL, // epoch - unspecified point in time (usually boot-time), machine-specific
-	SYSTEM // epoch - 1970 00:00:00 UT
+enum clock_type {
+	INTERNAL_CLOCK, // epoch - unspecified point in time (usually boot-time), machine-specific
+	SYSTEM_CLOCK // epoch - 1970 00:00:00 UT
 };
 
 struct duration;
 struct time_point;
 
 struct internal_clock {
-	// will return time_point with INTERNAL clock type and CYCLE time unit
+	// will return time_point with INTERNAL_CLOCK clock type and CYCLE time unit
 	static time_point now();
 };
 
 struct system_clock {
-	// will return time_point with SYSTEM clock type and NSEC time unit
+	// will return time_point with SYSTEM_CLOCK clock type and NSEC time unit
 	static time_point now();
 };
 

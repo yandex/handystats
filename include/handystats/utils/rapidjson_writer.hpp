@@ -16,7 +16,7 @@ namespace handystats { namespace utils { namespace rapidjson {
 template <typename JsonValue, typename Allocator>
 inline
 JsonValue& fill_value(JsonValue& json_value, const chrono::time_point& timestamp, Allocator&) {
-	const auto& system_timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM, timestamp);
+	const auto& system_timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, timestamp);
 
 	json_value.SetUint64(
 			chrono::duration::convert_to(

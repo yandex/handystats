@@ -10,7 +10,7 @@ time_point system_clock::now() {
 	struct timespec ts;
 	clock_gettime(CLOCK_REALTIME, &ts);
 
-	return time_point(duration(ts.tv_sec * 1000ull * 1000ull * 1000ull + ts.tv_nsec, time_unit::NSEC), clock_type::SYSTEM);
+	return time_point(duration(ts.tv_sec * 1000ull * 1000ull * 1000ull + ts.tv_nsec, time_unit::NSEC), clock_type::SYSTEM_CLOCK);
 }
 
 }} // namespace handystats::chrono

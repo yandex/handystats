@@ -18,7 +18,7 @@
 #include <handystats/metrics_dump.hpp>
 #include <handystats/measuring_points.hpp>
 
-#include <handystats/backends/file_logger.hpp>
+#include <handystats/experimental/backends/file_logger.hpp>
 
 #include <handystats/module.h>
 

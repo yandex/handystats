@@ -628,6 +628,10 @@ statistics::quantile_extractor::quantile_extractor(const statistics* const stati
 {}
 
 double statistics::quantile_extractor::at(const double& probability) const {
+	if (math_utils::cmp<double>(probability, 0) <= 0 || math_utils::cmp<double>(probability, 1) >= 0) {
+		throw std::logic_error("probability should be in (0, 1)");
+	}
+
 	if (m_statistics == nullptr) {
 		return 0;
 	}

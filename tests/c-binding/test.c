@@ -117,7 +117,7 @@ void run_test_attr(void) {
 	run_test_string_attr();
 }
 
-int main(int argc, char** argv) {
+void run_tests() {
 	HANDY_CONFIG_JSON("{\"dump-interval\": 20}");
 	HANDY_INIT();
 
@@ -127,10 +127,4 @@ int main(int argc, char** argv) {
 	run_test_timer();
 	run_test_scoped_timer();
 	run_test_attr();
-
-	int ret = check_tests(argc, argv);
-
-	HANDY_FINALIZE();
-
-	return ret;
 }

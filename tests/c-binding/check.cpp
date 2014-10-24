@@ -2,10 +2,15 @@
 
 #include <gtest/gtest.h>
 
+#include <handystats/core.hpp>
 #include <handystats/statistics.hpp>
+#include <handystats/chrono.hpp>
 #include <handystats/metrics_dump.hpp>
 
 #include "message_queue_impl.hpp"
+#include "../metrics_dump_helper.hpp"
+#include "../message_queue_helper.hpp"
+
 #include "test.h"
 
 TEST(CBindingTest, TestGauge) {
@@ -138,13 +143,17 @@ TEST(CBindingTest, TestStringAttr) {
 }
 
 
-int check_tests(int argc, char** argv) {
+int main(int argc, char** argv) {
 	::testing::InitGoogleTest(&argc, argv);
 
-	while (!handystats::message_queue::empty()) {
-		std::this_thread::sleep_for(std::chrono::microseconds(1));
-	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	run_tests();
 
-	return RUN_ALL_TESTS();
+	handystats::message_queue::wait_until_empty();
+	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
+
+	auto ret = RUN_ALL_TESTS();
+
+	HANDY_FINALIZE();
+
+	return ret;
 }

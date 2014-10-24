@@ -44,4 +44,4 @@
 
 #include <handystats/common.h>
 
-HANDYSTATS_EXTERN_C int check_tests(int argc, char** argv);
+HANDYSTATS_EXTERN_C void run_tests();

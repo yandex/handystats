@@ -10,7 +10,7 @@
 #include <handystats/utils/rapidjson_writer.hpp>
 #include <handystats/metrics_dump.hpp>
 
-#include "statistics_impl.hpp"
+#include <handystats/detail/statistics.hpp>
 
 namespace handystats { namespace serialization { namespace rapidjson {
 

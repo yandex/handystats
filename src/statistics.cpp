@@ -13,7 +13,7 @@
 
 #include <handystats/statistics.hpp>
 
-#include "statistics_impl.hpp"
+#include <handystats/detail/statistics.hpp>
 
 // a x^2 + b x + c == 0
 // z -- root in [0, 1]

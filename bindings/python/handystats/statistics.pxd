@@ -5,7 +5,7 @@ from libc.stdint cimport uint64_t
 
 from handystats.chrono cimport time_point
 
-cdef extern from "handystats/detail/statistics_impl.hpp" namespace "handystats":
+cdef extern from "handystats/detail/statistics.hpp" namespace "handystats":
     cdef cppclass statistics:
         cppclass data:
             data()
@@ -27,7 +27,7 @@ cdef extern from "handystats/detail/statistics_impl.hpp" namespace "handystats":
         double quantile(const double&) except +
         time_point timestamp() except +
 
-cdef extern from "handystats/detail/serialization/json_impl.hpp" namespace "handystats::serialization::json":
+cdef extern from "handystats/detail/serialization/json.hpp" namespace "handystats::serialization::json":
     cdef T loads[T](const string) except +
     cdef string dumps[T](const T&)
 

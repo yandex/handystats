@@ -7,8 +7,8 @@
 #include <handystats/chrono.hpp>
 #include <handystats/statistics.hpp>
 
-#include "statistics_impl.hpp"
-#include "serialization/rapidjson_impl.hpp"
+#include <handystats/detail/statistics.hpp>
+#include <handystats/detail/serialization/rapidjson.hpp>
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"

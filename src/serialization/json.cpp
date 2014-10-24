@@ -8,8 +8,8 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
 
-#include "serialization/json_impl.hpp"
-#include "serialization/rapidjson_impl.hpp"
+#include <handystats/detail/serialization/json.hpp>
+#include <handystats/detail/serialization/rapidjson.hpp>
 
 using namespace rapidjson;
 

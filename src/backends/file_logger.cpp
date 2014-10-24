@@ -3,7 +3,7 @@
 #include <chrono>
 
 #include <handystats/experimental/backends/file_logger.hpp>
-#include "serialization/rapidjson_impl.hpp"
+#include <handystats/detail/serialization/rapidjson.hpp>
 
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"

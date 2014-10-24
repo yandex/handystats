@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include "statistics_impl.hpp"
+#include <handystats/detail/statistics.hpp>
 
 namespace handystats { namespace serialization { namespace json {
 

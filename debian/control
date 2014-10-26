@@ -1,5 +1,4 @@
 Source: handystats
-Section: libdevel
 Priority: optional
 Maintainer: Danil Osherov <shindo@yandex-team.ru>
 Build-Depends: debhelper (>= 7),
@@ -7,12 +6,72 @@ Build-Depends: debhelper (>= 7),
 		cmake,
 		libboost-dev,
 		libgtest-dev,
+		python-all,
+		python-all-dev,
+		python-all-dbg,
+		python-support,
+		cython,
+		cython-dbg,
+X-Python-Version: >= 2.6
 Standards-Version: 3.8.0
 Homepage: https://github.com/shindo/handystats
 Vcs-git: git://github.com/shindo/handystats.git
 Vcs-Browser: https://github.com/shindo/handystats
 
-Package: handystats
+Package: libhandystats2
+Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: C++ library for collecting user-defined in-process runtime statistics with low overhead
+Description: C++ library to collect runtime statistics
+ Handystats is C++ library for collecting user-defined
+ in-process runtime statistics with low overhead.
+
+Package: libhandystats2-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+		libhandystats2 (= ${binary:Version}),
+Description: C++ library to collect runtime statistics - Debug files
+ Handystats is C++ library for collecting user-defined
+ in-process runtime statistics with low overhead.
+
+Package: libhandystats-dev
+Section: libdevel
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+		libboost-dev,
+Description: C++ library to collect runtime statistics - Development files
+ Handystats is C++ library for collecting user-defined
+ in-process runtime statistics with low overhead.
+
+Package: python-handystats
+Section: python
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends},
+		libhandystats2 (= ${binary:Version}),
+Description: Python bindings for handystats library
+ Handystats is C++ library for collecting user-defined
+ in-process runtime statistics with low overhead.
+
+Package: python-handystats-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends},
+		python-handystats (= ${binary:Version}),
+Recommends:
+		python-dbg
+Description: Python bindings for handystats library - Debug files
+ Handystats is C++ library for collecting user-defined
+ in-process runtime statistics with low overhead.
+
+Package: handystats-utils
+Section: utils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends},
+		python-handystats (= ${binary:Version}),
+		libhandystats2 (= ${binary:Version}),
+Description: C++ library to collect runtime statistics - Utilities
+ Handystats is C++ library for collecting user-defined
+ in-process runtime statistics with low overhead.

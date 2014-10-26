@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+# Copyright (c) 2014 Yandex LLC. All rights reserved.
+
+from distutils.core import setup
+from Cython.Distutils import build_ext
+from Cython.Distutils.extension import Extension
+
+name = 'python-handystats'
+copyright = 'Copyright (c) 2014 Yandex LLC. All rights reserved.'
+license = 'LGPLv3+'
+version = '${HANDYSTATS_VERSION}'
+maintainer = 'Danil Osherov'
+maintainer_email = 'shindo@yandex-team.ru'
+url = 'https://github.com/shindo/handystats'
+description = 'Python bindings for handystats library'
+
+ext_modules = [
+        Extension(module, [source],
+            include_dirs=[
+                ".",
+                "${HANDYSTATS_INCLUDE_DIR}",
+                ],
+            library_dirs=[
+                "${HANDYSTATS_LIBRARY_OUTPUT_DIR}",
+                ],
+            libraries=[
+                "handystats",
+                ],
+            extra_compile_args=[
+                "-std=c++0x",
+                "-Wreorder", "-Wreturn-type", "-Wunused-variable",
+                "-pedantic",
+                "-D_GLIBCXX_USE_NANOSLEEP",
+                "-D_GLIBCXX_USE_CLOCK_MONOTONIC",
+                "-D_GLIBCXX_USE_SCHED_YIELD",
+                ],
+            depends=[
+                # handystats include files
+                "${HANDYSTATS_INCLUDE_DIR}/*",
+                # cython source files
+                "${CMAKE_CURRENT_SOURCE_DIR}/handystats/*.py",
+                "${CMAKE_CURRENT_SOURCE_DIR}/handystats/*.pyx",
+                "${CMAKE_CURRENT_SOURCE_DIR}/handystats/*.pxd",
+                # handystats built library
+                "${HANDYSTATS_LIBRARY_OUTPUT_DIR}/*",
+                ],
+            language="c++"
+        )
+        for module, source in [
+            ["handystats.statistics", "handystats/statistics.pyx"],
+            ["handystats.chrono", "handystats/chrono.pyx"],
+        ]
+    ]
+
+setup(
+    name = name,
+    license = license,
+    version = version,
+    maintainer = maintainer,
+    maintainer_email = maintainer_email,
+    url = url,
+    description = description,
+    cmdclass = {'build_ext': build_ext},
+    ext_modules = ext_modules,
+    packages=[
+        "handystats",
+        ],
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Operating System :: OS Independent',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+        ],
+    platforms=[
+        'Independent'
+        ],
+)

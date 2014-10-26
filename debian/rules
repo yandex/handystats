@@ -1,6 +1,28 @@
 #!/usr/bin/make -f
+# -*- makefile -*-
 
-include /usr/share/cdbs/1/class/cmake.mk
 include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/cmake.mk
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+include /usr/share/cdbs/1/rules/utils.mk
 
-DEB_MAKE_CHECK_TARGET=check
+DEB_MAKE_CHECK_TARGET=check check_bindings
+
+DEB_CMAKE_EXTRA_FLAGS := \
+	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+	-DDESTDIR=${DEB_DESTDIR} \
+	-DWITH_BENCHMARKS=OFF \
+	-DWITH_TESTS=ON \
+	-DWITH_PYTHON=ON \
+	-DWITH_PYTHON_DBG=ON \
+	-DWITH_PYTHON_TESTS=ON \
+	-DWITH_UTILS=ON \
+
+
+DEB_BUILD_PARALLEL = yes
+DEB_PARALLEL_JOBS ?= $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)
+
+DEB_PYTHON_PACKAGES=python-handystats python-handystats-dbg handystats-utils
+
+$(patsubst %,binary-install/%,$(DEB_PYTHON_PACKAGES))::
+	dh_pysupport -p$(cdbs_curpkg)

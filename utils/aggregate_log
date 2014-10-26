@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+# Copyright (c) 2014 Yandex LLC. All rights reserved.
+
+import sys
+import json
+
+from handystats.statistics import Data
+
+def append_dump(metrics, dump):
+    if isinstance(dump, str):
+        dump = json.loads(dump)
+    elif not isinstance(dump, dict):
+        raise TypeError
+
+    for name, value in dump.iteritems():
+        data = Data.from_json(json.dumps(value, separators=(',',':')))
+
+        if name not in metrics:
+            metrics[name] = data
+        else:
+            metrics[name].append(data)
+
+def aggregate_log(log_file):
+    metrics = dict()
+
+    for line in log_file:
+        if not line: continue
+
+        unixtime, dump = line.split(' ', 1)
+        append_dump(metrics, dump)
+
+    return metrics
+
+def main():
+    metrics = aggregate_log(sys.stdin)
+
+    def data_to_dict(data):
+        return json.loads(data.to_json())
+
+    print json.dumps(metrics, default=data_to_dict, separators=(',',':'))
+
+if __name__ == "__main__":
+    main()

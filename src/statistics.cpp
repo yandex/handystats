@@ -124,35 +124,38 @@ void statistics::data::reset() {
 	m_timestamp = time_point();
 }
 
-double statistics::data::shift_interval_data(
-		const double& data, const time_point& data_timestamp,
-		const time_point& timestamp
+static
+double shift_data(
+		const statistics::data& ctx,
+		const double& data, const statistics::time_point& data_timestamp,
+		const statistics::time_point& timestamp
 	)
-	const
 {
 	// data is uninitialized
-	if (data_timestamp == time_point()) return 0;
+	if (data_timestamp == statistics::time_point()) return 0;
 
-	if (timestamp <= m_timestamp) return data;
+	if (timestamp <= ctx.m_timestamp) return data;
 
-	const auto& stale_interval = data_timestamp - (timestamp - m_moving_interval);
+	const auto& stale_interval = data_timestamp - (timestamp - ctx.m_moving_interval);
 
 	if (stale_interval.count() <= 0) return 0;
 
-	return data * stale_interval.count() / (m_moving_interval - (m_timestamp - data_timestamp)).count();
+	return data * stale_interval.count() /
+		(ctx.m_moving_interval - (ctx.m_timestamp - data_timestamp)).count();
 }
 
-double statistics::data::update_interval_data(
-		const double& data, const time_point& data_timestamp,
-		const value_type& value, const time_point& timestamp
+static
+double update_data(
+		const statistics::data& ctx,
+		const double& data, const statistics::time_point& data_timestamp,
+		const statistics::value_type& value, const statistics::time_point& timestamp
 	)
-	const
 {
 	// data is uninitialized
-	if (data_timestamp == time_point()) return value;
+	if (data_timestamp == statistics::time_point()) return value;
 
-	if (timestamp <= m_timestamp) {
-		if (timestamp < m_timestamp - m_moving_interval) {
+	if (timestamp <= ctx.m_timestamp) {
+		if (timestamp < ctx.m_timestamp - ctx.m_moving_interval) {
 			return data;
 		}
 		else {
@@ -160,41 +163,69 @@ double statistics::data::update_interval_data(
 		}
 	}
 	else {
-		return value + shift_interval_data(data, data_timestamp, timestamp);
+		return value + shift_data(ctx, data, data_timestamp, timestamp);
 	}
 
 	return data;
 }
 
-double statistics::data::truncate_interval_data(
-		const double& data, const time_point& data_timestamp,
-		const time_point& timestamp
+static
+double truncate_data_before(
+		const statistics::data& ctx,
+		const double& data, const statistics::time_point& data_timestamp,
+		const statistics::time_point& timestamp
 	)
-	const
 {
 	// data is uninitialized
-	if (data_timestamp == time_point()) return 0;
+	if (data_timestamp == statistics::time_point()) return 0;
 
 	if (math_utils::cmp<double>(data, 0) == 0) return 0;
 
 	if (timestamp >= data_timestamp) return 0;
 
-	if (timestamp <= m_timestamp - m_moving_interval) return data;
+	if (timestamp <= ctx.m_timestamp - ctx.m_moving_interval) return data;
 
-	const auto& stale_interval = timestamp - (m_timestamp - m_moving_interval);
-	const auto& data_interval = data_timestamp - (m_timestamp - m_moving_interval);
+	const auto& stale_interval = timestamp - (ctx.m_timestamp - ctx.m_moving_interval);
+	const auto& data_interval = data_timestamp - (ctx.m_timestamp - ctx.m_moving_interval);
 
 	return data * (data_interval - stale_interval).count() / data_interval.count();
 }
 
-void statistics::data::shift_histogram(const time_point& timestamp) {
-	if (m_histogram_bins == 0) return;
+static
+double truncate_data_after(
+		const statistics::data& ctx,
+		const double& data, const statistics::time_point& data_timestamp,
+		const statistics::time_point& timestamp
+	)
+{
+	// data is uninitialized
+	if (data_timestamp == statistics::time_point()) return 0;
 
-	for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
-		auto& bin_count = std::get<BIN_COUNT>(*bin);
-		auto& bin_timestamp = std::get<BIN_TIMESTAMP>(*bin);
+	if (math_utils::cmp<double>(data, 0) == 0) return 0;
 
-		bin_count = shift_interval_data(bin_count, bin_timestamp, timestamp);
+	if (timestamp >= data_timestamp) return data;
+
+	if (timestamp <= ctx.m_timestamp - ctx.m_moving_interval) return 0;
+
+	const auto& stale_interval = timestamp - (ctx.m_timestamp - ctx.m_moving_interval);
+	const auto& data_interval = data_timestamp - (ctx.m_timestamp - ctx.m_moving_interval);
+
+	return data * stale_interval.count() / data_interval.count();
+}
+
+static
+void shift_histogram(
+		statistics::data& ctx,
+		const statistics::time_point& timestamp
+	)
+{
+	if (ctx.m_histogram_bins == 0) return;
+
+	for (auto bin = ctx.m_histogram.begin(); bin != ctx.m_histogram.end(); ++bin) {
+		auto& bin_count = std::get<statistics::BIN_COUNT>(*bin);
+		auto& bin_timestamp = std::get<statistics::BIN_TIMESTAMP>(*bin);
+
+		bin_count = shift_data(ctx, bin_count, bin_timestamp, timestamp);
 
 		if (math_utils::cmp<double>(bin_count, 0) == 0) {
 			bin_count = 0;
@@ -202,14 +233,39 @@ void statistics::data::shift_histogram(const time_point& timestamp) {
 	}
 }
 
-void statistics::data::truncate_histogram(const time_point& timestamp) {
-	if (m_histogram_bins == 0) return;
+static
+void truncate_histogram_before(
+		statistics::data& ctx,
+		const statistics::time_point& timestamp
+	)
+{
+	if (ctx.m_histogram_bins == 0) return;
 
-	for (auto bin = m_histogram.begin(); bin != m_histogram.end(); ++bin) {
-		auto& bin_count = std::get<BIN_COUNT>(*bin);
-		auto& bin_timestamp = std::get<BIN_TIMESTAMP>(*bin);
+	for (auto bin = ctx.m_histogram.begin(); bin != ctx.m_histogram.end(); ++bin) {
+		auto& bin_count = std::get<statistics::BIN_COUNT>(*bin);
+		auto& bin_timestamp = std::get<statistics::BIN_TIMESTAMP>(*bin);
 
-		bin_count = truncate_interval_data(bin_count, bin_timestamp, timestamp);
+		bin_count = truncate_data_before(ctx, bin_count, bin_timestamp, timestamp);
+
+		if (math_utils::cmp<double>(bin_count, 0) == 0) {
+			bin_count = 0;
+		}
+	}
+}
+
+static
+void truncate_histogram_after(
+		statistics::data& ctx,
+		const statistics::time_point& timestamp
+	)
+{
+	if (ctx.m_histogram_bins == 0) return;
+
+	for (auto bin = ctx.m_histogram.begin(); bin != ctx.m_histogram.end(); ++bin) {
+		auto& bin_count = std::get<statistics::BIN_COUNT>(*bin);
+		auto& bin_timestamp = std::get<statistics::BIN_TIMESTAMP>(*bin);
+
+		bin_count = truncate_data_after(ctx, bin_count, bin_timestamp, timestamp);
 
 		if (math_utils::cmp<double>(bin_count, 0) == 0) {
 			bin_count = 0;
@@ -308,24 +364,28 @@ void compress_histogram(statistics::histogram_type& histogram, const size_t& his
 	}
 }
 
-void statistics::data::update_histogram(const value_type& value, const time_point& timestamp)
+static
+void update_histogram(
+		statistics::data& ctx,
+		const statistics::value_type& value, const statistics::time_point& timestamp
+	)
 {
-	if (m_histogram_bins == 0) return;
+	if (ctx.m_histogram_bins == 0) return;
 
 	statistics::bin_type new_bin(value, 1.0, timestamp);
 
-	auto insert_iter = std::lower_bound(m_histogram.begin(), m_histogram.end(), new_bin);
-	m_histogram.insert(insert_iter, std::move(new_bin));
+	auto insert_iter = std::lower_bound(ctx.m_histogram.begin(), ctx.m_histogram.end(), new_bin);
+	ctx.m_histogram.insert(insert_iter, std::move(new_bin));
 
-	shift_histogram(timestamp);
+	shift_histogram(ctx, timestamp);
 
-	compress_histogram(m_histogram, m_histogram_bins);
+	compress_histogram(ctx.m_histogram, ctx.m_histogram_bins);
 }
 
 void statistics::data::update(const value_type& value, const time_point& timestamp) {
 	if (m_tags & tag::rate) {
 		const value_type delta = value - m_value;
-		m_rate = update_interval_data(m_rate, m_data_timestamp, delta, timestamp);
+		m_rate = update_data(*this, m_rate, m_data_timestamp, delta, timestamp);
 	}
 
 	if (m_tags & tag::value) {
@@ -349,15 +409,15 @@ void statistics::data::update(const value_type& value, const time_point& timesta
 	}
 
 	if (m_tags & tag::moving_count) {
-		m_moving_count = update_interval_data(m_moving_count, m_data_timestamp, 1, timestamp);
+		m_moving_count = update_data(*this, m_moving_count, m_data_timestamp, 1, timestamp);
 	}
 
 	if (m_tags & tag::moving_sum) {
-		m_moving_sum = update_interval_data(m_moving_sum, m_data_timestamp, value, timestamp);
+		m_moving_sum = update_data(*this, m_moving_sum, m_data_timestamp, value, timestamp);
 	}
 
 	if (m_tags & tag::histogram) {
-		update_histogram(value, timestamp);
+		update_histogram(*this, value, timestamp);
 	}
 
 	m_timestamp = std::max(m_timestamp, timestamp);
@@ -368,28 +428,28 @@ void statistics::data::update_time(const time_point& timestamp) {
 	if (timestamp <= m_timestamp) return;
 
 	if (m_tags & tag::rate) {
-		m_rate = shift_interval_data(m_rate, m_data_timestamp, timestamp);
+		m_rate = shift_data(*this, m_rate, m_data_timestamp, timestamp);
 		if (math_utils::cmp<double>(m_rate, 0) == 0) {
 			m_rate = 0;
 		}
 	}
 
 	if (m_tags & tag::moving_count) {
-		m_moving_count = shift_interval_data(m_moving_count, m_data_timestamp, timestamp);
+		m_moving_count = shift_data(*this, m_moving_count, m_data_timestamp, timestamp);
 		if (math_utils::cmp<double>(m_moving_count, 0) == 0) {
 			m_moving_count = 0;
 		}
 	}
 
 	if (m_tags & tag::moving_sum) {
-		m_moving_sum = shift_interval_data(m_moving_sum, m_data_timestamp, timestamp);
+		m_moving_sum = shift_data(*this, m_moving_sum, m_data_timestamp, timestamp);
 		if (math_utils::cmp<double>(m_moving_sum, 0) == 0) {
 			m_moving_sum = 0;
 		}
 	}
 
 	if (m_tags & tag::histogram) {
-		shift_histogram(timestamp);
+		shift_histogram(*this, timestamp);
 	}
 
 	m_timestamp = std::max(m_timestamp, timestamp);
@@ -441,20 +501,20 @@ void statistics::data::append(data d) {
 	}
 
 	if (d.m_tags & tag::moving_count) {
-		m_moving_count += d.truncate_interval_data(d.m_moving_count, d.m_data_timestamp, m_timestamp);
+		m_moving_count += truncate_data_before(d, d.m_moving_count, d.m_data_timestamp, m_timestamp);
 		m_tags |= tag::moving_count;
 	}
 	if (d.m_tags & tag::moving_sum) {
-		m_moving_sum += d.truncate_interval_data(d.m_moving_sum, d.m_data_timestamp, m_timestamp);
+		m_moving_sum += truncate_data_before(d, d.m_moving_sum, d.m_data_timestamp, m_timestamp);
 		m_tags |= tag::moving_sum;
 	}
 	if (d.m_tags & tag::rate) {
-		m_rate += d.truncate_interval_data(d.m_rate, d.m_data_timestamp, m_timestamp);
+		m_rate += truncate_data_before(d, d.m_rate, d.m_data_timestamp, m_timestamp);
 		m_tags |= tag::rate;
 	}
 
 	if (d.m_tags & tag::histogram) {
-		d.truncate_histogram(m_timestamp);
+		truncate_histogram_before(d, m_timestamp);
 		m_histogram.reserve(m_histogram.size() + d.m_histogram.size());
 		m_histogram.insert(m_histogram.end(), d.m_histogram.begin(), d.m_histogram.end());
 		std::sort(m_histogram.begin(), m_histogram.end());
@@ -536,6 +596,86 @@ void statistics::data::merge(const data& d) {
 	m_timestamp = std::max(m_timestamp, d.m_timestamp);
 	m_moving_interval = m_timestamp - last_timestamp;
 }
+
+void statistics::data::truncate_before(const time_point& timestamp) {
+	if (m_tags & tag::rate) {
+		m_rate = truncate_data_before(*this, m_rate, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_rate, 0) == 0) {
+			m_rate = 0;
+		}
+	}
+
+	if (m_tags & tag::moving_count) {
+		m_moving_count = truncate_data_before(*this, m_moving_count, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_moving_count, 0) == 0) {
+			m_moving_count = 0;
+		}
+	}
+
+	if (m_tags & tag::moving_sum) {
+		m_moving_sum = truncate_data_before(*this, m_moving_sum, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_moving_sum, 0) == 0) {
+			m_moving_sum = 0;
+		}
+	}
+
+	if (m_tags & tag::histogram) {
+		truncate_histogram_before(*this, timestamp);
+	}
+
+	if (timestamp >= m_data_timestamp) {
+		m_data_timestamp = time_point();
+	}
+
+	if (timestamp >= m_timestamp) {
+		m_timestamp = time_point();
+		m_moving_interval = chrono::duration(0, m_moving_interval.unit());
+	}
+	else {
+		m_moving_interval = std::min(m_moving_interval, m_timestamp - timestamp);
+	}
+}
+
+void statistics::data::truncate_after(const time_point& timestamp) {
+	if (m_tags & tag::rate) {
+		m_rate = truncate_data_after(*this, m_rate, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_rate, 0) == 0) {
+			m_rate = 0;
+		}
+	}
+
+	if (m_tags & tag::moving_count) {
+		m_moving_count = truncate_data_after(*this, m_moving_count, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_moving_count, 0) == 0) {
+			m_moving_count = 0;
+		}
+	}
+
+	if (m_tags & tag::moving_sum) {
+		m_moving_sum = truncate_data_after(*this, m_moving_sum, m_data_timestamp, timestamp);
+		if (math_utils::cmp<double>(m_moving_sum, 0) == 0) {
+			m_moving_sum = 0;
+		}
+	}
+
+	if (m_tags & tag::histogram) {
+		truncate_histogram_after(*this, timestamp);
+	}
+
+	if (timestamp <= m_timestamp - m_moving_interval) {
+		m_data_timestamp = time_point();
+		m_timestamp = time_point();
+		m_moving_interval = chrono::duration(0, m_moving_interval.unit());
+	}
+	else {
+		const auto& last_timestamp = m_timestamp - m_moving_interval;
+
+		m_data_timestamp = std::min(m_data_timestamp, timestamp);
+		m_timestamp = std::min(m_timestamp, timestamp);
+		m_moving_interval = m_timestamp - last_timestamp;
+	}
+}
+
 
 void statistics::data::fulfill_dependencies() {
 	// timestamp - no dependency

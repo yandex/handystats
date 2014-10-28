@@ -2,8 +2,6 @@
 
 from cython.operator cimport dereference as deref
 
-from handystats.chrono cimport Timepoint
-
 cdef class Data:
     def __cinit__(self):
         self.thisptr = new statistics.data()
@@ -16,6 +14,12 @@ cdef class Data:
 
     cpdef merge(self, Data other):
         self.thisptr.merge(deref(other.thisptr))
+
+    cpdef truncate(self, Timepoint before = None, Timepoint after = None):
+        if before is not None:
+            self.thisptr.truncate_before(deref(before.thisptr))
+        if after is not None:
+            self.thisptr.truncate_after(deref(after.thisptr))
 
     @staticmethod
     def from_json(json_object):

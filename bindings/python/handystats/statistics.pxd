@@ -3,14 +3,18 @@
 from libcpp.string cimport string
 from libc.stdint cimport uint64_t
 
-from handystats.chrono cimport time_point
+from handystats.chrono cimport time_point, Timepoint
 
 cdef extern from "handystats/detail/statistics.hpp" namespace "handystats":
     cdef cppclass statistics:
         cppclass data:
             data()
+
             void append(data)
             void merge(const data)
+
+            void truncate_before(const time_point)
+            void truncate_after(const time_point)
 
         statistics()
         statistics(const data&)
@@ -36,6 +40,8 @@ cdef class Data:
 
     cpdef append(self, Data other)
     cpdef merge(self, Data other)
+
+    cpdef truncate(self, Timepoint before = *, Timepoint after = *)
 
 cdef class Statistics:
     cdef statistics *thisptr

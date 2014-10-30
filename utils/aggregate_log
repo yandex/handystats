@@ -22,6 +22,7 @@ def append_dump(metrics, dump):
 
 def aggregate_log(log_file):
     metrics = dict()
+    unixtime = 0
 
     for line in log_file:
         if not line: continue
@@ -29,15 +30,15 @@ def aggregate_log(log_file):
         unixtime, dump = line.split(' ', 1)
         append_dump(metrics, dump)
 
-    return metrics
+    return unixtime, metrics
 
 def main():
-    metrics = aggregate_log(sys.stdin)
+    unixtime, metrics = aggregate_log(sys.stdin)
 
     def data_to_dict(data):
         return json.loads(data.to_json())
 
-    print json.dumps(metrics, default=data_to_dict, separators=(',',':'))
+    print unixtime, json.dumps(metrics, default=data_to_dict, separators=(',',':'))
 
 if __name__ == "__main__":
     main()

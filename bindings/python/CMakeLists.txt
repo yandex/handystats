@@ -2,10 +2,6 @@ CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
 PROJECT (HANDYSTATS_PYTHON)
 
-IF (NOT WITH_PYTHON)
-	RETURN ()
-ENDIF ()
-
 FIND_PACKAGE (PythonInterp 2.6 REQUIRED)
 FIND_PACKAGE (PythonLibs 2.6 REQUIRED)
 EXECUTE_PROCESS (COMMAND
@@ -16,65 +12,22 @@ EXECUTE_PROCESS (COMMAND
 MESSAGE (STATUS "Python includes are situated in ${PYTHON_INCLUDE_DIRS}")
 MESSAGE (STATUS "Python site-packages are situated in ${PYTHON_SITE_PACKAGES}")
 
-# setup.py
-SET (SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in")
-SET (SETUP_PY "${CMAKE_CURRENT_BINARY_DIR}/setup.py")
-CONFIGURE_FILE (${SETUP_PY_IN} ${SETUP_PY})
-
-IF (NOT DESTDIR)
-	SET (DESTDIR $ENV{DESTDIR})
-ENDIF ()
-
-ADD_CUSTOM_TARGET (bindings_python ALL
-	COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} build_ext
+ADD_CUSTOM_TARGET (bindings_python
+	COMMAND ${PYTHON_EXECUTABLE} setup.py build_py
 		--build-lib ${CMAKE_CURRENT_BINARY_DIR}
+		--force
 		--verbose
-	COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} build_py
+	COMMAND ${PYTHON_EXECUTABLE} setup.py build_ext
 		--build-lib ${CMAKE_CURRENT_BINARY_DIR}
+		--include-dirs "${HANDYSTATS_INCLUDE_DIR}"
+		--library-dirs "${HANDYSTATS_LIBRARY_OUTPUT_DIR}"
+		--force
+		--cython-c-in-temp
 		--verbose
-	COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} clean
+	COMMAND ${PYTHON_EXECUTABLE} setup.py clean
 		--build-lib ${CMAKE_CURRENT_BINARY_DIR}
 		--verbose
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	)
 
 ADD_DEPENDENCIES (bindings_python ${HANDYSTATS_LIBRARY})
-
-MESSAGE (STATUS "Install python bindings with --prefix=${DESTDIR}/${CMAKE_INSTALL_PREFIX}")
-
-INSTALL (CODE
-	"EXECUTE_PROCESS (
-		COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} install
-			--no-compile
-			--prefix ${DESTDIR}/${CMAKE_INSTALL_PREFIX}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-		)"
-	)
-
-# NOTE: by now it's debian-only feature (python-dbg)
-IF (WITH_PYTHON_DBG)
-	ADD_CUSTOM_TARGET (bindings_python_dbg ALL
-		COMMAND ${PYTHON_EXECUTABLE}-dbg ${SETUP_PY} build_ext
-			--build-lib ${CMAKE_CURRENT_BINARY_DIR}
-			--debug
-			--verbose
-		COMMAND ${PYTHON_EXECUTABLE}-dbg ${SETUP_PY} build_py
-			--build-lib ${CMAKE_CURRENT_BINARY_DIR}
-			--verbose
-		COMMAND ${PYTHON_EXECUTABLE}-dbg ${SETUP_PY} clean
-			--build-lib ${CMAKE_CURRENT_BINARY_DIR}
-			--verbose
-		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-		)
-
-	ADD_DEPENDENCIES (bindings_python_dbg ${HANDYSTATS_LIBRARY})
-
-	INSTALL (CODE
-		"EXECUTE_PROCESS (
-			COMMAND ${PYTHON_EXECUTABLE}-dbg ${SETUP_PY} install
-				--no-compile
-				--prefix ${DESTDIR}/${CMAKE_INSTALL_PREFIX}
-			WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-			)"
-		)
-ENDIF ()

@@ -1,2 +1,2 @@
-usr/lib/python2*/*-packages/*/*[!_][!d].so
+usr/lib/python2*/*-packages/*/*[!_][!_].so
 usr/lib/python2*/*-packages/*/*.py

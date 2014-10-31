@@ -1,28 +1,122 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/cmake.mk
-include /usr/share/cdbs/1/rules/simple-patchsys.mk
-include /usr/share/cdbs/1/rules/utils.mk
+DH_VERBOSE = 1
 
-DEB_MAKE_CHECK_TARGET=check check_bindings
-
-DEB_CMAKE_EXTRA_FLAGS := \
-	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
-	-DDESTDIR=${DEB_DESTDIR} \
-	-DWITH_BENCHMARKS=OFF \
-	-DWITH_TESTS=ON \
-	-DWITH_PYTHON=ON \
-	-DWITH_PYTHON_DBG=ON \
-	-DWITH_PYTHON_TESTS=ON \
-	-DWITH_UTILS=ON \
-
-
-DEB_BUILD_PARALLEL = yes
 DEB_PARALLEL_JOBS ?= $(shell getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
-DEB_PYTHON_PACKAGES=python-handystats python-handystats-dbg handystats-utils
+BUILDDIR := debian/build
+DESTDIR := ${CURDIR}/debian/tmp
 
-$(patsubst %,binary-install/%,$(DEB_PYTHON_PACKAGES))::
-	dh_pysupport -p$(cdbs_curpkg)
+PYTHON2 = $(shell pyversions -vr)
+
+SONAME := 2
+
+LIBHANDYSTATS_CMAKE_EXTRA_FLAGS := \
+	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
+	-DWITH_TESTS=ON \
+
+
+### LIBHANDYSTATS ###
+
+configure-libhandystats:
+	dh_auto_configure --buildsystem=cmake \
+		--sourcedirectory=${CURDIR} --builddirectory=${BUILDDIR}/handystats \
+		-- ${LIBHANDYSTATS_CMAKE_EXTRA_FLAGS}
+
+build-libhandystats: configure-libhandystats
+	set -e; \
+		cd ${BUILDDIR}/handystats; \
+		${MAKE} -j ${DEB_PARALLEL_JOBS}
+
+test-libhandystats:
+	set -e; \
+		cd ${BUILDDIR}/handystats; \
+		${MAKE} check -j ${DEB_PARALLEL_JOBS}
+
+install-libhandystats:
+	set -e; \
+		cd ${BUILDDIR}/handystats; \
+		${MAKE} install DESTDIR=${DESTDIR}
+
+clean-libhandystats:
+	rm -rf ${BUILDDIR}/handystats
+
+
+### PYTHON-BINDINGS ###
+
+configure-python%-bindings:
+
+build-python%-bindings: build-libhandystats
+	set -e; \
+		cd bindings/python; \
+		python$* setup.py build_py \
+			--force \
+			--verbose; \
+		python$* setup.py build_ext \
+			--include-dirs ../../include \
+			--library-dirs ../../${BUILDDIR}/handystats/lib*/ \
+			--force \
+			--cython-c-in-temp \
+			--verbose;
+
+test-python%-bindings:
+
+install-python%-bindings:
+	set -e; \
+		cd bindings/python; \
+		python$* setup.py install \
+			--root=${DESTDIR} \
+			--install-layout=deb \
+			--no-compile \
+			--skip-build \
+			--verbose;
+
+clean-python%-bindings:
+	set -e; \
+	cd bindings/python; \
+	python$* setup.py clean \
+		--verbose;
+	rm -rf bindings/python/*.egg-info
+
+
+### HANDYSTATS-UTILS ###
+
+configure-handystats-utils:
+	dh_auto_configure --buildsystem=cmake \
+		--sourcedirectory=${CURDIR}/utils --builddirectory=${BUILDDIR}/handystats-utils \
+
+build-handystats-utils: configure-handystats-utils
+	set -e; \
+		cd ${BUILDDIR}/handystats-utils; \
+		${MAKE} -j ${DEB_PARALLEL_JOBS}
+
+test-handystats-utils:
+
+install-handystats-utils:
+	set -e; \
+		cd ${BUILDDIR}/handystats-utils; \
+		${MAKE} install DESTDIR=${DESTDIR}
+
+clean-handystats-utils:
+	rm -rf ${BUILDDIR}/handystats-utils
+
+
+build %:
+	dh $@ --with python2
+
+override_dh_auto_build: build-libhandystats $(PYTHON2:%=build-python%-bindings) $(PYTHON2:%=build-python%-dbg-bindings) build-handystats-utils
+
+override_dh_auto_install: install-libhandystats $(PYTHON2:%=install-python%-bindings) $(PYTHON2:%=install-python%-dbg-bindings) install-handystats-utils
+
+override_dh_auto_test: test-libhandystats
+
+override_dh_strip:
+	dh_strip --dbg-package=libhandystats${SONAME}-dbg -plibhandystats${SONAME}
+	dh_strip --dbg-package=python-handystats-dbg -ppython-handystats
+
+override_dh_auto_clean: clean-libhandystats $(PYTHON2:%=clean-python%-bindings) $(PYTHON2:%=clean-python%-dbg-bindings) clean-handystats-utils
+	dh_auto_clean
+	rm -rf ${BUILDDIR}
+
+.PHONY: build

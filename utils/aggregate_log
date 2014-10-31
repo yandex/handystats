@@ -25,7 +25,8 @@ def aggregate_log(log_file):
     unixtime = 0
 
     for line in log_file:
-        if not line: continue
+        if not line:
+            continue
 
         unixtime, dump = line.split(' ', 1)
         append_dump(metrics, dump)

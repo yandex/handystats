@@ -102,12 +102,43 @@ clean-handystats-utils:
 	rm -rf ${BUILDDIR}/handystats-utils
 
 
+### COMBAINE-PLUGIN-HANDYSTATS ###
+
+configure-combaine-plugin-handystats:
+	dh_auto_configure --buildsystem=cmake \
+		--sourcedirectory=${CURDIR}/combaine/plugin --builddirectory=${BUILDDIR}/combaine-plugin-handystats \
+
+build-combaine-plugin-handystats: configure-combaine-plugin-handystats
+	set -e; \
+		cd ${BUILDDIR}/combaine-plugin-handystats; \
+		${MAKE} -j ${DEB_PARALLEL_JOBS}
+
+test-combaine-plugin-handystats:
+
+install-combaine-plugin-handystats:
+	set -e; \
+		cd ${BUILDDIR}/combaine-plugin-handystats; \
+		${MAKE} install DESTDIR=${DESTDIR}
+
+clean-combaine-plugin-handystats:
+	rm -rf ${BUILDDIR}/combaine-plugin-handystats
+
 build %:
 	dh $@ --with python2
 
-override_dh_auto_build: build-libhandystats $(PYTHON2:%=build-python%-bindings) $(PYTHON2:%=build-python%-dbg-bindings) build-handystats-utils
+override_dh_auto_build: \
+	build-libhandystats \
+	$(PYTHON2:%=build-python%-bindings) \
+	$(PYTHON2:%=build-python%-dbg-bindings) \
+	build-handystats-utils \
+	build-combaine-plugin-handystats
 
-override_dh_auto_install: install-libhandystats $(PYTHON2:%=install-python%-bindings) $(PYTHON2:%=install-python%-dbg-bindings) install-handystats-utils
+override_dh_auto_install: \
+	install-libhandystats \
+	$(PYTHON2:%=install-python%-bindings) \
+	$(PYTHON2:%=install-python%-dbg-bindings) \
+	install-handystats-utils \
+	install-combaine-plugin-handystats
 
 override_dh_auto_test: test-libhandystats
 
@@ -115,7 +146,12 @@ override_dh_strip:
 	dh_strip --dbg-package=libhandystats${SONAME}-dbg -plibhandystats${SONAME}
 	dh_strip --dbg-package=python-handystats-dbg -ppython-handystats
 
-override_dh_auto_clean: clean-libhandystats $(PYTHON2:%=clean-python%-bindings) $(PYTHON2:%=clean-python%-dbg-bindings) clean-handystats-utils
+override_dh_auto_clean: \
+	clean-libhandystats \
+	$(PYTHON2:%=clean-python%-bindings) \
+	$(PYTHON2:%=clean-python%-dbg-bindings) \
+	clean-handystats-utils \
+	clean-combaine-plugin-handystats
 	dh_auto_clean
 	rm -rf ${BUILDDIR}
 

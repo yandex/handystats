@@ -4,7 +4,6 @@
 #include <algorithm>
 
 #include "events/timer_impl.hpp"
-#include "message_queue_impl.hpp"
 #include "core_impl.hpp"
 
 #include <handystats/measuring_points/timer.hpp>
@@ -20,7 +19,7 @@ void timer_init(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::timer::create_init_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -33,7 +32,7 @@ void timer_start(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::timer::create_start_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -46,7 +45,7 @@ void timer_stop(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::timer::create_stop_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -59,7 +58,7 @@ void timer_discard(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::timer::create_discard_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -72,7 +71,7 @@ void timer_heartbeat(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::timer::create_heartbeat_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -85,7 +84,7 @@ void timer_set(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::timer::create_set_event(std::move(timer_name), measurement, timestamp)
 			);
 	}

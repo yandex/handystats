@@ -58,7 +58,7 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 		std::this_thread::sleep_for(sleep_time);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -98,7 +98,7 @@ TEST_F(HandyScopedTimerTest, TestMultipleNestedScopes) {
 		}
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -135,7 +135,7 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 		std::this_thread::sleep_for(sleep_time);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();

@@ -4,7 +4,6 @@
 #include <algorithm>
 
 #include "events/gauge_impl.hpp"
-#include "message_queue_impl.hpp"
 #include "core_impl.hpp"
 
 #include <handystats/measuring_points/gauge.hpp>
@@ -20,7 +19,7 @@ void gauge_init(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
+		channel->push(
 				handystats::events::gauge::create_init_event(std::move(gauge_name), init_value, timestamp)
 			);
 	}
@@ -33,7 +32,7 @@ void gauge_set(
 	)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
+		channel->push(
 				handystats::events::gauge::create_set_event(std::move(gauge_name), value, timestamp)
 			);
 	}

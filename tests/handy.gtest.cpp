@@ -80,7 +80,7 @@ TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 		}
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -113,7 +113,7 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 		}
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();

@@ -7,6 +7,7 @@
 #include <handystats/chrono.hpp>
 #include <handystats/metrics_dump.hpp>
 
+#include "core_impl.hpp"
 #include "internal_impl.hpp"
 #include "message_queue_impl.hpp"
 #include "config_impl.hpp"
@@ -112,21 +113,21 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.size",
-						message_queue::stats::size.values()
+						statistics(channel->m_stats.size)
 						)
 					);
 
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.message_wait_time",
-						message_queue::stats::message_wait_time.values()
+						statistics(channel->m_stats.message_wait_time)
 						)
 					);
 
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.pop_count",
-						message_queue::stats::pop_count.values()
+						statistics(channel->m_stats.pop_count)
 						)
 					);
 		}
@@ -191,7 +192,7 @@ void update(const chrono::time_point& current_time, const chrono::time_point& in
 		internal::update_metrics(internal_time);
 
 		internal::stats::update(current_time);
-		message_queue::stats::update(current_time);
+		channel->m_stats.update(current_time);
 		stats::update(current_time);
 
 		auto new_dump = create_dump(current_time, internal_time);

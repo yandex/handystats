@@ -44,7 +44,7 @@ TEST_F(HandyProxyTest, GaugeProxy) {
 		gauge_proxy.set(value);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -73,7 +73,7 @@ TEST_F(HandyProxyTest, CounterProxy) {
 		counter_proxy.decrement(DELTA);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -101,7 +101,7 @@ TEST_F(HandyProxyTest, TimerProxySingleInstance) {
 		timer_proxy.stop(sleep_step + 1); // again, no influence
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -140,7 +140,7 @@ TEST_F(HandyProxyTest, TimerProxyMultiInstance) {
 		timer_proxy.stop(sleep_step);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();

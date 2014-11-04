@@ -48,7 +48,7 @@ TEST_F(MetricsDumpTest, SampleCounter) {
 		TEST_COUNTER_INCREMENT("counter", INCR_VALUE);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -73,7 +73,7 @@ TEST_F(MetricsDumpTest, SampleTimer) {
 		TEST_TIMER_STOP("timer", i);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -96,7 +96,7 @@ TEST_F(MetricsDumpTest, SampleGauge) {
 		TEST_GAUGE_SET("gauge", value);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();

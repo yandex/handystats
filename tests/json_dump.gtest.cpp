@@ -40,7 +40,7 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 		TEST_TIMER_STOP("test.timer");
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -90,7 +90,7 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 		TEST_TIMER_STOP("test.timer");
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();

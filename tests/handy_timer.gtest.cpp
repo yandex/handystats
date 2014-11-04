@@ -55,7 +55,7 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 		TEST_TIMER_STOP("sleep.time");
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -79,7 +79,7 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 		TEST_TIMER_STOP("sleep.time", step);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -107,7 +107,7 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 		TEST_TIMER_STOP("sleep.time", step);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto metrics_dump = HANDY_METRICS_DUMP();

@@ -11,17 +11,18 @@
 #include <handystats/core.h>
 
 #include "events/event_message_impl.hpp"
-#include "message_queue_impl.hpp"
 #include "internal_impl.hpp"
 #include "metrics_dump_impl.hpp"
 #include "config_impl.hpp"
 
 #include "core_impl.hpp"
 
+
 namespace handystats {
 
 std::mutex operation_mutex;
 std::atomic<bool> enabled_flag(false);
+std::unique_ptr<handystats::message_queue> channel;
 
 bool is_enabled() {
 	return config::core_opts.enable && enabled_flag.load(std::memory_order_acquire);
@@ -32,7 +33,7 @@ chrono::time_point last_message_timestamp;
 std::thread processor_thread;
 
 static void process_message_queue() {
-	auto* message = message_queue::pop();
+	auto* message = channel->pop();
 
 	if (message) {
 		last_message_timestamp = std::max(last_message_timestamp, message->timestamp);
@@ -51,7 +52,7 @@ static void run_processor() {
 	prctl(PR_SET_NAME, thread_name);
 
 	while (is_enabled()) {
-		if (!message_queue::empty()) {
+		if (channel->size() > 0) {
 			process_message_queue();
 		}
 		else {
@@ -71,7 +72,8 @@ void initialize() {
 
 	metrics_dump::initialize();
 	internal::initialize();
-	message_queue::initialize();
+
+	channel.reset(new message_queue());
 
 	if (!config::core_opts.enable) {
 		return;
@@ -93,7 +95,7 @@ void finalize() {
 	}
 
 	internal::finalize();
-	message_queue::finalize();
+	channel.reset();
 	metrics_dump::finalize();
 	config::finalize();
 }

@@ -50,7 +50,7 @@ TEST_F(HandyDisabledModuleTest, CheckGauge) {
 		TEST_GAUGE_SET(gauge_name, i);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(20));
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -68,7 +68,7 @@ TEST_F(HandyDisabledModuleTest, CheckCounter) {
 		TEST_COUNTER_CHANGE(counter_name, DELTA);
 	}
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(20));
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
@@ -88,7 +88,7 @@ TEST_F(HandyDisabledModuleTest, CheckTimer) {
 	}
 	TEST_TIMER_STOP(timer_name);
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(20));
 
 	auto metrics_dump = HANDY_METRICS_DUMP();

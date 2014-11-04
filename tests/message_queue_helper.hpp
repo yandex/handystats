@@ -6,16 +6,16 @@
 #include <thread>
 #include <chrono>
 
-#include "message_queue_impl.hpp"
+#include "core_impl.hpp"
 
-namespace handystats { namespace message_queue {
+namespace handystats {
 
 void wait_until_empty() {
-	while (!handystats::message_queue::empty()) {
+	while (channel->size() > 0) {
 		std::this_thread::sleep_for(std::chrono::microseconds(1));
 	}
 }
 
-}} // namespace handystats::message_queue
+} // namespace handystats
 
 #endif // HANDYSTATS_TESTS_MESSAGE_QUEUE_HELPER_HPP_

@@ -7,7 +7,6 @@
 #include <handystats/chrono.hpp>
 #include <handystats/metrics_dump.hpp>
 
-#include "message_queue_impl.hpp"
 #include "../metrics_dump_helper.hpp"
 #include "../message_queue_helper.hpp"
 
@@ -148,7 +147,7 @@ int main(int argc, char** argv) {
 
 	run_tests();
 
-	handystats::message_queue::wait_until_empty();
+	handystats::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
 	auto ret = RUN_ALL_TESTS();

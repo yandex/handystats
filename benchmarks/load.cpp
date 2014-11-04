@@ -107,7 +107,7 @@ void print_stats() {
 		const char* name = "handystats.message_queue.pop_count";
 		const auto& pop_count = metrics_dump->first.at(name);
 		std::cout << name << ":" << std::endl;
-		std::cout << "          rate: " << pop_count.get<handystats::statistics::tag::rate>() << std::endl;
+		std::cout << "          rate: " << pop_count.get<handystats::statistics::tag::moving_sum>() << std::endl;
 //		std::cout << "     timestamp: " << pop_count.get<handystats::statistics::tag::timestamp>() << std::endl;
 		std::cout << std::endl;
 	}

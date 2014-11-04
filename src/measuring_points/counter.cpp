@@ -4,7 +4,6 @@
 #include <algorithm>
 
 #include "events/counter_impl.hpp"
-#include "message_queue_impl.hpp"
 #include "core_impl.hpp"
 
 #include <handystats/measuring_points/counter.hpp>
@@ -20,7 +19,7 @@ void counter_init(
 		)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
+		channel->push(
 				handystats::events::counter::create_init_event(std::move(counter_name), init_value, timestamp)
 			);
 	}
@@ -33,7 +32,7 @@ void counter_increment(
 		)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
+		channel->push(
 				handystats::events::counter::create_increment_event(std::move(counter_name), value, timestamp)
 			);
 	}
@@ -46,7 +45,7 @@ void counter_decrement(
 		)
 {
 	if (handystats::is_enabled()) {
-		handystats::message_queue::push(
+		channel->push(
 				handystats::events::counter::create_decrement_event(std::move(counter_name), value, timestamp)
 			);
 	}

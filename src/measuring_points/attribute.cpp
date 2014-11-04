@@ -4,7 +4,6 @@
 #include <algorithm>
 
 #include "events/attribute_impl.hpp"
-#include "message_queue_impl.hpp"
 #include "core_impl.hpp"
 
 #include <handystats/measuring_points/attribute.hpp>
@@ -21,7 +20,7 @@ void attribute_set<attribute::value_type>(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::attribute::create_set_event(std::move(attr_name), value, timestamp)
 			);
 	}
@@ -35,7 +34,7 @@ void attribute_set<bool>(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(b),
@@ -53,7 +52,7 @@ void attribute_set<int>(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(i),
@@ -71,7 +70,7 @@ void attribute_set<unsigned>(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(u),
@@ -89,7 +88,7 @@ void attribute_set<int64_t>(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(i64),
@@ -107,7 +106,7 @@ void attribute_set<uint64_t>(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(u64),
@@ -125,7 +124,7 @@ void attribute_set<double>(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(d),
@@ -143,7 +142,7 @@ void attribute_set<std::string>(
 	)
 {
 	if (is_enabled()) {
-		message_queue::push(
+		channel->push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(s),

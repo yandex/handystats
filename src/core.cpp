@@ -22,7 +22,7 @@ namespace handystats {
 core_t::stats::stats() {
 	{
 		config::statistics config;
-		config.tags |= statistics::tag::moving_avg;
+		config.tags = statistics::tag::moving_avg;
 		config.moving_interval = chrono::seconds(1);
 
 		process_time = statistics::data(config);
@@ -30,7 +30,7 @@ core_t::stats::stats() {
 
 	{
 		config::statistics config;
-		config.tags |= statistics::tag::moving_avg;
+		config.tags = statistics::tag::moving_avg;
 		config.moving_interval = chrono::seconds(1);
 
 		dump_time = statistics::data(config);

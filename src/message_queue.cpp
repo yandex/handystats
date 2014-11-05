@@ -10,7 +10,7 @@ namespace handystats {
 message_queue::stats::stats() {
 	{
 		config::statistics config;
-		config.tags |= statistics::tag::value | statistics::tag::max | statistics::tag::moving_avg;
+		config.tags = statistics::tag::value | statistics::tag::max | statistics::tag::moving_avg;
 		config.moving_interval = chrono::seconds(1);
 
 		size = statistics::data(config);
@@ -20,7 +20,7 @@ message_queue::stats::stats() {
 
 	{
 		config::statistics config;
-		config.tags |= statistics::tag::moving_avg;
+		config.tags = statistics::tag::moving_avg;
 		config.moving_interval = chrono::seconds(1);
 
 		message_wait_time = statistics::data(config);
@@ -28,7 +28,7 @@ message_queue::stats::stats() {
 
 	{
 		config::statistics config;
-		config.tags |= statistics::tag::moving_sum;
+		config.tags = statistics::tag::moving_sum;
 		config.moving_interval = chrono::seconds(1);
 
 		pop_count = statistics::data(config);

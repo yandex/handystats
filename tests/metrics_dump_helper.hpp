@@ -7,6 +7,7 @@
 #include <chrono>
 
 #include <handystats/chrono.hpp>
+#include "core_impl.hpp"
 #include "metrics_dump_impl.hpp"
 
 namespace handystats { namespace metrics_dump {
@@ -38,8 +39,8 @@ struct dump_timestamp_visitor : public boost::static_visitor<int64_t>
 
 void wait_until(const chrono::time_point& timestamp) {
 	const char* timestamp_name = "handystats.internal_timestamp";
-	while (true) {
-		const auto& dump = get_dump();
+	while (core) {
+		const auto& dump = get_dump(*core);
 		const auto& attributes = dump->second;
 		if (attributes.find(timestamp_name) != attributes.cend()) {
 			dump_timestamp_visitor visitor;

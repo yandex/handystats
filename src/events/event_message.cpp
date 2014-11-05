@@ -10,6 +10,27 @@
 
 namespace handystats { namespace events {
 
+void process_event_message(metrics::metric_ptr_variant& metric_ptr, const event_message& message) {
+	switch (metric_ptr.which()) {
+		case metrics::metric_index::COUNTER:
+			counter::process_event(*boost::get<metrics::counter*>(metric_ptr), message);
+			break;
+		case metrics::metric_index::GAUGE:
+			gauge::process_event(*boost::get<metrics::gauge*>(metric_ptr), message);
+			break;
+		case metrics::metric_index::TIMER:
+			timer::process_event(*boost::get<metrics::timer*>(metric_ptr), message);
+			break;
+		default:
+			return;
+	}
+}
+
+void process_event_message(::handystats::attribute& attr, const event_message& message) {
+	attribute::process_event(attr, message);
+}
+
+
 void delete_event_message(event_message* message) {
 	if (!message) {
 		return;

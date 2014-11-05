@@ -19,8 +19,8 @@ void attribute_set<attribute::value_type>(
 		const attribute::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::attribute::create_set_event(std::move(attr_name), value, timestamp)
 			);
 	}
@@ -33,8 +33,8 @@ void attribute_set<bool>(
 		const attribute::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(b),
@@ -51,8 +51,8 @@ void attribute_set<int>(
 		const attribute::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(i),
@@ -69,8 +69,8 @@ void attribute_set<unsigned>(
 		const attribute::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(u),
@@ -87,8 +87,8 @@ void attribute_set<int64_t>(
 		const attribute::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(i64),
@@ -105,8 +105,8 @@ void attribute_set<uint64_t>(
 		const attribute::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(u64),
@@ -123,8 +123,8 @@ void attribute_set<double>(
 		const attribute::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(d),
@@ -141,8 +141,8 @@ void attribute_set<std::string>(
 		const attribute::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::attribute::create_set_event(
 					std::move(attr_name),
 					attribute::value_type(s),

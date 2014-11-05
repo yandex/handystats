@@ -57,9 +57,8 @@ namespace handystats {
 
 static
 bool config_json(const rapidjson::Value& config) {
-	std::lock_guard<std::mutex> lock(handystats::operation_mutex);
-	if (handystats::is_enabled()) {
-		return true;
+	if (core) {
+		return false;
 	}
 
 	if (!config.IsObject()) {

@@ -18,8 +18,8 @@ void timer_init(
 		const metrics::timer::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::timer::create_init_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -31,8 +31,8 @@ void timer_start(
 		const metrics::timer::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::timer::create_start_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -44,8 +44,8 @@ void timer_stop(
 		const metrics::timer::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::timer::create_stop_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -57,8 +57,8 @@ void timer_discard(
 		const metrics::timer::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::timer::create_discard_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -70,8 +70,8 @@ void timer_heartbeat(
 		const metrics::timer::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::timer::create_heartbeat_event(std::move(timer_name), instance_id, timestamp)
 			);
 	}
@@ -83,8 +83,8 @@ void timer_set(
 		const metrics::timer::time_point& timestamp
 	)
 {
-	if (is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				events::timer::create_set_event(std::move(timer_name), measurement, timestamp)
 			);
 	}

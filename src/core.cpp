@@ -11,7 +11,6 @@
 #include <handystats/core.h>
 
 #include "events/event_message_impl.hpp"
-#include "internal_impl.hpp"
 #include "metrics_dump_impl.hpp"
 #include "config_impl.hpp"
 
@@ -20,30 +19,84 @@
 
 namespace handystats {
 
-std::mutex operation_mutex;
-std::atomic<bool> enabled_flag(false);
-std::unique_ptr<handystats::message_queue> channel;
+core_t::stats::stats() {
+	{
+		config::statistics config;
+		config.tags |= statistics::tag::moving_avg;
+		config.moving_interval = chrono::seconds(1);
 
-bool is_enabled() {
-	return config::core_opts.enable && enabled_flag.load(std::memory_order_acquire);
+		process_time = statistics::data(config);
+	}
+
+	{
+		config::statistics config;
+		config.tags |= statistics::tag::moving_avg;
+		config.moving_interval = chrono::seconds(1);
+
+		dump_time = statistics::data(config);
+	}
 }
 
+void core_t::stats::update(const chrono::time_point& timestamp) {
+	process_time.update_time(timestamp);
+	dump_time.update_time(timestamp);
+}
 
-chrono::time_point last_message_timestamp;
-std::thread processor_thread;
+static
+void process_event_message(core_t& core, const events::event_message& message) {
+	auto process_start_time = chrono::internal_clock::now();
 
-static void process_message_queue() {
-	auto* message = channel->pop();
+	if (message.destination_type == events::event_destination_type::ATTRIBUTE) {
+		auto& attr = core.m_attributes[message.destination_name];
+		process_event_message(attr, message);
+	}
+	else {
+		auto metric_iter = core.m_metrics.find(message.destination_name);
+
+		if (metric_iter == core.m_metrics.end()) {
+			std::pair<std::string, metrics::metric_ptr_variant> insert_value;
+			insert_value.first = message.destination_name;
+
+			switch (message.destination_type) {
+				case events::event_destination_type::COUNTER:
+					insert_value.second = new metrics::counter(config::metrics::counter_opts);
+					break;
+				case events::event_destination_type::GAUGE:
+					insert_value.second = new metrics::gauge(config::metrics::gauge_opts);
+					break;
+				case events::event_destination_type::TIMER:
+					insert_value.second = new metrics::timer(config::metrics::timer_opts);
+					break;
+			}
+
+			metric_iter = core.m_metrics.insert(insert_value).first;
+		}
+
+		events::process_event_message(metric_iter->second, message);
+	}
+
+	auto process_end_time = chrono::internal_clock::now();
+
+	core.m_stats.process_time.update(
+			(process_end_time - process_start_time).count(metrics::timer::value_unit),
+			process_end_time
+		);
+}
+
+static
+void process(core_t& core) {
+	auto* message = core.m_channel.pop();
 
 	if (message) {
-		last_message_timestamp = std::max(last_message_timestamp, message->timestamp);
-		internal::process_event_message(*message);
+		core.m_internal_timestamp = std::max(core.m_internal_timestamp, message->timestamp);
+		process_event_message(core, *message);
 	}
 
 	events::delete_event_message(message);
 }
 
-static void run_processor() {
+static
+void run_processor(core_t& core) {
 	char thread_name[16];
 	memset(thread_name, 0, sizeof(thread_name));
 
@@ -51,52 +104,79 @@ static void run_processor() {
 
 	prctl(PR_SET_NAME, thread_name);
 
-	while (is_enabled()) {
-		if (channel->size() > 0) {
-			process_message_queue();
+	while (core.m_enabled_flag.load(std::memory_order_acquire)) {
+		if (core.m_channel.size() > 0) {
+			process(core);
 		}
 		else {
-			last_message_timestamp = std::max(last_message_timestamp, chrono::internal_clock::now());
+			core.m_internal_timestamp = std::max(core.m_internal_timestamp, chrono::internal_clock::now());
 			std::this_thread::sleep_for(std::chrono::microseconds(10));
 		}
 
-		metrics_dump::update(chrono::internal_clock::now(), last_message_timestamp);
+		metrics_dump::update_dump(core, chrono::internal_clock::now());
 	}
 }
 
-void initialize() {
-	std::lock_guard<std::mutex> lock(operation_mutex);
-	if (enabled_flag.load(std::memory_order_acquire)) {
-		return;
-	}
+core_t::core_t() {
+	// dump initialization
+	m_dump_config = config::metrics_dump_opts;
+	m_dump_timestamp = chrono::internal_clock::now();
+	m_dump.reset(new metrics_dump_type());
 
-	metrics_dump::initialize();
-	internal::initialize();
+	// internal time
+	m_internal_timestamp = chrono::internal_clock::now();
 
-	channel.reset(new message_queue());
+	// enabled flag
+	m_enabled_flag.store(true, std::memory_order_release);
 
 	if (!config::core_opts.enable) {
+		m_enabled_flag.store(false, std::memory_order_release);
 		return;
 	}
 
-	enabled_flag.store(true, std::memory_order_release);
+}
 
-	last_message_timestamp = chrono::time_point(chrono::nanoseconds(0), chrono::clock_type::SYSTEM_CLOCK);
+core_t::~core_t() {
+	// enabled flag
+	m_enabled_flag.store(false, std::memory_order_release);
 
-	processor_thread = std::thread(run_processor);
+	if (m_thread.joinable()) {
+		m_thread.join();
+	}
+
+	for (auto metric_iter = m_metrics.begin(); metric_iter != m_metrics.end(); ++metric_iter) {
+		switch (metric_iter->second.which()) {
+			case metrics::metric_index::COUNTER:
+				delete boost::get<metrics::counter*>(metric_iter->second);
+				break;
+			case metrics::metric_index::GAUGE:
+				delete boost::get<metrics::gauge*>(metric_iter->second);
+				break;
+			case metrics::metric_index::TIMER:
+				delete boost::get<metrics::timer*>(metric_iter->second);
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+void core_t::run() {
+	if (m_enabled_flag.load(std::memory_order_acquire)) {
+		m_thread = std::thread(run_processor, std::ref(*this));
+	}
+}
+
+std::unique_ptr<core_t> core;
+
+
+void initialize() {
+	core.reset(new core_t());
+	core->run();
 }
 
 void finalize() {
-	std::lock_guard<std::mutex> lock(operation_mutex);
-	enabled_flag.store(false, std::memory_order_release);
-
-	if (processor_thread.joinable()) {
-		processor_thread.join();
-	}
-
-	internal::finalize();
-	channel.reset();
-	metrics_dump::finalize();
+	core.reset();
 	config::finalize();
 }
 

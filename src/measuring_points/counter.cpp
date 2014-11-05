@@ -18,8 +18,8 @@ void counter_init(
 		const handystats::metrics::counter::time_point& timestamp
 		)
 {
-	if (handystats::is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				handystats::events::counter::create_init_event(std::move(counter_name), init_value, timestamp)
 			);
 	}
@@ -31,8 +31,8 @@ void counter_increment(
 		const handystats::metrics::counter::time_point& timestamp
 		)
 {
-	if (handystats::is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				handystats::events::counter::create_increment_event(std::move(counter_name), value, timestamp)
 			);
 	}
@@ -44,8 +44,8 @@ void counter_decrement(
 		const handystats::metrics::counter::time_point& timestamp
 		)
 {
-	if (handystats::is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				handystats::events::counter::create_decrement_event(std::move(counter_name), value, timestamp)
 			);
 	}
@@ -57,7 +57,7 @@ void counter_change(
 		const handystats::metrics::counter::time_point& timestamp
 		)
 {
-	if (handystats::is_enabled()) {
+	if (core) {
 		if (value >= 0) {
 			HANDY_COUNTER_INCREMENT(std::move(counter_name), value, timestamp);
 		}

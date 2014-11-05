@@ -11,7 +11,7 @@
 namespace handystats {
 
 void wait_until_empty() {
-	while (channel->size() > 0) {
+	while (core && core->m_channel.size() > 0) {
 		std::this_thread::sleep_for(std::chrono::microseconds(1));
 	}
 }

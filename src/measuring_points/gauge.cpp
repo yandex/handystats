@@ -18,8 +18,8 @@ void gauge_init(
 		const handystats::metrics::gauge::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				handystats::events::gauge::create_init_event(std::move(gauge_name), init_value, timestamp)
 			);
 	}
@@ -31,8 +31,8 @@ void gauge_set(
 		const handystats::metrics::gauge::time_point& timestamp
 	)
 {
-	if (handystats::is_enabled()) {
-		channel->push(
+	if (core) {
+		core->m_channel.push(
 				handystats::events::gauge::create_set_event(std::move(gauge_name), value, timestamp)
 			);
 	}

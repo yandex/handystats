@@ -7,6 +7,8 @@
 #include <vector>
 
 #include <handystats/chrono.hpp>
+#include <handystats/metrics.hpp>
+#include <handystats/attribute.hpp>
 
 #include "message_queue_impl.hpp"
 
@@ -31,6 +33,9 @@ struct event_message : message_queue::node
 
 	void* event_data;
 };
+
+void process_event_message(metrics::metric_ptr_variant&, const event_message&);
+void process_event_message(::handystats::attribute&, const event_message&);
 
 void delete_event_message(event_message* message);
 

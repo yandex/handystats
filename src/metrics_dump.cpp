@@ -5,68 +5,32 @@
 #include <map>
 
 #include <handystats/chrono.hpp>
-#include <handystats/metrics_dump.hpp>
 
-#include "core_impl.hpp"
-#include "internal_impl.hpp"
-#include "message_queue_impl.hpp"
-#include "config_impl.hpp"
 #include "metrics_dump_impl.hpp"
 
 
 namespace handystats { namespace metrics_dump {
 
-namespace stats {
-
-metrics::gauge dump_time;
-
-void update(const chrono::time_point& timestamp) {
-	dump_time.update_statistics(timestamp);
-}
-
-static void reset() {
-	config::metrics::gauge dump_time_opts;
-	dump_time_opts.values.tags = statistics::tag::moving_avg;
-	dump_time_opts.values.moving_interval = chrono::seconds(1);
-
-	dump_time = metrics::gauge(dump_time_opts);
-}
-
-void initialize() {
-	reset();
-}
-
-void finalize() {
-	reset();
-}
-
-} // namespace stats
-
-
-chrono::time_point dump_timestamp;
-std::mutex dump_mutex;
-
-std::shared_ptr<const metrics_dump_type> dump(new metrics_dump_type());
-
 const std::shared_ptr<const metrics_dump_type>
-get_dump()
+get_dump(core_t& core)
 {
-	std::lock_guard<std::mutex> lock(dump_mutex);
-	return dump;
+	std::lock_guard<std::mutex> lock(core.m_dump_mutex);
+	return core.m_dump;
 }
 
 static
 std::shared_ptr<const metrics_dump_type>
-create_dump(const chrono::time_point& current_time, const chrono::time_point& internal_time)
+create_dump(core_t& core, const chrono::time_point& current_timestamp)
 {
 	auto dump_start_time = chrono::internal_clock::now();
 
 	std::shared_ptr<metrics_dump_type> new_dump(new metrics_dump_type());
 
 	auto& metrics_dump = new_dump->first;
-	for (auto metric_iter = internal::metrics_map.cbegin(); metric_iter != internal::metrics_map.cend(); ++metric_iter) {
+	for (auto metric_iter = core.m_metrics.begin(); metric_iter != core.m_metrics.end(); ++metric_iter) {
 		switch (metric_iter->second.which()) {
 			case metrics::metric_index::GAUGE:
+				boost::get<metrics::gauge*>(metric_iter->second)->update_statistics(core.m_internal_timestamp);
 				metrics_dump.insert(
 						std::pair<std::string, statistics>(
 							metric_iter->first,
@@ -75,6 +39,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 					);
 				break;
 			case metrics::metric_index::COUNTER:
+				boost::get<metrics::counter*>(metric_iter->second)->update_statistics(core.m_internal_timestamp);
 				metrics_dump.insert(
 						std::pair<std::string, statistics>(
 							metric_iter->first,
@@ -83,6 +48,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 					);
 				break;
 			case metrics::metric_index::TIMER:
+				boost::get<metrics::timer*>(metric_iter->second)->update_statistics(core.m_internal_timestamp);
 				metrics_dump.insert(
 						std::pair<std::string, statistics>(
 							metric_iter->first,
@@ -94,16 +60,19 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 	}
 
 	auto& attrs_dump = new_dump->second;
-	attrs_dump = internal::attributes_map;
+	attrs_dump = core.m_attributes;
+
+	core.m_stats.update(current_timestamp);
+	core.m_channel.m_stats.update(current_timestamp);
 
 	// handystats' statistics
 	{
-		// internal
+		// core
 		{
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
-						"handystats.internal.process_time",
-						internal::stats::process_time.values()
+						"handystats.core.process_time",
+						statistics(core.m_stats.process_time)
 						)
 					);
 		}
@@ -113,21 +82,21 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.size",
-						statistics(channel->m_stats.size)
+						statistics(core.m_channel.m_stats.size)
 						)
 					);
 
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.message_wait_time",
-						statistics(channel->m_stats.message_wait_time)
+						statistics(core.m_channel.m_stats.message_wait_time)
 						)
 					);
 
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.pop_count",
-						statistics(channel->m_stats.pop_count)
+						statistics(core.m_channel.m_stats.pop_count)
 						)
 					);
 		}
@@ -136,7 +105,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 	// current system time
 	{
 		// NOTE: possible call chrono::system_clock::now()
-		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, current_time);
+		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, current_timestamp);
 
 		attribute timestamp_attr;
 		timestamp_attr.set(timestamp.time_since_epoch().count(chrono::time_unit::MSEC));
@@ -151,7 +120,7 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 
 	// current internal time
 	{
-		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, internal_time);
+		const auto& timestamp = chrono::time_point::convert_to(chrono::clock_type::SYSTEM_CLOCK, core.m_internal_timestamp);
 
 		attribute timestamp_attr;
 		timestamp_attr.set(timestamp.time_since_epoch().count(chrono::time_unit::MSEC));
@@ -166,16 +135,16 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 
 	auto dump_end_time = chrono::internal_clock::now();
 
-	stats::dump_time.set(
+	core.m_stats.dump_time.update(
 			(dump_end_time - dump_start_time).count(metrics::timer::value_unit),
-			dump_end_time
+			current_timestamp
 		);
 
 	{
 		metrics_dump.insert(
 				std::pair<std::string, statistics>(
-					"handystats.metrics_dump.dump_time",
-					stats::dump_time.values()
+					"handystats.core.dump_time",
+					statistics(core.m_stats.dump_time)
 				)
 			);
 	}
@@ -183,50 +152,29 @@ create_dump(const chrono::time_point& current_time, const chrono::time_point& in
 	return std::const_pointer_cast<const metrics_dump_type>(new_dump);
 }
 
-void update(const chrono::time_point& current_time, const chrono::time_point& internal_time) {
-	if (config::metrics_dump_opts.interval.count() == 0) {
+void update_dump(core_t& core, const chrono::time_point& current_timestamp) {
+	if (core.m_dump_config.interval.count() == 0) {
 		return;
 	}
 
-	if (current_time - dump_timestamp > config::metrics_dump_opts.interval) {
-		internal::update_metrics(internal_time);
-
-		internal::stats::update(current_time);
-		channel->m_stats.update(current_time);
-		stats::update(current_time);
-
-		auto new_dump = create_dump(current_time, internal_time);
+	if (current_timestamp - core.m_dump_timestamp > core.m_dump_config.interval) {
+		auto new_dump = create_dump(core, current_timestamp);
 		{
-			std::lock_guard<std::mutex> lock(dump_mutex);
-			dump = new_dump;
+			std::lock_guard<std::mutex> lock(core.m_dump_mutex);
+			core.m_dump = new_dump;
 		}
 
-		dump_timestamp = current_time;
+		core.m_dump_timestamp = current_timestamp;
 	}
-}
-
-static
-void reset_dump() {
-	std::lock_guard<std::mutex> lock(dump_mutex);
-
-	dump_timestamp = chrono::time_point(chrono::nanoseconds(0), chrono::clock_type::SYSTEM_CLOCK);
-	dump = std::shared_ptr<const metrics_dump_type>(new metrics_dump_type());
-}
-
-void initialize() {
-	stats::initialize();
-
-	reset_dump();
-}
-
-void finalize() {
-	stats::finalize();
-
-	reset_dump();
 }
 
 }} // namespace handystats::metrics_dump
 
 const std::shared_ptr<const handystats::metrics_dump_type> HANDY_METRICS_DUMP() {
-	return handystats::metrics_dump::get_dump();
+	if (handystats::core) {
+		return handystats::metrics_dump::get_dump(*handystats::core);
+	}
+	else {
+		return std::shared_ptr<const handystats::metrics_dump_type>(new handystats::metrics_dump_type());
+	}
 }

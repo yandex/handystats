@@ -1,7 +1,8 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-#include "events/event_message_impl.hpp"
+#include <handystats/metrics/timer.hpp>
 
+#include "events/event_message_impl.hpp"
 #include "message_queue_impl.hpp"
 
 namespace handystats {
@@ -134,7 +135,7 @@ events::event_message* message_queue::pop() {
 		m_stats.size.update(size(), current_time);
 		m_stats.message_wait_time.update(
 				(current_time - message->timestamp)
-					.count(chrono::time_unit::USEC),
+					.count(metrics::timer::value_unit),
 				current_time
 			);
 	}

@@ -106,18 +106,33 @@ uint64_t get_cycles_count() {
 }
 
 
-const uint64_t CYCLES_DELTA = 15000;
+const uint64_t MAX_CYCLES_DELTA = 15000;
+const int MAX_PAIR_TRIES = 20;
 
 void get_simultaneous_pair(uint64_t* cycles_count, uint64_t* nanoseconds) {
-	while(true) {
-		uint64_t tsc1 = get_cycles_count();
-		*nanoseconds = get_nanoseconds();
-		uint64_t tsc2 = get_cycles_count();
-		if (tsc2 - tsc1 < CYCLES_DELTA) {
-			*cycles_count = tsc1 + (tsc2 - tsc1) / 2;
-			break;
+	uint64_t min_cycles_delta = -1;
+	uint64_t best_cycles_count;
+	uint64_t best_nanoseconds;
+
+	for (int pair_try = 0; pair_try < MAX_PAIR_TRIES; ++pair_try) {
+		while(true) {
+			uint64_t tsc1 = get_cycles_count();
+			uint64_t cur_nanoseconds = get_nanoseconds();
+			uint64_t tsc2 = get_cycles_count();
+			if (tsc2 - tsc1 < MAX_CYCLES_DELTA) {
+				uint64_t cur_cycles_count = tsc1 + (tsc2 - tsc1) / 2;
+				if (tsc2 - tsc1 < min_cycles_delta) {
+					min_cycles_delta = tsc2 - tsc1;
+					best_cycles_count = cur_cycles_count;
+					best_nanoseconds = cur_nanoseconds;
+				}
+				break;
+			}
 		}
 	}
+
+	*cycles_count = best_cycles_count;
+	*nanoseconds = best_nanoseconds;
 }
 
 long double get_cycles_frequency(const timespec& sleep_interval) {

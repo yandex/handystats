@@ -69,14 +69,12 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics\": {\
-					\"gauge\": {\
-						\"stats\": []\
-					},\
-					\"counter\": {\
-					}\
+				\"dump-interval\": 1,\
+				\"gauge\": {\
+					\"stats\": []\
 				},\
-				\"dump-interval\": 1\
+				\"counter\": {\
+				}\
 			}"
 		);
 

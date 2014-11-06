@@ -7,16 +7,14 @@ handystats_config="{
 		\"histogram-bins\": 20,
 		\"stats\": []
 	},
-	\"metrics\": {
-		\"gauge\": {
-			\"stats\": [\"value\", \"moving-avg\"]
-		},
-		\"counter\": {
-			\"stats\": [\"value\", \"moving-avg\"]
-		},
-		\"timer\": {
-			\"stats\": [\"moving-avg\", \"quantile\"]
-		}
+	\"gauge\": {
+		\"stats\": [\"value\", \"moving-avg\"]
+	},
+	\"counter\": {
+		\"stats\": [\"value\", \"moving-avg\"]
+	},
+	\"timer\": {
+		\"stats\": [\"moving-avg\", \"quantile\"]
 	}
 }"
 

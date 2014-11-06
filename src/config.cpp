@@ -5,41 +5,143 @@
 #include <string>
 #include <iostream>
 
+#include <fnmatch.h>
+
 #include <handystats/core.hpp>
 #include <handystats/core.h>
 
-#include "core_impl.hpp"
 #include "rapidjson/document.h"
 
+#include "core_impl.hpp"
 #include "config_impl.hpp"
 
 namespace handystats { namespace config {
 
-statistics statistics_opts;
+/*
+ * pattern ::= [<preabmle>] [ { <list> } ] [<postscript>]
+ *
+ * preamble ::= <word>
+ *
+ * word ::= sequence without <special_symbol> (may be empty)
+ * special_symbol ::= { | } | ,
+ *
+ * list ::= <pattern> [, <list>]
+ *
+ * postscript ::= <pattern>
+ */
 
-namespace metrics {
-	gauge gauge_opts;
-	counter counter_opts;
-	timer timer_opts;
+// returns pattern expansion as vector of strings
+// if expansion fails empty vector is returned
+// else pos points to end of pattern
+static
+std::vector<std::string> expand_pattern(const char* pattern, size_t& pos, bool nested) {
+	static const char SYM_LIST_DELIM = ',';
+	static const char SYM_LIST_START = '{';
+	static const char SYM_LIST_END = '}';
+
+	size_t preamble_end = pos;
+	while (true) {
+		if (pattern[preamble_end] == 0) {
+			break;
+		}
+		if (pattern[preamble_end] == SYM_LIST_START) {
+			break;
+		}
+		if (nested && (pattern[preamble_end] == SYM_LIST_END || pattern[preamble_end] == SYM_LIST_DELIM)) {
+			break;
+		}
+		++preamble_end;
+	}
+
+	std::string preamble(pattern + pos, preamble_end - pos);
+	if (pattern[preamble_end] != SYM_LIST_START) {
+		// pattern is preamble
+		pos = preamble_end;
+		return {preamble};
+	}
+
+	std::vector<std::string> list_expansion;
+	size_t list_end = preamble_end + 1;
+	while (true) {
+		auto sublist_expansion = expand_pattern(pattern, list_end, true);
+		if (sublist_expansion.empty()) {
+			return {};
+		}
+
+		list_expansion.insert(list_expansion.end(), sublist_expansion.begin(), sublist_expansion.end());
+		if (pattern[list_end] == SYM_LIST_DELIM) {
+			list_end++;
+			continue;
+		}
+		else if (pattern[list_end] == SYM_LIST_END) {
+			break;
+		}
+		else {
+			return {};
+		}
+	}
+
+	size_t postscript_start = list_end + 1;
+	auto postscript_expansion = expand_pattern(pattern, postscript_start, nested);
+	if (postscript_expansion.empty()) {
+		return {};
+	}
+
+	std::vector<std::string> expansion;
+	expansion.reserve(list_expansion.size() * postscript_expansion.size());
+	for (auto list_iter = list_expansion.begin(); list_iter != list_expansion.end(); ++list_iter) {
+		for (auto postscript_iter = postscript_expansion.begin(); postscript_iter != postscript_expansion.end(); ++postscript_iter) {
+			expansion.push_back(preamble + *list_iter + *postscript_iter);
+		}
+	}
+
+	pos = postscript_start;
+	return expansion;
 }
 
-metrics_dump metrics_dump_opts;
-core core_opts;
+static
+std::vector<std::string> expand_pattern(const std::string& pattern) {
+	size_t pos = 0;
+	auto expansion = expand_pattern(pattern.c_str(), pos, false);
 
-static void reset() {
-	statistics_opts = statistics();
+	if (pos == pattern.size()) {
+		return expansion;
+	}
+	else {
+		return {};
+	}
+}
 
-	metrics::gauge_opts = metrics::gauge();
-	metrics::counter_opts = metrics::counter();
-	metrics::timer_opts = metrics::timer();
+std::shared_ptr<opts_t> opts;
 
-	metrics_dump_opts = metrics_dump();
-	core_opts = core();
+opts_t::opts_t()
+	: m_dump_interval(750, chrono::time_unit::MSEC)
+	, m_core_enable(true)
+{
+}
+
+rapidjson::Value* opts_t::select_pattern(const std::string& name) const {
+	for (auto pattern_group_iter = m_patterns.begin(); pattern_group_iter != m_patterns.end(); ++pattern_group_iter) {
+		auto& pattern_group = pattern_group_iter->first;
+		auto* pattern_cfg = pattern_group_iter->second;
+		for (auto pattern_iter = pattern_group.begin(); pattern_iter != pattern_group.end(); ++pattern_iter) {
+			if (fnmatch(pattern_iter->c_str(), name.c_str(), 0) == 0) {
+				return pattern_cfg;
+			}
+		}
+	}
+
+	return nullptr;
 }
 
 __attribute__((constructor(300)))
 static void init_opts() {
-	reset();
+	initialize();
+}
+
+static
+void reset() {
+	opts.reset(new opts_t());
 }
 
 void initialize() {
@@ -55,55 +157,97 @@ void finalize() {
 
 namespace handystats {
 
-static
-bool config_json(const rapidjson::Value& config) {
-	if (core) {
+bool config_json(const char* config_data) {
+	if (config::opts.use_count() == 0) {
+		return false;
+	}
+	auto opts = config::opts;
+
+	rapidjson::Document& cfg = opts->m_source;
+	cfg.Parse<0>(config_data);
+	if (cfg.HasParseError()) {
+		// std::cerr << "Unable to parse configuration json: " << opts->m_source.GetParseError() << std::endl;
 		return false;
 	}
 
-	if (!config.IsObject()) {
+	if (!cfg.IsObject()) {
 		return false;
 	}
 
-	if (config.HasMember("defaults")) {
-		const rapidjson::Value& statistics_config = config["defaults"];
-
-		config::apply(statistics_config, config::statistics_opts);
-		config::apply(statistics_config, config::metrics::gauge_opts.values);
-		config::apply(statistics_config, config::metrics::counter_opts.values);
-		config::apply(statistics_config, config::metrics::timer_opts.values);
-	}
-
-	if (config.HasMember("metrics")) {
-		const rapidjson::Value& metrics_config = config["metrics"];
-
-		if (metrics_config.HasMember("gauge")) {
-			config::apply(metrics_config["gauge"], config::metrics::gauge_opts);
+	if (cfg.HasMember("enable")) {
+		rapidjson::Value& enable = cfg["enable"];
+		if (enable.IsBool()) {
+			opts->m_core_enable = enable.GetBool();
 		}
-		if (metrics_config.HasMember("counter")) {
-			config::apply(metrics_config["counter"], config::metrics::counter_opts);
-		}
-		if (metrics_config.HasMember("timer")) {
-			config::apply(metrics_config["timer"], config::metrics::timer_opts);
+		else {
+			return false;
 		}
 	}
 
-	config::apply(config, config::metrics_dump_opts);
+	if (cfg.HasMember("dump-interval")) {
+		rapidjson::Value& dump_interval = cfg["dump-interval"];
+		if (dump_interval.IsUint64()) {
+			opts->m_dump_interval = chrono::milliseconds(dump_interval.GetUint64());
+		}
+		else {
+			return false;
+		}
+	}
 
-	config::apply(config, config::core_opts);
+	if (cfg.HasMember("defaults")) {
+		rapidjson::Value& defaults = cfg["defaults"];
+		config::apply(defaults, opts->m_statistics);
+		config::apply(defaults, opts->m_gauge.values);
+		config::apply(defaults, opts->m_counter.values);
+		config::apply(defaults, opts->m_timer.values);
+	}
+
+	if (cfg.HasMember("gauge")) {
+		rapidjson::Value& gauge = cfg["gauge"];
+		config::apply(gauge, opts->m_gauge);
+	}
+
+	if (cfg.HasMember("counter")) {
+		rapidjson::Value& counter = cfg["counter"];
+		config::apply(counter, opts->m_counter);
+	}
+
+	if (cfg.HasMember("timer")) {
+		rapidjson::Value& timer = cfg["timer"];
+		config::apply(timer, opts->m_timer);
+	}
+
+	for (auto config_member = opts->m_source.MemberBegin(); config_member != opts->m_source.MemberEnd(); ++config_member) {
+		rapidjson::Value& member_name = config_member->name;
+		rapidjson::Value& member_value = config_member->value;
+
+		// skip reserved sections
+		if (strcmp(member_name.GetString(), "enable") == 0
+			|| strcmp(member_name.GetString(), "dump-interval") == 0
+			|| strcmp(member_name.GetString(), "defaults") == 0
+			|| strcmp(member_name.GetString(), "gauge") == 0
+			|| strcmp(member_name.GetString(), "counter") == 0
+			|| strcmp(member_name.GetString(), "timer") == 0
+			)
+		{
+			continue;
+		}
+
+		// pattern
+		std::vector<std::string> expansion = config::expand_pattern(member_name.GetString());
+		if (expansion.empty()) {
+			// invalid pattern
+			return false;
+		}
+
+		config::statistics test_opts;
+		config::apply(member_value, test_opts);
+		// TODO: check test_opts
+
+		opts->m_patterns.push_back(std::make_pair(expansion, &member_value));
+	}
 
 	return true;
-}
-
-bool config_json(const char* config_data) {
-	rapidjson::Document config;
-	config.Parse<0>(config_data);
-	if (config.HasParseError()) {
-		std::cerr << "Unable to parse configuration json: " << config.GetParseError() << std::endl;
-		return false;
-	}
-
-	return config_json(config);
 }
 
 bool config_file(const char* filename) {
@@ -129,10 +273,18 @@ bool config_file(const char* filename) {
 extern "C" {
 
 int handystats_config_file(const char* file) {
+	if (handystats::core) {
+		return 0;
+	}
+
 	return handystats::config_file(file);
 }
 
 int handystats_config_json(const char* config_data) {
+	if (handystats::core) {
+		return 0;
+	}
+
 	return handystats::config_json(config_data);
 }
 

@@ -57,15 +57,37 @@ void process_event_message(core_t& core, const events::event_message& message) {
 			std::pair<std::string, metrics::metric_ptr_variant> insert_value;
 			insert_value.first = message.destination_name;
 
+			rapidjson::Value* pattern_cfg = core.m_opts->select_pattern(message.destination_name);
+
 			switch (message.destination_type) {
-				case events::event_destination_type::COUNTER:
-					insert_value.second = new metrics::counter(config::metrics::counter_opts);
-					break;
 				case events::event_destination_type::GAUGE:
-					insert_value.second = new metrics::gauge(config::metrics::gauge_opts);
+					{
+						config::metrics::gauge opts = core.m_opts->m_gauge;
+						if (pattern_cfg) {
+							config::apply(*pattern_cfg, opts);
+						}
+						insert_value.second = new metrics::gauge(opts);
+						break;
+					}
 					break;
+				case events::event_destination_type::COUNTER:
+					{
+						config::metrics::counter opts = core.m_opts->m_counter;
+						if (pattern_cfg) {
+							config::apply(*pattern_cfg, opts);
+						}
+						insert_value.second = new metrics::counter(opts);
+						break;
+					}
 				case events::event_destination_type::TIMER:
-					insert_value.second = new metrics::timer(config::metrics::timer_opts);
+					{
+						config::metrics::timer opts = core.m_opts->m_timer;
+						if (pattern_cfg) {
+							config::apply(*pattern_cfg, opts);
+						}
+						insert_value.second = new metrics::timer(opts);
+						break;
+					}
 					break;
 			}
 
@@ -119,7 +141,6 @@ void run_processor(core_t& core) {
 
 core_t::core_t() {
 	// dump initialization
-	m_dump_config = config::metrics_dump_opts;
 	m_dump_timestamp = chrono::internal_clock::now();
 	m_dump.reset(new metrics_dump_type());
 
@@ -129,11 +150,12 @@ core_t::core_t() {
 	// enabled flag
 	m_enabled_flag.store(true, std::memory_order_release);
 
-	if (!config::core_opts.enable) {
+	m_opts = config::opts;
+
+	if (m_opts.use_count() == 0 || !m_opts->m_core_enable) {
 		m_enabled_flag.store(false, std::memory_order_release);
 		return;
 	}
-
 }
 
 core_t::~core_t() {

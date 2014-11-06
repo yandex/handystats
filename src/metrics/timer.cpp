@@ -16,6 +16,12 @@ timer::timer(
 {
 }
 
+void timer::reset() {
+	m_idle_check_timestamp = chrono::time_point();
+	m_instances.clear();
+	m_values.reset();
+}
+
 void timer::start(const instance_id_type& instance_id, const time_point& timestamp) {
 	check_idle_timeout(timestamp);
 

@@ -20,6 +20,7 @@ struct counter
 	typedef chrono::time_point time_point;
 
 	counter(const config::metrics::counter& opts = config::metrics::counter());
+	void reset();
 
 	void init(const value_type& value = 0, const time_point& timestamp = clock::now());
 	void increment(const value_type& value = 1, const time_point& timestamp = clock::now());

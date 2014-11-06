@@ -9,6 +9,10 @@ gauge::gauge(const config::metrics::gauge& opts)
 {
 }
 
+void gauge::reset() {
+	m_values.reset();
+}
+
 void gauge::set(const value_type& value, const time_point& timestamp) {
 	m_values.update(value, timestamp);
 }

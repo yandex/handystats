@@ -18,6 +18,7 @@ struct gauge
 	typedef chrono::time_point time_point;
 
 	gauge(const config::metrics::gauge& opts = config::metrics::gauge());
+	void reset();
 
 	void set(const value_type& value, const time_point& timestamp = clock::now());
 

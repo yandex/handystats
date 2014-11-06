@@ -43,6 +43,7 @@ struct timer
 	};
 
 	timer(const config::metrics::timer& timer_opts = config::metrics::timer());
+	void reset();
 
 	void start(
 			const instance_id_type& instance_id = DEFAULT_INSTANCE_ID,

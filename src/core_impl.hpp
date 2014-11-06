@@ -13,7 +13,7 @@
 #include <handystats/metrics.hpp>
 #include <handystats/metrics_dump.hpp>
 
-#include "config/metrics_dump_impl.hpp"
+#include "config_impl.hpp"
 #include "message_queue_impl.hpp"
 
 namespace handystats {
@@ -33,6 +33,9 @@ struct core_t {
 
 	void run();
 
+	// configuration
+	std::shared_ptr<config::opts_t> m_opts;
+
 	// enabled flag
 	std::atomic<bool> m_enabled_flag;
 
@@ -44,7 +47,6 @@ struct core_t {
 	std::map<std::string, attribute> m_attributes;
 
 	// dump
-	config::metrics_dump m_dump_config;
 	chrono::time_point m_dump_timestamp;
 	std::mutex m_dump_mutex;
 	std::shared_ptr<const metrics_dump_type> m_dump;

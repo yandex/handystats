@@ -97,7 +97,8 @@ void delete_event(event_message* message) {
 
 void process_init_event(metrics::counter& counter, const event_message& message) {
 	const auto& init_value = reinterpret_cast<const metrics::counter::value_type>(message.event_data);
-	counter = metrics::counter(config::metrics::counter_opts);
+
+	counter.reset();
 	counter.init(init_value, message.timestamp);
 }
 

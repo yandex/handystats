@@ -3,26 +3,46 @@
 #ifndef HANDYSTATS_CONFIG_IMPL_HPP_
 #define HANDYSTATS_CONFIG_IMPL_HPP_
 
+#include <vector>
+#include <utility>
+#include <string>
+#include <memory>
+
 #include "config/statistics_impl.hpp"
 #include "config/metrics/gauge_impl.hpp"
 #include "config/metrics/counter_impl.hpp"
 #include "config/metrics/timer_impl.hpp"
 
-#include "config/metrics_dump_impl.hpp"
-#include "config/core_impl.hpp"
+#include "rapidjson/document.h"
 
 namespace handystats { namespace config {
 
-extern statistics statistics_opts;
+struct opts_t {
+	opts_t();
 
-namespace metrics {
-	extern gauge gauge_opts;
-	extern counter counter_opts;
-	extern timer timer_opts;
-}
+	rapidjson::Value* select_pattern(const std::string& name) const;
 
-extern metrics_dump metrics_dump_opts;
-extern core core_opts;
+	statistics m_statistics;
+
+	metrics::gauge m_gauge;
+	metrics::counter m_counter;
+	metrics::timer m_timer;
+
+	chrono::duration m_dump_interval;
+	bool m_core_enable;
+
+	std::vector<
+		std::pair<
+			std::vector<std::string>,
+			rapidjson::Value*
+		>
+	>
+	m_patterns;
+
+	rapidjson::Document m_source;
+};
+
+extern std::shared_ptr<opts_t> opts;
 
 void initialize();
 void finalize();

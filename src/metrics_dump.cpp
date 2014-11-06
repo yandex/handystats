@@ -153,11 +153,11 @@ create_dump(core_t& core, const chrono::time_point& current_timestamp)
 }
 
 void update_dump(core_t& core, const chrono::time_point& current_timestamp) {
-	if (core.m_dump_config.interval.count() == 0) {
+	if (core.m_opts->m_dump_interval.count() == 0) {
 		return;
 	}
 
-	if (current_timestamp - core.m_dump_timestamp > core.m_dump_config.interval) {
+	if (current_timestamp - core.m_dump_timestamp > core.m_opts->m_dump_interval) {
 		auto new_dump = create_dump(core, current_timestamp);
 		{
 			std::lock_guard<std::mutex> lock(core.m_dump_mutex);

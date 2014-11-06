@@ -8,28 +8,28 @@
 /*
  * {
  *     "enable": <boolean value>,
+ *     "dump-interval": <value in msec>,
  *     "defaults": {
  *         "moving-interval": <value in msec>,
  *         "histogram-bins": <integer value>,
  *         "stats": ["<statistic name>", "<statistic name>", ...],
  *         "rate-unit": <"ns" | "us" | "ms" | "s" | "m" | "h">
  *     },
- *     "metrics": {
- *         "gauge": {
- *             <statistics opts>
- *         },
- *         "counter": {
- *             <statistics opts>
- *         },
- *         "timer": {
- *             "idle-timeout": <value in msec>,
- *             <statistics opts>
- *         }
+ *     "gauge": {
+ *         <statistics opts>
  *     },
- *     "dump-interval": <value in msec>
+ *     "counter": {
+ *         <statistics opts>
+ *     },
+ *     "timer": {
+ *         "idle-timeout": <value in msec>,
+ *         <statistics opts>
+ *     },
+ *     "<pattern>": {
+ *         <statistics opts>
+ *     }
  * }
  */
-
 
 HANDYSTATS_EXTERN_C
 void handystats_initialize();

@@ -12,6 +12,12 @@ counter::counter(const config::metrics::counter& opts)
 {
 }
 
+void counter::reset() {
+	m_value = value_type();
+	m_timestamp = chrono::time_point();
+
+	m_values.reset();
+}
 
 void counter::init(const value_type& init_value, const time_point& timestamp) {
 	m_value = init_value;

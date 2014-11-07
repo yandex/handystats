@@ -354,3 +354,72 @@ TEST_F(HandyConfigurationTest, PatternConfiguration) {
 	ASSERT_TRUE(counter_values.enabled(handystats::statistics::tag::histogram));
 	ASSERT_EQ(counter_values.get<handystats::statistics::tag::histogram>().size(), 25);
 }
+
+TEST_F(HandyConfigurationTest, InvalidConfiguration) {
+	ASSERT_FALSE(
+			HANDY_CONFIG_JSON(
+				"{\
+					\"dump-interval\": -750\
+				}"
+			)
+		);
+	std::cerr << HANDY_CONFIG_ERROR() << std::endl;
+
+	ASSERT_FALSE(
+			HANDY_CONFIG_JSON(
+				"{\
+					\"enable\": 1\
+				}"
+			)
+		);
+	std::cerr << HANDY_CONFIG_ERROR() << std::endl;
+
+	ASSERT_FALSE(
+			HANDY_CONFIG_JSON(
+				"{\
+					\"gauge\": 1\
+				}"
+			)
+		);
+	std::cerr << HANDY_CONFIG_ERROR() << std::endl;
+
+	ASSERT_FALSE(
+			HANDY_CONFIG_JSON(
+				"{\
+					\"timer\": {\
+						\"idle-timeout\": \"1s\"\
+					}\
+				}"
+			)
+		);
+	std::cerr << HANDY_CONFIG_ERROR() << std::endl;
+
+	ASSERT_FALSE(
+			HANDY_CONFIG_JSON(
+				"{\
+					\"timer\": {\
+						\"idle-timeout\": 10000,\
+						\"stats\": [\"invalid-statistic\"]\
+					}\
+				}"
+			)
+		);
+	std::cerr << HANDY_CONFIG_ERROR() << std::endl;
+
+	ASSERT_FALSE(
+			HANDY_CONFIG_JSON(
+				"{\
+					\"timer\": {\
+						\"idle-timeout\": 10000,\
+						\"stats\": \"throughput\"\
+					}\
+				}"
+			)
+		);
+	std::cerr << HANDY_CONFIG_ERROR() << std::endl;
+
+	ASSERT_FALSE(
+			HANDY_CONFIG_FILE("surely-invalid-config-file.json")
+		);
+	std::cerr << HANDY_CONFIG_ERROR() << std::endl;
+}

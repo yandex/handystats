@@ -42,6 +42,8 @@ int handystats_config_file(const char* filename);
 HANDYSTATS_EXTERN_C
 int handystats_config_json(const char* config);
 
+HANDYSTATS_EXTERN_C
+const char* handystats_config_error();
 
 #ifndef __cplusplus
 	#ifndef HANDYSTATS_DISABLE
@@ -54,15 +56,19 @@ int handystats_config_json(const char* config);
 
 		#define HANDY_CONFIG_JSON(...) handystats_config_json(__VA_ARGS__)
 
+		#define HANDY_CONFIG_ERROR(...) handystats_config_error(__VA_ARGS__)
+
 	#else
 
 		#define HANDY_INIT(...)
 
 		#define HANDY_FINALIZE(...)
 
-		#define HANDY_CONFIG_FILE(...)
+		#define HANDY_CONFIG_FILE(...) 0
 
-		#define HANDY_CONFIG_JSON(...)
+		#define HANDY_CONFIG_JSON(...) 0
+
+		#define HANDY_CONFIG_ERROR(...) "Handystats is not supported. Recompile with appropriate falgs."
 
 	#endif
 #endif

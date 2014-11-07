@@ -4,6 +4,8 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <sstream>
+#include <stdexcept>
 
 #include <fnmatch.h>
 
@@ -33,6 +35,8 @@ namespace handystats { namespace config {
 // returns pattern expansion as vector of strings
 // if expansion fails empty vector is returned
 // else pos points to end of pattern
+//
+// may throw std::logic_error
 static
 std::vector<std::string> expand_pattern(const char* pattern, size_t& pos, bool nested) {
 	static const char SYM_LIST_DELIM = ',';
@@ -64,9 +68,6 @@ std::vector<std::string> expand_pattern(const char* pattern, size_t& pos, bool n
 	size_t list_end = preamble_end + 1;
 	while (true) {
 		auto sublist_expansion = expand_pattern(pattern, list_end, true);
-		if (sublist_expansion.empty()) {
-			return {};
-		}
 
 		list_expansion.insert(list_expansion.end(), sublist_expansion.begin(), sublist_expansion.end());
 		if (pattern[list_end] == SYM_LIST_DELIM) {
@@ -77,15 +78,14 @@ std::vector<std::string> expand_pattern(const char* pattern, size_t& pos, bool n
 			break;
 		}
 		else {
-			return {};
+			std::ostringstream err;
+			err << "Invalid symbol at pos " << list_end << " pattern '" << pattern << "'";
+			throw std::logic_error(err.str());
 		}
 	}
 
 	size_t postscript_start = list_end + 1;
 	auto postscript_expansion = expand_pattern(pattern, postscript_start, nested);
-	if (postscript_expansion.empty()) {
-		return {};
-	}
 
 	std::vector<std::string> expansion;
 	expansion.reserve(list_expansion.size() * postscript_expansion.size());
@@ -108,11 +108,14 @@ std::vector<std::string> expand_pattern(const std::string& pattern) {
 		return expansion;
 	}
 	else {
-		return {};
+		std::ostringstream err;
+		err << "Parsing stopped at pos " << pos << " pattern '" << pattern << "'";
+		throw std::logic_error(err.str());
 	}
 }
 
 std::shared_ptr<opts_t> opts;
+std::shared_ptr<std::string> error;
 
 opts_t::opts_t()
 	: m_dump_interval(750, chrono::time_unit::MSEC)
@@ -142,6 +145,7 @@ static void init_opts() {
 static
 void reset() {
 	opts.reset(new opts_t());
+	error.reset();
 }
 
 void initialize() {
@@ -158,113 +162,166 @@ void finalize() {
 namespace handystats {
 
 bool config_json(const char* config_data) {
-	if (config::opts.use_count() == 0) {
+	try {
+		auto opts = config::opts;
+
+		rapidjson::Document& cfg = opts->m_source;
+		cfg.Parse<0>(config_data);
+		if (cfg.HasParseError()) {
+			std::ostringstream err;
+			err << "Unable to parse configuration json: " << opts->m_source.GetParseError();
+			throw std::logic_error(err.str());
+		}
+
+		if (!cfg.IsObject()) {
+			std::ostringstream err;
+			err << "Config data must be JSON object";
+			throw std::logic_error(err.str());
+		}
+
+		if (cfg.HasMember("enable")) {
+			rapidjson::Value& enable = cfg["enable"];
+			if (enable.IsBool()) {
+				opts->m_core_enable = enable.GetBool();
+			}
+			else {
+				std::ostringstream err;
+				err << "'enable' option must be boolean";
+				throw std::logic_error(err.str());
+			}
+		}
+
+		if (cfg.HasMember("dump-interval")) {
+			rapidjson::Value& dump_interval = cfg["dump-interval"];
+			if (dump_interval.IsUint64()) {
+				opts->m_dump_interval = chrono::milliseconds(dump_interval.GetUint64());
+			}
+			else {
+				std::ostringstream err;
+				err << "'dump-interval' option must be unsigned integer";
+				throw std::logic_error(err.str());
+			}
+		}
+
+		if (cfg.HasMember("defaults")) {
+			rapidjson::Value& defaults = cfg["defaults"];
+			try {
+				config::apply(defaults, opts->m_statistics);
+				config::apply(defaults, opts->m_gauge.values);
+				config::apply(defaults, opts->m_counter.values);
+				config::apply(defaults, opts->m_timer.values);
+			}
+			catch (const std::logic_error& err) {
+				throw std::logic_error(std::string("Error in 'defaults' section: ") + std::string(err.what()));
+			}
+		}
+
+		if (cfg.HasMember("gauge")) {
+			rapidjson::Value& gauge = cfg["gauge"];
+			try {
+				config::apply(gauge, opts->m_gauge);
+			}
+			catch (const std::logic_error& err) {
+				throw std::logic_error(std::string("Error in 'gauge' section: ") + std::string(err.what()));
+			}
+		}
+
+		if (cfg.HasMember("counter")) {
+			rapidjson::Value& counter = cfg["counter"];
+			try {
+				config::apply(counter, opts->m_counter);
+			}
+			catch (const std::logic_error& err) {
+				throw std::logic_error(std::string("Error in 'counter' section: ") + std::string(err.what()));
+			}
+		}
+
+		if (cfg.HasMember("timer")) {
+			rapidjson::Value& timer = cfg["timer"];
+			try {
+				config::apply(timer, opts->m_timer);
+			}
+			catch (const std::logic_error& err) {
+				throw std::logic_error(std::string("Error in 'timer' section: ") + std::string(err.what()));
+			}
+		}
+
+		for (auto config_member = opts->m_source.MemberBegin(); config_member != opts->m_source.MemberEnd(); ++config_member) {
+			rapidjson::Value& member_name = config_member->name;
+			rapidjson::Value& member_value = config_member->value;
+
+			// skip reserved sections
+			if (strcmp(member_name.GetString(), "enable") == 0
+					|| strcmp(member_name.GetString(), "dump-interval") == 0
+					|| strcmp(member_name.GetString(), "defaults") == 0
+					|| strcmp(member_name.GetString(), "gauge") == 0
+					|| strcmp(member_name.GetString(), "counter") == 0
+					|| strcmp(member_name.GetString(), "timer") == 0
+			   )
+			{
+				continue;
+			}
+
+			// pattern
+			std::vector<std::string> expansion = config::expand_pattern(member_name.GetString());
+
+			config::statistics test_opts;
+			try {
+				config::apply(member_value, test_opts);
+			}
+			catch (const std::logic_error& err) {
+				throw std::logic_error(
+						std::string("Error in pattern '") + std::string(member_name.GetString()) + std::string("': ") +
+						std::string(err.what())
+					);
+			}
+
+			opts->m_patterns.push_back(std::make_pair(expansion, &member_value));
+		}
+
+		return true;
+	}
+	catch (const std::logic_error& err) {
+		config::error.reset(new std::string(err.what()));
+		config::opts.reset(new config::opts_t());
+
 		return false;
 	}
-	auto opts = config::opts;
-
-	rapidjson::Document& cfg = opts->m_source;
-	cfg.Parse<0>(config_data);
-	if (cfg.HasParseError()) {
-		// std::cerr << "Unable to parse configuration json: " << opts->m_source.GetParseError() << std::endl;
-		return false;
-	}
-
-	if (!cfg.IsObject()) {
-		return false;
-	}
-
-	if (cfg.HasMember("enable")) {
-		rapidjson::Value& enable = cfg["enable"];
-		if (enable.IsBool()) {
-			opts->m_core_enable = enable.GetBool();
-		}
-		else {
-			return false;
-		}
-	}
-
-	if (cfg.HasMember("dump-interval")) {
-		rapidjson::Value& dump_interval = cfg["dump-interval"];
-		if (dump_interval.IsUint64()) {
-			opts->m_dump_interval = chrono::milliseconds(dump_interval.GetUint64());
-		}
-		else {
-			return false;
-		}
-	}
-
-	if (cfg.HasMember("defaults")) {
-		rapidjson::Value& defaults = cfg["defaults"];
-		config::apply(defaults, opts->m_statistics);
-		config::apply(defaults, opts->m_gauge.values);
-		config::apply(defaults, opts->m_counter.values);
-		config::apply(defaults, opts->m_timer.values);
-	}
-
-	if (cfg.HasMember("gauge")) {
-		rapidjson::Value& gauge = cfg["gauge"];
-		config::apply(gauge, opts->m_gauge);
-	}
-
-	if (cfg.HasMember("counter")) {
-		rapidjson::Value& counter = cfg["counter"];
-		config::apply(counter, opts->m_counter);
-	}
-
-	if (cfg.HasMember("timer")) {
-		rapidjson::Value& timer = cfg["timer"];
-		config::apply(timer, opts->m_timer);
-	}
-
-	for (auto config_member = opts->m_source.MemberBegin(); config_member != opts->m_source.MemberEnd(); ++config_member) {
-		rapidjson::Value& member_name = config_member->name;
-		rapidjson::Value& member_value = config_member->value;
-
-		// skip reserved sections
-		if (strcmp(member_name.GetString(), "enable") == 0
-			|| strcmp(member_name.GetString(), "dump-interval") == 0
-			|| strcmp(member_name.GetString(), "defaults") == 0
-			|| strcmp(member_name.GetString(), "gauge") == 0
-			|| strcmp(member_name.GetString(), "counter") == 0
-			|| strcmp(member_name.GetString(), "timer") == 0
-			)
-		{
-			continue;
-		}
-
-		// pattern
-		std::vector<std::string> expansion = config::expand_pattern(member_name.GetString());
-		if (expansion.empty()) {
-			// invalid pattern
-			return false;
-		}
-
-		config::statistics test_opts;
-		config::apply(member_value, test_opts);
-		// TODO: check test_opts
-
-		opts->m_patterns.push_back(std::make_pair(expansion, &member_value));
-	}
-
-	return true;
 }
 
 bool config_file(const char* filename) {
-	std::ifstream input(filename, std::ios::in | std::ios::binary);
-	if (!input) {
-		std::cerr << "Unable to open configuration file " << filename << std::endl;
+	try {
+		std::ifstream input(filename, std::ios::in | std::ios::binary);
+		if (!input) {
+			std::ostringstream err;
+			err << "Unable to open configuration file '" << filename << "'";
+			throw std::logic_error(err.str());
+		}
+
+		std::string config_data;
+		input.seekg(0, std::ios::end);
+		config_data.resize(input.tellg());
+		input.seekg(0, std::ios::beg);
+		input.read(&config_data[0], config_data.size());
+		input.close();
+
+		return config_json(config_data.c_str());
+	}
+	catch (const std::logic_error& err) {
+		config::error.reset(new std::string(err.what()));
+		config::opts.reset(new config::opts_t());
+
 		return false;
 	}
+}
 
-	std::string config_data;
-	input.seekg(0, std::ios::end);
-	config_data.resize(input.tellg());
-	input.seekg(0, std::ios::beg);
-	input.read(&config_data[0], config_data.size());
-	input.close();
-
-	return config_json(config_data.c_str());
+const char* config_error() {
+	if (config::error.use_count() == 0) {
+		return nullptr;
+	}
+	else {
+		return config::error->c_str();
+	}
 }
 
 } // namespace handystats
@@ -273,19 +330,15 @@ bool config_file(const char* filename) {
 extern "C" {
 
 int handystats_config_file(const char* file) {
-	if (handystats::core) {
-		return 0;
-	}
-
 	return handystats::config_file(file);
 }
 
 int handystats_config_json(const char* config_data) {
-	if (handystats::core) {
-		return 0;
-	}
-
 	return handystats::config_json(config_data);
+}
+
+const char* handystats_config_error() {
+	return handystats::config_error();
 }
 
 } // extern "C"

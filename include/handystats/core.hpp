@@ -37,6 +37,8 @@ void finalize();
 bool config_file(const char* filename);
 bool config_json(const char* config);
 
+const char* config_error();
+
 } // namespace handystats
 
 
@@ -50,15 +52,19 @@ bool config_json(const char* config);
 
 	#define HANDY_CONFIG_JSON(...) handystats::config_json(__VA_ARGS__)
 
+	#define HANDY_CONFIG_ERROR(...) handystats::config_error(__VA_ARGS__)
+
 #else
 
 	#define HANDY_INIT(...)
 
 	#define HANDY_FINALIZE(...)
 
-	#define HANDY_CONFIG_FILE(...)
+	#define HANDY_CONFIG_FILE(...) false
 
-	#define HANDY_CONFIG_JSON(...)
+	#define HANDY_CONFIG_JSON(...) false
+
+	#define HANDY_CONFIG_ERROR(...) "Handystats is not supported. Recompile with appropriate flags."
 
 #endif
 

@@ -114,8 +114,8 @@ std::vector<std::string> expand_pattern(const std::string& pattern) {
 	}
 }
 
-std::shared_ptr<opts_t> opts;
-std::shared_ptr<std::string> error;
+std::shared_ptr<opts_t> opts __attribute__((init_priority(200)));
+std::shared_ptr<std::string> error __attribute__((init_priority(200)));
 
 opts_t::opts_t()
 	: m_dump_interval(750, chrono::time_unit::MSEC)

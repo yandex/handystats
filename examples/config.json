@@ -10,21 +10,29 @@
 		"rate-unit": "s"
 	},
 
-	"metrics": {
-		"gauge": {
-			"stats": ["moving-avg"],
-			"moving-interval": 5000
-		},
+	"gauge": {
+		"stats": ["moving-avg"],
+		"moving-interval": 5000
+	},
 
-		"counter": {
-			"stats": ["value", "moving-avg", "rate"],
-			"rate-unit": "m"
-		},
+	"counter": {
+		"stats": ["value", "moving-avg", "rate"],
+		"rate-unit": "m"
+	},
 
-		"timer": {
-			"stats": ["max", "moving-avg", "quantile"],
-			"histogram-bins": 30,
-			"moving-interval": 60000
-		}
+	"timer": {
+		"stats": ["max", "moving-avg", "quantile"],
+		"histogram-bins": 30,
+		"moving-interval": 60000
+	},
+
+	"app.queue.[0-9].size": {
+		"stats": ["max", "moving-avg"],
+		"moving-interval": 1000
+	},
+	"app.request.{GET,UPLOAD}": {
+		"stats": ["value", "moving-avg", "rate"],
+		"rate-unit": "s",
+		"moving-interval": 2000
 	}
 }

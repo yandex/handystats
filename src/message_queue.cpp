@@ -28,7 +28,7 @@ message_queue::stats::stats() {
 
 	{
 		config::statistics config;
-		config.tags = statistics::tag::moving_sum;
+		config.tags = statistics::tag::throughput;
 		config.moving_interval = chrono::seconds(1);
 
 		pop_count = statistics::data(config);

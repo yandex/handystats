@@ -107,7 +107,7 @@ void print_stats() {
 		const char* name = "handystats.message_queue.pop_count";
 		const auto& pop_count = metrics_dump->first.at(name);
 		std::cout << name << ":" << std::endl;
-		std::cout << "          rate: " << pop_count.get<handystats::statistics::tag::moving_sum>() << std::endl;
+		std::cout << "          rate: " << pop_count.get<handystats::statistics::tag::throughput>() << std::endl;
 //		std::cout << "     timestamp: " << pop_count.get<handystats::statistics::tag::timestamp>() << std::endl;
 		std::cout << std::endl;
 	}
@@ -120,6 +120,7 @@ void print_stats() {
 		std::cout << "          p50: " << timer.get<handystats::statistics::tag::quantile>().at(0.50) << std::endl;
 		std::cout << "          p75: " << timer.get<handystats::statistics::tag::quantile>().at(0.75) << std::endl;
 		std::cout << "          p95: " << timer.get<handystats::statistics::tag::quantile>().at(0.95) << std::endl;
+		std::cout << "    frequency: " << timer.get<handystats::statistics::tag::frequency>() << std::endl;
 //		std::cout << "    timestamp: " << timer.get<handystats::statistics::tag::timestamp>() << std::endl;
 		std::cout << std::endl;
 	}

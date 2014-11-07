@@ -16,7 +16,6 @@ statistics::statistics()
 		handystats::statistics::tag::moving_count | handystats::statistics::tag::moving_sum | handystats::statistics::tag::moving_avg |
 		handystats::statistics::tag::timestamp
 	)
-	, rate_unit(chrono::time_unit::SEC)
 {}
 
 void apply(const rapidjson::Value& config, statistics& statistics_opts) {
@@ -48,18 +47,6 @@ void apply(const rapidjson::Value& config, statistics& statistics_opts) {
 				if (tag.IsString()) {
 					statistics_opts.tags |= handystats::statistics::tag::from_string(tag.GetString());
 				}
-			}
-		}
-	}
-
-	if (config.HasMember("rate-unit")) {
-		const rapidjson::Value& rate_unit = config["rate-unit"];
-
-		if (rate_unit.IsString()) {
-			try {
-				statistics_opts.rate_unit = chrono::time_unit_from_string(rate_unit.GetString());
-			}
-			catch (const std::logic_error&) {
 			}
 		}
 	}

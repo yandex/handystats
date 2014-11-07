@@ -14,7 +14,7 @@ handystats_config="{
 		\"stats\": [\"value\", \"moving-avg\"]
 	},
 	\"timer\": {
-		\"stats\": [\"moving-avg\", \"quantile\"]
+		\"stats\": [\"moving-avg\", \"quantile\", \"frequency\"]
 	}
 }"
 

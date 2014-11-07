@@ -60,9 +60,6 @@ JsonValue& fill_value(JsonValue& json_value, const statistics::data& stats_data,
 		}
 		json_value.AddMember("hist", histogram_value, allocator);
 	}
-	if (stats_data.m_tags & statistics::tag::rate) {
-		json_value.AddMember("rate", stats_data.m_rate, allocator);
-	}
 	if (stats_data.m_tags & statistics::tag::timestamp) {
 		JsonValue timestamp_value;
 		utils::rapidjson::fill_value(timestamp_value, stats_data.m_timestamp, allocator);
@@ -76,8 +73,7 @@ JsonValue& fill_value(JsonValue& json_value, const statistics::data& stats_data,
 	// moving_interval config
 	const statistics::tag::type& moving_stats =
 		statistics::tag::moving_count | statistics::tag::moving_sum |
-		statistics::tag::histogram |
-		statistics::tag::rate;
+		statistics::tag::histogram;
 
 	if (stats_data.m_tags & moving_stats) {
 		json_value.AddMember(
@@ -307,16 +303,6 @@ statistics::data& load_value(statistics::data& data, const JsonValue& json_value
 			}
 		}
 	}
-	{
-		typename JsonValue::ConstMemberIterator rate_iter = json_value.FindMember("rate");
-		if (rate_iter) {
-			const auto& rate_json = rate_iter->value;
-			if (rate_json.IsNumber()) {
-				data.m_rate = rate_json.GetDouble();
-				data.m_tags |= statistics::tag::rate;
-			}
-		}
-	}
 
 	data.fulfill_dependencies();
 
@@ -334,7 +320,6 @@ stats_data_map& load_dump(stats_data_map& metrics, const chrono::time_point& dum
 	empty_config.moving_interval = chrono::nanoseconds(0);
 	empty_config.histogram_bins = 0;
 	empty_config.tags = statistics::tag::empty;
-	empty_config.rate_unit = chrono::time_unit::SEC;
 
 	for (auto member_iter = dump_value.MemberBegin(); member_iter != dump_value.MemberEnd(); ++member_iter) {
 		statistics::data& data =

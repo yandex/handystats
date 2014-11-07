@@ -12,8 +12,7 @@
  *     "defaults": {
  *         "moving-interval": <value in msec>,
  *         "histogram-bins": <integer value>,
- *         "stats": ["<statistic name>", "<statistic name>", ...],
- *         "rate-unit": <"ns" | "us" | "ms" | "s" | "m" | "h">
+ *         "stats": ["<statistic name>", "<statistic name>", ...]
  *     },
  *     "gauge": {
  *         <statistics opts>

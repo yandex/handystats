@@ -53,6 +53,7 @@ JsonValue& fill_value(JsonValue& json_value, const statistics& stats, Allocator&
 	if (stats.enabled(statistics::tag::avg)) {
 		json_value.AddMember("avg", stats.get<statistics::tag::avg>(), allocator);
 	}
+
 	if (stats.enabled(statistics::tag::moving_count)) {
 		json_value.AddMember("moving-count", stats.get<statistics::tag::moving_count>(), allocator);
 	}
@@ -84,16 +85,20 @@ JsonValue& fill_value(JsonValue& json_value, const statistics& stats, Allocator&
 		json_value.AddMember("p90", quantile.at(0.90), allocator);
 		json_value.AddMember("p95", quantile.at(0.95), allocator);
 	}
+	if (stats.enabled(statistics::tag::entropy)) {
+		json_value.AddMember("entropy", stats.get<statistics::tag::entropy>(), allocator);
+	}
+	if (stats.enabled(statistics::tag::throughput)) {
+		json_value.AddMember("throughput", stats.get<statistics::tag::throughput>(), allocator);
+	}
+	if (stats.enabled(statistics::tag::frequency)) {
+		json_value.AddMember("frequency", stats.get<statistics::tag::frequency>(), allocator);
+	}
+
 	if (stats.enabled(statistics::tag::timestamp)) {
 		JsonValue timestamp_value;
 		fill_value(timestamp_value, stats.get<statistics::tag::timestamp>(), allocator);
 		json_value.AddMember("timestamp", timestamp_value, allocator);
-	}
-	if (stats.enabled(statistics::tag::rate)) {
-		json_value.AddMember("rate", stats.get<statistics::tag::rate>(), allocator);
-	}
-	if (stats.enabled(statistics::tag::entropy)) {
-		json_value.AddMember("entropy", stats.get<statistics::tag::entropy>(), allocator);
 	}
 
 	return json_value;

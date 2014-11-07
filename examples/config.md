@@ -9,28 +9,35 @@ Example config
 
 	"defaults": {
 		"stats": ["count", "avg", "moving-avg", "quantile", "rate"],
-		"moving-interval": 1000,
 		"histogram-bins": 20,
+		"moving-interval": 1000,
 		"rate-unit": "s"
 	},
 
-	"metrics": {
-		"gauge": {
-			"stats": ["moving-avg"],
-			"moving-interval": 5000
-		},
+	"gauge": {
+		"stats": ["moving-avg"],
+		"moving-interval": 5000
+	},
 
-		"counter": {
-			"stats": ["value", "moving-avg", "rate"],
-			"rate-unit": "m"
-		},
+	"counter": {
+		"stats": ["value", "moving-avg", "rate"],
+		"rate-unit": "m"
+	},
 
-		"timer": {
-			"idle-timeout": 60000,
-			"stats": ["max", "moving-avg", "quantile"],
-			"histogram-bins": 30,
-			"moving-interval": 5000
-		}
+	"timer": {
+		"stats": ["max", "moving-avg", "quantile"],
+		"histogram-bins": 30,
+		"moving-interval": 60000
+	},
+
+	"app.queue.[0-9].size": {
+		"stats": ["max", "moving-avg"],
+		"moving-interval": 1000
+	},
+	"app.request.{GET,UPLOAD}": {
+		"stats": ["value", "moving-avg", "rate"],
+		"rate-unit": "s",
+		"moving-interval": 2000
 	}
 }
 ```
@@ -126,77 +133,83 @@ i.e. dump will be updated every `dump-interval` milliseconds.
 		}
 		```
 
-- `metrics`
+- `gauge`
 
-	Specifies behaviour for metrics:
+	Sets statistics options (as in `defaults`) for data produced by gauge metric.
 
-	* `gauge`
+	*Default*: as in `defaults`
 
-		Sets statistics options (as in `defaults`) for data produced by gauge metric.
+	```json
+	{
+		"gauge": {
+			"stats": ["avg", "moving-avg", "rate"],
+			"moving-interval": 30000,
+			"rate-unit": "m"
+		}
+	}
+	```
+
+- `counter`
+
+	Sets statistics options (as in `defaults`) for data produced by counter metric.
+
+	*Default*: as in `defaults`
+
+	```json
+	{
+		"counter": {
+			"stats": ["value", "min", "max", "moving-avg", "rate", "timestamp"]
+		}
+	}
+	```
+
+- `timer`
+
+	- statistics options (as in `defaults`) for data produced by timer metric
 
 		*Default*: as in `defaults`
 
 		```json
 		{
-			"metrics": {
-				"gauge": {
-					"stats": ["avg", "moving-avg", "rate"],
-					"moving-interval": 30000,
-					"rate-unit": "m"
-				}
+			"timer": {
+				"stats": ["moving-avg", "quantile"],
+				"moving-interval": 60000,
+				"histogram-bins": 20
 			}
 		}
 		```
 
-	* `counter`
+	- `idle-timeout`
 
-		Sets statistics options (as in `defaults`) for data produced by counter metric.
+		Specifies time limit in milliseconds after which timer's instance will be dropped unless it receives heartbeat.
 
-		*Default*: as in `defaults`
+		*Default*: 10000ms
 
 		```json
 		{
-			"metrics": {
-				"counter": {
-					"stats": ["value", "min", "max", "moving-avg", "rate", "timestamp"]
-				}
+			"timer": {
+				"idle-timeout": 60000
 			}
 		}
 		```
 
-	* `timer`
+- patterns
 
-		- statistics options (as in `defaults`) for data produced by timer metric
+	Overrides statistics options for data which name matches specified pattern
 
-			*Default*: as in `defaults`
-
-			```json
-			{
-				"metrics": {
-					"timer": {
-						"stats": ["moving-avg", "quantile"],
-						"moving-interval": 60000,
-						"histogram-bins": 20
-					}
-				}
-			}
-			```
-
-		- `idle-timeout`
-
-			Specifies time limit in milliseconds after which timer's instance will be dropped unless it receives heartbeat.
-
-			*Default*: 10000ms
-
-			```json
-			{
-				"metrics": {
-					"timer": {
-						"idle-timeout": 60000
-					}
-				}
-			}
-			```
+	```json
+	{
+		"app.queue.[0-9].size": {
+			"stats": ["max", "moving-avg"],
+			"moving-interval": 1000
+		},
+		"app.request.{GET,UPLOAD}": {
+			"stats": ["value", "moving-avg", "rate"],
+			"rate-unit": "s",
+			"moving-interval": 2000
+		}
+	}
+	```
 
 Available statistics
 ====================

@@ -37,7 +37,6 @@ struct statistics::data {
 	value_type m_moving_sum;
 	histogram_type m_histogram;
 	time_point m_data_timestamp;
-	value_type m_rate;
 
 	time_point m_timestamp;
 

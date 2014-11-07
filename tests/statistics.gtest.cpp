@@ -4,7 +4,6 @@
 #include <gtest/gtest.h>
 
 #include <handystats/statistics.hpp>
-
 #include <handystats/chrono.hpp>
 
 class IncrementalStatisticsTest : public ::testing::Test {
@@ -187,65 +186,36 @@ TEST_F(IncrementalStatisticsTest, HistogramTest) {
 	}
 }
 
-TEST_F(IncrementalStatisticsTest, RateMovingCountTest) {
+TEST_F(IncrementalStatisticsTest, ThroughputFrequencyTest) {
 	opts.moving_interval = handystats::chrono::duration::convert_to(
 			handystats::chrono::time_unit::NSEC,
 			handystats::chrono::seconds(1)
 		);
-	opts.rate_unit = handystats::chrono::time_unit::SEC;
-	opts.tags = handystats::statistics::tag::rate |
-		handystats::statistics::tag::moving_count |
-		handystats::statistics::tag::moving_sum;
+	opts.tags = handystats::statistics::tag::throughput |
+		handystats::statistics::tag::frequency;
 
 	stats = handystats::statistics(opts);
 
 	const size_t COUNT = 1000;
+	const size_t VALUE = 1;
 
-	for (int value = 1; value <= COUNT; ++value) {
-		stats.update(value);
+	for (int step = 1; step <= COUNT; ++step) {
+		stats.update(VALUE);
 		std::this_thread::yield();
 	}
 
 	ASSERT_NEAR(
-			stats.get<handystats::statistics::tag::rate>(),
-			stats.get<handystats::statistics::tag::moving_count>(),
-			1E-6
-		);
-}
-
-TEST_F(IncrementalStatisticsTest, ZeroRateTest) {
-	opts.rate_unit = handystats::chrono::time_unit::SEC;
-	opts.moving_interval = handystats::chrono::duration::convert_to(
-			handystats::chrono::time_unit::NSEC,
-			handystats::chrono::seconds(1)
-		);
-	opts.tags = handystats::statistics::tag::rate;
-
-	stats = handystats::statistics(opts);
-
-	const size_t COUNT = 1000;
-
-	for (int value = 0; value < COUNT; ++value) {
-		stats.update(value);
-		std::this_thread::yield();
-	}
+			stats.get<handystats::statistics::tag::throughput>(),
+			VALUE * COUNT,
+			VALUE * COUNT * 0.05
+			);
 
 	ASSERT_NEAR(
-			stats.get<handystats::statistics::tag::rate>(),
-			COUNT - 1,
-			0.10 * (COUNT - 1)
-		);
+			stats.get<handystats::statistics::tag::frequency>(),
+			COUNT,
+			COUNT * 0.05
+			);
 
-	for (int value = COUNT - 1; value >= 0; --value) {
-		stats.update(value);
-		std::this_thread::yield();
-	}
-
-	ASSERT_NEAR(
-			stats.get<handystats::statistics::tag::rate>(),
-			0,
-			0.10 * (COUNT - 1)
-		);
 }
 
 class StatisticsTagDependency : public ::testing::Test {

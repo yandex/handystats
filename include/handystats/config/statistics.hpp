@@ -11,7 +11,6 @@ struct statistics {
 	chrono::duration moving_interval;
 	size_t histogram_bins;
 	int tags;
-	chrono::time_unit rate_unit;
 
 	statistics();
 };

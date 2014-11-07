@@ -4,24 +4,22 @@
 	"dump-interval": 500,
 
 	"defaults": {
-		"stats": ["count", "avg", "moving-avg", "quantile", "rate"],
+		"stats": ["count", "avg", "moving-avg", "quantile"],
 		"histogram-bins": 20,
-		"moving-interval": 1000,
-		"rate-unit": "s"
+		"moving-interval": 1000
 	},
 
 	"gauge": {
-		"stats": ["moving-avg"],
+		"stats": ["moving-avg", "throughput"],
 		"moving-interval": 5000
 	},
 
 	"counter": {
-		"stats": ["value", "moving-avg", "rate"],
-		"rate-unit": "m"
+		"stats": ["value", "moving-avg"]
 	},
 
 	"timer": {
-		"stats": ["max", "moving-avg", "quantile"],
+		"stats": ["max", "moving-avg", "quantile", "frequency"],
 		"histogram-bins": 30,
 		"moving-interval": 60000
 	},
@@ -31,8 +29,7 @@
 		"moving-interval": 1000
 	},
 	"app.request.{GET,UPLOAD}": {
-		"stats": ["value", "moving-avg", "rate"],
-		"rate-unit": "s",
+		"stats": ["value", "throughput"],
 		"moving-interval": 2000
 	}
 }

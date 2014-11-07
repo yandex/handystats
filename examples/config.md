@@ -8,24 +8,22 @@ Example config
 	"dump-interval": 500,
 
 	"defaults": {
-		"stats": ["count", "avg", "moving-avg", "quantile", "rate"],
+		"stats": ["count", "avg", "moving-avg", "quantile"],
 		"histogram-bins": 20,
-		"moving-interval": 1000,
-		"rate-unit": "s"
+		"moving-interval": 1000
 	},
 
 	"gauge": {
-		"stats": ["moving-avg"],
+		"stats": ["moving-avg", "throughput"],
 		"moving-interval": 5000
 	},
 
 	"counter": {
-		"stats": ["value", "moving-avg", "rate"],
-		"rate-unit": "m"
+		"stats": ["value", "moving-avg"]
 	},
 
 	"timer": {
-		"stats": ["max", "moving-avg", "quantile"],
+		"stats": ["max", "moving-avg", "quantile", "frequency"],
 		"histogram-bins": 30,
 		"moving-interval": 60000
 	},
@@ -35,8 +33,7 @@ Example config
 		"moving-interval": 1000
 	},
 	"app.request.{GET,UPLOAD}": {
-		"stats": ["value", "moving-avg", "rate"],
-		"rate-unit": "s",
+		"stats": ["value", "throughput"],
 		"moving-interval": 2000
 	}
 }
@@ -93,7 +90,7 @@ i.e. dump will be updated every `dump-interval` milliseconds.
 	* `moving-interval`
 
 		Sets moving interval length in milliseconds for moving statistics
-		(`moving-count`, `moving-sum`, `moving-avg`, `rate`, `histogram`, `quantile`, `entropy`).
+		(`moving-count`, `moving-sum`, `moving-avg`, `histogram`, `quantile`, `entropy`, `throughput`, `frequency`).
 
 		*Default*: 1000ms
 
@@ -119,20 +116,6 @@ i.e. dump will be updated every `dump-interval` milliseconds.
 		}
 		```
 
-	* `rate-unit`
-
-		Sets time unit (ns, us, ms, s, m, h, d) to which `rate` statistic will be converted.
-
-		*Default*: s
-
-		```json
-		{
-			"defaults": {
-				"rate-unit": "ms"
-			}
-		}
-		```
-
 - `gauge`
 
 	Sets statistics options (as in `defaults`) for data produced by gauge metric.
@@ -142,9 +125,8 @@ i.e. dump will be updated every `dump-interval` milliseconds.
 	```json
 	{
 		"gauge": {
-			"stats": ["avg", "moving-avg", "rate"],
-			"moving-interval": 30000,
-			"rate-unit": "m"
+			"stats": ["avg", "moving-avg", "throughput"],
+			"moving-interval": 30000
 		}
 	}
 	```
@@ -158,7 +140,7 @@ i.e. dump will be updated every `dump-interval` milliseconds.
 	```json
 	{
 		"counter": {
-			"stats": ["value", "min", "max", "moving-avg", "rate", "timestamp"]
+			"stats": ["value", "min", "max", "moving-avg", "timestamp"]
 		}
 	}
 	```
@@ -204,8 +186,7 @@ i.e. dump will be updated every `dump-interval` milliseconds.
 			"moving-interval": 1000
 		},
 		"app.request.{GET,UPLOAD}": {
-			"stats": ["value", "moving-avg", "rate"],
-			"rate-unit": "s",
+			"stats": ["value", "throughput"],
 			"moving-interval": 2000
 		}
 	}
@@ -231,5 +212,6 @@ Available statistics
 	* `moving-avg` - average of data values
 	* `histogram` - histogram of data values
 	* `quantile` - 25-, 50-, 75-, 90-, 95-percent level quantiles ("p25", "p50", "p75", "p90", "p95") of data values
-	* `rate` - rate at which data has been changed
 	* `entropy` - continuous entropy of data values distribution
+	* `throughput` - moving sum of data values averaged to second
+	* `frequency` - moving count of data values averaged to second

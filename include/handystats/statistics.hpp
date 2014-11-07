@@ -55,14 +55,17 @@ struct statistics {
 		static const type count = 1 << 4;
 		static const type sum = 1 << 5;
 		static const type avg = 1 << 6;
+
 		static const type moving_count = 1 << 7;
 		static const type moving_sum = 1 << 8;
 		static const type moving_avg = 1 << 9;
 		static const type histogram = 1 << 10;
 		static const type quantile = 1 << 11;
-		static const type timestamp = 1 << 12;
-		static const type rate = 1 << 13;
-		static const type entropy = 1 << 14;
+		static const type entropy = 1 << 12;
+		static const type throughput = 1 << 13;
+		static const type frequency = 1 << 14;
+
+		static const type timestamp = 1 << 15;
 
 		static type from_string(const std::string&);
 	};
@@ -85,9 +88,10 @@ struct statistics {
 		, enable_if_eq<Tag, tag::moving_avg, double>
 		, enable_if_eq<Tag, tag::histogram, histogram_type>
 		, enable_if_eq<Tag, tag::quantile, quantile_extractor>
-		, enable_if_eq<Tag, tag::timestamp, time_point>
-		, enable_if_eq<Tag, tag::rate, double>
 		, enable_if_eq<Tag, tag::entropy, double>
+		, enable_if_eq<Tag, tag::throughput, double>
+		, enable_if_eq<Tag, tag::frequency, double>
+		, enable_if_eq<Tag, tag::timestamp, time_point>
 	{};
 
 	// statistics is enabled from configuration

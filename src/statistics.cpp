@@ -99,8 +99,12 @@ statistics::data::data(const config::statistics& config)
 		m_tags |= tag::entropy | tag::histogram;
 	}
 
-	if (config.tags & tag::rate) {
-		m_tags |= tag::rate | tag::value;
+	if (config.tags & tag::throughput) {
+		m_tags |= tag::throughput | tag::moving_sum;
+	}
+
+	if (config.tags & tag::frequency) {
+		m_tags |= tag::frequency | tag::moving_count;
 	}
 
 	reset();
@@ -119,7 +123,6 @@ void statistics::data::reset() {
 		m_histogram.reserve(m_histogram_bins + 1);
 	}
 	m_data_timestamp = time_point();
-	m_rate = 0.0;
 
 	m_timestamp = time_point();
 }
@@ -383,11 +386,6 @@ void update_histogram(
 }
 
 void statistics::data::update(const value_type& value, const time_point& timestamp) {
-	if (m_tags & tag::rate) {
-		const value_type delta = value - m_value;
-		m_rate = update_data(*this, m_rate, m_data_timestamp, delta, timestamp);
-	}
-
 	if (m_tags & tag::value) {
 		m_value = value;
 	}
@@ -426,13 +424,6 @@ void statistics::data::update(const value_type& value, const time_point& timesta
 
 void statistics::data::update_time(const time_point& timestamp) {
 	if (timestamp <= m_timestamp) return;
-
-	if (m_tags & tag::rate) {
-		m_rate = shift_data(*this, m_rate, m_data_timestamp, timestamp);
-		if (math_utils::cmp<double>(m_rate, 0) == 0) {
-			m_rate = 0;
-		}
-	}
 
 	if (m_tags & tag::moving_count) {
 		m_moving_count = shift_data(*this, m_moving_count, m_data_timestamp, timestamp);
@@ -508,10 +499,6 @@ void statistics::data::append(data d) {
 		m_moving_sum += truncate_data_before(d, d.m_moving_sum, d.m_data_timestamp, m_timestamp);
 		m_tags |= tag::moving_sum;
 	}
-	if (d.m_tags & tag::rate) {
-		m_rate += truncate_data_before(d, d.m_rate, d.m_data_timestamp, m_timestamp);
-		m_tags |= tag::rate;
-	}
 
 	if (d.m_tags & tag::histogram) {
 		truncate_histogram_before(d, m_timestamp);
@@ -576,10 +563,6 @@ void statistics::data::merge(const data& d) {
 		m_moving_sum += d.m_moving_sum;
 		m_tags |= tag::moving_sum;
 	}
-	if (d.m_tags & tag::rate) {
-		m_rate += d.m_rate;
-		m_tags |= tag::rate;
-	}
 
 	if (d.m_tags & tag::histogram) {
 		m_histogram.reserve(m_histogram.size() + d.m_histogram.size());
@@ -598,13 +581,6 @@ void statistics::data::merge(const data& d) {
 }
 
 void statistics::data::truncate_before(const time_point& timestamp) {
-	if (m_tags & tag::rate) {
-		m_rate = truncate_data_before(*this, m_rate, m_data_timestamp, timestamp);
-		if (math_utils::cmp<double>(m_rate, 0) == 0) {
-			m_rate = 0;
-		}
-	}
-
 	if (m_tags & tag::moving_count) {
 		m_moving_count = truncate_data_before(*this, m_moving_count, m_data_timestamp, timestamp);
 		if (math_utils::cmp<double>(m_moving_count, 0) == 0) {
@@ -637,13 +613,6 @@ void statistics::data::truncate_before(const time_point& timestamp) {
 }
 
 void statistics::data::truncate_after(const time_point& timestamp) {
-	if (m_tags & tag::rate) {
-		m_rate = truncate_data_after(*this, m_rate, m_data_timestamp, timestamp);
-		if (math_utils::cmp<double>(m_rate, 0) == 0) {
-			m_rate = 0;
-		}
-	}
-
 	if (m_tags & tag::moving_count) {
 		m_moving_count = truncate_data_after(*this, m_moving_count, m_data_timestamp, timestamp);
 		if (math_utils::cmp<double>(m_moving_count, 0) == 0) {
@@ -750,16 +719,20 @@ void statistics::data::fulfill_dependencies() {
 		m_tags &= ~tag::entropy;
 	}
 
-	// rate - depends on value and moving_interval
-	if ((m_tags & tag::rate) &&
-			(m_tags & tag::value) &&
-			(m_moving_interval.count() > 0)
-		)
-	{
-		m_tags |= tag::rate;
+	// throughput - depends on moving_sum
+	if ((m_tags & tag::throughput) && (m_tags & tag::moving_sum)) {
+		m_tags |= tag::throughput;
 	}
 	else {
-		m_tags &= ~tag::rate;
+		m_tags &= ~tag::throughput;
+	}
+
+	// frequency - depends on moving_count
+	if ((m_tags & tag::frequency) && (m_tags & tag::moving_count)) {
+		m_tags |= tag::frequency;
+	}
+	else {
+		m_tags &= ~tag::frequency;
 	}
 }
 
@@ -864,14 +837,17 @@ const statistics::tag::type statistics::tag::max;
 const statistics::tag::type statistics::tag::count;
 const statistics::tag::type statistics::tag::sum;
 const statistics::tag::type statistics::tag::avg;
+
 const statistics::tag::type statistics::tag::moving_count;
 const statistics::tag::type statistics::tag::moving_sum;
 const statistics::tag::type statistics::tag::moving_avg;
 const statistics::tag::type statistics::tag::histogram;
 const statistics::tag::type statistics::tag::quantile;
-const statistics::tag::type statistics::tag::timestamp;
-const statistics::tag::type statistics::tag::rate;
 const statistics::tag::type statistics::tag::entropy;
+const statistics::tag::type statistics::tag::throughput;
+const statistics::tag::type statistics::tag::frequency;
+
+const statistics::tag::type statistics::tag::timestamp;
 
 statistics::tag::type statistics::tag::from_string(const std::string& tag_name) {
 	if (strcmp("value", tag_name.c_str()) == 0) {
@@ -892,6 +868,7 @@ statistics::tag::type statistics::tag::from_string(const std::string& tag_name) 
 	if (strcmp("avg", tag_name.c_str()) == 0) {
 		return avg;
 	}
+
 	if (strcmp("moving-count", tag_name.c_str()) == 0) {
 		return moving_count;
 	}
@@ -907,14 +884,18 @@ statistics::tag::type statistics::tag::from_string(const std::string& tag_name) 
 	if (strcmp("quantile", tag_name.c_str()) == 0) {
 		return quantile;
 	}
-	if (strcmp("timestamp", tag_name.c_str()) == 0) {
-		return timestamp;
-	}
-	if (strcmp("rate", tag_name.c_str()) == 0) {
-		return rate;
-	}
 	if (strcmp("entropy", tag_name.c_str()) == 0) {
 		return entropy;
+	}
+	if (strcmp("throughput", tag_name.c_str()) == 0) {
+		return throughput;
+	}
+	if (strcmp("frequency", tag_name.c_str()) == 0) {
+		return frequency;
+	}
+
+	if (strcmp("timestamp", tag_name.c_str()) == 0) {
+		return timestamp;
 	}
 
 	throw invalid_tag_error("tag::from_string: invalid tag");
@@ -1142,39 +1123,6 @@ statistics::get_impl<statistics::tag::quantile>() const
 }
 
 template <>
-statistics::result_type<statistics::tag::timestamp>::type
-statistics::get_impl<statistics::tag::timestamp>() const
-{
-	if (computed(tag::timestamp)) {
-		return m_data->m_timestamp;
-	}
-	else {
-		throw invalid_tag_error("invalid tag: timestamp");
-	}
-}
-
-template <>
-statistics::result_type<statistics::tag::rate>::type
-statistics::get_impl<statistics::tag::rate>() const
-{
-	if (computed(tag::rate)) {
-		if (std::less<chrono::time_unit>()(m_config.rate_unit, m_config.moving_interval.unit())) {
-			const double& rate_factor = m_config.moving_interval.count(m_config.rate_unit);
-			return double(m_data->m_rate) / rate_factor;
-		}
-		else {
-			const double& rate_factor =
-				chrono::duration(1, m_config.rate_unit)
-				.count(m_config.moving_interval.unit());
-			return double(m_data->m_rate) * rate_factor / m_config.moving_interval.count();
-		}
-	}
-	else {
-		throw invalid_tag_error("invalid tag: rate");
-	}
-}
-
-template <>
 statistics::result_type<statistics::tag::entropy>::type
 statistics::get_impl<statistics::tag::entropy>() const
 {
@@ -1224,6 +1172,45 @@ statistics::get_impl<statistics::tag::entropy>() const
 		throw invalid_tag_error("invalid tag: entropy");
 	}
 }
+
+template <>
+statistics::result_type<statistics::tag::throughput>::type
+statistics::get_impl<statistics::tag::throughput>() const
+{
+	if (computed(tag::throughput)) {
+		auto unit = chrono::time_unit::NSEC;
+		return m_data->m_moving_sum * chrono::seconds(1).count(unit) / m_data->m_moving_interval.count(unit);
+	}
+	else {
+		throw invalid_tag_error("invalid tag: throughput");
+	}
+}
+
+template <>
+statistics::result_type<statistics::tag::frequency>::type
+statistics::get_impl<statistics::tag::frequency>() const
+{
+	if (computed(tag::frequency)) {
+		auto unit = chrono::time_unit::NSEC;
+		return m_data->m_moving_count * chrono::seconds(1).count(unit) / m_data->m_moving_interval.count(unit);
+	}
+	else {
+		throw invalid_tag_error("invalid tag: frequency");
+	}
+}
+
+template <>
+statistics::result_type<statistics::tag::timestamp>::type
+statistics::get_impl<statistics::tag::timestamp>() const
+{
+	if (computed(tag::timestamp)) {
+		return m_data->m_timestamp;
+	}
+	else {
+		throw invalid_tag_error("invalid tag: timestamp");
+	}
+}
+
 
 // depricated iface
 statistics::value_type statistics::value() const

@@ -67,12 +67,29 @@ TARGET_LINK_LIBRARIES (${HANDYSTATS_LIBRARY} rt)
 # install library
 INSTALL (TARGETS ${HANDYSTATS_LIBRARY}
 	LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}
+	COMPONENT library
 	)
 
 # install headers (-dev)
 INSTALL (DIRECTORY ${HANDYSTATS_INCLUDE_DIR}/handystats
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+	COMPONENT development
 	)
+
+
+ADD_CUSTOM_TARGET (install_library
+	${CMAKE_COMMAND}
+	-D "CMAKE_INSTALL_COMPONENT=library"
+	-P "${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake"
+	)
+ADD_DEPENDENCIES (install_library ${HANDYSTATS_LIBRARY})
+
+ADD_CUSTOM_TARGET (install_development
+	${CMAKE_COMMAND}
+	-D "CMAKE_INSTALL_COMPONENT=development"
+	-P "${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake"
+	)
+
 
 # Tests
 IF (WITH_TESTS)

@@ -1,29 +1,76 @@
 # Maintainer: Danil Osherov <shindo@yandex-team.ru>
-pkgname=handystats
-pkgver=1.10.2
+
+pkgbase=handystats
+pkgdesc="Handystats is C++ library for collecting user-defined in-process runtime statistics with low overhead."
+pkgname=('libhandystats' 'python2-handystats' 'handystats-utils')
+pkgver=2.0.0
 pkgrel=1
-pkgdesc="C++ library for collecting user-defined in-process runtime statistics with low overhead"
-arch=('any')
+arch=('x86_64')
 url=('https://github.com/shindo/handystats')
-license=('unknown')
-depends=('boost>=1.46')
+license=('LGPL3')
 checkdepends=('gtest')
-makedepends=('git' 'cmake')
-source=("$pkgname"::"git://github.com/shindo/handystats.git#tag=$pkgver")
+makedepends=('git' 'cmake' 'boost>=1.46' 'cython2')
+source=("$pkgbase-$pkgver"::"git://github.com/shindo/handystats.git#tag=$pkgver")
 md5sums=('SKIP')
+options=('makeflags')
 
 build() {
-	cd "$srcdir/$pkgname"
-	cmake -DCMAKE_INSTALL_PREFIX=${pkgdir}/usr
-	make
+	# XXX: debug mode
+	#git clone $startdir/.. $srcdir/$pkgbase-$pkgver
+
+	# libhandystats
+	cd $srcdir/$pkgbase-$pkgver
+	cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWITH_TESTS=ON
+	make -j $(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)
+
+	# python bindings
+	cd $srcdir/$pkgbase-$pkgver/bindings/python
+	python2 setup.py build_py \
+		--force \
+		--verbose
+	python2 setup.py build_ext \
+		--include-dirs "$srcdir/$pkgbase-$pkgver/include" \
+		--library-dirs "$srcdir/$pkgbase-$pkgver/lib:$srcdir/$pkgbase-$pkgver/lib64" \
+		--force \
+		--cython-c-in-temp \
+		--verbose
+
+	# utils
+	cd $srcdir/$pkgbase-$pkgver/utils
+	cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo
+	make -j $(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)
 }
 
 check() {
-	cd "$srcdir/$pkgname"
-	make -k check
+	cd $srcdir/$pkgbase-$pkgver
+	make -k -j$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1) check
 }
 
-package() {
-	cd "$srcdir/$pkgname"
-	make install
+package_libhandystats() {
+	pkgdesc="C++ library to collect runtime statistics - Core library"
+	depends=('boost>=1.46')
+	options=('strip' 'debug')
+
+	cd $srcdir/$pkgbase-$pkgver
+	make DESTDIR="$pkgdir/" install
+}
+
+package_python2-handystats() {
+	pkgdesc="Python bindings for libhandystats"
+	depends=('python2' 'libhandystats'=$pkgver-$pkgrel)
+
+	cd $srcdir/$pkgbase-$pkgver/bindings/python
+	python2 setup.py install \
+		--root="$pkgdir/" \
+		--optimize=1 \
+		--skip-build \
+		--verbose
+}
+
+package_handystats-utils() {
+	pkgdesc="C++ library to collect runtime statistics - Utilities"
+	depends=('python2' 'libhandystats'=$pkgver-$pkgrel 'python2-handystats'=$pkgver-$pkgrel)
+
+	cd $srcdir/$pkgbase-$pkgver/utils
+	make DESTDIR="$pkgdir/" install
 }

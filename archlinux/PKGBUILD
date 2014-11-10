@@ -9,7 +9,7 @@ arch=('x86_64')
 url=('https://github.com/shindo/handystats')
 license=('LGPL3')
 checkdepends=('gtest')
-makedepends=('git' 'cmake' 'boost>=1.46' 'cython2')
+makedepends=('git' 'cmake' 'boost>=1.46' 'python2')
 source=("$pkgbase-$pkgver"::"git://github.com/shindo/handystats.git#tag=$pkgver")
 md5sums=('SKIP')
 options=('makeflags')
@@ -32,7 +32,6 @@ build() {
 		--include-dirs "$srcdir/$pkgbase-$pkgver/include" \
 		--library-dirs "$srcdir/$pkgbase-$pkgver/lib:$srcdir/$pkgbase-$pkgver/lib64" \
 		--force \
-		--cython-c-in-temp \
 		--verbose
 
 	# utils

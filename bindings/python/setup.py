@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # Copyright (c) 2014 Yandex LLC. All rights reserved.
 
-from setuptools import setup
-from Cython.Distutils import build_ext
-from Cython.Distutils.extension import Extension
+from distutils.core import setup, Extension
 
 __name__ = 'python-handystats'
 __copyright__ = 'Copyright (c) 2014 Yandex LLC. All rights reserved.'
@@ -14,7 +12,8 @@ __maintainer_email__ = 'shindo@yandex-team.ru'
 __url__ = 'https://github.com/shindo/handystats'
 __description__ = 'Python bindings for handystats library'
 __ext_modules__ = [
-  Extension(module, [source],
+  Extension(module,
+    sources=[source],
     language="c++",
     libraries=[
       "handystats"
@@ -28,8 +27,8 @@ __ext_modules__ = [
     ],
   )
   for module, source in [
-    ["handystats.statistics", "handystats/statistics.pyx"],
-    ["handystats.chrono", "handystats/chrono.pyx"],
+    ["handystats.statistics", "handystats/statistics.cpp"],
+    ["handystats.chrono", "handystats/chrono.cpp"],
   ]
 ]
 
@@ -41,7 +40,6 @@ setup(
   maintainer_email = __maintainer_email__,
   url = __url__,
   description = __description__,
-  cmdclass = {'build_ext': build_ext},
   ext_modules = __ext_modules__,
   packages=[
       "handystats",

@@ -98,7 +98,7 @@ ENDIF ()
 
 # Bindings
 IF (WITH_PYTHON)
-	ADD_SUBDIRECTORY (bindings/python EXCLUDE_FROM_ALL)
+	ADD_SUBDIRECTORY (bindings/python)
 ENDIF ()
 
 # Benchmarks
@@ -108,5 +108,5 @@ ENDIF ()
 
 # Utilities
 IF (WITH_UTILS)
-	ADD_SUBDIRECTORY (utils EXCLUDE_FROM_ALL)
+	ADD_SUBDIRECTORY (utils)
 ENDIF ()

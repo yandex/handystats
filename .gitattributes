@@ -7,3 +7,7 @@
 *.hpp text
 *.c text
 *.h text
+
+# nodiff for cython-generated files
+bindings/python/handystats/chrono.cpp -diff
+bindings/python/handystats/statistics.cpp -diff

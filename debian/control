@@ -9,8 +9,6 @@ Build-Depends:
 	libgtest-dev,
 	python-all (>= 2.6.6-3~),
 	python-all-dev (>= 2.6.6-3~),
-	python-setuptools,
-	cython (>= 0.20.1),
 X-Python-Version: >= 2.6
 Standards-Version: 3.8.0
 Homepage: https://github.com/shindo/handystats

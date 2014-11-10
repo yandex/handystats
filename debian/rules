@@ -12,6 +12,9 @@ PYTHON2 = $(shell pyversions -vr)
 
 SONAME := 2
 
+# To check if Lucid
+VERSION = $(shell lsb_release -r | cut -f2 | cut -d'.' -f1)
+
 LIBHANDYSTATS_CMAKE_EXTRA_FLAGS := \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	-DWITH_TESTS=ON \
@@ -123,7 +126,11 @@ clean-combaine-plugin-handystats:
 	rm -rf ${BUILDDIR}/combaine-plugin-handystats
 
 build %:
+ifeq ($(VERSION), 10)
+	dh $@
+else
 	dh $@ --with python2
+endif
 
 override_dh_auto_build: \
 	build-libhandystats \
@@ -144,6 +151,10 @@ override_dh_auto_test: test-libhandystats
 override_dh_strip:
 	dh_strip --dbg-package=libhandystats${SONAME}-dbg -plibhandystats${SONAME}
 	dh_strip --dbg-package=python-handystats-dbg -ppython-handystats
+ifeq ($(VERSION), 10)
+	# Rename pyshared to pymodules
+	cd debian/python-handystats-dbg/usr/lib/debug/usr/lib && mv pyshared pymodules
+endif
 
 override_dh_auto_clean: \
 	clean-libhandystats \

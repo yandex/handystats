@@ -2,14 +2,16 @@ Source: handystats
 Priority: optional
 Maintainer: Danil Osherov <shindo@yandex-team.ru>
 Build-Depends:
-	debhelper (>= 9),
-	dh-python,
+	debhelper (>= 7),
+	dh-python | python-support (>= 0.90),
 	cmake,
 	libboost-dev,
 	libgtest-dev,
-	python-all (>= 2.6.6-3~),
-	python-all-dev (>= 2.6.6-3~),
+	python-all (>= 2.6),
+	python-all-dev (>= 2.6),
+	python-all-dbg (>= 2.6),
 X-Python-Version: >= 2.6
+XS-Python-Version: >= 2.6
 Standards-Version: 3.8.0
 Homepage: https://github.com/shindo/handystats
 Vcs-git: git://github.com/shindo/handystats.git

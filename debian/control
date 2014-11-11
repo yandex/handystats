@@ -97,7 +97,7 @@ Depends:
 	${misc:Depends},
 	python (>= 2.6),
 	python-handystats (= ${binary:Version}),
-	combaine-core (>= 0.6.5.4),
+	combaine-core (>= 0.6.5.6),
 Description: Plugin for Combaine to use handystats aggregation
  Handystats is C++ library for collecting user-defined
  in-process runtime statistics with low overhead.

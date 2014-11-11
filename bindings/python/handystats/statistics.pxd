@@ -35,6 +35,22 @@ cdef extern from "handystats/detail/serialization/json.hpp" namespace "handystat
     cdef T loads[T](const string) except +
     cdef string dumps[T](const T&)
 
+cdef extern from "statistics_extract.hpp" namespace "handystats::bindings::python::detail":
+    cdef double extract_value(const statistics.data& data) except +
+    cdef double extract_min(const statistics.data& data) except +
+    cdef double extract_max(const statistics.data& data) except +
+    cdef double extract_sum(const statistics.data& data) except +
+    cdef uint64_t extract_count(const statistics.data& data) except +
+    cdef double extract_avg(const statistics.data& data) except +
+    cdef double extract_moving_count(const statistics.data& data) except +
+    cdef double extract_moving_sum(const statistics.data& data) except +
+    cdef double extract_moving_avg(const statistics.data& data) except +
+    cdef double extract_quantile(const statistics.data& data, const double&) except +
+    cdef double extract_entropy(const statistics.data& data) except +
+    cdef double extract_throughput(const statistics.data& data) except +
+    cdef double extract_frequency(const statistics.data& data) except +
+    cdef time_point extract_timestamp(const statistics.data& data) except +
+
 cdef class Data:
     cdef statistics.data *thisptr
 
@@ -42,6 +58,3 @@ cdef class Data:
     cpdef merge(self, Data other)
 
     cpdef truncate(self, Timepoint before = *, Timepoint after = *)
-
-cdef class Statistics:
-    cdef statistics *thisptr

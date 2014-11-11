@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 #include <string>
-#include <exception>
+#include <stdexcept>
 #include <tuple>
 #include <memory>
 
@@ -31,15 +31,18 @@ struct statistics {
 	// histogram
 	typedef std::vector<bin_type> histogram_type;
 
+	// underlying statistics data
+	class data;
+
 	typedef std::logic_error invalid_tag_error;
 
 	// quantile extractor
 	// result of statistics::get<tag::quantile>
 	struct quantile_extractor {
-		quantile_extractor(const statistics* const = nullptr);
+		quantile_extractor(const statistics::data* const = nullptr);
 		double at(const double& probability) const;
 	private:
-		const statistics* const m_statistics;
+		const statistics::data* const m_data;
 	};
 	friend struct quantile_extractor;
 
@@ -94,7 +97,7 @@ struct statistics {
 		, enable_if_eq<Tag, tag::timestamp, time_point>
 	{};
 
-	// statistics is enabled from configuration
+	// statistic is enabled from configuration
 	// but could also be computed due to data dependency
 	bool enabled(const tag::type& t) const HANDYSTATS_NOEXCEPT;
 	bool computed(const tag::type& t) const HANDYSTATS_NOEXCEPT;
@@ -105,6 +108,7 @@ struct statistics {
 	statistics(const config::statistics& opts = config::statistics());
 	statistics(statistics&&);
 	statistics(const statistics&);
+	statistics(const data&);
 
 	// Dtor
 	~statistics();
@@ -117,26 +121,12 @@ struct statistics {
 	void update(const value_type& value, const time_point& timestamp = clock::now());
 	void update_time(const time_point& timestamp = clock::now());
 
-	// Depricated iface, use get<tag>
-	value_type value() const;
-	value_type min() const;
-	value_type max() const;
-	value_type sum() const;
-	size_t count() const;
-	double avg() const;
-	double moving_count() const;
-	double moving_sum() const;
-	double moving_avg() const;
-	histogram_type histogram() const;
-	double quantile(const double& probability) const;
-	time_point timestamp() const;
-
 	// Method will throw if statistics tag is not computed
 	template <tag::type Tag>
 	typename result_type<Tag>::type
 	get() const
 	{
-		return get_impl<Tag>();
+		return get_impl<Tag>(*m_data);
 	}
 
 	// Method will not throw if statistics tag is not computed
@@ -150,22 +140,19 @@ struct statistics {
 		const HANDYSTATS_NOEXCEPT
 	{
 		try {
-			return get_impl<Tag>();
+			return get_impl<Tag>(*m_data);
 		}
 		catch (const invalid_tag_error&) {
 			return default_value;
 		}
 	}
 
-	config::statistics m_config;
-
-	class data;
-	statistics(const data&);
-
-	std::unique_ptr<data> m_data;
-
 	template <tag::type Tag>
-	typename result_type<Tag>::type get_impl() const;
+	static
+	typename result_type<Tag>::type get_impl(const data&);
+
+	config::statistics m_config;
+	std::unique_ptr<data> m_data;
 };
 
 } // namespace handystats

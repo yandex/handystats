@@ -28,6 +28,8 @@ struct statistics::data {
 
 	void fulfill_dependencies();
 
+	bool computed(const tag::type& t) const HANDYSTATS_NOEXCEPT;
+
 	value_type m_value;
 	value_type m_min;
 	value_type m_max;

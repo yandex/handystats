@@ -53,7 +53,6 @@ ADD_CUSTOM_TARGET (bindings_python
 		--verbose
 	COMMAND ${PYTHON_EXECUTABLE} setup.py clean
 		--build-lib ${CMAKE_CURRENT_BINARY_DIR}
-		--force
 		--verbose
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	)

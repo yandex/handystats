@@ -44,7 +44,7 @@ BuildRequires: cmake
 %build
 # libhandystats
 cd %{_builddir}/%{name}-%{version}
-%{__cmake} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWITH_TESTS=ON
+%{__cmake} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWITH_TESTS=ON -DWITH_PYTHON=OFF -DWITH_UTILS=OFF -DWITH_BENCHMARKS=OFF
 make %{?_smp_mflags} -j $(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
 # python bindings

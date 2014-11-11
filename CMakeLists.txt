@@ -10,11 +10,11 @@ STRING (REGEX MATCH "(^[0-9]+)" HANDYSTATS_SOVERSION "${HANDYSTATS_VERSION}")
 # Options
 OPTION (WITH_TESTS "Build tests" ON)
 
-OPTION (WITH_PYTHON "Build python bindings" OFF)
+OPTION (WITH_PYTHON "Build python bindings" ON)
 
-OPTION (WITH_UTILS "Build utilities" OFF)
+OPTION (WITH_UTILS "Build utilities" ON)
 
-OPTION (WITH_BENCHMARKS "Build benchmarks" OFF)
+OPTION (WITH_BENCHMARKS "Build benchmarks" ON)
 
 # Build with debug info
 IF (NOT CMAKE_BUILD_TYPE)

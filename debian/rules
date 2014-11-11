@@ -18,6 +18,9 @@ VERSION = $(shell lsb_release -r | cut -f2 | cut -d'.' -f1)
 LIBHANDYSTATS_CMAKE_EXTRA_FLAGS := \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	-DWITH_TESTS=ON \
+	-DWITH_PYTHON=OFF \
+	-DWITH_UTILS=OFF \
+	-DWITH_BENCHMARKS=OFF
 
 
 ### LIBHANDYSTATS ###

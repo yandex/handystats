@@ -1,7 +1,8 @@
 #!/bin/sh
 
 handystats_config="{
-	\"enabled\": true,
+	\"enable\": true,
+	\"dump-interval\": 500,
 	\"defaults\": {
 		\"moving-interval\": 1000,
 		\"histogram-bins\": 20,
@@ -14,6 +15,9 @@ handystats_config="{
 		\"stats\": [\"value\", \"moving-avg\"]
 	},
 	\"timer\": {
+		\"stats\": [\"moving-avg\"]
+	},
+	\"load_test.timer.*\": {
 		\"stats\": [\"moving-avg\", \"quantile\", \"frequency\"]
 	}
 }"

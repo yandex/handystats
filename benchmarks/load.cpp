@@ -186,7 +186,10 @@ int main(int argc, char** argv) {
 	}
 
 	if (vm.count("handystats-config")) {
-		HANDY_CONFIG_JSON(vm["handystats-config"].as<std::string>().c_str());
+		if (!HANDY_CONFIG_JSON(vm["handystats-config"].as<std::string>().c_str())) {
+			std::cerr << HANDY_CONFIG_ERROR() << std::endl;
+			return 1;
+		}
 	}
 
 	output_interval = std::chrono::milliseconds(vm["output-interval"].as<uint64_t>());

@@ -35,55 +35,49 @@ cdef class Data:
         cdef string s = dumps[statistics.data](deref(self.thisptr))
         return (<bytes>s).decode('utf-8')
 
-cdef class Statistics:
-    def __cinit__(self):
-        self.thisptr = new statistics()
-
-    def __dealloc__(self):
-        del self.thisptr
-
-    @staticmethod
-    def from_data(Data data):
-        cdef Statistics stats
-        stats = Statistics()
-        stats.thisptr[0] = statistics(deref(data.thisptr))
-
-        return stats
-
     def value(self):
-        return self.thisptr.value()
+        return extract_value(deref(self.thisptr))
 
     def min(self):
-        return self.thisptr.min()
+        return extract_min(deref(self.thisptr))
 
     def max(self):
-        return self.thisptr.max()
+        return extract_max(deref(self.thisptr))
 
     def sum(self):
-        return self.thisptr.sum()
+        return extract_sum(deref(self.thisptr))
 
     def count(self):
-        return self.thisptr.count()
+        return extract_count(deref(self.thisptr))
 
     def avg(self):
-        return self.thisptr.avg()
+        return extract_avg(deref(self.thisptr))
 
     def moving_count(self):
-        return self.thisptr.moving_count()
+        return extract_moving_count(deref(self.thisptr))
 
     def moving_sum(self):
-        return self.thisptr.moving_sum()
+        return extract_moving_sum(deref(self.thisptr))
 
     def moving_avg(self):
-        return self.thisptr.moving_avg()
+        return extract_moving_avg(deref(self.thisptr))
 
     def quantile(self, double probability):
-        return self.thisptr.quantile(probability)
+        return extract_quantile(deref(self.thisptr), probability)
+
+    def entropy(self):
+        return extract_entropy(deref(self.thisptr))
+
+    def throughput(self):
+        return extract_throughput(deref(self.thisptr))
+
+    def frequency(self):
+        return extract_frequency(deref(self.thisptr))
 
     def timestamp(self):
         cdef Timepoint ts
         ts = Timepoint()
 
-        ts.thisptr[0] = self.thisptr.timestamp()
+        ts.thisptr[0] = extract_timestamp(deref(self.thisptr))
 
         return ts

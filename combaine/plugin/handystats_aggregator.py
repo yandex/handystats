@@ -4,7 +4,7 @@
 import json
 
 from handystats.chrono import Timepoint
-from handystats.statistics import Statistics, Data
+from handystats.statistics import Data
 
 class Handystats(object):
     def __init__(self, config):
@@ -16,14 +16,13 @@ class Handystats(object):
         self.metric_name = self.config['metric']
         self.stat = self.config['stat']
 
-    def aggregate_host(self, payload):
+    def aggregate_host(self, payload, prevtime, currtime):
         dump_timestamp, dump_str = payload.split(' ', 1)
 
         dump_timestamp = int(dump_timestamp) / 1000
         dump = json.loads(dump_str)
 
-        # NOTE: Use 'period' config option until time frame is passed
-        query_interval = self.config['period']
+        query_interval = currtime - prevtime
 
         if self.metric_name not in dump:
             raise RuntimeError("'%s' metric is not found" % self.metric_name)
@@ -53,43 +52,50 @@ class Handystats(object):
             # NOTE: return 0 instead?
             raise RuntimeError("No data for metric '%s'" % self.metric_name)
 
-        stats = Statistics.from_data(merged_data)
-
         if self.stat == 'value':
-            return stats.value()
+            return merged_data.value()
 
         elif self.stat == 'min':
-            return stats.min()
+            return merged_data.min()
 
         elif self.stat == 'max':
-            return stats.max()
+            return merged_data.max()
 
         elif self.stat == 'sum':
-            return stats.sum()
+            return merged_data.sum()
 
         elif self.stat == 'count':
-            return stats.count()
+            return merged_data.count()
 
         elif self.stat == 'avg':
-            return stats.avg()
+            return merged_data.avg()
 
         elif self.stat == 'moving-count':
-            return stats.moving_count()
+            return merged_data.moving_count()
 
         elif self.stat == 'moving-sum':
-            return stats.moving_sum()
+            return merged_data.moving_sum()
 
         elif self.stat == 'moving-avg':
-            return stats.moving_avg()
+            return merged_data.moving_avg()
 
         elif self.stat == 'quantile':
-            probs = list(self.config.get('probs', [75, 90, 93, 94, 95, 96, 97, 98, 99]))
+            levels = list(self.config.get('levels', [75, 90, 93, 94, 95, 96, 97, 98, 99]))
 
             res = []
-            for prob in probs:
-                res.append(stats.quantile(prob / 100.0))
+            for level in levels:
+                res.append(merged_data.quantile(level / 100.0))
 
             return res
+
+        elif self.stat == 'entropy':
+            return merged_data.entropy()
+
+        elif self.stat == 'throughput':
+            return merged_data.throughput()
+
+        elif self.stat == 'frequency':
+            return merged_data.frequency()
 
         else:
             raise NotImplementedError("'%s' statistic is not implemented" % self.stat)

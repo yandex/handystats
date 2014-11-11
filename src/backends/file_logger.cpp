@@ -1,6 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
 #include <chrono>
+#include <sstream>
 
 #include <handystats/experimental/backends/file_logger.hpp>
 #include <handystats/detail/serialization/rapidjson.hpp>
@@ -8,6 +9,8 @@
 #include "rapidjson/document.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/writer.h"
+
+#include "core_impl.hpp"
 
 namespace handystats { namespace backends {
 
@@ -33,6 +36,8 @@ void file_logger::stop() {
 		m_file.flush();
 		m_file.close();
 	}
+
+	m_error.clear();
 }
 
 static
@@ -92,22 +97,36 @@ void run_file_logger(std::atomic<bool>& running_flag, std::ofstream& log, const 
 bool file_logger::run() {
 	if (m_running.load()) {
 		// already running
+		m_error = "file_logger is already running";
 		return false;
 	}
 
 	if (m_period.count() <= 0) {
+		std::ostringstream err;
+		err << "invalid period value: " << m_period.count();
+		m_error = err.str();
+		return false;
+	}
+
+	if (!core || !core->m_enabled_flag.load()) {
+		m_error = "handystats processing core is not active";
 		return false;
 	}
 
 	m_file.open(m_filename.c_str(), std::ofstream::out | std::ofstream::app);
 
 	if (m_file.fail()) {
+		std::ostringstream err;
+		err << "unable to open log file: '" << m_filename << "'";
+		m_error = err.str();
 		return false;
 	}
 
 	m_running.store(true);
 
 	m_thread = std::thread(run_file_logger, std::ref(m_running), std::ref(m_file), m_period);
+
+	m_error.clear();
 
 	return true;
 }

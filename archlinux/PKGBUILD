@@ -20,7 +20,7 @@ build() {
 
 	# libhandystats
 	cd $srcdir/$pkgbase-$pkgver
-	cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWITH_TESTS=ON
+	cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DWITH_TESTS=ON -DWITH_PYTHON=OFF -DWITH_UTILS=OFF -DWITH_BENCHMARKS=OFF
 	make -j $(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)
 
 	# python bindings

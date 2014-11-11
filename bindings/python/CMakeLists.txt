@@ -34,6 +34,7 @@ FOREACH (CYTHON_SRC_FILE IN LISTS CYTHON_SRC_FILES)
 			--include-dir "${HANDYSTATS_INCLUDE_DIR}"
 			--cplus
 			--output-file "handystats/${CYTHON_MODULE_NAME}.cpp"
+			--force
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 		)
 	ADD_DEPENDENCIES (generate_bindings_python generate_bindings_python_module_${CYTHON_MODULE_NAME})
@@ -41,16 +42,19 @@ ENDFOREACH ()
 
 ADD_CUSTOM_TARGET (bindings_python
 	COMMAND ${PYTHON_EXECUTABLE} setup.py build_py
-	--build-lib ${CMAKE_CURRENT_BINARY_DIR}
-	--verbose
+		--build-lib ${CMAKE_CURRENT_BINARY_DIR}
+		--force
+		--verbose
 	COMMAND ${PYTHON_EXECUTABLE} setup.py build_ext
-	--build-lib ${CMAKE_CURRENT_BINARY_DIR}
-	--include-dirs "${HANDYSTATS_INCLUDE_DIR}"
-	--library-dirs "${HANDYSTATS_LIBRARY_OUTPUT_DIR}"
-	--verbose
+		--build-lib ${CMAKE_CURRENT_BINARY_DIR}
+		--include-dirs "${HANDYSTATS_INCLUDE_DIR}"
+		--library-dirs "${HANDYSTATS_LIBRARY_OUTPUT_DIR}"
+		--force
+		--verbose
 	COMMAND ${PYTHON_EXECUTABLE} setup.py clean
-	--build-lib ${CMAKE_CURRENT_BINARY_DIR}
-	--verbose
+		--build-lib ${CMAKE_CURRENT_BINARY_DIR}
+		--force
+		--verbose
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	)
 

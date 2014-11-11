@@ -210,18 +210,15 @@ int main(int argc, char** argv) {
 			}
 		);
 
-	handystats::backends::file_logger* file_logger = nullptr;
+	std::unique_ptr<handystats::backends::file_logger> file_logger;
 	if (vm.count("log-file") && vm.count("log-period")) {
 		std::string log_filename = vm["log-file"].as<std::string>();
 		uint64_t log_period_ms = vm["log-period"].as<uint64_t>();
 		if (log_period_ms > 0) {
 			const auto& log_period = handystats::chrono::milliseconds(log_period_ms);
-			file_logger = new handystats::backends::file_logger(log_filename, log_period);
+			file_logger.reset(new handystats::backends::file_logger(log_filename, log_period));
 			if (!file_logger->run()) {
-				std::cerr << "Unable to start file_logger with"
-					<< " log file (" << log_filename << ")"
-					<< " and period (" << log_period_ms << ", ms)"
-					<< std::endl;
+				std::cerr << "Unable to start file_logger: " << file_logger->m_error << std::endl;
 				HANDY_FINALIZE();
 				return 1;
 			}

@@ -26,6 +26,8 @@ struct file_logger {
 
 	std::atomic<bool> m_running;
 	std::thread m_thread;
+
+	std::string m_error;
 };
 
 }} // namespace handystats::backends

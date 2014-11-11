@@ -99,7 +99,7 @@ bool file_logger::run() {
 		return false;
 	}
 
-	m_file.open(m_filename.c_str());
+	m_file.open(m_filename.c_str(), std::ofstream::out | std::ofstream::app);
 
 	if (m_file.fail()) {
 		return false;

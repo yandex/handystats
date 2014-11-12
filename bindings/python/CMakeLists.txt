@@ -2,8 +2,14 @@ CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
 PROJECT (HANDYSTATS_PYTHON)
 
-FIND_PACKAGE (PythonInterp 2.6 REQUIRED)
-FIND_PACKAGE (PythonLibs 2.6 REQUIRED)
+FIND_PACKAGE (PythonInterp 2.6)
+FIND_PACKAGE (PythonLibs 2.6)
+
+IF (NOT PYTHONLIBS_FOUND OR NOT PYTHONINTERP_FOUND)
+	MESSAGE (WARNING "PythonLibs and/or PythonInterp >= 2.6 are not found (required for python bindings")
+	RETURN ()
+ENDIF ()
+
 EXECUTE_PROCESS (COMMAND
 	${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())"
 	OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
@@ -17,7 +23,8 @@ FIND_PROGRAM (CYTHON_EXECUTABLE
 	NAMES cython cython2
 	PATHS /usr/bin)
 IF (CYTHON_EXECUTABLE-NOTFOUND)
-	MESSAGE (FATAL_ERROR "Cython executable not found.")
+	MESSAGE (WARNING "Cython executable not found (required for python bindings generation)")
+	RETURN ()
 ELSE ()
 	MESSAGE (STATUS "Cython executable found: ${CYTHON_EXECUTABLE}")
 ENDIF ()

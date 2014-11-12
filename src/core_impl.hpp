@@ -20,8 +20,8 @@ namespace handystats {
 
 struct core_t {
 	struct stats {
-		statistics::data process_time;
-		statistics::data dump_time;
+		statistics process_time;
+		statistics dump_time;
 
 		stats();
 		void update(const chrono::time_point&);

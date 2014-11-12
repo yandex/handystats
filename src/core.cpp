@@ -25,7 +25,7 @@ core_t::stats::stats() {
 		config.tags = statistics::tag::moving_avg;
 		config.moving_interval = chrono::seconds(1);
 
-		process_time = statistics::data(config);
+		process_time = statistics(config);
 	}
 
 	{
@@ -33,7 +33,7 @@ core_t::stats::stats() {
 		config.tags = statistics::tag::moving_avg;
 		config.moving_interval = chrono::seconds(1);
 
-		dump_time = statistics::data(config);
+		dump_time = statistics(config);
 	}
 }
 

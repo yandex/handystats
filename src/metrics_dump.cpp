@@ -72,7 +72,7 @@ create_dump(core_t& core, const chrono::time_point& current_timestamp)
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.core.process_time",
-						statistics(core.m_stats.process_time)
+						core.m_stats.process_time
 						)
 					);
 		}
@@ -82,21 +82,21 @@ create_dump(core_t& core, const chrono::time_point& current_timestamp)
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.size",
-						statistics(core.m_channel.m_stats.size)
+						core.m_channel.m_stats.size
 						)
 					);
 
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.message_wait_time",
-						statistics(core.m_channel.m_stats.message_wait_time)
+						core.m_channel.m_stats.message_wait_time
 						)
 					);
 
 			metrics_dump.insert(
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.pop_count",
-						statistics(core.m_channel.m_stats.pop_count)
+						core.m_channel.m_stats.pop_count
 						)
 					);
 		}
@@ -144,7 +144,7 @@ create_dump(core_t& core, const chrono::time_point& current_timestamp)
 		metrics_dump.insert(
 				std::pair<std::string, statistics>(
 					"handystats.core.dump_time",
-					statistics(core.m_stats.dump_time)
+					core.m_stats.dump_time
 				)
 			);
 	}

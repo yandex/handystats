@@ -91,7 +91,7 @@ statistics::data::data(const config::statistics& config)
 void statistics::data::reset() {
 	m_value = value_type(0);
 	m_min = std::numeric_limits<value_type>::max();
-	m_max = std::numeric_limits<value_type>::min();
+	m_max = -std::numeric_limits<value_type>::max();
 	m_sum = value_type(0);
 	m_count = 0;
 	m_moving_count = 0.0;

@@ -13,7 +13,7 @@ message_queue::stats::stats() {
 		config.tags = statistics::tag::value | statistics::tag::max | statistics::tag::moving_avg;
 		config.moving_interval = chrono::seconds(1);
 
-		size = statistics::data(config);
+		size = statistics(config);
 
 		size.update(0);
 	}
@@ -23,7 +23,7 @@ message_queue::stats::stats() {
 		config.tags = statistics::tag::moving_avg;
 		config.moving_interval = chrono::seconds(1);
 
-		message_wait_time = statistics::data(config);
+		message_wait_time = statistics(config);
 	}
 
 	{
@@ -31,7 +31,7 @@ message_queue::stats::stats() {
 		config.tags = statistics::tag::throughput;
 		config.moving_interval = chrono::seconds(1);
 
-		pop_count = statistics::data(config);
+		pop_count = statistics(config);
 	}
 }
 

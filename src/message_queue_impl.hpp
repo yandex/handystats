@@ -26,9 +26,9 @@ struct message_queue
 	};
 
 	struct stats {
-		statistics::data size;
-		statistics::data message_wait_time;
-		statistics::data pop_count;
+		statistics size;
+		statistics message_wait_time;
+		statistics pop_count;
 
 		stats();
 		void update(const chrono::time_point&);

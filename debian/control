@@ -88,18 +88,3 @@ Depends:
 Description: C++ library to collect runtime statistics - Utilities
  Handystats is C++ library for collecting user-defined
  in-process runtime statistics with low overhead.
-
-Package: combaine-plugin-handystats
-Section: utils
-Architecture: any
-Depends:
-	${shlibs:Depends},
-	${misc:Depends},
-	python (>= 2.6),
-	python-handystats (= ${binary:Version}),
-	combaine-core (>= 0.6.5.6),
-Description: Plugin for Combaine to use handystats aggregation
- Handystats is C++ library for collecting user-defined
- in-process runtime statistics with low overhead.
- .
- Combaine is distributed fault-tolerant system of data processing based on Cocaine.

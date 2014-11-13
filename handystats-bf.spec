@@ -1,3 +1,14 @@
+# library soname
+%global __soname 2
+
+# python things
+%if 0%{?rhel} && 0%{?rhel} <= 6
+%{!?__python2: %global __python2 /usr/bin/python2}
+%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
+%{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%endif
+
+
 Name: handystats
 Version: 2.0.0
 Release: 1%{?dist}
@@ -6,10 +17,6 @@ License: LGPLv3+
 URL: https://github.com/shindo/handystats
 Source: https://github.com/shindo/handystats/archive/%{version}.tar.gz
 BuildRoot: %{_tmppath}/handystats-%{version}-root
-
-%description
-C++ library for collecting user-defined
-in-process runtime statistics with low overhead.
 
 # Build dependencies
 BuildRequires: boost-devel
@@ -25,15 +32,9 @@ BuildRequires: cmake
 %global __cmake %{cmake}
 %endif
 
-# library soname
-%global __soname 2
-
-# python things
-%if 0%{?rhel} && 0%{?rhel} <= 6
-%{!?__python2: %global __python2 /usr/bin/python2}
-%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-%endif
+%description
+C++ library for collecting user-defined
+in-process runtime statistics with low overhead.
 
 
 %prep

@@ -37,7 +37,7 @@ BuildRequires: cmake
 
 
 %prep
-%setup -q -c -n %{name}-%{version}
+%setup -q
 #%%prep
 
 

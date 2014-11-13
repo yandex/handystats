@@ -107,7 +107,7 @@ clean-handystats-utils:
 	rm -rf ${BUILDDIR}/handystats-utils
 
 
-build %:
+%:
 ifeq ($(VERSION), 10)
 	dh $@
 else
@@ -143,5 +143,3 @@ override_dh_auto_clean: \
 	clean-handystats-utils
 	dh_auto_clean
 	rm -rf ${BUILDDIR}
-
-.PHONY: build

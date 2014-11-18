@@ -438,7 +438,7 @@ struct __pyx_obj_10handystats_6chrono_Timepoint;
 struct __pyx_obj_10handystats_10statistics_Data;
 struct __pyx_opt_args_10handystats_6chrono_8Duration_count;
 
-/* "handystats/chrono.pxd":78
+/* "handystats/chrono.pxd":95
  *     cdef duration *thisptr
  * 
  *     cpdef int64_t count(self, time_unit unit = *)             # <<<<<<<<<<<<<<
@@ -451,7 +451,7 @@ struct __pyx_opt_args_10handystats_6chrono_8Duration_count {
 };
 struct __pyx_opt_args_10handystats_10statistics_4Data_truncate;
 
-/* "handystats/statistics.pxd":60
+/* "handystats/statistics.pxd":77
  *     cpdef merge(self, Data other)
  * 
  *     cpdef truncate(self, Timepoint before = *, Timepoint after = *)             # <<<<<<<<<<<<<<
@@ -462,7 +462,7 @@ struct __pyx_opt_args_10handystats_10statistics_4Data_truncate {
   struct __pyx_obj_10handystats_6chrono_Timepoint *after;
 };
 
-/* "handystats/chrono.pxd":75
+/* "handystats/chrono.pxd":92
  * 
  * 
  * cdef class Duration:             # <<<<<<<<<<<<<<
@@ -476,7 +476,7 @@ struct __pyx_obj_10handystats_6chrono_Duration {
 };
 
 
-/* "handystats/chrono.pxd":80
+/* "handystats/chrono.pxd":97
  *     cpdef int64_t count(self, time_unit unit = *)
  * 
  * cdef class Timepoint:             # <<<<<<<<<<<<<<
@@ -490,7 +490,7 @@ struct __pyx_obj_10handystats_6chrono_Timepoint {
 };
 
 
-/* "handystats/statistics.pxd":54
+/* "handystats/statistics.pxd":71
  *     cdef time_point extract_timestamp(const statistics.data& data) except +
  * 
  * cdef class Data:             # <<<<<<<<<<<<<<
@@ -505,7 +505,7 @@ struct __pyx_obj_10handystats_10statistics_Data {
 
 
 
-/* "handystats/chrono.pxd":75
+/* "handystats/chrono.pxd":92
  * 
  * 
  * cdef class Duration:             # <<<<<<<<<<<<<<
@@ -519,7 +519,7 @@ struct __pyx_vtabstruct_10handystats_6chrono_Duration {
 static struct __pyx_vtabstruct_10handystats_6chrono_Duration *__pyx_vtabptr_10handystats_6chrono_Duration;
 
 
-/* "handystats/chrono.pxd":80
+/* "handystats/chrono.pxd":97
  *     cpdef int64_t count(self, time_unit unit = *)
  * 
  * cdef class Timepoint:             # <<<<<<<<<<<<<<
@@ -533,7 +533,7 @@ struct __pyx_vtabstruct_10handystats_6chrono_Timepoint {
 static struct __pyx_vtabstruct_10handystats_6chrono_Timepoint *__pyx_vtabptr_10handystats_6chrono_Timepoint;
 
 
-/* "handystats/statistics.pyx":5
+/* "handystats/statistics.pyx":22
  * from cython.operator cimport dereference as deref
  * 
  * cdef class Data:             # <<<<<<<<<<<<<<
@@ -842,7 +842,7 @@ static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_codeobj__3;
 
-/* "handystats/statistics.pyx":6
+/* "handystats/statistics.pyx":23
  * 
  * cdef class Data:
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -871,7 +871,7 @@ static int __pyx_pf_10handystats_10statistics_4Data___cinit__(struct __pyx_obj_1
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "handystats/statistics.pyx":7
+  /* "handystats/statistics.pyx":24
  * cdef class Data:
  *     def __cinit__(self):
  *         self.thisptr = new statistics.data()             # <<<<<<<<<<<<<<
@@ -880,7 +880,7 @@ static int __pyx_pf_10handystats_10statistics_4Data___cinit__(struct __pyx_obj_1
  */
   __pyx_v_self->thisptr = new handystats::statistics::data();
 
-  /* "handystats/statistics.pyx":6
+  /* "handystats/statistics.pyx":23
  * 
  * cdef class Data:
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -894,7 +894,7 @@ static int __pyx_pf_10handystats_10statistics_4Data___cinit__(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":9
+/* "handystats/statistics.pyx":26
  *         self.thisptr = new statistics.data()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -917,7 +917,7 @@ static void __pyx_pf_10handystats_10statistics_4Data_2__dealloc__(struct __pyx_o
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "handystats/statistics.pyx":10
+  /* "handystats/statistics.pyx":27
  * 
  *     def __dealloc__(self):
  *         del self.thisptr             # <<<<<<<<<<<<<<
@@ -926,7 +926,7 @@ static void __pyx_pf_10handystats_10statistics_4Data_2__dealloc__(struct __pyx_o
  */
   delete __pyx_v_self->thisptr;
 
-  /* "handystats/statistics.pyx":9
+  /* "handystats/statistics.pyx":26
  *         self.thisptr = new statistics.data()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -938,7 +938,7 @@ static void __pyx_pf_10handystats_10statistics_4Data_2__dealloc__(struct __pyx_o
   __Pyx_RefNannyFinishContext();
 }
 
-/* "handystats/statistics.pyx":12
+/* "handystats/statistics.pyx":29
  *         del self.thisptr
  * 
  *     cpdef append(self, Data other):             # <<<<<<<<<<<<<<
@@ -963,7 +963,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_append(struct __pyx_obj
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_append); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_append); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_10handystats_10statistics_4Data_5append)) {
       __Pyx_XDECREF(__pyx_r);
@@ -979,16 +979,16 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_append(struct __pyx_obj
         }
       }
       if (!__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_other)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_other)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_2);
       } else {
-        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __Pyx_GIVEREF(__pyx_t_4); __pyx_t_4 = NULL;
         __Pyx_INCREF(((PyObject *)__pyx_v_other));
         PyTuple_SET_ITEM(__pyx_t_5, 0+1, ((PyObject *)__pyx_v_other));
         __Pyx_GIVEREF(((PyObject *)__pyx_v_other));
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
@@ -1001,7 +1001,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_append(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "handystats/statistics.pyx":13
+  /* "handystats/statistics.pyx":30
  * 
  *     cpdef append(self, Data other):
  *         self.thisptr.append(deref(other.thisptr))             # <<<<<<<<<<<<<<
@@ -1010,7 +1010,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_append(struct __pyx_obj
  */
   __pyx_v_self->thisptr->append((*__pyx_v_other->thisptr));
 
-  /* "handystats/statistics.pyx":12
+  /* "handystats/statistics.pyx":29
  *         del self.thisptr
  * 
  *     cpdef append(self, Data other):             # <<<<<<<<<<<<<<
@@ -1044,7 +1044,7 @@ static PyObject *__pyx_pw_10handystats_10statistics_4Data_5append(PyObject *__py
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("append (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_10statistics_Data, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_10statistics_Data, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_10statistics_4Data_4append(((struct __pyx_obj_10handystats_10statistics_Data *)__pyx_v_self), ((struct __pyx_obj_10handystats_10statistics_Data *)__pyx_v_other));
 
   /* function exit code */
@@ -1065,7 +1065,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_4append(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("append", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_10handystats_10statistics_4Data_append(__pyx_v_self, __pyx_v_other, 1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_f_10handystats_10statistics_4Data_append(__pyx_v_self, __pyx_v_other, 1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -1082,7 +1082,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_4append(struct __pyx_o
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":15
+/* "handystats/statistics.pyx":32
  *         self.thisptr.append(deref(other.thisptr))
  * 
  *     cpdef merge(self, Data other):             # <<<<<<<<<<<<<<
@@ -1107,7 +1107,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_merge(struct __pyx_obj_
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_merge); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_merge); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_10handystats_10statistics_4Data_7merge)) {
       __Pyx_XDECREF(__pyx_r);
@@ -1123,16 +1123,16 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_merge(struct __pyx_obj_
         }
       }
       if (!__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_other)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, ((PyObject *)__pyx_v_other)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_2);
       } else {
-        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __Pyx_GIVEREF(__pyx_t_4); __pyx_t_4 = NULL;
         __Pyx_INCREF(((PyObject *)__pyx_v_other));
         PyTuple_SET_ITEM(__pyx_t_5, 0+1, ((PyObject *)__pyx_v_other));
         __Pyx_GIVEREF(((PyObject *)__pyx_v_other));
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       }
@@ -1145,7 +1145,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_merge(struct __pyx_obj_
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "handystats/statistics.pyx":16
+  /* "handystats/statistics.pyx":33
  * 
  *     cpdef merge(self, Data other):
  *         self.thisptr.merge(deref(other.thisptr))             # <<<<<<<<<<<<<<
@@ -1154,7 +1154,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_merge(struct __pyx_obj_
  */
   __pyx_v_self->thisptr->merge((*__pyx_v_other->thisptr));
 
-  /* "handystats/statistics.pyx":15
+  /* "handystats/statistics.pyx":32
  *         self.thisptr.append(deref(other.thisptr))
  * 
  *     cpdef merge(self, Data other):             # <<<<<<<<<<<<<<
@@ -1188,7 +1188,7 @@ static PyObject *__pyx_pw_10handystats_10statistics_4Data_7merge(PyObject *__pyx
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("merge (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_10statistics_Data, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_10statistics_Data, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_10statistics_4Data_6merge(((struct __pyx_obj_10handystats_10statistics_Data *)__pyx_v_self), ((struct __pyx_obj_10handystats_10statistics_Data *)__pyx_v_other));
 
   /* function exit code */
@@ -1209,7 +1209,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_6merge(struct __pyx_ob
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("merge", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_10handystats_10statistics_4Data_merge(__pyx_v_self, __pyx_v_other, 1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_f_10handystats_10statistics_4Data_merge(__pyx_v_self, __pyx_v_other, 1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -1226,7 +1226,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_6merge(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":18
+/* "handystats/statistics.pyx":35
  *         self.thisptr.merge(deref(other.thisptr))
  * 
  *     cpdef truncate(self, Timepoint before = None, Timepoint after = None):             # <<<<<<<<<<<<<<
@@ -1264,7 +1264,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_truncate(struct __pyx_o
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_truncate); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_truncate); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_10handystats_10statistics_4Data_9truncate)) {
       __Pyx_XDECREF(__pyx_r);
@@ -1281,7 +1281,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_truncate(struct __pyx_o
           __pyx_t_5 = 1;
         }
       }
-      __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       if (__pyx_t_4) {
         PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __Pyx_GIVEREF(__pyx_t_4); __pyx_t_4 = NULL;
@@ -1292,7 +1292,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_truncate(struct __pyx_o
       __Pyx_INCREF(((PyObject *)__pyx_v_after));
       PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, ((PyObject *)__pyx_v_after));
       __Pyx_GIVEREF(((PyObject *)__pyx_v_after));
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -1304,7 +1304,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_truncate(struct __pyx_o
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "handystats/statistics.pyx":19
+  /* "handystats/statistics.pyx":36
  * 
  *     cpdef truncate(self, Timepoint before = None, Timepoint after = None):
  *         if before is not None:             # <<<<<<<<<<<<<<
@@ -1315,7 +1315,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_truncate(struct __pyx_o
   __pyx_t_8 = (__pyx_t_7 != 0);
   if (__pyx_t_8) {
 
-    /* "handystats/statistics.pyx":20
+    /* "handystats/statistics.pyx":37
  *     cpdef truncate(self, Timepoint before = None, Timepoint after = None):
  *         if before is not None:
  *             self.thisptr.truncate_before(deref(before.thisptr))             # <<<<<<<<<<<<<<
@@ -1327,7 +1327,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_truncate(struct __pyx_o
   }
   __pyx_L3:;
 
-  /* "handystats/statistics.pyx":21
+  /* "handystats/statistics.pyx":38
  *         if before is not None:
  *             self.thisptr.truncate_before(deref(before.thisptr))
  *         if after is not None:             # <<<<<<<<<<<<<<
@@ -1338,7 +1338,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_truncate(struct __pyx_o
   __pyx_t_7 = (__pyx_t_8 != 0);
   if (__pyx_t_7) {
 
-    /* "handystats/statistics.pyx":22
+    /* "handystats/statistics.pyx":39
  *             self.thisptr.truncate_before(deref(before.thisptr))
  *         if after is not None:
  *             self.thisptr.truncate_after(deref(after.thisptr))             # <<<<<<<<<<<<<<
@@ -1350,7 +1350,7 @@ static PyObject *__pyx_f_10handystats_10statistics_4Data_truncate(struct __pyx_o
   }
   __pyx_L4:;
 
-  /* "handystats/statistics.pyx":18
+  /* "handystats/statistics.pyx":35
  *         self.thisptr.merge(deref(other.thisptr))
  * 
  *     cpdef truncate(self, Timepoint before = None, Timepoint after = None):             # <<<<<<<<<<<<<<
@@ -1414,7 +1414,7 @@ static PyObject *__pyx_pw_10handystats_10statistics_4Data_9truncate(PyObject *__
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "truncate") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "truncate") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -1429,14 +1429,14 @@ static PyObject *__pyx_pw_10handystats_10statistics_4Data_9truncate(PyObject *__
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("truncate", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("truncate", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("handystats.statistics.Data.truncate", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_before), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "before", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_after), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "after", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_before), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "before", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_after), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "after", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_10statistics_4Data_8truncate(((struct __pyx_obj_10handystats_10statistics_Data *)__pyx_v_self), __pyx_v_before, __pyx_v_after);
 
   /* function exit code */
@@ -1461,7 +1461,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_8truncate(struct __pyx
   __pyx_t_2.__pyx_n = 2;
   __pyx_t_2.before = __pyx_v_before;
   __pyx_t_2.after = __pyx_v_after;
-  __pyx_t_1 = __pyx_vtabptr_10handystats_10statistics_Data->truncate(__pyx_v_self, 1, &__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_vtabptr_10handystats_10statistics_Data->truncate(__pyx_v_self, 1, &__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -1478,7 +1478,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_8truncate(struct __pyx
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":25
+/* "handystats/statistics.pyx":42
  * 
  *     @staticmethod
  *     def from_json(json_object):             # <<<<<<<<<<<<<<
@@ -1515,7 +1515,7 @@ static PyObject *__pyx_pw_10handystats_10statistics_4Data_11from_json(CYTHON_UNU
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "from_json") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "from_json") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -1526,7 +1526,7 @@ static PyObject *__pyx_pw_10handystats_10statistics_4Data_11from_json(CYTHON_UNU
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("from_json", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("from_json", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("handystats.statistics.Data.from_json", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1553,35 +1553,35 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_10from_json(PyObject *
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("from_json", 0);
 
-  /* "handystats/statistics.pyx":26
+  /* "handystats/statistics.pyx":43
  *     @staticmethod
  *     def from_json(json_object):
  *         cdef string s = json_object.encode('utf-8')             # <<<<<<<<<<<<<<
  * 
  *         cdef Data data
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_json_object, __pyx_n_s_encode); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_json_object, __pyx_n_s_encode); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_3 = __pyx_convert_string_from_py_std__string(__pyx_t_2); if (unlikely(PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __pyx_convert_string_from_py_std__string(__pyx_t_2); if (unlikely(PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_s = __pyx_t_3;
 
-  /* "handystats/statistics.pyx":29
+  /* "handystats/statistics.pyx":46
  * 
  *         cdef Data data
  *         data = Data()             # <<<<<<<<<<<<<<
  *         data.thisptr[0] = loads[statistics.data](s)
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_10statistics_Data)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_10statistics_Data)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 46; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_data = ((struct __pyx_obj_10handystats_10statistics_Data *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "handystats/statistics.pyx":30
+  /* "handystats/statistics.pyx":47
  *         cdef Data data
  *         data = Data()
  *         data.thisptr[0] = loads[statistics.data](s)             # <<<<<<<<<<<<<<
@@ -1592,11 +1592,11 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_10from_json(PyObject *
     __pyx_t_4 = handystats::serialization::json::loads<handystats::statistics::data>(__pyx_v_s);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   (__pyx_v_data->thisptr[0]) = __pyx_t_4;
 
-  /* "handystats/statistics.pyx":32
+  /* "handystats/statistics.pyx":49
  *         data.thisptr[0] = loads[statistics.data](s)
  * 
  *         return data             # <<<<<<<<<<<<<<
@@ -1608,7 +1608,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_10from_json(PyObject *
   __pyx_r = ((PyObject *)__pyx_v_data);
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":25
+  /* "handystats/statistics.pyx":42
  * 
  *     @staticmethod
  *     def from_json(json_object):             # <<<<<<<<<<<<<<
@@ -1629,7 +1629,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_10from_json(PyObject *
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":34
+/* "handystats/statistics.pyx":51
  *         return data
  * 
  *     def to_json(self):             # <<<<<<<<<<<<<<
@@ -1661,7 +1661,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_12to_json(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("to_json", 0);
 
-  /* "handystats/statistics.pyx":35
+  /* "handystats/statistics.pyx":52
  * 
  *     def to_json(self):
  *         cdef string s = dumps[statistics.data](deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -1670,7 +1670,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_12to_json(struct __pyx
  */
   __pyx_v_s = handystats::serialization::json::dumps<handystats::statistics::data>((*__pyx_v_self->thisptr));
 
-  /* "handystats/statistics.pyx":36
+  /* "handystats/statistics.pyx":53
  *     def to_json(self):
  *         cdef string s = dumps[statistics.data](deref(self.thisptr))
  *         return (<bytes>s).decode('utf-8')             # <<<<<<<<<<<<<<
@@ -1678,20 +1678,20 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_12to_json(struct __pyx
  *     def value(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_convert_PyBytes_string_to_py_std__string(__pyx_v_s); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __pyx_convert_PyBytes_string_to_py_std__string(__pyx_v_s); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   if (unlikely(__pyx_t_1 == Py_None)) {
     PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%s'", "decode");
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = __Pyx_decode_bytes(((PyObject*)__pyx_t_1), 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_decode_bytes(((PyObject*)__pyx_t_1), 0, PY_SSIZE_T_MAX, NULL, NULL, PyUnicode_DecodeUTF8); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 53; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":34
+  /* "handystats/statistics.pyx":51
  *         return data
  * 
  *     def to_json(self):             # <<<<<<<<<<<<<<
@@ -1711,7 +1711,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_12to_json(struct __pyx
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":38
+/* "handystats/statistics.pyx":55
  *         return (<bytes>s).decode('utf-8')
  * 
  *     def value(self):             # <<<<<<<<<<<<<<
@@ -1742,7 +1742,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_14value(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("value", 0);
 
-  /* "handystats/statistics.pyx":39
+  /* "handystats/statistics.pyx":56
  * 
  *     def value(self):
  *         return extract_value(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -1754,15 +1754,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_14value(struct __pyx_o
     __pyx_t_1 = handystats::bindings::python::detail::extract_value((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":38
+  /* "handystats/statistics.pyx":55
  *         return (<bytes>s).decode('utf-8')
  * 
  *     def value(self):             # <<<<<<<<<<<<<<
@@ -1781,7 +1781,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_14value(struct __pyx_o
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":41
+/* "handystats/statistics.pyx":58
  *         return extract_value(deref(self.thisptr))
  * 
  *     def min(self):             # <<<<<<<<<<<<<<
@@ -1812,7 +1812,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_16min(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("min", 0);
 
-  /* "handystats/statistics.pyx":42
+  /* "handystats/statistics.pyx":59
  * 
  *     def min(self):
  *         return extract_min(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -1824,15 +1824,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_16min(struct __pyx_obj
     __pyx_t_1 = handystats::bindings::python::detail::extract_min((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 59; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":41
+  /* "handystats/statistics.pyx":58
  *         return extract_value(deref(self.thisptr))
  * 
  *     def min(self):             # <<<<<<<<<<<<<<
@@ -1851,7 +1851,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_16min(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":44
+/* "handystats/statistics.pyx":61
  *         return extract_min(deref(self.thisptr))
  * 
  *     def max(self):             # <<<<<<<<<<<<<<
@@ -1882,7 +1882,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_18max(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("max", 0);
 
-  /* "handystats/statistics.pyx":45
+  /* "handystats/statistics.pyx":62
  * 
  *     def max(self):
  *         return extract_max(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -1894,15 +1894,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_18max(struct __pyx_obj
     __pyx_t_1 = handystats::bindings::python::detail::extract_max((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 62; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 45; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 62; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":44
+  /* "handystats/statistics.pyx":61
  *         return extract_min(deref(self.thisptr))
  * 
  *     def max(self):             # <<<<<<<<<<<<<<
@@ -1921,7 +1921,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_18max(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":47
+/* "handystats/statistics.pyx":64
  *         return extract_max(deref(self.thisptr))
  * 
  *     def sum(self):             # <<<<<<<<<<<<<<
@@ -1952,7 +1952,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_20sum(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("sum", 0);
 
-  /* "handystats/statistics.pyx":48
+  /* "handystats/statistics.pyx":65
  * 
  *     def sum(self):
  *         return extract_sum(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -1964,15 +1964,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_20sum(struct __pyx_obj
     __pyx_t_1 = handystats::bindings::python::detail::extract_sum((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 65; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 65; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":47
+  /* "handystats/statistics.pyx":64
  *         return extract_max(deref(self.thisptr))
  * 
  *     def sum(self):             # <<<<<<<<<<<<<<
@@ -1991,7 +1991,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_20sum(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":50
+/* "handystats/statistics.pyx":67
  *         return extract_sum(deref(self.thisptr))
  * 
  *     def count(self):             # <<<<<<<<<<<<<<
@@ -2022,7 +2022,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_22count(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("count", 0);
 
-  /* "handystats/statistics.pyx":51
+  /* "handystats/statistics.pyx":68
  * 
  *     def count(self):
  *         return extract_count(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -2034,15 +2034,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_22count(struct __pyx_o
     __pyx_t_1 = handystats::bindings::python::detail::extract_count((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 51; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = __Pyx_PyInt_From_uint64_t(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 51; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyInt_From_uint64_t(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 68; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":50
+  /* "handystats/statistics.pyx":67
  *         return extract_sum(deref(self.thisptr))
  * 
  *     def count(self):             # <<<<<<<<<<<<<<
@@ -2061,7 +2061,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_22count(struct __pyx_o
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":53
+/* "handystats/statistics.pyx":70
  *         return extract_count(deref(self.thisptr))
  * 
  *     def avg(self):             # <<<<<<<<<<<<<<
@@ -2092,7 +2092,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_24avg(struct __pyx_obj
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("avg", 0);
 
-  /* "handystats/statistics.pyx":54
+  /* "handystats/statistics.pyx":71
  * 
  *     def avg(self):
  *         return extract_avg(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -2104,15 +2104,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_24avg(struct __pyx_obj
     __pyx_t_1 = handystats::bindings::python::detail::extract_avg((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 54; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":53
+  /* "handystats/statistics.pyx":70
  *         return extract_count(deref(self.thisptr))
  * 
  *     def avg(self):             # <<<<<<<<<<<<<<
@@ -2131,7 +2131,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_24avg(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":56
+/* "handystats/statistics.pyx":73
  *         return extract_avg(deref(self.thisptr))
  * 
  *     def moving_count(self):             # <<<<<<<<<<<<<<
@@ -2162,7 +2162,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_26moving_count(struct 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("moving_count", 0);
 
-  /* "handystats/statistics.pyx":57
+  /* "handystats/statistics.pyx":74
  * 
  *     def moving_count(self):
  *         return extract_moving_count(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -2174,15 +2174,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_26moving_count(struct 
     __pyx_t_1 = handystats::bindings::python::detail::extract_moving_count((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 57; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 57; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":56
+  /* "handystats/statistics.pyx":73
  *         return extract_avg(deref(self.thisptr))
  * 
  *     def moving_count(self):             # <<<<<<<<<<<<<<
@@ -2201,7 +2201,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_26moving_count(struct 
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":59
+/* "handystats/statistics.pyx":76
  *         return extract_moving_count(deref(self.thisptr))
  * 
  *     def moving_sum(self):             # <<<<<<<<<<<<<<
@@ -2232,7 +2232,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_28moving_sum(struct __
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("moving_sum", 0);
 
-  /* "handystats/statistics.pyx":60
+  /* "handystats/statistics.pyx":77
  * 
  *     def moving_sum(self):
  *         return extract_moving_sum(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -2244,15 +2244,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_28moving_sum(struct __
     __pyx_t_1 = handystats::bindings::python::detail::extract_moving_sum((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 60; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":59
+  /* "handystats/statistics.pyx":76
  *         return extract_moving_count(deref(self.thisptr))
  * 
  *     def moving_sum(self):             # <<<<<<<<<<<<<<
@@ -2271,7 +2271,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_28moving_sum(struct __
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":62
+/* "handystats/statistics.pyx":79
  *         return extract_moving_sum(deref(self.thisptr))
  * 
  *     def moving_avg(self):             # <<<<<<<<<<<<<<
@@ -2302,7 +2302,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_30moving_avg(struct __
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("moving_avg", 0);
 
-  /* "handystats/statistics.pyx":63
+  /* "handystats/statistics.pyx":80
  * 
  *     def moving_avg(self):
  *         return extract_moving_avg(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -2314,15 +2314,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_30moving_avg(struct __
     __pyx_t_1 = handystats::bindings::python::detail::extract_moving_avg((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":62
+  /* "handystats/statistics.pyx":79
  *         return extract_moving_sum(deref(self.thisptr))
  * 
  *     def moving_avg(self):             # <<<<<<<<<<<<<<
@@ -2341,7 +2341,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_30moving_avg(struct __
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":65
+/* "handystats/statistics.pyx":82
  *         return extract_moving_avg(deref(self.thisptr))
  * 
  *     def quantile(self, double probability):             # <<<<<<<<<<<<<<
@@ -2360,7 +2360,7 @@ static PyObject *__pyx_pw_10handystats_10statistics_4Data_33quantile(PyObject *_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("quantile (wrapper)", 0);
   assert(__pyx_arg_probability); {
-    __pyx_v_probability = __pyx_PyFloat_AsDouble(__pyx_arg_probability); if (unlikely((__pyx_v_probability == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 65; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_probability = __pyx_PyFloat_AsDouble(__pyx_arg_probability); if (unlikely((__pyx_v_probability == (double)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 82; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -2385,7 +2385,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_32quantile(struct __py
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("quantile", 0);
 
-  /* "handystats/statistics.pyx":66
+  /* "handystats/statistics.pyx":83
  * 
  *     def quantile(self, double probability):
  *         return extract_quantile(deref(self.thisptr), probability)             # <<<<<<<<<<<<<<
@@ -2397,15 +2397,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_32quantile(struct __py
     __pyx_t_1 = handystats::bindings::python::detail::extract_quantile((*__pyx_v_self->thisptr), __pyx_v_probability);
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 66; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 66; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":65
+  /* "handystats/statistics.pyx":82
  *         return extract_moving_avg(deref(self.thisptr))
  * 
  *     def quantile(self, double probability):             # <<<<<<<<<<<<<<
@@ -2424,7 +2424,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_32quantile(struct __py
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":68
+/* "handystats/statistics.pyx":85
  *         return extract_quantile(deref(self.thisptr), probability)
  * 
  *     def entropy(self):             # <<<<<<<<<<<<<<
@@ -2455,7 +2455,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_34entropy(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("entropy", 0);
 
-  /* "handystats/statistics.pyx":69
+  /* "handystats/statistics.pyx":86
  * 
  *     def entropy(self):
  *         return extract_entropy(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -2467,15 +2467,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_34entropy(struct __pyx
     __pyx_t_1 = handystats::bindings::python::detail::extract_entropy((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 69; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 86; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":68
+  /* "handystats/statistics.pyx":85
  *         return extract_quantile(deref(self.thisptr), probability)
  * 
  *     def entropy(self):             # <<<<<<<<<<<<<<
@@ -2494,7 +2494,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_34entropy(struct __pyx
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":71
+/* "handystats/statistics.pyx":88
  *         return extract_entropy(deref(self.thisptr))
  * 
  *     def throughput(self):             # <<<<<<<<<<<<<<
@@ -2525,7 +2525,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_36throughput(struct __
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("throughput", 0);
 
-  /* "handystats/statistics.pyx":72
+  /* "handystats/statistics.pyx":89
  * 
  *     def throughput(self):
  *         return extract_throughput(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -2537,15 +2537,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_36throughput(struct __
     __pyx_t_1 = handystats::bindings::python::detail::extract_throughput((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 89; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 89; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":71
+  /* "handystats/statistics.pyx":88
  *         return extract_entropy(deref(self.thisptr))
  * 
  *     def throughput(self):             # <<<<<<<<<<<<<<
@@ -2564,7 +2564,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_36throughput(struct __
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":74
+/* "handystats/statistics.pyx":91
  *         return extract_throughput(deref(self.thisptr))
  * 
  *     def frequency(self):             # <<<<<<<<<<<<<<
@@ -2595,7 +2595,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_38frequency(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("frequency", 0);
 
-  /* "handystats/statistics.pyx":75
+  /* "handystats/statistics.pyx":92
  * 
  *     def frequency(self):
  *         return extract_frequency(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -2607,15 +2607,15 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_38frequency(struct __p
     __pyx_t_1 = handystats::bindings::python::detail::extract_frequency((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_t_1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":74
+  /* "handystats/statistics.pyx":91
  *         return extract_throughput(deref(self.thisptr))
  * 
  *     def frequency(self):             # <<<<<<<<<<<<<<
@@ -2634,7 +2634,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_38frequency(struct __p
   return __pyx_r;
 }
 
-/* "handystats/statistics.pyx":77
+/* "handystats/statistics.pyx":94
  *         return extract_frequency(deref(self.thisptr))
  * 
  *     def timestamp(self):             # <<<<<<<<<<<<<<
@@ -2666,19 +2666,19 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_40timestamp(struct __p
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("timestamp", 0);
 
-  /* "handystats/statistics.pyx":79
+  /* "handystats/statistics.pyx":96
  *     def timestamp(self):
  *         cdef Timepoint ts
  *         ts = Timepoint()             # <<<<<<<<<<<<<<
  * 
  *         ts.thisptr[0] = extract_timestamp(deref(self.thisptr))
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 79; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_ts = ((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/statistics.pyx":81
+  /* "handystats/statistics.pyx":98
  *         ts = Timepoint()
  * 
  *         ts.thisptr[0] = extract_timestamp(deref(self.thisptr))             # <<<<<<<<<<<<<<
@@ -2689,11 +2689,11 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_40timestamp(struct __p
     __pyx_t_2 = handystats::bindings::python::detail::extract_timestamp((*__pyx_v_self->thisptr));
   } catch(...) {
     __Pyx_CppExn2PyErr();
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 98; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   (__pyx_v_ts->thisptr[0]) = __pyx_t_2;
 
-  /* "handystats/statistics.pyx":83
+  /* "handystats/statistics.pyx":100
  *         ts.thisptr[0] = extract_timestamp(deref(self.thisptr))
  * 
  *         return ts             # <<<<<<<<<<<<<<
@@ -2703,7 +2703,7 @@ static PyObject *__pyx_pf_10handystats_10statistics_4Data_40timestamp(struct __p
   __pyx_r = ((PyObject *)__pyx_v_ts);
   goto __pyx_L0;
 
-  /* "handystats/statistics.pyx":77
+  /* "handystats/statistics.pyx":94
  *         return extract_frequency(deref(self.thisptr))
  * 
  *     def timestamp(self):             # <<<<<<<<<<<<<<
@@ -3136,7 +3136,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -3146,28 +3146,28 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "handystats/statistics.pyx":26
+  /* "handystats/statistics.pyx":43
  *     @staticmethod
  *     def from_json(json_object):
  *         cdef string s = json_object.encode('utf-8')             # <<<<<<<<<<<<<<
  * 
  *         cdef Data data
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple_)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 43; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "handystats/statistics.pyx":25
+  /* "handystats/statistics.pyx":42
  * 
  *     @staticmethod
  *     def from_json(json_object):             # <<<<<<<<<<<<<<
  *         cdef string s = json_object.encode('utf-8')
  * 
  */
-  __pyx_tuple__2 = PyTuple_Pack(3, __pyx_n_s_json_object, __pyx_n_s_s, __pyx_n_s_data); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__2 = PyTuple_Pack(3, __pyx_n_s_json_object, __pyx_n_s_s, __pyx_n_s_data); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
-  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__2, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_shindo_handystats_bindings, __pyx_n_s_from_json, 25, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__2, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_shindo_handystats_bindings, __pyx_n_s_from_json, 42, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -3267,82 +3267,82 @@ PyMODINIT_FUNC PyInit_statistics(void)
   __pyx_vtable_10handystats_10statistics_Data.append = (PyObject *(*)(struct __pyx_obj_10handystats_10statistics_Data *, struct __pyx_obj_10handystats_10statistics_Data *, int __pyx_skip_dispatch))__pyx_f_10handystats_10statistics_4Data_append;
   __pyx_vtable_10handystats_10statistics_Data.merge = (PyObject *(*)(struct __pyx_obj_10handystats_10statistics_Data *, struct __pyx_obj_10handystats_10statistics_Data *, int __pyx_skip_dispatch))__pyx_f_10handystats_10statistics_4Data_merge;
   __pyx_vtable_10handystats_10statistics_Data.truncate = (PyObject *(*)(struct __pyx_obj_10handystats_10statistics_Data *, int __pyx_skip_dispatch, struct __pyx_opt_args_10handystats_10statistics_4Data_truncate *__pyx_optional_args))__pyx_f_10handystats_10statistics_4Data_truncate;
-  if (PyType_Ready(&__pyx_type_10handystats_10statistics_Data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_10handystats_10statistics_Data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_10handystats_10statistics_Data.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_10handystats_10statistics_Data.tp_dict, __pyx_vtabptr_10handystats_10statistics_Data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyObject_SetAttrString(__pyx_m, "Data", (PyObject *)&__pyx_type_10handystats_10statistics_Data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_SetVtable(__pyx_type_10handystats_10statistics_Data.tp_dict, __pyx_vtabptr_10handystats_10statistics_Data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "Data", (PyObject *)&__pyx_type_10handystats_10statistics_Data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_10handystats_10statistics_Data = &__pyx_type_10handystats_10statistics_Data;
   /*--- Type import code ---*/
-  __pyx_ptype_10handystats_6chrono_Duration = __Pyx_ImportType("handystats.chrono", "Duration", sizeof(struct __pyx_obj_10handystats_6chrono_Duration), 1); if (unlikely(!__pyx_ptype_10handystats_6chrono_Duration)) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_vtabptr_10handystats_6chrono_Duration = (struct __pyx_vtabstruct_10handystats_6chrono_Duration*)__Pyx_GetVtable(__pyx_ptype_10handystats_6chrono_Duration->tp_dict); if (unlikely(!__pyx_vtabptr_10handystats_6chrono_Duration)) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_ptype_10handystats_6chrono_Timepoint = __Pyx_ImportType("handystats.chrono", "Timepoint", sizeof(struct __pyx_obj_10handystats_6chrono_Timepoint), 1); if (unlikely(!__pyx_ptype_10handystats_6chrono_Timepoint)) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_vtabptr_10handystats_6chrono_Timepoint = (struct __pyx_vtabstruct_10handystats_6chrono_Timepoint*)__Pyx_GetVtable(__pyx_ptype_10handystats_6chrono_Timepoint->tp_dict); if (unlikely(!__pyx_vtabptr_10handystats_6chrono_Timepoint)) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_10handystats_6chrono_Duration = __Pyx_ImportType("handystats.chrono", "Duration", sizeof(struct __pyx_obj_10handystats_6chrono_Duration), 1); if (unlikely(!__pyx_ptype_10handystats_6chrono_Duration)) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_vtabptr_10handystats_6chrono_Duration = (struct __pyx_vtabstruct_10handystats_6chrono_Duration*)__Pyx_GetVtable(__pyx_ptype_10handystats_6chrono_Duration->tp_dict); if (unlikely(!__pyx_vtabptr_10handystats_6chrono_Duration)) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_ptype_10handystats_6chrono_Timepoint = __Pyx_ImportType("handystats.chrono", "Timepoint", sizeof(struct __pyx_obj_10handystats_6chrono_Timepoint), 1); if (unlikely(!__pyx_ptype_10handystats_6chrono_Timepoint)) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_vtabptr_10handystats_6chrono_Timepoint = (struct __pyx_vtabstruct_10handystats_6chrono_Timepoint*)__Pyx_GetVtable(__pyx_ptype_10handystats_6chrono_Timepoint->tp_dict); if (unlikely(!__pyx_vtabptr_10handystats_6chrono_Timepoint)) {__pyx_filename = __pyx_f[3]; __pyx_lineno = 97; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   /*--- Variable import code ---*/
   /*--- Function import code ---*/
   /*--- Execution code ---*/
 
-  /* "handystats/statistics.pyx":25
+  /* "handystats/statistics.pyx":42
  * 
  *     @staticmethod
  *     def from_json(json_object):             # <<<<<<<<<<<<<<
  *         cdef string s = json_object.encode('utf-8')
  * 
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10handystats_10statistics_4Data_11from_json, NULL, __pyx_n_s_handystats_statistics); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10handystats_10statistics_4Data_11from_json, NULL, __pyx_n_s_handystats_statistics); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "handystats/statistics.pyx":24
+  /* "handystats/statistics.pyx":41
  *             self.thisptr.truncate_after(deref(after.thisptr))
  * 
  *     @staticmethod             # <<<<<<<<<<<<<<
  *     def from_json(json_object):
  *         cdef string s = json_object.encode('utf-8')
  */
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_10handystats_10statistics_Data->tp_dict, __pyx_n_s_from_json, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_10handystats_10statistics_Data->tp_dict, __pyx_n_s_from_json, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_10handystats_10statistics_Data);
 
-  /* "handystats/statistics.pyx":25
+  /* "handystats/statistics.pyx":42
  * 
  *     @staticmethod
  *     def from_json(json_object):             # <<<<<<<<<<<<<<
  *         cdef string s = json_object.encode('utf-8')
  * 
  */
-  __pyx_t_1 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_10handystats_10statistics_Data, __pyx_n_s_from_json); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_10handystats_10statistics_Data, __pyx_n_s_from_json); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "handystats/statistics.pyx":24
+  /* "handystats/statistics.pyx":41
  *             self.thisptr.truncate_after(deref(after.thisptr))
  * 
  *     @staticmethod             # <<<<<<<<<<<<<<
  *     def from_json(json_object):
  *         cdef string s = json_object.encode('utf-8')
  */
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 24; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_10handystats_10statistics_Data->tp_dict, __pyx_n_s_from_json, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_10handystats_10statistics_Data->tp_dict, __pyx_n_s_from_json, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_10handystats_10statistics_Data);
 
   /* "handystats/statistics.pyx":1
  * # distutils: language = c++             # <<<<<<<<<<<<<<
  * 
- * from cython.operator cimport dereference as deref
+ * # Copyright (c) 2014 Yandex LLC. All rights reserved.
  */
   __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);

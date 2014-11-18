@@ -214,7 +214,7 @@ time_point to_system_time(const time_point& t) {
 						.count(time_unit::NSEC);
 
 				ns_offset.store(new_offset, std::memory_order_release);
-				offset_timestamp.store(cycles_middle.time_since_epoch().count(), std::memory_order_release);
+				offset_timestamp.store(cycles_middle.time_since_epoch().count(tsc_unit), std::memory_order_release);
 			}
 
 			lock.clear(std::memory_order_release);

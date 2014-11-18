@@ -71,7 +71,7 @@ void log_dump(std::ofstream& log, const chrono::time_point& timestamp, const met
 			>
 			(json_dump);
 
-	log << timestamp.time_since_epoch().count() << " " << dump_str << "\n";
+	log << timestamp.time_since_epoch().count(handystats::chrono::MSEC) << " " << dump_str << "\n";
 }
 
 static

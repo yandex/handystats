@@ -124,6 +124,7 @@ struct duration {
 	duration& operator= (const duration&) = default;
 
 	/* Access ticks count and time unit */
+	__attribute__((deprecated))
 	int64_t count() const;
 	time_unit unit() const;
 

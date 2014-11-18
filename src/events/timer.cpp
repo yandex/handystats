@@ -160,7 +160,7 @@ event_message* create_set_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::SET;
-	new (&message->event_data) int64_t(measurement.count());
+	new (&message->event_data) int64_t(measurement.count(metrics::timer::value_unit));
 
 	return message;
 }

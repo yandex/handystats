@@ -426,7 +426,7 @@ struct __pyx_obj_10handystats_6chrono_Duration;
 struct __pyx_obj_10handystats_6chrono_Timepoint;
 struct __pyx_opt_args_10handystats_6chrono_8Duration_count;
 
-/* "handystats/chrono.pxd":78
+/* "handystats/chrono.pxd":95
  *     cdef duration *thisptr
  * 
  *     cpdef int64_t count(self, time_unit unit = *)             # <<<<<<<<<<<<<<
@@ -438,7 +438,7 @@ struct __pyx_opt_args_10handystats_6chrono_8Duration_count {
   enum handystats::chrono::time_unit unit;
 };
 
-/* "handystats/chrono.pxd":75
+/* "handystats/chrono.pxd":92
  * 
  * 
  * cdef class Duration:             # <<<<<<<<<<<<<<
@@ -452,7 +452,7 @@ struct __pyx_obj_10handystats_6chrono_Duration {
 };
 
 
-/* "handystats/chrono.pxd":80
+/* "handystats/chrono.pxd":97
  *     cpdef int64_t count(self, time_unit unit = *)
  * 
  * cdef class Timepoint:             # <<<<<<<<<<<<<<
@@ -467,7 +467,7 @@ struct __pyx_obj_10handystats_6chrono_Timepoint {
 
 
 
-/* "handystats/chrono.pyx":5
+/* "handystats/chrono.pyx":22
  * from cython.operator cimport dereference as deref
  * 
  * cdef class Duration:             # <<<<<<<<<<<<<<
@@ -481,7 +481,7 @@ struct __pyx_vtabstruct_10handystats_6chrono_Duration {
 static struct __pyx_vtabstruct_10handystats_6chrono_Duration *__pyx_vtabptr_10handystats_6chrono_Duration;
 
 
-/* "handystats/chrono.pyx":85
+/* "handystats/chrono.pyx":102
  *             return deref(self.thisptr) >= deref(other.thisptr)
  * 
  * cdef class Timepoint:             # <<<<<<<<<<<<<<
@@ -812,7 +812,7 @@ static PyObject *__pyx_codeobj__3;
 static PyObject *__pyx_codeobj__5;
 static PyObject *__pyx_codeobj__7;
 
-/* "handystats/chrono.pyx":6
+/* "handystats/chrono.pyx":23
  * 
  * cdef class Duration:
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -841,7 +841,7 @@ static int __pyx_pf_10handystats_6chrono_8Duration___cinit__(struct __pyx_obj_10
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "handystats/chrono.pyx":7
+  /* "handystats/chrono.pyx":24
  * cdef class Duration:
  *     def __cinit__(self):
  *         self.thisptr = new duration()             # <<<<<<<<<<<<<<
@@ -850,7 +850,7 @@ static int __pyx_pf_10handystats_6chrono_8Duration___cinit__(struct __pyx_obj_10
  */
   __pyx_v_self->thisptr = new handystats::chrono::duration();
 
-  /* "handystats/chrono.pyx":6
+  /* "handystats/chrono.pyx":23
  * 
  * cdef class Duration:
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -864,7 +864,7 @@ static int __pyx_pf_10handystats_6chrono_8Duration___cinit__(struct __pyx_obj_10
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":9
+/* "handystats/chrono.pyx":26
  *         self.thisptr = new duration()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -887,7 +887,7 @@ static void __pyx_pf_10handystats_6chrono_8Duration_2__dealloc__(struct __pyx_ob
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "handystats/chrono.pyx":10
+  /* "handystats/chrono.pyx":27
  * 
  *     def __dealloc__(self):
  *         del self.thisptr             # <<<<<<<<<<<<<<
@@ -896,7 +896,7 @@ static void __pyx_pf_10handystats_6chrono_8Duration_2__dealloc__(struct __pyx_ob
  */
   delete __pyx_v_self->thisptr;
 
-  /* "handystats/chrono.pyx":9
+  /* "handystats/chrono.pyx":26
  *         self.thisptr = new duration()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -908,7 +908,7 @@ static void __pyx_pf_10handystats_6chrono_8Duration_2__dealloc__(struct __pyx_ob
   __Pyx_RefNannyFinishContext();
 }
 
-/* "handystats/chrono.pyx":12
+/* "handystats/chrono.pyx":29
  *         del self.thisptr
  * 
  *     cpdef int64_t count(self, time_unit unit = SEC):             # <<<<<<<<<<<<<<
@@ -941,10 +941,10 @@ static int64_t __pyx_f_10handystats_6chrono_8Duration_count(struct __pyx_obj_10h
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_count); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_count); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_10handystats_6chrono_8Duration_5count)) {
-      __pyx_t_3 = PyInt_FromLong(__pyx_v_unit); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_3 = PyInt_FromLong(__pyx_v_unit); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_t_1);
       __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
@@ -958,22 +958,22 @@ static int64_t __pyx_f_10handystats_6chrono_8Duration_count(struct __pyx_obj_10h
         }
       }
       if (!__pyx_t_5) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_GOTREF(__pyx_t_2);
       } else {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_6);
         PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __Pyx_GIVEREF(__pyx_t_5); __pyx_t_5 = NULL;
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_3);
         __Pyx_GIVEREF(__pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_7 = __Pyx_PyInt_As_int64_t(__pyx_t_2); if (unlikely((__pyx_t_7 == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_7 = __Pyx_PyInt_As_int64_t(__pyx_t_2); if (unlikely((__pyx_t_7 == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_r = __pyx_t_7;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -982,7 +982,7 @@ static int64_t __pyx_f_10handystats_6chrono_8Duration_count(struct __pyx_obj_10h
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "handystats/chrono.pyx":13
+  /* "handystats/chrono.pyx":30
  * 
  *     cpdef int64_t count(self, time_unit unit = SEC):
  *         return self.thisptr.count(unit)             # <<<<<<<<<<<<<<
@@ -992,7 +992,7 @@ static int64_t __pyx_f_10handystats_6chrono_8Duration_count(struct __pyx_obj_10h
   __pyx_r = __pyx_v_self->thisptr->count(__pyx_v_unit);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":12
+  /* "handystats/chrono.pyx":29
  *         del self.thisptr
  * 
  *     cpdef int64_t count(self, time_unit unit = SEC):             # <<<<<<<<<<<<<<
@@ -1045,7 +1045,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_5count(PyObject *__pyx_
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "count") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "count") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -1055,14 +1055,14 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_5count(PyObject *__pyx_
       }
     }
     if (values[0]) {
-      __pyx_v_unit = ((enum handystats::chrono::time_unit)PyInt_AsLong(values[0])); if (unlikely(PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+      __pyx_v_unit = ((enum handystats::chrono::time_unit)PyInt_AsLong(values[0])); if (unlikely(PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
     } else {
       __pyx_v_unit = __pyx_k_;
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("count", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("count", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("handystats.chrono.Duration.count", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1089,7 +1089,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_4count(struct __pyx_obj
   __pyx_t_2.__pyx_n = 1;
   __pyx_t_2.unit = __pyx_v_unit;
   __pyx_t_1 = __pyx_vtabptr_10handystats_6chrono_Duration->count(__pyx_v_self, 1, &__pyx_t_2); 
-  __pyx_t_3 = __Pyx_PyInt_From_int64_t(__pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyInt_From_int64_t(__pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
@@ -1106,7 +1106,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_4count(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":15
+/* "handystats/chrono.pyx":32
  *         return self.thisptr.count(unit)
  * 
  *     def __pos__(Duration self):             # <<<<<<<<<<<<<<
@@ -1137,19 +1137,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_6__pos__(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__pos__", 0);
 
-  /* "handystats/chrono.pyx":17
+  /* "handystats/chrono.pyx":34
  *     def __pos__(Duration self):
  *         cdef Duration d
  *         d = Duration()             # <<<<<<<<<<<<<<
  * 
  *         d.thisptr[0] = +deref(self.thisptr)
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 17; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 34; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_d = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":19
+  /* "handystats/chrono.pyx":36
  *         d = Duration()
  * 
  *         d.thisptr[0] = +deref(self.thisptr)             # <<<<<<<<<<<<<<
@@ -1158,7 +1158,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_6__pos__(struct __pyx_o
  */
   (__pyx_v_d->thisptr[0]) = (+(*__pyx_v_self->thisptr));
 
-  /* "handystats/chrono.pyx":21
+  /* "handystats/chrono.pyx":38
  *         d.thisptr[0] = +deref(self.thisptr)
  * 
  *         return d             # <<<<<<<<<<<<<<
@@ -1170,7 +1170,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_6__pos__(struct __pyx_o
   __pyx_r = ((PyObject *)__pyx_v_d);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":15
+  /* "handystats/chrono.pyx":32
  *         return self.thisptr.count(unit)
  * 
  *     def __pos__(Duration self):             # <<<<<<<<<<<<<<
@@ -1190,7 +1190,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_6__pos__(struct __pyx_o
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":23
+/* "handystats/chrono.pyx":40
  *         return d
  * 
  *     def __neg__(Duration self):             # <<<<<<<<<<<<<<
@@ -1221,19 +1221,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_8__neg__(struct __pyx_o
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__neg__", 0);
 
-  /* "handystats/chrono.pyx":25
+  /* "handystats/chrono.pyx":42
  *     def __neg__(Duration self):
  *         cdef Duration d
  *         d = Duration()             # <<<<<<<<<<<<<<
  * 
  *         d.thisptr[0] = -deref(self.thisptr)
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 42; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_d = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":27
+  /* "handystats/chrono.pyx":44
  *         d = Duration()
  * 
  *         d.thisptr[0] = -deref(self.thisptr)             # <<<<<<<<<<<<<<
@@ -1242,7 +1242,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_8__neg__(struct __pyx_o
  */
   (__pyx_v_d->thisptr[0]) = (-(*__pyx_v_self->thisptr));
 
-  /* "handystats/chrono.pyx":29
+  /* "handystats/chrono.pyx":46
  *         d.thisptr[0] = -deref(self.thisptr)
  * 
  *         return d             # <<<<<<<<<<<<<<
@@ -1254,7 +1254,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_8__neg__(struct __pyx_o
   __pyx_r = ((PyObject *)__pyx_v_d);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":23
+  /* "handystats/chrono.pyx":40
  *         return d
  * 
  *     def __neg__(Duration self):             # <<<<<<<<<<<<<<
@@ -1274,7 +1274,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_8__neg__(struct __pyx_o
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":31
+/* "handystats/chrono.pyx":48
  *         return d
  * 
  *     def __add__(Duration self, Duration other):             # <<<<<<<<<<<<<<
@@ -1291,8 +1291,8 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_11__add__(PyObject *__p
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__add__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_6chrono_Duration, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_6chrono_Duration, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 48; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_6chrono_8Duration_10__add__(((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_self), ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_other));
 
   /* function exit code */
@@ -1314,19 +1314,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_10__add__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "handystats/chrono.pyx":33
+  /* "handystats/chrono.pyx":50
  *     def __add__(Duration self, Duration other):
  *         cdef Duration res
  *         res = Duration()             # <<<<<<<<<<<<<<
  * 
  *         res.thisptr[0] = deref(self.thisptr) + deref(other.thisptr)
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 33; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 50; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_res = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":35
+  /* "handystats/chrono.pyx":52
  *         res = Duration()
  * 
  *         res.thisptr[0] = deref(self.thisptr) + deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -1335,7 +1335,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_10__add__(struct __pyx_
  */
   (__pyx_v_res->thisptr[0]) = ((*__pyx_v_self->thisptr) + (*__pyx_v_other->thisptr));
 
-  /* "handystats/chrono.pyx":37
+  /* "handystats/chrono.pyx":54
  *         res.thisptr[0] = deref(self.thisptr) + deref(other.thisptr)
  * 
  *         return res             # <<<<<<<<<<<<<<
@@ -1347,7 +1347,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_10__add__(struct __pyx_
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":31
+  /* "handystats/chrono.pyx":48
  *         return d
  * 
  *     def __add__(Duration self, Duration other):             # <<<<<<<<<<<<<<
@@ -1367,7 +1367,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_10__add__(struct __pyx_
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":39
+/* "handystats/chrono.pyx":56
  *         return res
  * 
  *     def __sub__(Duration self, Duration other):             # <<<<<<<<<<<<<<
@@ -1384,8 +1384,8 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_13__sub__(PyObject *__p
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__sub__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_6chrono_Duration, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 39; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_6chrono_Duration, 1, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 56; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_6chrono_8Duration_12__sub__(((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_self), ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_other));
 
   /* function exit code */
@@ -1407,19 +1407,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_12__sub__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__sub__", 0);
 
-  /* "handystats/chrono.pyx":41
+  /* "handystats/chrono.pyx":58
  *     def __sub__(Duration self, Duration other):
  *         cdef Duration res
  *         res = Duration()             # <<<<<<<<<<<<<<
  * 
  *         res.thisptr[0] = deref(self.thisptr) - deref(other.thisptr)
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 41; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 58; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_res = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":43
+  /* "handystats/chrono.pyx":60
  *         res = Duration()
  * 
  *         res.thisptr[0] = deref(self.thisptr) - deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -1428,7 +1428,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_12__sub__(struct __pyx_
  */
   (__pyx_v_res->thisptr[0]) = ((*__pyx_v_self->thisptr) - (*__pyx_v_other->thisptr));
 
-  /* "handystats/chrono.pyx":45
+  /* "handystats/chrono.pyx":62
  *         res.thisptr[0] = deref(self.thisptr) - deref(other.thisptr)
  * 
  *         return res             # <<<<<<<<<<<<<<
@@ -1440,7 +1440,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_12__sub__(struct __pyx_
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":39
+  /* "handystats/chrono.pyx":56
  *         return res
  * 
  *     def __sub__(Duration self, Duration other):             # <<<<<<<<<<<<<<
@@ -1460,7 +1460,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_12__sub__(struct __pyx_
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":47
+/* "handystats/chrono.pyx":64
  *         return res
  * 
  *     def __mul__(Duration self, const int64_t& d):             # <<<<<<<<<<<<<<
@@ -1479,7 +1479,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_15__mul__(PyObject *__p
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__mul__ (wrapper)", 0);
   assert(__pyx_arg_d); {
-    __pyx_v_d = __Pyx_PyInt_As_int64_t(__pyx_arg_d); if (unlikely((__pyx_v_d == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_d = __Pyx_PyInt_As_int64_t(__pyx_arg_d); if (unlikely((__pyx_v_d == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -1487,7 +1487,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_15__mul__(PyObject *__p
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 47; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 64; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_6chrono_8Duration_14__mul__(((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_self), ((int64_t)__pyx_v_d));
 
   /* function exit code */
@@ -1509,19 +1509,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_14__mul__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__mul__", 0);
 
-  /* "handystats/chrono.pyx":49
+  /* "handystats/chrono.pyx":66
  *     def __mul__(Duration self, const int64_t& d):
  *         cdef Duration res
  *         res = Duration()             # <<<<<<<<<<<<<<
  * 
  *         res.thisptr[0] = deref(self.thisptr) * d
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 49; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 66; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_res = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":51
+  /* "handystats/chrono.pyx":68
  *         res = Duration()
  * 
  *         res.thisptr[0] = deref(self.thisptr) * d             # <<<<<<<<<<<<<<
@@ -1530,7 +1530,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_14__mul__(struct __pyx_
  */
   (__pyx_v_res->thisptr[0]) = ((*__pyx_v_self->thisptr) * __pyx_v_d);
 
-  /* "handystats/chrono.pyx":53
+  /* "handystats/chrono.pyx":70
  *         res.thisptr[0] = deref(self.thisptr) * d
  * 
  *         return res             # <<<<<<<<<<<<<<
@@ -1542,7 +1542,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_14__mul__(struct __pyx_
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":47
+  /* "handystats/chrono.pyx":64
  *         return res
  * 
  *     def __mul__(Duration self, const int64_t& d):             # <<<<<<<<<<<<<<
@@ -1562,7 +1562,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_14__mul__(struct __pyx_
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":55
+/* "handystats/chrono.pyx":72
  *         return res
  * 
  *     def __div__(Duration self, const int64_t& d):             # <<<<<<<<<<<<<<
@@ -1582,7 +1582,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_17__div__(PyObject *__p
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__div__ (wrapper)", 0);
   assert(__pyx_arg_d); {
-    __pyx_v_d = __Pyx_PyInt_As_int64_t(__pyx_arg_d); if (unlikely((__pyx_v_d == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_d = __Pyx_PyInt_As_int64_t(__pyx_arg_d); if (unlikely((__pyx_v_d == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -1590,7 +1590,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_17__div__(PyObject *__p
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 55; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 72; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_6chrono_8Duration_16__div__(((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_self), ((int64_t)__pyx_v_d));
 
   /* function exit code */
@@ -1614,19 +1614,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_16__div__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__div__", 0);
 
-  /* "handystats/chrono.pyx":57
+  /* "handystats/chrono.pyx":74
  *     def __div__(Duration self, const int64_t& d):
  *         cdef Duration res
  *         res = Duration()             # <<<<<<<<<<<<<<
  * 
  *         res.thisptr[0] = deref(self.thisptr) / d
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 57; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 74; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_res = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":59
+  /* "handystats/chrono.pyx":76
  *         res = Duration()
  * 
  *         res.thisptr[0] = deref(self.thisptr) / d             # <<<<<<<<<<<<<<
@@ -1635,7 +1635,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_16__div__(struct __pyx_
  */
   (__pyx_v_res->thisptr[0]) = ((*__pyx_v_self->thisptr) / __pyx_v_d);
 
-  /* "handystats/chrono.pyx":61
+  /* "handystats/chrono.pyx":78
  *         res.thisptr[0] = deref(self.thisptr) / d
  * 
  *         return res             # <<<<<<<<<<<<<<
@@ -1647,7 +1647,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_16__div__(struct __pyx_
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":55
+  /* "handystats/chrono.pyx":72
  *         return res
  * 
  *     def __div__(Duration self, const int64_t& d):             # <<<<<<<<<<<<<<
@@ -1668,7 +1668,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_16__div__(struct __pyx_
 }
 #endif /*!(#if PY_MAJOR_VERSION < 3)*/
 
-/* "handystats/chrono.pyx":63
+/* "handystats/chrono.pyx":80
  *         return res
  * 
  *     def __mod__(Duration self, const int64_t& d):             # <<<<<<<<<<<<<<
@@ -1687,7 +1687,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_19__mod__(PyObject *__p
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__mod__ (wrapper)", 0);
   assert(__pyx_arg_d); {
-    __pyx_v_d = __Pyx_PyInt_As_int64_t(__pyx_arg_d); if (unlikely((__pyx_v_d == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_d = __Pyx_PyInt_As_int64_t(__pyx_arg_d); if (unlikely((__pyx_v_d == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -1695,7 +1695,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_19__mod__(PyObject *__p
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 63; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 80; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_6chrono_8Duration_18__mod__(((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_self), ((int64_t)__pyx_v_d));
 
   /* function exit code */
@@ -1717,19 +1717,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_18__mod__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__mod__", 0);
 
-  /* "handystats/chrono.pyx":65
+  /* "handystats/chrono.pyx":82
  *     def __mod__(Duration self, const int64_t& d):
  *         cdef Duration res
  *         res = Duration()             # <<<<<<<<<<<<<<
  * 
  *         res.thisptr[0] = deref(self.thisptr) % d
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 65; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 82; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_res = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":67
+  /* "handystats/chrono.pyx":84
  *         res = Duration()
  * 
  *         res.thisptr[0] = deref(self.thisptr) % d             # <<<<<<<<<<<<<<
@@ -1738,7 +1738,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_18__mod__(struct __pyx_
  */
   (__pyx_v_res->thisptr[0]) = ((*__pyx_v_self->thisptr) % __pyx_v_d);
 
-  /* "handystats/chrono.pyx":69
+  /* "handystats/chrono.pyx":86
  *         res.thisptr[0] = deref(self.thisptr) % d
  * 
  *         return res             # <<<<<<<<<<<<<<
@@ -1750,7 +1750,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_18__mod__(struct __pyx_
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":63
+  /* "handystats/chrono.pyx":80
  *         return res
  * 
  *     def __mod__(Duration self, const int64_t& d):             # <<<<<<<<<<<<<<
@@ -1770,7 +1770,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_18__mod__(struct __pyx_
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":71
+/* "handystats/chrono.pyx":88
  *         return res
  * 
  *     def __richcmp__(Duration self, Duration other not None, int op):             # <<<<<<<<<<<<<<
@@ -1787,8 +1787,8 @@ static PyObject *__pyx_pw_10handystats_6chrono_8Duration_21__richcmp__(PyObject 
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__richcmp__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_6chrono_Duration, 0, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 71; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Duration, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_6chrono_Duration, 0, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 88; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_self), ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_other), ((int)__pyx_v_op));
 
   /* function exit code */
@@ -1809,7 +1809,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__richcmp__", 0);
 
-  /* "handystats/chrono.pyx":82
+  /* "handystats/chrono.pyx":99
  *         elif op == 4: # >
  *             return deref(self.thisptr) > deref(other.thisptr)
  *         elif op == 5: # >=             # <<<<<<<<<<<<<<
@@ -1818,7 +1818,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  */
   switch (__pyx_v_op) {
 
-    /* "handystats/chrono.pyx":72
+    /* "handystats/chrono.pyx":89
  * 
  *     def __richcmp__(Duration self, Duration other not None, int op):
  *         if op == 0: # <             # <<<<<<<<<<<<<<
@@ -1827,7 +1827,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  */
     case 0:
 
-    /* "handystats/chrono.pyx":73
+    /* "handystats/chrono.pyx":90
  *     def __richcmp__(Duration self, Duration other not None, int op):
  *         if op == 0: # <
  *             return deref(self.thisptr) < deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -1835,14 +1835,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  *             return deref(self.thisptr) <= deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) < (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 73; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) < (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 90; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":74
+    /* "handystats/chrono.pyx":91
  *         if op == 0: # <
  *             return deref(self.thisptr) < deref(other.thisptr)
  *         elif op == 1: # <=             # <<<<<<<<<<<<<<
@@ -1851,7 +1851,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  */
     case 1:
 
-    /* "handystats/chrono.pyx":75
+    /* "handystats/chrono.pyx":92
  *             return deref(self.thisptr) < deref(other.thisptr)
  *         elif op == 1: # <=
  *             return deref(self.thisptr) <= deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -1859,14 +1859,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  *             return deref(self.thisptr) == deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) <= (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 75; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) <= (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":76
+    /* "handystats/chrono.pyx":93
  *         elif op == 1: # <=
  *             return deref(self.thisptr) <= deref(other.thisptr)
  *         elif op == 2: # ==             # <<<<<<<<<<<<<<
@@ -1875,7 +1875,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  */
     case 2:
 
-    /* "handystats/chrono.pyx":77
+    /* "handystats/chrono.pyx":94
  *             return deref(self.thisptr) <= deref(other.thisptr)
  *         elif op == 2: # ==
  *             return deref(self.thisptr) == deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -1883,14 +1883,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  *             return deref(self.thisptr) != deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) == (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 77; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) == (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 94; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":78
+    /* "handystats/chrono.pyx":95
  *         elif op == 2: # ==
  *             return deref(self.thisptr) == deref(other.thisptr)
  *         elif op == 3: # !=             # <<<<<<<<<<<<<<
@@ -1899,7 +1899,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  */
     case 3:
 
-    /* "handystats/chrono.pyx":79
+    /* "handystats/chrono.pyx":96
  *             return deref(self.thisptr) == deref(other.thisptr)
  *         elif op == 3: # !=
  *             return deref(self.thisptr) != deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -1907,14 +1907,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  *             return deref(self.thisptr) > deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) != (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 79; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) != (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 96; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":80
+    /* "handystats/chrono.pyx":97
  *         elif op == 3: # !=
  *             return deref(self.thisptr) != deref(other.thisptr)
  *         elif op == 4: # >             # <<<<<<<<<<<<<<
@@ -1923,7 +1923,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  */
     case 4:
 
-    /* "handystats/chrono.pyx":81
+    /* "handystats/chrono.pyx":98
  *             return deref(self.thisptr) != deref(other.thisptr)
  *         elif op == 4: # >
  *             return deref(self.thisptr) > deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -1931,14 +1931,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  *             return deref(self.thisptr) >= deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) > (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 81; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) > (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 98; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":82
+    /* "handystats/chrono.pyx":99
  *         elif op == 4: # >
  *             return deref(self.thisptr) > deref(other.thisptr)
  *         elif op == 5: # >=             # <<<<<<<<<<<<<<
@@ -1947,7 +1947,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  */
     case 5:
 
-    /* "handystats/chrono.pyx":83
+    /* "handystats/chrono.pyx":100
  *             return deref(self.thisptr) > deref(other.thisptr)
  *         elif op == 5: # >=
  *             return deref(self.thisptr) >= deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -1955,7 +1955,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
  * cdef class Timepoint:
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) >= (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 83; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) >= (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 100; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
@@ -1964,7 +1964,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
     default: break;
   }
 
-  /* "handystats/chrono.pyx":71
+  /* "handystats/chrono.pyx":88
  *         return res
  * 
  *     def __richcmp__(Duration self, Duration other not None, int op):             # <<<<<<<<<<<<<<
@@ -1985,7 +1985,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_8Duration_20__richcmp__(struct __
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":86
+/* "handystats/chrono.pyx":103
  * 
  * cdef class Timepoint:
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -2014,7 +2014,7 @@ static int __pyx_pf_10handystats_6chrono_9Timepoint___cinit__(struct __pyx_obj_1
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "handystats/chrono.pyx":87
+  /* "handystats/chrono.pyx":104
  * cdef class Timepoint:
  *     def __cinit__(self):
  *         self.thisptr = new time_point()             # <<<<<<<<<<<<<<
@@ -2023,7 +2023,7 @@ static int __pyx_pf_10handystats_6chrono_9Timepoint___cinit__(struct __pyx_obj_1
  */
   __pyx_v_self->thisptr = new handystats::chrono::time_point();
 
-  /* "handystats/chrono.pyx":86
+  /* "handystats/chrono.pyx":103
  * 
  * cdef class Timepoint:
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -2037,7 +2037,7 @@ static int __pyx_pf_10handystats_6chrono_9Timepoint___cinit__(struct __pyx_obj_1
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":89
+/* "handystats/chrono.pyx":106
  *         self.thisptr = new time_point()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -2060,7 +2060,7 @@ static void __pyx_pf_10handystats_6chrono_9Timepoint_2__dealloc__(struct __pyx_o
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "handystats/chrono.pyx":90
+  /* "handystats/chrono.pyx":107
  * 
  *     def __dealloc__(self):
  *         del self.thisptr             # <<<<<<<<<<<<<<
@@ -2069,7 +2069,7 @@ static void __pyx_pf_10handystats_6chrono_9Timepoint_2__dealloc__(struct __pyx_o
  */
   delete __pyx_v_self->thisptr;
 
-  /* "handystats/chrono.pyx":89
+  /* "handystats/chrono.pyx":106
  *         self.thisptr = new time_point()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -2081,7 +2081,7 @@ static void __pyx_pf_10handystats_6chrono_9Timepoint_2__dealloc__(struct __pyx_o
   __Pyx_RefNannyFinishContext();
 }
 
-/* "handystats/chrono.pyx":93
+/* "handystats/chrono.pyx":110
  * 
  *     @staticmethod
  *     def from_unixtime(unixtime):             # <<<<<<<<<<<<<<
@@ -2118,7 +2118,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_9Timepoint_5from_unixtime(CYTHON_
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "from_unixtime") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "from_unixtime") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -2129,7 +2129,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_9Timepoint_5from_unixtime(CYTHON_
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("from_unixtime", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("from_unixtime", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("handystats.chrono.Timepoint.from_unixtime", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2155,17 +2155,17 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_4from_unixtime(PyObjec
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("from_unixtime", 0);
 
-  /* "handystats/chrono.pyx":98
+  /* "handystats/chrono.pyx":115
  *         cdef Timepoint t
  * 
  *         _dur = duration(unixtime, SEC)             # <<<<<<<<<<<<<<
  *         _tp = time_point(_dur, SYSTEM_CLOCK)
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int64_t(__pyx_v_unixtime); if (unlikely((__pyx_t_1 == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 98; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyInt_As_int64_t(__pyx_v_unixtime); if (unlikely((__pyx_t_1 == (int64_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 115; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_v__dur = handystats::chrono::duration(__pyx_t_1, handystats::chrono::SEC);
 
-  /* "handystats/chrono.pyx":99
+  /* "handystats/chrono.pyx":116
  * 
  *         _dur = duration(unixtime, SEC)
  *         _tp = time_point(_dur, SYSTEM_CLOCK)             # <<<<<<<<<<<<<<
@@ -2174,19 +2174,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_4from_unixtime(PyObjec
  */
   __pyx_v__tp = handystats::chrono::time_point(__pyx_v__dur, handystats::chrono::SYSTEM_CLOCK);
 
-  /* "handystats/chrono.pyx":101
+  /* "handystats/chrono.pyx":118
  *         _tp = time_point(_dur, SYSTEM_CLOCK)
  * 
  *         t = Timepoint()             # <<<<<<<<<<<<<<
  *         t.thisptr[0] = _tp
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 101; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 118; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_t = ((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "handystats/chrono.pyx":102
+  /* "handystats/chrono.pyx":119
  * 
  *         t = Timepoint()
  *         t.thisptr[0] = _tp             # <<<<<<<<<<<<<<
@@ -2195,7 +2195,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_4from_unixtime(PyObjec
  */
   (__pyx_v_t->thisptr[0]) = __pyx_v__tp;
 
-  /* "handystats/chrono.pyx":104
+  /* "handystats/chrono.pyx":121
  *         t.thisptr[0] = _tp
  * 
  *         return t             # <<<<<<<<<<<<<<
@@ -2207,7 +2207,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_4from_unixtime(PyObjec
   __pyx_r = ((PyObject *)__pyx_v_t);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":93
+  /* "handystats/chrono.pyx":110
  * 
  *     @staticmethod
  *     def from_unixtime(unixtime):             # <<<<<<<<<<<<<<
@@ -2227,7 +2227,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_4from_unixtime(PyObjec
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":106
+/* "handystats/chrono.pyx":123
  *         return t
  * 
  *     cpdef Duration time_since_epoch(self):             # <<<<<<<<<<<<<<
@@ -2252,7 +2252,7 @@ static struct __pyx_obj_10handystats_6chrono_Duration *__pyx_f_10handystats_6chr
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_time_since_epoch); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_time_since_epoch); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 123; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_10handystats_6chrono_9Timepoint_7time_since_epoch)) {
       __Pyx_XDECREF(((PyObject *)__pyx_r));
@@ -2268,14 +2268,14 @@ static struct __pyx_obj_10handystats_6chrono_Duration *__pyx_f_10handystats_6chr
         }
       }
       if (__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 123; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 123; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       }
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_10handystats_6chrono_Duration))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_10handystats_6chrono_Duration))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 123; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __pyx_r = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_2);
       __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -2284,19 +2284,19 @@ static struct __pyx_obj_10handystats_6chrono_Duration *__pyx_f_10handystats_6chr
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "handystats/chrono.pyx":108
+  /* "handystats/chrono.pyx":125
  *     cpdef Duration time_since_epoch(self):
  *         cdef Duration since_epoch
  *         since_epoch = Duration()             # <<<<<<<<<<<<<<
  * 
  *         since_epoch.thisptr[0] = self.thisptr.time_since_epoch()
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 108; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 125; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_since_epoch = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":110
+  /* "handystats/chrono.pyx":127
  *         since_epoch = Duration()
  * 
  *         since_epoch.thisptr[0] = self.thisptr.time_since_epoch()             # <<<<<<<<<<<<<<
@@ -2305,7 +2305,7 @@ static struct __pyx_obj_10handystats_6chrono_Duration *__pyx_f_10handystats_6chr
  */
   (__pyx_v_since_epoch->thisptr[0]) = __pyx_v_self->thisptr->time_since_epoch();
 
-  /* "handystats/chrono.pyx":112
+  /* "handystats/chrono.pyx":129
  *         since_epoch.thisptr[0] = self.thisptr.time_since_epoch()
  * 
  *         return since_epoch             # <<<<<<<<<<<<<<
@@ -2317,7 +2317,7 @@ static struct __pyx_obj_10handystats_6chrono_Duration *__pyx_f_10handystats_6chr
   __pyx_r = __pyx_v_since_epoch;
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":106
+  /* "handystats/chrono.pyx":123
  *         return t
  * 
  *     cpdef Duration time_since_epoch(self):             # <<<<<<<<<<<<<<
@@ -2362,7 +2362,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_6time_since_epoch(stru
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("time_since_epoch", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_10handystats_6chrono_9Timepoint_time_since_epoch(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 106; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = ((PyObject *)__pyx_f_10handystats_6chrono_9Timepoint_time_since_epoch(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 123; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -2379,7 +2379,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_6time_since_epoch(stru
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":114
+/* "handystats/chrono.pyx":131
  *         return since_epoch
  * 
  *     def __add__(Timepoint self, Duration d):             # <<<<<<<<<<<<<<
@@ -2396,8 +2396,8 @@ static PyObject *__pyx_pw_10handystats_6chrono_9Timepoint_9__add__(PyObject *__p
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__add__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 114; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_d), __pyx_ptype_10handystats_6chrono_Duration, 1, "d", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 114; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 131; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_d), __pyx_ptype_10handystats_6chrono_Duration, 1, "d", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 131; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_6chrono_9Timepoint_8__add__(((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_v_self), ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_d));
 
   /* function exit code */
@@ -2419,19 +2419,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_8__add__(struct __pyx_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "handystats/chrono.pyx":116
+  /* "handystats/chrono.pyx":133
  *     def __add__(Timepoint self, Duration d):
  *         cdef Timepoint t
  *         t = Timepoint()             # <<<<<<<<<<<<<<
  * 
  *         t.thisptr[0] = deref(self.thisptr) + deref(d.thisptr)
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 116; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 133; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_t = ((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":118
+  /* "handystats/chrono.pyx":135
  *         t = Timepoint()
  * 
  *         t.thisptr[0] = deref(self.thisptr) + deref(d.thisptr)             # <<<<<<<<<<<<<<
@@ -2440,7 +2440,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_8__add__(struct __pyx_
  */
   (__pyx_v_t->thisptr[0]) = ((*__pyx_v_self->thisptr) + (*__pyx_v_d->thisptr));
 
-  /* "handystats/chrono.pyx":120
+  /* "handystats/chrono.pyx":137
  *         t.thisptr[0] = deref(self.thisptr) + deref(d.thisptr)
  * 
  *         return t             # <<<<<<<<<<<<<<
@@ -2452,7 +2452,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_8__add__(struct __pyx_
   __pyx_r = ((PyObject *)__pyx_v_t);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":114
+  /* "handystats/chrono.pyx":131
  *         return since_epoch
  * 
  *     def __add__(Timepoint self, Duration d):             # <<<<<<<<<<<<<<
@@ -2472,7 +2472,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_8__add__(struct __pyx_
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":122
+/* "handystats/chrono.pyx":139
  *         return t
  * 
  *     def __sub__(Timepoint self, other):             # <<<<<<<<<<<<<<
@@ -2489,7 +2489,7 @@ static PyObject *__pyx_pw_10handystats_6chrono_9Timepoint_11__sub__(PyObject *__
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__sub__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 122; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_v_self), ((PyObject *)__pyx_v_other));
 
   /* function exit code */
@@ -2514,7 +2514,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(struct __pyx
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__sub__", 0);
 
-  /* "handystats/chrono.pyx":125
+  /* "handystats/chrono.pyx":142
  *         cdef Timepoint t
  *         cdef Duration d
  *         if isinstance(other, Duration):             # <<<<<<<<<<<<<<
@@ -2525,19 +2525,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(struct __pyx
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "handystats/chrono.pyx":126
+    /* "handystats/chrono.pyx":143
  *         cdef Duration d
  *         if isinstance(other, Duration):
  *             t = Timepoint()             # <<<<<<<<<<<<<<
  * 
  *             t.thisptr[0] = deref(self.thisptr) - deref((<Duration>other).thisptr)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 126; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_v_t = ((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "handystats/chrono.pyx":128
+    /* "handystats/chrono.pyx":145
  *             t = Timepoint()
  * 
  *             t.thisptr[0] = deref(self.thisptr) - deref((<Duration>other).thisptr)             # <<<<<<<<<<<<<<
@@ -2546,7 +2546,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(struct __pyx
  */
     (__pyx_v_t->thisptr[0]) = ((*__pyx_v_self->thisptr) - (*((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_v_other)->thisptr));
 
-    /* "handystats/chrono.pyx":130
+    /* "handystats/chrono.pyx":147
  *             t.thisptr[0] = deref(self.thisptr) - deref((<Duration>other).thisptr)
  * 
  *             return t             # <<<<<<<<<<<<<<
@@ -2559,7 +2559,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(struct __pyx
     goto __pyx_L0;
   }
 
-  /* "handystats/chrono.pyx":131
+  /* "handystats/chrono.pyx":148
  * 
  *             return t
  *         elif isinstance(other, Timepoint):             # <<<<<<<<<<<<<<
@@ -2570,19 +2570,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(struct __pyx
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "handystats/chrono.pyx":132
+    /* "handystats/chrono.pyx":149
  *             return t
  *         elif isinstance(other, Timepoint):
  *             d = Duration()             # <<<<<<<<<<<<<<
  * 
  *             d.thisptr[0] = deref(self.thisptr) - deref((<Timepoint>other).thisptr)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 132; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Duration)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_v_d = ((struct __pyx_obj_10handystats_6chrono_Duration *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "handystats/chrono.pyx":134
+    /* "handystats/chrono.pyx":151
  *             d = Duration()
  * 
  *             d.thisptr[0] = deref(self.thisptr) - deref((<Timepoint>other).thisptr)             # <<<<<<<<<<<<<<
@@ -2591,7 +2591,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(struct __pyx
  */
     (__pyx_v_d->thisptr[0]) = ((*__pyx_v_self->thisptr) - (*((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_v_other)->thisptr));
 
-    /* "handystats/chrono.pyx":136
+    /* "handystats/chrono.pyx":153
  *             d.thisptr[0] = deref(self.thisptr) - deref((<Timepoint>other).thisptr)
  * 
  *             return d             # <<<<<<<<<<<<<<
@@ -2605,7 +2605,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(struct __pyx
   }
   /*else*/ {
 
-    /* "handystats/chrono.pyx":138
+    /* "handystats/chrono.pyx":155
  *             return d
  *         else:
  *             raise TypeError             # <<<<<<<<<<<<<<
@@ -2613,10 +2613,10 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(struct __pyx
  * 
  */
     __Pyx_Raise(__pyx_builtin_TypeError, 0, 0, 0);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 138; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
 
-  /* "handystats/chrono.pyx":122
+  /* "handystats/chrono.pyx":139
  *         return t
  * 
  *     def __sub__(Timepoint self, other):             # <<<<<<<<<<<<<<
@@ -2637,7 +2637,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_10__sub__(struct __pyx
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":141
+/* "handystats/chrono.pyx":158
  * 
  * 
  *     def __richcmp__(Timepoint self, Timepoint other not None, int op):             # <<<<<<<<<<<<<<
@@ -2654,8 +2654,8 @@ static PyObject *__pyx_pw_10handystats_6chrono_9Timepoint_13__richcmp__(PyObject
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__richcmp__ (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_6chrono_Timepoint, 0, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 141; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_self), __pyx_ptype_10handystats_6chrono_Timepoint, 1, "self", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_other), __pyx_ptype_10handystats_6chrono_Timepoint, 0, "other", 0))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_r = __pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_v_self), ((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_v_other), ((int)__pyx_v_op));
 
   /* function exit code */
@@ -2676,7 +2676,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__richcmp__", 0);
 
-  /* "handystats/chrono.pyx":152
+  /* "handystats/chrono.pyx":169
  *         elif op == 4: # >
  *             return deref(self.thisptr) > deref(other.thisptr)
  *         elif op == 5: # >=             # <<<<<<<<<<<<<<
@@ -2685,7 +2685,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  */
   switch (__pyx_v_op) {
 
-    /* "handystats/chrono.pyx":142
+    /* "handystats/chrono.pyx":159
  * 
  *     def __richcmp__(Timepoint self, Timepoint other not None, int op):
  *         if op == 0: # <             # <<<<<<<<<<<<<<
@@ -2694,7 +2694,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  */
     case 0:
 
-    /* "handystats/chrono.pyx":143
+    /* "handystats/chrono.pyx":160
  *     def __richcmp__(Timepoint self, Timepoint other not None, int op):
  *         if op == 0: # <
  *             return deref(self.thisptr) < deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -2702,14 +2702,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  *             return deref(self.thisptr) <= deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) < (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) < (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":144
+    /* "handystats/chrono.pyx":161
  *         if op == 0: # <
  *             return deref(self.thisptr) < deref(other.thisptr)
  *         elif op == 1: # <=             # <<<<<<<<<<<<<<
@@ -2718,7 +2718,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  */
     case 1:
 
-    /* "handystats/chrono.pyx":145
+    /* "handystats/chrono.pyx":162
  *             return deref(self.thisptr) < deref(other.thisptr)
  *         elif op == 1: # <=
  *             return deref(self.thisptr) <= deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -2726,14 +2726,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  *             return deref(self.thisptr) == deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) <= (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) <= (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":146
+    /* "handystats/chrono.pyx":163
  *         elif op == 1: # <=
  *             return deref(self.thisptr) <= deref(other.thisptr)
  *         elif op == 2: # ==             # <<<<<<<<<<<<<<
@@ -2742,7 +2742,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  */
     case 2:
 
-    /* "handystats/chrono.pyx":147
+    /* "handystats/chrono.pyx":164
  *             return deref(self.thisptr) <= deref(other.thisptr)
  *         elif op == 2: # ==
  *             return deref(self.thisptr) == deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -2750,14 +2750,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  *             return deref(self.thisptr) != deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) == (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) == (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":148
+    /* "handystats/chrono.pyx":165
  *         elif op == 2: # ==
  *             return deref(self.thisptr) == deref(other.thisptr)
  *         elif op == 3: # !=             # <<<<<<<<<<<<<<
@@ -2766,7 +2766,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  */
     case 3:
 
-    /* "handystats/chrono.pyx":149
+    /* "handystats/chrono.pyx":166
  *             return deref(self.thisptr) == deref(other.thisptr)
  *         elif op == 3: # !=
  *             return deref(self.thisptr) != deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -2774,14 +2774,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  *             return deref(self.thisptr) > deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) != (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) != (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":150
+    /* "handystats/chrono.pyx":167
  *         elif op == 3: # !=
  *             return deref(self.thisptr) != deref(other.thisptr)
  *         elif op == 4: # >             # <<<<<<<<<<<<<<
@@ -2790,7 +2790,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  */
     case 4:
 
-    /* "handystats/chrono.pyx":151
+    /* "handystats/chrono.pyx":168
  *             return deref(self.thisptr) != deref(other.thisptr)
  *         elif op == 4: # >
  *             return deref(self.thisptr) > deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -2798,14 +2798,14 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  *             return deref(self.thisptr) >= deref(other.thisptr)
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) > (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) > (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 168; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
     goto __pyx_L0;
     break;
 
-    /* "handystats/chrono.pyx":152
+    /* "handystats/chrono.pyx":169
  *         elif op == 4: # >
  *             return deref(self.thisptr) > deref(other.thisptr)
  *         elif op == 5: # >=             # <<<<<<<<<<<<<<
@@ -2814,7 +2814,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  */
     case 5:
 
-    /* "handystats/chrono.pyx":153
+    /* "handystats/chrono.pyx":170
  *             return deref(self.thisptr) > deref(other.thisptr)
  *         elif op == 5: # >=
  *             return deref(self.thisptr) >= deref(other.thisptr)             # <<<<<<<<<<<<<<
@@ -2822,7 +2822,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
  * class InternalClock:
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) >= (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 153; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyBool_FromLong(((*__pyx_v_self->thisptr) >= (*__pyx_v_other->thisptr))); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 170; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_r = __pyx_t_1;
     __pyx_t_1 = 0;
@@ -2831,7 +2831,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
     default: break;
   }
 
-  /* "handystats/chrono.pyx":141
+  /* "handystats/chrono.pyx":158
  * 
  * 
  *     def __richcmp__(Timepoint self, Timepoint other not None, int op):             # <<<<<<<<<<<<<<
@@ -2852,7 +2852,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_9Timepoint_12__richcmp__(struct _
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":157
+/* "handystats/chrono.pyx":174
  * class InternalClock:
  *     @staticmethod
  *     def now():             # <<<<<<<<<<<<<<
@@ -2884,19 +2884,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_13InternalClock_now(CYTHON_UNUSED
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("now", 0);
 
-  /* "handystats/chrono.pyx":159
+  /* "handystats/chrono.pyx":176
  *     def now():
  *         cdef Timepoint t
  *         t = Timepoint()             # <<<<<<<<<<<<<<
  * 
  *         t.thisptr[0] = internal_clock.now()
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 176; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_t = ((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":161
+  /* "handystats/chrono.pyx":178
  *         t = Timepoint()
  * 
  *         t.thisptr[0] = internal_clock.now()             # <<<<<<<<<<<<<<
@@ -2905,7 +2905,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_13InternalClock_now(CYTHON_UNUSED
  */
   (__pyx_v_t->thisptr[0]) = handystats::chrono::internal_clock::now();
 
-  /* "handystats/chrono.pyx":163
+  /* "handystats/chrono.pyx":180
  *         t.thisptr[0] = internal_clock.now()
  * 
  *         return t             # <<<<<<<<<<<<<<
@@ -2917,7 +2917,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_13InternalClock_now(CYTHON_UNUSED
   __pyx_r = ((PyObject *)__pyx_v_t);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":157
+  /* "handystats/chrono.pyx":174
  * class InternalClock:
  *     @staticmethod
  *     def now():             # <<<<<<<<<<<<<<
@@ -2937,7 +2937,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_13InternalClock_now(CYTHON_UNUSED
   return __pyx_r;
 }
 
-/* "handystats/chrono.pyx":167
+/* "handystats/chrono.pyx":184
  * class SystemClock:
  *     @staticmethod
  *     def now():             # <<<<<<<<<<<<<<
@@ -2969,19 +2969,19 @@ static PyObject *__pyx_pf_10handystats_6chrono_11SystemClock_now(CYTHON_UNUSED P
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("now", 0);
 
-  /* "handystats/chrono.pyx":169
+  /* "handystats/chrono.pyx":186
  *     def now():
  *         cdef Timepoint t
  *         t = Timepoint()             # <<<<<<<<<<<<<<
  * 
  *         t.thisptr[0] = system_clock.now()
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)((PyObject*)__pyx_ptype_10handystats_6chrono_Timepoint)), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_t = ((struct __pyx_obj_10handystats_6chrono_Timepoint *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":171
+  /* "handystats/chrono.pyx":188
  *         t = Timepoint()
  * 
  *         t.thisptr[0] = system_clock.now()             # <<<<<<<<<<<<<<
@@ -2990,7 +2990,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_11SystemClock_now(CYTHON_UNUSED P
  */
   (__pyx_v_t->thisptr[0]) = handystats::chrono::system_clock::now();
 
-  /* "handystats/chrono.pyx":173
+  /* "handystats/chrono.pyx":190
  *         t.thisptr[0] = system_clock.now()
  * 
  *         return t             # <<<<<<<<<<<<<<
@@ -3000,7 +3000,7 @@ static PyObject *__pyx_pf_10handystats_6chrono_11SystemClock_now(CYTHON_UNUSED P
   __pyx_r = ((PyObject *)__pyx_v_t);
   goto __pyx_L0;
 
-  /* "handystats/chrono.pyx":167
+  /* "handystats/chrono.pyx":184
  * class SystemClock:
  *     @staticmethod
  *     def now():             # <<<<<<<<<<<<<<
@@ -3390,8 +3390,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 138; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -3401,41 +3401,41 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "handystats/chrono.pyx":93
+  /* "handystats/chrono.pyx":110
  * 
  *     @staticmethod
  *     def from_unixtime(unixtime):             # <<<<<<<<<<<<<<
  *         cdef duration _dur
  *         cdef time_point _tp
  */
-  __pyx_tuple__2 = PyTuple_Pack(4, __pyx_n_s_unixtime, __pyx_n_s_dur, __pyx_n_s_tp, __pyx_n_s_t); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__2 = PyTuple_Pack(4, __pyx_n_s_unixtime, __pyx_n_s_dur, __pyx_n_s_tp, __pyx_n_s_t); if (unlikely(!__pyx_tuple__2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
-  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__2, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_shindo_handystats_bindings, __pyx_n_s_from_unixtime, 93, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__2, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_shindo_handystats_bindings, __pyx_n_s_from_unixtime, 110, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "handystats/chrono.pyx":157
+  /* "handystats/chrono.pyx":174
  * class InternalClock:
  *     @staticmethod
  *     def now():             # <<<<<<<<<<<<<<
  *         cdef Timepoint t
  *         t = Timepoint()
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_n_s_t); if (unlikely(!__pyx_tuple__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_n_s_t); if (unlikely(!__pyx_tuple__4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 174; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
-  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(0, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_shindo_handystats_bindings, __pyx_n_s_now, 157, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(0, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_shindo_handystats_bindings, __pyx_n_s_now, 174, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 174; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "handystats/chrono.pyx":167
+  /* "handystats/chrono.pyx":184
  * class SystemClock:
  *     @staticmethod
  *     def now():             # <<<<<<<<<<<<<<
  *         cdef Timepoint t
  *         t = Timepoint()
  */
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_n_s_t); if (unlikely(!__pyx_tuple__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 167; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_n_s_t); if (unlikely(!__pyx_tuple__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 184; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
-  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(0, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_shindo_handystats_bindings, __pyx_n_s_now, 167, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 167; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_codeobj__7 = (PyObject*)__Pyx_PyCode_New(0, 0, 1, 0, 0, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__6, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_home_shindo_handystats_bindings, __pyx_n_s_now, 184, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 184; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -3534,24 +3534,24 @@ PyMODINIT_FUNC PyInit_chrono(void)
   /*--- Type init code ---*/
   __pyx_vtabptr_10handystats_6chrono_Duration = &__pyx_vtable_10handystats_6chrono_Duration;
   __pyx_vtable_10handystats_6chrono_Duration.count = (int64_t (*)(struct __pyx_obj_10handystats_6chrono_Duration *, int __pyx_skip_dispatch, struct __pyx_opt_args_10handystats_6chrono_8Duration_count *__pyx_optional_args))__pyx_f_10handystats_6chrono_8Duration_count;
-  if (PyType_Ready(&__pyx_type_10handystats_6chrono_Duration) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_10handystats_6chrono_Duration) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_10handystats_6chrono_Duration.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_10handystats_6chrono_Duration.tp_dict, __pyx_vtabptr_10handystats_6chrono_Duration) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyObject_SetAttrString(__pyx_m, "Duration", (PyObject *)&__pyx_type_10handystats_6chrono_Duration) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_SetVtable(__pyx_type_10handystats_6chrono_Duration.tp_dict, __pyx_vtabptr_10handystats_6chrono_Duration) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "Duration", (PyObject *)&__pyx_type_10handystats_6chrono_Duration) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 22; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_10handystats_6chrono_Duration = &__pyx_type_10handystats_6chrono_Duration;
   __pyx_vtabptr_10handystats_6chrono_Timepoint = &__pyx_vtable_10handystats_6chrono_Timepoint;
   __pyx_vtable_10handystats_6chrono_Timepoint.time_since_epoch = (struct __pyx_obj_10handystats_6chrono_Duration *(*)(struct __pyx_obj_10handystats_6chrono_Timepoint *, int __pyx_skip_dispatch))__pyx_f_10handystats_6chrono_9Timepoint_time_since_epoch;
-  if (PyType_Ready(&__pyx_type_10handystats_6chrono_Timepoint) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_10handystats_6chrono_Timepoint) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_10handystats_6chrono_Timepoint.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_10handystats_6chrono_Timepoint.tp_dict, __pyx_vtabptr_10handystats_6chrono_Timepoint) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyObject_SetAttrString(__pyx_m, "Timepoint", (PyObject *)&__pyx_type_10handystats_6chrono_Timepoint) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 85; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_SetVtable(__pyx_type_10handystats_6chrono_Timepoint.tp_dict, __pyx_vtabptr_10handystats_6chrono_Timepoint) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "Timepoint", (PyObject *)&__pyx_type_10handystats_6chrono_Timepoint) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 102; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_10handystats_6chrono_Timepoint = &__pyx_type_10handystats_6chrono_Timepoint;
   /*--- Type import code ---*/
   /*--- Variable import code ---*/
   /*--- Function import code ---*/
   /*--- Execution code ---*/
 
-  /* "handystats/chrono.pyx":12
+  /* "handystats/chrono.pyx":29
  *         del self.thisptr
  * 
  *     cpdef int64_t count(self, time_unit unit = SEC):             # <<<<<<<<<<<<<<
@@ -3561,170 +3561,170 @@ PyMODINIT_FUNC PyInit_chrono(void)
   __pyx_k_ = handystats::chrono::SEC;
   __pyx_k_ = handystats::chrono::SEC;
 
-  /* "handystats/chrono.pyx":93
+  /* "handystats/chrono.pyx":110
  * 
  *     @staticmethod
  *     def from_unixtime(unixtime):             # <<<<<<<<<<<<<<
  *         cdef duration _dur
  *         cdef time_point _tp
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10handystats_6chrono_9Timepoint_5from_unixtime, NULL, __pyx_n_s_handystats_chrono); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10handystats_6chrono_9Timepoint_5from_unixtime, NULL, __pyx_n_s_handystats_chrono); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "handystats/chrono.pyx":92
+  /* "handystats/chrono.pyx":109
  *         del self.thisptr
  * 
  *     @staticmethod             # <<<<<<<<<<<<<<
  *     def from_unixtime(unixtime):
  *         cdef duration _dur
  */
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_10handystats_6chrono_Timepoint->tp_dict, __pyx_n_s_from_unixtime, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_10handystats_6chrono_Timepoint->tp_dict, __pyx_n_s_from_unixtime, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_10handystats_6chrono_Timepoint);
 
-  /* "handystats/chrono.pyx":93
+  /* "handystats/chrono.pyx":110
  * 
  *     @staticmethod
  *     def from_unixtime(unixtime):             # <<<<<<<<<<<<<<
  *         cdef duration _dur
  *         cdef time_point _tp
  */
-  __pyx_t_1 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_10handystats_6chrono_Timepoint, __pyx_n_s_from_unixtime); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_10handystats_6chrono_Timepoint, __pyx_n_s_from_unixtime); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "handystats/chrono.pyx":92
+  /* "handystats/chrono.pyx":109
  *         del self.thisptr
  * 
  *     @staticmethod             # <<<<<<<<<<<<<<
  *     def from_unixtime(unixtime):
  *         cdef duration _dur
  */
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 92; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 109; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_10handystats_6chrono_Timepoint->tp_dict, __pyx_n_s_from_unixtime, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 93; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_10handystats_6chrono_Timepoint->tp_dict, __pyx_n_s_from_unixtime, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 110; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   PyType_Modified(__pyx_ptype_10handystats_6chrono_Timepoint);
 
-  /* "handystats/chrono.pyx":155
+  /* "handystats/chrono.pyx":172
  *             return deref(self.thisptr) >= deref(other.thisptr)
  * 
  * class InternalClock:             # <<<<<<<<<<<<<<
  *     @staticmethod
  *     def now():
  */
-  __pyx_t_1 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_InternalClock, __pyx_n_s_InternalClock, (PyObject *) NULL, __pyx_n_s_handystats_chrono, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_InternalClock, __pyx_n_s_InternalClock, (PyObject *) NULL, __pyx_n_s_handystats_chrono, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "handystats/chrono.pyx":157
+  /* "handystats/chrono.pyx":174
  * class InternalClock:
  *     @staticmethod
  *     def now():             # <<<<<<<<<<<<<<
  *         cdef Timepoint t
  *         t = Timepoint()
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_10handystats_6chrono_13InternalClock_1now, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_InternalClock_now, NULL, __pyx_n_s_handystats_chrono, __pyx_d, ((PyObject *)__pyx_codeobj__5)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_10handystats_6chrono_13InternalClock_1now, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_InternalClock_now, NULL, __pyx_n_s_handystats_chrono, __pyx_d, ((PyObject *)__pyx_codeobj__5)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 174; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "handystats/chrono.pyx":156
+  /* "handystats/chrono.pyx":173
  * 
  * class InternalClock:
  *     @staticmethod             # <<<<<<<<<<<<<<
  *     def now():
  *         cdef Timepoint t
  */
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_2);
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_now, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_now, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 174; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "handystats/chrono.pyx":155
+  /* "handystats/chrono.pyx":172
  *             return deref(self.thisptr) >= deref(other.thisptr)
  * 
  * class InternalClock:             # <<<<<<<<<<<<<<
  *     @staticmethod
  *     def now():
  */
-  __pyx_t_2 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_InternalClock, __pyx_empty_tuple, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_InternalClock, __pyx_empty_tuple, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_InternalClock, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_InternalClock, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "handystats/chrono.pyx":165
+  /* "handystats/chrono.pyx":182
  *         return t
  * 
  * class SystemClock:             # <<<<<<<<<<<<<<
  *     @staticmethod
  *     def now():
  */
-  __pyx_t_1 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_SystemClock, __pyx_n_s_SystemClock, (PyObject *) NULL, __pyx_n_s_handystats_chrono, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 165; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare((PyObject *) NULL, __pyx_empty_tuple, __pyx_n_s_SystemClock, __pyx_n_s_SystemClock, (PyObject *) NULL, __pyx_n_s_handystats_chrono, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 182; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "handystats/chrono.pyx":167
+  /* "handystats/chrono.pyx":184
  * class SystemClock:
  *     @staticmethod
  *     def now():             # <<<<<<<<<<<<<<
  *         cdef Timepoint t
  *         t = Timepoint()
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_10handystats_6chrono_11SystemClock_1now, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_SystemClock_now, NULL, __pyx_n_s_handystats_chrono, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 167; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_10handystats_6chrono_11SystemClock_1now, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_SystemClock_now, NULL, __pyx_n_s_handystats_chrono, __pyx_d, ((PyObject *)__pyx_codeobj__7)); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 184; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "handystats/chrono.pyx":166
+  /* "handystats/chrono.pyx":183
  * 
  * class SystemClock:
  *     @staticmethod             # <<<<<<<<<<<<<<
  *     def now():
  *         cdef Timepoint t
  */
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 183; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_2);
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 183; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_now, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 167; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetItem(__pyx_t_1, __pyx_n_s_now, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 184; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "handystats/chrono.pyx":165
+  /* "handystats/chrono.pyx":182
  *         return t
  * 
  * class SystemClock:             # <<<<<<<<<<<<<<
  *     @staticmethod
  *     def now():
  */
-  __pyx_t_2 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_SystemClock, __pyx_empty_tuple, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 165; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_Py3ClassCreate(((PyObject*)&__Pyx_DefaultClassType), __pyx_n_s_SystemClock, __pyx_empty_tuple, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 182; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_SystemClock, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 165; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_SystemClock, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 182; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "handystats/chrono.pyx":1
  * # distutils: language = c++             # <<<<<<<<<<<<<<
  * 
- * from cython.operator cimport dereference as deref
+ * # Copyright (c) 2014 Yandex LLC. All rights reserved.
  */
   __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 1; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
@@ -3734,53 +3734,53 @@ PyMODINIT_FUNC PyInit_chrono(void)
   /*--- Wrapped vars code ---*/
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::USEC);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "USEC", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 10; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "USEC", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 27; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::MIN);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 13; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "MIN", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 13; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "MIN", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 30; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::SYSTEM_CLOCK);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "SYSTEM_CLOCK", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 19; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "SYSTEM_CLOCK", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 36; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::HOUR);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "HOUR", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 14; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "HOUR", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 31; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::SEC);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "SEC", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 12; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "SEC", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 29; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::CYCLE);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "CYCLE", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "CYCLE", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 25; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::MSEC);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "MSEC", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 11; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "MSEC", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 28; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::NSEC);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 9; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "NSEC", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 9; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "NSEC", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 26; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::INTERNAL_CLOCK);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "INTERNAL_CLOCK", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 18; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "INTERNAL_CLOCK", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 35; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
   {
     PyObject* wrapped = PyInt_FromLong(handystats::chrono::DAY);
-    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    if (PyObject_SetAttrString(__pyx_m, "DAY", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 15; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
+    if (unlikely(!wrapped)) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (PyObject_SetAttrString(__pyx_m, "DAY", wrapped) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 32; __pyx_clineno = __LINE__; goto __pyx_L1_error;};
   }
 
   goto __pyx_L0;

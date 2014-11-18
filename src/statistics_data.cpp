@@ -138,8 +138,8 @@ double shift_data(
 
 	if (stale_interval.count() <= 0) return 0;
 
-	return data * stale_interval.count() /
-		(ctx.m_moving_interval - (ctx.m_timestamp - data_timestamp)).count();
+	return data * stale_interval.count(chrono::NSEC) /
+		(ctx.m_moving_interval - (ctx.m_timestamp - data_timestamp)).count(chrono::NSEC);
 }
 
 static
@@ -186,7 +186,7 @@ double truncate_data_before(
 	const auto& stale_interval = timestamp - (ctx.m_timestamp - ctx.m_moving_interval);
 	const auto& data_interval = data_timestamp - (ctx.m_timestamp - ctx.m_moving_interval);
 
-	return data * (data_interval - stale_interval).count() / data_interval.count();
+	return data * (data_interval - stale_interval).count(chrono::NSEC) / data_interval.count(chrono::NSEC);
 }
 
 static
@@ -208,7 +208,7 @@ double truncate_data_after(
 	const auto& stale_interval = timestamp - (ctx.m_timestamp - ctx.m_moving_interval);
 	const auto& data_interval = data_timestamp - (ctx.m_timestamp - ctx.m_moving_interval);
 
-	return data * stale_interval.count() / data_interval.count();
+	return data * stale_interval.count(chrono::NSEC) / data_interval.count(chrono::NSEC);
 }
 
 static

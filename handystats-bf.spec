@@ -100,6 +100,7 @@ cd %{_builddir}/%{name}-%{version}/utils
 %package -n libhandystats%{__soname}
 Summary: C++ library to collect runtime statistics - Core library
 Group: Development/Libraries
+Obsoletes: handystats < 2.0.0
 
 %description -n libhandystats%{__soname}
 Handystats is C++ library for collecting user-defined
@@ -119,6 +120,7 @@ Summary: C++ library to collect runtime statistics - Development files
 Group: Development/Libraries
 Requires: libhandystats%{__soname} = %{version}-%{release}
 Requires: boost-devel
+Obsoletes: handystats < 2.0.0
 
 %description -n libhandystats-devel
 Handystats is C++ library for collecting user-defined

@@ -23,6 +23,8 @@ Architecture: any
 Depends:
 	${shlibs:Depends},
 	${misc:Depends},
+Conflicts: handystats (<< 2.0.0)
+Replaces: handystats (<< 2.0.0)
 Description: C++ library to collect runtime statistics - Core library
  Handystats is C++ library for collecting user-defined
  in-process runtime statistics with low overhead.
@@ -46,6 +48,8 @@ Depends:
 	${shlibs:Depends},
 	${misc:Depends},
 	libboost-dev,
+Conflicts: handystats (<< 2.0.0)
+Replaces: handystats (<< 2.0.0)
 Description: C++ library to collect runtime statistics - Development files
  Handystats is C++ library for collecting user-defined
  in-process runtime statistics with low overhead.

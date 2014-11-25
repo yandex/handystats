@@ -60,6 +60,8 @@ std::atomic<int64_t> end_time(0);
 // command() function is executed in multiple threads
 // NOTE: rand() function may be not thread-safe.
 void command() {
+	static thread_local unsigned int seed = pthread_self();
+
 	// 0 .. counters .. counters + gauges .. counters + gauges + timers
 	const double total_metrics = counters + gauges + timers;
 
@@ -67,20 +69,20 @@ void command() {
 	double gauge_prob = double(counters + gauges) / total_metrics;
 //	double timer_prob = 1.0;
 
-	double choice = double(rand()) / RAND_MAX;
+	double choice = double(rand_r(&seed)) / RAND_MAX;
 
 	if (handystats::math_utils::cmp(choice, counter_prob) < 0) {
-		LOAD_COUNTER_INCREMENT("load_test.counter." + std::to_string(rand() % counters), rand());
+		LOAD_COUNTER_INCREMENT("load_test.counter." + std::to_string(rand_r(&seed) % counters), rand_r(&seed));
 	}
 	else if (handystats::math_utils::cmp(choice, gauge_prob) < 0) {
-		LOAD_GAUGE_SET("load_test.gauge." + std::to_string(rand() % gauges), rand());
+		LOAD_GAUGE_SET("load_test.gauge." + std::to_string(rand_r(&seed) % gauges), rand_r(&seed));
 	}
 	else {
-		if (rand() & 1) {
-			LOAD_TIMER_START("load_test.timer." + std::to_string(rand() % timers), std::hash<std::thread::id>()(std::this_thread::get_id()));
+		if (rand_r(&seed) & 1) {
+			LOAD_TIMER_START("load_test.timer." + std::to_string(rand_r(&seed) % timers), std::hash<std::thread::id>()(std::this_thread::get_id()));
 		}
 		else {
-			LOAD_TIMER_STOP("load_test.timer." + std::to_string(rand() % timers), std::hash<std::thread::id>()(std::this_thread::get_id()));
+			LOAD_TIMER_STOP("load_test.timer." + std::to_string(rand_r(&seed) % timers), std::hash<std::thread::id>()(std::this_thread::get_id()));
 		}
 	}
 }
@@ -131,15 +133,17 @@ void print_stats() {
 
 	{
 		const char* name = "load_test.timer.0";
-		const auto& timer = metrics_dump->first.at(name);
-		std::cout << name << ":" << std::endl;
-		std::cout << "          p25: " << timer.get<handystats::statistics::tag::quantile>().at(0.25) << std::endl;
-		std::cout << "          p50: " << timer.get<handystats::statistics::tag::quantile>().at(0.50) << std::endl;
-		std::cout << "          p75: " << timer.get<handystats::statistics::tag::quantile>().at(0.75) << std::endl;
-		std::cout << "          p95: " << timer.get<handystats::statistics::tag::quantile>().at(0.95) << std::endl;
-		std::cout << "    frequency: " << timer.get<handystats::statistics::tag::frequency>() << std::endl;
-//		std::cout << "    timestamp: " << timer.get<handystats::statistics::tag::timestamp>() << std::endl;
-		std::cout << std::endl;
+		if (metrics_dump->first.find(name) != metrics_dump->first.end()) {
+			const auto& timer = metrics_dump->first.at(name);
+			std::cout << name << ":" << std::endl;
+			std::cout << "          p25: " << timer.get<handystats::statistics::tag::quantile>().at(0.25) << std::endl;
+			std::cout << "          p50: " << timer.get<handystats::statistics::tag::quantile>().at(0.50) << std::endl;
+			std::cout << "          p75: " << timer.get<handystats::statistics::tag::quantile>().at(0.75) << std::endl;
+			std::cout << "          p95: " << timer.get<handystats::statistics::tag::quantile>().at(0.95) << std::endl;
+			std::cout << "    frequency: " << timer.get<handystats::statistics::tag::frequency>() << std::endl;
+//			std::cout << "    timestamp: " << timer.get<handystats::statistics::tag::timestamp>() << std::endl;
+			std::cout << std::endl;
+		}
 	}
 }
 

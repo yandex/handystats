@@ -44,7 +44,7 @@ TEST_F(CounterEventsTest, TestCounterInitEvent) {
 	const handystats::metrics::counter::value_type init_value = 10;
 	auto message = create_init_event(counter_name, init_value, handystats::metrics::counter::clock::now());
 
-	ASSERT_EQ(message->destination_name, counter_name);
+	ASSERT_STREQ(message->destination_name, counter_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::COUNTER);
 
 	ASSERT_EQ(message->event_type, event_type::INIT);
@@ -58,7 +58,7 @@ TEST_F(CounterEventsTest, TestCounterIncrementEvent) {
 	const handystats::metrics::counter::value_type value = 2;
 	auto message = create_increment_event(counter_name, value, handystats::metrics::counter::clock::now());
 
-	ASSERT_EQ(message->destination_name, counter_name);
+	ASSERT_STREQ(message->destination_name, counter_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::COUNTER);
 
 	ASSERT_EQ(message->event_type, event_type::INCREMENT);
@@ -72,7 +72,7 @@ TEST_F(CounterEventsTest, TestCounterDecrementEvent) {
 	const handystats::metrics::counter::value_type value = -1;
 	auto message = create_decrement_event(counter_name, value, handystats::metrics::counter::clock::now());
 
-	ASSERT_EQ(message->destination_name, counter_name);
+	ASSERT_STREQ(message->destination_name, counter_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::COUNTER);
 
 	ASSERT_EQ(message->event_type, event_type::DECREMENT);

@@ -18,6 +18,7 @@
 */
 
 #include <algorithm>
+#include <cstring>
 
 #include <handystats/common.h>
 
@@ -37,7 +38,7 @@ event_message* create_set_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(attr_name);
+	strncpy(message->destination_name, attr_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::ATTRIBUTE;
 
 	message->timestamp = timestamp;

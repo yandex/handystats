@@ -17,6 +17,8 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cstring>
+
 #include <handystats/common.h>
 #include <handystats/chrono.hpp>
 
@@ -38,7 +40,7 @@ event_message* create_init_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(timer_name);
+	strncpy(message->destination_name, timer_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;
@@ -64,7 +66,7 @@ event_message* create_start_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(timer_name);
+	strncpy(message->destination_name, timer_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;
@@ -90,7 +92,7 @@ event_message* create_stop_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(timer_name);
+	strncpy(message->destination_name, timer_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;
@@ -116,7 +118,7 @@ event_message* create_discard_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(timer_name);
+	strncpy(message->destination_name, timer_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;
@@ -142,7 +144,7 @@ event_message* create_heartbeat_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(timer_name);
+	strncpy(message->destination_name, timer_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;
@@ -168,7 +170,7 @@ event_message* create_set_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(timer_name);
+	strncpy(message->destination_name, timer_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::TIMER;
 
 	message->timestamp = timestamp;

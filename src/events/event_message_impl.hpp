@@ -20,7 +20,6 @@
 #ifndef HANDYSTATS_EVENT_MESSAGE_HPP_
 #define HANDYSTATS_EVENT_MESSAGE_HPP_
 
-#include <string>
 #include <vector>
 
 #include <handystats/chrono.hpp>
@@ -50,9 +49,11 @@ enum : char {
 
 struct event_message : message_queue::node
 {
+	static const size_t NAME_SIZE = 64;
+
 	char destination_type;
 	char event_type;
-	std::string destination_name;
+	char destination_name[NAME_SIZE];
 
 	chrono::time_point timestamp;
 

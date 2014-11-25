@@ -17,6 +17,8 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cstring>
+
 #include <handystats/common.h>
 
 #include "config_impl.hpp"
@@ -37,7 +39,7 @@ event_message* create_init_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(counter_name);
+	strncpy(message->destination_name, counter_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::COUNTER;
 
 	message->timestamp = timestamp;
@@ -63,7 +65,7 @@ event_message* create_increment_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(counter_name);
+	strncpy(message->destination_name, counter_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::COUNTER;
 
 	message->timestamp = timestamp;
@@ -89,7 +91,7 @@ event_message* create_decrement_event(
 		return nullptr;
 	}
 
-	message->destination_name.swap(counter_name);
+	strncpy(message->destination_name, counter_name.c_str(), event_message::NAME_SIZE);
 	message->destination_type = event_destination_type::COUNTER;
 
 	message->timestamp = timestamp;

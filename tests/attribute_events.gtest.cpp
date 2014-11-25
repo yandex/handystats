@@ -44,7 +44,7 @@ TEST_F(AttributeEventsTest, TestAttributeSetDoubleEvent) {
 	const double value = 0.75;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
-	ASSERT_EQ(message->destination_name, attribute_name);
+	ASSERT_STREQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
@@ -62,7 +62,7 @@ TEST_F(AttributeEventsTest, TestAttributeSetBoolEvent) {
 	const bool value = true;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
-	ASSERT_EQ(message->destination_name, attribute_name);
+	ASSERT_STREQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
@@ -79,7 +79,7 @@ TEST_F(AttributeEventsTest, TestAttributeSetIntEvent) {
 	const int value = -123;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
-	ASSERT_EQ(message->destination_name, attribute_name);
+	ASSERT_STREQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
@@ -96,7 +96,7 @@ TEST_F(AttributeEventsTest, TestAttributeSetUintEvent) {
 	const unsigned value = 123;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
-	ASSERT_EQ(message->destination_name, attribute_name);
+	ASSERT_STREQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
@@ -113,7 +113,7 @@ TEST_F(AttributeEventsTest, TestAttributeSetInt64Event) {
 	const int64_t value = -1e13;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
-	ASSERT_EQ(message->destination_name, attribute_name);
+	ASSERT_STREQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
@@ -130,7 +130,7 @@ TEST_F(AttributeEventsTest, TestAttributeSetUint64Event) {
 	const uint64_t value = 1e13;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
 
-	ASSERT_EQ(message->destination_name, attribute_name);
+	ASSERT_STREQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
@@ -147,7 +147,7 @@ TEST_F(AttributeEventsTest, TestAttributeSetStringEvent) {
 	const char* value = "attr.test.value";
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(std::string(value)), handystats::attribute::clock::now());
 
-	ASSERT_EQ(message->destination_name, attribute_name);
+	ASSERT_STREQ(message->destination_name, attribute_name);
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::ATTRIBUTE);
 
 	ASSERT_EQ(message->event_type, event_type::SET);

@@ -17,6 +17,8 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <handystats/common.h>
+
 #include "config_impl.hpp"
 
 #include "events/counter_impl.hpp"
@@ -30,7 +32,10 @@ event_message* create_init_event(
 		const metrics::counter::time_point& timestamp
 	)
 {
-	event_message* message = new event_message;
+	event_message* message = allocate_event_message();
+	if (!message) {
+		return nullptr;
+	}
 
 	message->destination_name.swap(counter_name);
 	message->destination_type = event_destination_type::COUNTER;
@@ -44,7 +49,6 @@ event_message* create_init_event(
 }
 
 void delete_init_event(event_message* message) {
-	delete message;
 }
 
 
@@ -54,7 +58,10 @@ event_message* create_increment_event(
 		const metrics::counter::time_point& timestamp
 	)
 {
-	event_message* message = new event_message;
+	event_message* message = allocate_event_message();
+	if (!message) {
+		return nullptr;
+	}
 
 	message->destination_name.swap(counter_name);
 	message->destination_type = event_destination_type::COUNTER;
@@ -68,7 +75,6 @@ event_message* create_increment_event(
 }
 
 void delete_increment_event(event_message* message) {
-	delete message;
 }
 
 
@@ -78,7 +84,10 @@ event_message* create_decrement_event(
 		const metrics::counter::time_point& timestamp
 	)
 {
-	event_message* message = new event_message;
+	event_message* message = allocate_event_message();
+	if (!message) {
+		return nullptr;
+	}
 
 	message->destination_name.swap(counter_name);
 	message->destination_type = event_destination_type::COUNTER;
@@ -92,7 +101,6 @@ event_message* create_decrement_event(
 }
 
 void delete_decrement_event(event_message* message) {
-	delete message;
 }
 
 

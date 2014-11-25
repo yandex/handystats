@@ -129,9 +129,12 @@ void process(core_t& core) {
 	if (message) {
 		core.m_internal_timestamp = std::max(core.m_internal_timestamp, message->timestamp);
 		process_event_message(core, *message);
-	}
 
-	events::delete_event_message(message);
+		// deletion actually frees event data
+		events::delete_event_message(message);
+
+		core.m_pool.acknowledge(message);
+	}
 }
 
 static
@@ -198,6 +201,17 @@ core_t::~core_t() {
 				break;
 		}
 	}
+
+	// "process" all remaining messages
+	while (m_channel.size() > 0) {
+		auto* message = m_channel.pop();
+		events::delete_event_message(message);
+
+		m_pool.acknowledge(message);
+	}
+
+	// pool's clean up
+	m_pool.free();
 }
 
 void core_t::run() {

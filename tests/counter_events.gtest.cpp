@@ -22,14 +22,24 @@
 #include <gtest/gtest.h>
 
 #include <handystats/metrics/counter.hpp>
+#include <handystats/core.hpp>
 
 #include "events/event_message_impl.hpp"
 #include "events/counter_impl.hpp"
 
+class CounterEventsTest: public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		HANDY_INIT();
+	}
+	virtual void TearDown() {
+		HANDY_FINALIZE();
+	}
+};
 
 using namespace handystats::events::counter;
 
-TEST(CounterEventsTest, TestCounterInitEvent) {
+TEST_F(CounterEventsTest, TestCounterInitEvent) {
 	const char* counter_name = "queue.size";
 	const handystats::metrics::counter::value_type init_value = 10;
 	auto message = create_init_event(counter_name, init_value, handystats::metrics::counter::clock::now());
@@ -43,7 +53,7 @@ TEST(CounterEventsTest, TestCounterInitEvent) {
 	delete_event_message(message);
 }
 
-TEST(CounterEventsTest, TestCounterIncrementEvent) {
+TEST_F(CounterEventsTest, TestCounterIncrementEvent) {
 	const char* counter_name = "queue.size";
 	const handystats::metrics::counter::value_type value = 2;
 	auto message = create_increment_event(counter_name, value, handystats::metrics::counter::clock::now());
@@ -57,7 +67,7 @@ TEST(CounterEventsTest, TestCounterIncrementEvent) {
 	delete_event_message(message);
 }
 
-TEST(CounterEventsTest, TestCounterDecrementEvent) {
+TEST_F(CounterEventsTest, TestCounterDecrementEvent) {
 	const char* counter_name = "queue.size";
 	const handystats::metrics::counter::value_type value = -1;
 	auto message = create_decrement_event(counter_name, value, handystats::metrics::counter::clock::now());

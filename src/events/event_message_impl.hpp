@@ -29,6 +29,14 @@
 
 #include "message_queue_impl.hpp"
 
+
+namespace handystats { namespace memory {
+
+struct message_block;
+
+}} // namespace handystats::memory
+
+
 namespace handystats { namespace events {
 
 namespace event_destination_type {
@@ -48,8 +56,12 @@ struct event_message : message_queue::node
 
 	chrono::time_point timestamp;
 
+	memory::message_block* block;
+
 	void* event_data;
 };
+
+event_message* allocate_event_message();
 
 void process_event_message(metrics::metric_ptr_variant&, const event_message&);
 void process_event_message(::handystats::attribute&, const event_message&);

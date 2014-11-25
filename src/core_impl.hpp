@@ -32,6 +32,7 @@
 
 #include "config_impl.hpp"
 #include "message_queue_impl.hpp"
+#include "memory/pool_impl.hpp"
 
 namespace handystats {
 
@@ -55,6 +56,9 @@ struct core_t {
 
 	// enabled flag
 	std::atomic<bool> m_enabled_flag;
+
+	// message_block pool
+	memory::pool m_pool;
 
 	// channel (originally message queue)
 	message_queue m_channel;

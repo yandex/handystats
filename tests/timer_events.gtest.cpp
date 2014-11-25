@@ -23,14 +23,24 @@
 #include <gtest/gtest.h>
 
 #include <handystats/metrics/timer.hpp>
+#include <handystats/core.hpp>
 
 #include "events/event_message_impl.hpp"
 #include "events/timer_impl.hpp"
 
+class TimerEventsTest: public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		HANDY_INIT();
+	}
+	virtual void TearDown() {
+		HANDY_FINALIZE();
+	}
+};
 
 using namespace handystats::events::timer;
 
-TEST(TimerEventsTest, TestTimerInitEventWithDefaultInstance) {
+TEST_F(TimerEventsTest, TestTimerInitEventWithDefaultInstance) {
 	const char* timer_name = "queue.push";
 	auto message = create_init_event(timer_name, -1, handystats::metrics::timer::clock::now());
 
@@ -43,7 +53,7 @@ TEST(TimerEventsTest, TestTimerInitEventWithDefaultInstance) {
 	delete_event_message(message);
 }
 
-TEST(TimerEventsTest, TestTimerInitEventWithSpecificInstance) {
+TEST_F(TimerEventsTest, TestTimerInitEventWithSpecificInstance) {
 	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 123;
 	auto message = create_init_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
@@ -57,7 +67,7 @@ TEST(TimerEventsTest, TestTimerInitEventWithSpecificInstance) {
 	delete_event_message(message);
 }
 
-TEST(TimerEventsTest, TestTimerStartEvent) {
+TEST_F(TimerEventsTest, TestTimerStartEvent) {
 	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 1234567890;
 	auto message = create_start_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
@@ -71,7 +81,7 @@ TEST(TimerEventsTest, TestTimerStartEvent) {
 	delete_event_message(message);
 }
 
-TEST(TimerEventsTest, TestTimerStopEvent) {
+TEST_F(TimerEventsTest, TestTimerStopEvent) {
 	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 1234567890;
 	auto message = create_stop_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
@@ -85,7 +95,7 @@ TEST(TimerEventsTest, TestTimerStopEvent) {
 	delete_event_message(message);
 }
 
-TEST(TimerEventsTest, TestTimerDiscardEvent) {
+TEST_F(TimerEventsTest, TestTimerDiscardEvent) {
 	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 1234567890;
 	auto message = create_discard_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
@@ -99,7 +109,7 @@ TEST(TimerEventsTest, TestTimerDiscardEvent) {
 	delete_event_message(message);
 }
 
-TEST(TimerEventsTest, TestTimerHeartbeatEvent) {
+TEST_F(TimerEventsTest, TestTimerHeartbeatEvent) {
 	const char* timer_name = "queue.push";
 	const handystats::metrics::timer::instance_id_type instance_id = 1234567890;
 	auto message = create_heartbeat_event(timer_name, instance_id, handystats::metrics::timer::clock::now());
@@ -113,7 +123,7 @@ TEST(TimerEventsTest, TestTimerHeartbeatEvent) {
 	delete_event_message(message);
 }
 
-TEST(TimerEventsTest, TestTimerSetEvent) {
+TEST_F(TimerEventsTest, TestTimerSetEvent) {
 	const char* timer_name = "queue.push";
 	handystats::chrono::duration duration = handystats::chrono::nanoseconds(123456);
 	auto message = create_set_event(timer_name, duration, handystats::metrics::timer::clock::now());

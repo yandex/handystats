@@ -22,14 +22,24 @@
 #include <gtest/gtest.h>
 
 #include <handystats/attribute.hpp>
+#include <handystats/core.hpp>
 
 #include "events/event_message_impl.hpp"
 #include "events/attribute_impl.hpp"
 
+class AttributeEventsTest: public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		HANDY_INIT();
+	}
+	virtual void TearDown() {
+		HANDY_FINALIZE();
+	}
+};
 
 using namespace handystats::events::attribute;
 
-TEST(AttributeEventsTest, TestAttributeSetDoubleEvent) {
+TEST_F(AttributeEventsTest, TestAttributeSetDoubleEvent) {
 	const char* attribute_name = "attr.test";
 	const double value = 0.75;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
@@ -47,7 +57,7 @@ TEST(AttributeEventsTest, TestAttributeSetDoubleEvent) {
 	delete_event_message(message);
 }
 
-TEST(AttributeEventsTest, TestAttributeSetBoolEvent) {
+TEST_F(AttributeEventsTest, TestAttributeSetBoolEvent) {
 	const char* attribute_name = "attr.test";
 	const bool value = true;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
@@ -64,7 +74,7 @@ TEST(AttributeEventsTest, TestAttributeSetBoolEvent) {
 	delete_event_message(message);
 }
 
-TEST(AttributeEventsTest, TestAttributeSetIntEvent) {
+TEST_F(AttributeEventsTest, TestAttributeSetIntEvent) {
 	const char* attribute_name = "attr.test";
 	const int value = -123;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
@@ -81,7 +91,7 @@ TEST(AttributeEventsTest, TestAttributeSetIntEvent) {
 	delete_event_message(message);
 }
 
-TEST(AttributeEventsTest, TestAttributeSetUintEvent) {
+TEST_F(AttributeEventsTest, TestAttributeSetUintEvent) {
 	const char* attribute_name = "attr.test";
 	const unsigned value = 123;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
@@ -98,7 +108,7 @@ TEST(AttributeEventsTest, TestAttributeSetUintEvent) {
 	delete_event_message(message);
 }
 
-TEST(AttributeEventsTest, TestAttributeSetInt64Event) {
+TEST_F(AttributeEventsTest, TestAttributeSetInt64Event) {
 	const char* attribute_name = "attr.test";
 	const int64_t value = -1e13;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
@@ -115,7 +125,7 @@ TEST(AttributeEventsTest, TestAttributeSetInt64Event) {
 	delete_event_message(message);
 }
 
-TEST(AttributeEventsTest, TestAttributeSetUint64Event) {
+TEST_F(AttributeEventsTest, TestAttributeSetUint64Event) {
 	const char* attribute_name = "attr.test";
 	const uint64_t value = 1e13;
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(value), handystats::attribute::clock::now());
@@ -132,7 +142,7 @@ TEST(AttributeEventsTest, TestAttributeSetUint64Event) {
 	delete_event_message(message);
 }
 
-TEST(AttributeEventsTest, TestAttributeSetStringEvent) {
+TEST_F(AttributeEventsTest, TestAttributeSetStringEvent) {
 	const char* attribute_name = "attr.test";
 	const char* value = "attr.test.value";
 	auto message = create_set_event(attribute_name, handystats::attribute::value_type(std::string(value)), handystats::attribute::clock::now());

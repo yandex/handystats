@@ -22,14 +22,24 @@
 #include <gtest/gtest.h>
 
 #include <handystats/metrics/gauge.hpp>
+#include <handystats/core.hpp>
 
 #include "events/event_message_impl.hpp"
 #include "events/gauge_impl.hpp"
 
+class GaugeEventsTest: public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		HANDY_INIT();
+	}
+	virtual void TearDown() {
+		HANDY_FINALIZE();
+	}
+};
 
 using namespace handystats::events::gauge;
 
-TEST(GaugeEventsTest, TestGaugeInitEvent) {
+TEST_F(GaugeEventsTest, TestGaugeInitEvent) {
 	const char* gauge_name = "proc.load";
 	const double init_value = 0.75;
 	auto message = create_init_event(gauge_name, init_value, handystats::metrics::gauge::clock::now());
@@ -43,7 +53,7 @@ TEST(GaugeEventsTest, TestGaugeInitEvent) {
 	delete_event_message(message);
 }
 
-TEST(GaugeEventsTest, TestGaugeSetEvent) {
+TEST_F(GaugeEventsTest, TestGaugeSetEvent) {
 	const char* gauge_name = "proc.load";
 	const double value = 1.5;
 	auto message = create_set_event(gauge_name, value, handystats::metrics::gauge::clock::now());

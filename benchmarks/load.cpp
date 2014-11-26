@@ -132,6 +132,17 @@ void print_stats() {
 	}
 
 	{
+		const char* name = "handystats.memory.free_list_size";
+		const auto& free_list_size = metrics_dump->first.at(name);
+		std::cout << name << ":" << std::endl;
+		std::cout << "         value: " << free_list_size.get<handystats::statistics::tag::value>() << std::endl;
+		std::cout << "    moving-avg: " << free_list_size.get<handystats::statistics::tag::moving_avg>() << std::endl;
+		std::cout << "           max: " << free_list_size.get<handystats::statistics::tag::max>() << std::endl;
+//		std::cout << "     timestamp: " << free_list_size.get<handystats::statistics::tag::timestamp>() << std::endl;
+		std::cout << std::endl;
+	}
+
+	{
 		const char* name = "load_test.timer.0";
 		if (metrics_dump->first.find(name) != metrics_dump->first.end()) {
 			const auto& timer = metrics_dump->first.at(name);

@@ -50,11 +50,28 @@ void local_block_cleanup(message_block* block) {
 		// that's why m_allocated is not reseted
 		std::lock_guard<std::mutex> guard(core->m_pool.m_free_list_lock);
 		core->m_pool.m_free_list.push_front(block);
+		core->m_pool.m_stats.free_list_size.update(core->m_pool.m_free_list.size(), chrono::internal_clock::now());
 	}
 	else {
 		// this thread "owns" block
 		delete block;
 	}
+}
+
+pool::stats::stats() {
+	{
+		config::statistics config;
+		config.tags = statistics::tag::value | statistics::tag::max | statistics::tag::moving_avg;
+		config.moving_interval = chrono::seconds(1);
+
+		free_list_size = statistics(config);
+
+		free_list_size.update(0);
+	}
+}
+
+void pool::stats::update(const chrono::time_point& timestamp) {
+	free_list_size.update_time(timestamp);
 }
 
 pool::~pool() {
@@ -78,6 +95,7 @@ message_block* pool::acquire() {
 		if (!m_free_list.empty()) {
 			auto* block = m_free_list.front();
 			m_free_list.pop_front();
+			m_stats.free_list_size.update(m_free_list.size(), chrono::internal_clock::now());
 			return block;
 		}
 	}
@@ -99,6 +117,8 @@ void pool::acknowledge(const events::event_message* message) {
 		block->m_processed = 0;
 
 		m_free_list.push_back(block);
+
+		m_stats.free_list_size.update(m_free_list.size(), chrono::internal_clock::now());
 	}
 }
 

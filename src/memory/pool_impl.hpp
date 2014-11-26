@@ -23,12 +23,22 @@
 #include <deque>
 #include <mutex>
 
+#include <handystats/chrono.hpp>
+#include <handystats/statistics.hpp>
+
 #include "memory/message_block_impl.hpp"
 
 namespace handystats { namespace memory {
 
 struct pool
 {
+	struct stats {
+		statistics free_list_size;
+
+		stats();
+		void update(const chrono::time_point&);
+	};
+
 	~pool();
 
 	message_block* acquire();
@@ -37,6 +47,8 @@ struct pool
 
 	std::deque<message_block*> m_free_list;
 	std::mutex m_free_list_lock;
+
+	stats m_stats;
 };
 
 }} // namespace handystats::memory

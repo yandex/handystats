@@ -81,6 +81,7 @@ create_dump(core_t& core, const chrono::time_point& current_timestamp)
 
 	core.m_stats.update(current_timestamp);
 	core.m_channel.m_stats.update(current_timestamp);
+	core.m_pool.m_stats.update(current_timestamp);
 
 	// handystats' statistics
 	{
@@ -114,6 +115,16 @@ create_dump(core_t& core, const chrono::time_point& current_timestamp)
 					std::pair<std::string, statistics>(
 						"handystats.message_queue.pop_count",
 						core.m_channel.m_stats.pop_count
+						)
+					);
+		}
+
+		// memory pool
+		{
+			metrics_dump.insert(
+					std::pair<std::string, statistics>(
+						"handystats.memory.free_list_size",
+						core.m_pool.m_stats.free_list_size
 						)
 					);
 		}

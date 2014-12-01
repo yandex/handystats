@@ -119,11 +119,6 @@ message_queue::node* message_queue::pop_impl() {
 void message_queue::push(events::event_message* message) {
 	push_impl(static_cast<node*>(message));
 	m_size++;
-
-	// update stats
-	{
-		m_stats.size.update(size());
-	}
 }
 
 events::event_message* message_queue::pop() {

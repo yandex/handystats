@@ -178,6 +178,24 @@ void finalize() {
 
 namespace handystats {
 
+static
+bool is_pattern_section(const rapidjson::Value& name, const rapidjson::Value& value) {
+	// check reserved section names
+	if (strcmp(name.GetString(), "enable") == 0
+			|| strcmp(name.GetString(), "dump-interval") == 0
+			|| strcmp(name.GetString(), "defaults") == 0
+			|| strcmp(name.GetString(), "gauge") == 0
+			|| strcmp(name.GetString(), "counter") == 0
+			|| strcmp(name.GetString(), "timer") == 0
+			|| strcmp(name.GetString(), "backends") == 0
+		)
+	{
+		return false;
+	}
+
+	return value.IsObject();
+}
+
 bool config_json(const char* config_data) {
 	try {
 		auto opts = config::opts;
@@ -267,15 +285,8 @@ bool config_json(const char* config_data) {
 			rapidjson::Value& member_name = config_member->name;
 			rapidjson::Value& member_value = config_member->value;
 
-			// skip reserved sections
-			if (strcmp(member_name.GetString(), "enable") == 0
-					|| strcmp(member_name.GetString(), "dump-interval") == 0
-					|| strcmp(member_name.GetString(), "defaults") == 0
-					|| strcmp(member_name.GetString(), "gauge") == 0
-					|| strcmp(member_name.GetString(), "counter") == 0
-					|| strcmp(member_name.GetString(), "timer") == 0
-			   )
-			{
+			// skip non-pattern sections
+			if (!is_pattern_section(member_name, member_value)) {
 				continue;
 			}
 

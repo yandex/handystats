@@ -14,15 +14,9 @@
 #include <handystats/core.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
-#include <handystats/module.h>
 
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
-
-#ifndef _HAVE_HANDY_MODULE_TEST
-#define _HAVE_HANDY_MODULE_TEST 1
-#endif
-HANDY_MODULE(TEST)
 
 class HandyTimerTest : public ::testing::Test {
 protected:
@@ -48,9 +42,9 @@ TEST_F(HandyTimerTest, CommonTestSingleInstanceTimer) {
 	auto sleep_time = std::chrono::milliseconds(10);
 
 	for (int step = 0; step < COUNT; ++step) {
-		TEST_TIMER_START("sleep.time");
+		HANDY_TIMER_START("sleep.time");
 		std::this_thread::sleep_for(sleep_time);
-		TEST_TIMER_STOP("sleep.time");
+		HANDY_TIMER_STOP("sleep.time");
 	}
 
 	handystats::message_queue::wait_until_empty();
@@ -81,9 +75,9 @@ TEST_F(HandyTimerTest, CommonTestMultiInstanceTimer) {
 	auto sleep_time = std::chrono::milliseconds(1);
 
 	for (int step = 0; step < COUNT; ++step) {
-		TEST_TIMER_START("sleep.time", step);
+		HANDY_TIMER_START("sleep.time", step);
 		std::this_thread::sleep_for(sleep_time);
-		TEST_TIMER_STOP("sleep.time", step);
+		HANDY_TIMER_STOP("sleep.time", step);
 	}
 
 	handystats::message_queue::wait_until_empty();
@@ -114,13 +108,13 @@ TEST_F(HandyTimerTest, TestConcurrentlyMultiInstanceTimer) {
 	auto sleep_time = std::chrono::milliseconds(1);
 
 	for (int step = 0; step < COUNT; ++step) {
-		TEST_TIMER_START("sleep.time", step);
+		HANDY_TIMER_START("sleep.time", step);
 	}
 
 	std::this_thread::sleep_for(sleep_time);
 
 	for (int step = 0; step < COUNT; ++step) {
-		TEST_TIMER_STOP("sleep.time", step);
+		HANDY_TIMER_STOP("sleep.time", step);
 	}
 
 	handystats::message_queue::wait_until_empty();

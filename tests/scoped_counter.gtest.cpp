@@ -32,24 +32,9 @@
 #include <handystats/core.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
-#include <handystats/module.h>
 
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
-
-#ifndef _HAVE_HANDY_MODULE_TEST
-#define _HAVE_HANDY_MODULE_TEST 1
-#endif
-
-HANDY_MODULE(TEST)
-
-#if _HAVE_HANDY_MODULE_TEST == 1
-#define TEST_TIMER_SCOPE(...) HANDY_TIMER_SCOPE(__VA_ARGS__)
-#define TEST_COUNTER_SCOPE(...) HANDY_COUNTER_SCOPE(__VA_ARGS__)
-#else
-#define TEST_TIMER_SCOPE(...)
-#define TEST_COUNTER_SCOPE(...)
-#endif
 
 class HandyScopedCounterTest : public ::testing::Test {
 protected:
@@ -71,7 +56,7 @@ TEST_F(HandyScopedCounterTest, TestSingleScope) {
 	const int COUNT = 10;
 
 	for (int step = 0; step < COUNT; ++step) {
-		TEST_COUNTER_SCOPE("test.counter", 1);
+		HANDY_COUNTER_SCOPE("test.counter", 1);
 	}
 
 	handystats::wait_until_empty();
@@ -92,9 +77,9 @@ TEST_F(HandyScopedCounterTest, TestDoubleNestedScope) {
 	const int COUNT = 10;
 
 	for (int step = 0; step < COUNT; ++step) {
-		TEST_COUNTER_SCOPE("test.counter", 1);
+		HANDY_COUNTER_SCOPE("test.counter", 1);
 		{
-			TEST_COUNTER_SCOPE("test.counter", -1);
+			HANDY_COUNTER_SCOPE("test.counter", -1);
 		}
 	}
 

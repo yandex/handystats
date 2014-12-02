@@ -24,7 +24,6 @@
 #include <gtest/gtest.h>
 
 #include <handystats/core.hpp>
-#include <handystats/module.h>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
 #include <handystats/json_dump.hpp>
@@ -37,11 +36,6 @@
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
 
-#ifndef _HAVE_HANDY_MODULE_TEST
-#define _HAVE_HANDY_MODULE_TEST 1
-#endif
-HANDY_MODULE(TEST)
-
 TEST(JsonDumpTest, TestJsonDumpMethods) {
 	HANDY_CONFIG_JSON(
 			"{\
@@ -52,11 +46,11 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 	HANDY_INIT();
 
 	for (int i = 0; i < 10; ++i) {
-		TEST_TIMER_START("test.timer");
-		TEST_GAUGE_SET("test.gauge", i);
-		TEST_COUNTER_INCREMENT("test.counter", i);
-		TEST_ATTRIBUTE_SET("cycle.interation", i);
-		TEST_TIMER_STOP("test.timer");
+		HANDY_TIMER_START("test.timer");
+		HANDY_GAUGE_SET("test.gauge", i);
+		HANDY_COUNTER_INCREMENT("test.counter", i);
+		HANDY_ATTRIBUTE_SET("cycle.interation", i);
+		HANDY_TIMER_STOP("test.timer");
 	}
 
 	handystats::wait_until_empty();
@@ -100,11 +94,11 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 	HANDY_INIT();
 
 	for (int i = 0; i < 10; ++i) {
-		TEST_TIMER_START("test.timer");
-		TEST_GAUGE_SET("test.gauge", i);
-		TEST_COUNTER_INCREMENT("test.counter", i);
-		TEST_ATTRIBUTE_SET("cycle.interation", i);
-		TEST_TIMER_STOP("test.timer");
+		HANDY_TIMER_START("test.timer");
+		HANDY_GAUGE_SET("test.gauge", i);
+		HANDY_COUNTER_INCREMENT("test.counter", i);
+		HANDY_ATTRIBUTE_SET("cycle.interation", i);
+		HANDY_TIMER_STOP("test.timer");
 	}
 
 	handystats::wait_until_empty();

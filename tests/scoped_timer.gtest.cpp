@@ -33,24 +33,9 @@
 #include <handystats/core.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
-#include <handystats/module.h>
 
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
-
-#ifndef _HAVE_HANDY_MODULE_TEST
-#define _HAVE_HANDY_MODULE_TEST 1
-#endif
-
-HANDY_MODULE(TEST)
-
-#if _HAVE_HANDY_MODULE_TEST == 1
-#define TEST_TIMER_SCOPE(...) HANDY_TIMER_SCOPE(__VA_ARGS__)
-#define TEST_COUNTER_SCOPE(...) HANDY_COUNTER_SCOPE(__VA_ARGS__)
-#else
-#define TEST_TIMER_SCOPE(...)
-#define TEST_COUNTER_SCOPE(...)
-#endif
 
 class HandyScopedTimerTest : public ::testing::Test {
 protected:
@@ -73,7 +58,7 @@ TEST_F(HandyScopedTimerTest, TestSingleInstanceScopedTimer) {
 	auto sleep_time = std::chrono::milliseconds(10);
 
 	for (int step = 0; step < COUNT; ++step) {
-		TEST_TIMER_SCOPE("sleep.time");
+		HANDY_TIMER_SCOPE("sleep.time");
 		std::this_thread::sleep_for(sleep_time);
 	}
 
@@ -103,15 +88,15 @@ TEST_F(HandyScopedTimerTest, TestMultipleNestedScopes) {
 	auto sleep_time = std::chrono::milliseconds(1);
 
 	{
-		TEST_TIMER_SCOPE("sleep.time");
+		HANDY_TIMER_SCOPE("sleep.time");
 		std::this_thread::sleep_for(sleep_time);
 
 		{
-			TEST_TIMER_SCOPE("sleep.time");
+			HANDY_TIMER_SCOPE("sleep.time");
 			std::this_thread::sleep_for(sleep_time);
 
 			{
-				TEST_TIMER_SCOPE("sleep.time");
+				HANDY_TIMER_SCOPE("sleep.time");
 				std::this_thread::sleep_for(sleep_time);
 			}
 		}
@@ -148,9 +133,9 @@ TEST_F(HandyScopedTimerTest, TestSeveralScopedTimersInOneScope) {
 	auto sleep_time = std::chrono::milliseconds(1);
 
 	for (int step = 0; step < COUNT; ++step) {
-		TEST_TIMER_SCOPE("double.sleep.time");
+		HANDY_TIMER_SCOPE("double.sleep.time");
 		std::this_thread::sleep_for(sleep_time);
-		TEST_TIMER_SCOPE("sleep.time");
+		HANDY_TIMER_SCOPE("sleep.time");
 		std::this_thread::sleep_for(sleep_time);
 	}
 

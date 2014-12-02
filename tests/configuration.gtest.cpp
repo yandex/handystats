@@ -8,8 +8,8 @@
 #include <handystats/rapidjson/document.h>
 
 #include <handystats/core.hpp>
-#include <handystats/module.h>
 #include <handystats/metrics_dump.hpp>
+#include <handystats/measuring_points.hpp>
 #include <handystats/json_dump.hpp>
 
 #include "config_impl.hpp"
@@ -17,11 +17,6 @@
 
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
-
-#ifndef _HAVE_HANDY_MODULE_TEST
-#define _HAVE_HANDY_MODULE_TEST 1
-#endif
-HANDY_MODULE(TEST)
 
 class HandyConfigurationTest : public ::testing::Test {
 protected:
@@ -59,7 +54,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 
 	HANDY_INIT();
 
-	TEST_GAUGE_SET("gauge.test", 15);
+	HANDY_GAUGE_SET("gauge.test", 15);
 
 	handystats::message_queue::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
@@ -87,7 +82,7 @@ TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 
 	HANDY_INIT();
 
-	TEST_GAUGE_SET("gauge.test", 15);
+	HANDY_GAUGE_SET("gauge.test", 15);
 
 	handystats::message_queue::wait_until_empty();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -118,16 +113,16 @@ TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 
 	HANDY_INIT();
 
-	TEST_TIMER_START("dead-timer");
-	TEST_TIMER_START("alive-timer");
+	HANDY_TIMER_START("dead-timer");
+	HANDY_TIMER_START("alive-timer");
 
 	for (int cycle = 0; cycle < 100; ++cycle) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-		TEST_TIMER_HEARTBEAT("alive-timer");
+		HANDY_TIMER_HEARTBEAT("alive-timer");
 	}
 
-	TEST_TIMER_STOP("dead-timer");
-	TEST_TIMER_STOP("alive-timer");
+	HANDY_TIMER_STOP("dead-timer");
+	HANDY_TIMER_STOP("alive-timer");
 
 	handystats::message_queue::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
@@ -188,7 +183,7 @@ TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
 	HANDY_INIT();
 
 	for (int i = 0; i < 10; ++i) {
-		TEST_GAUGE_SET("test.gauge", i);
+		HANDY_GAUGE_SET("test.gauge", i);
 	}
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -218,11 +213,11 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {
 	HANDY_INIT();
 
 	for (int i = 0; i < 10; ++i) {
-		TEST_GAUGE_SET("test.gauge", i);
+		HANDY_GAUGE_SET("test.gauge", i);
 	}
 
 	for (int i = 0; i < 100; ++i) {
-		TEST_COUNTER_INCREMENT("test.counter", i);
+		HANDY_COUNTER_INCREMENT("test.counter", i);
 	}
 
 	handystats::message_queue::wait_until_empty();
@@ -259,7 +254,7 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 	HANDY_INIT();
 
 	for (int i = 0; i < 10; ++i) {
-		TEST_GAUGE_SET("test.gauge", i);
+		HANDY_GAUGE_SET("test.gauge", i);
 	}
 
 	handystats::message_queue::wait_until_empty();
@@ -293,7 +288,7 @@ TEST_F(HandyConfigurationTest, MetricsConfigOverwritesStatistcs) {
 	HANDY_INIT();
 
 	for (int i = 0; i < 10; ++i) {
-		TEST_GAUGE_SET("test.gauge", i);
+		HANDY_GAUGE_SET("test.gauge", i);
 	}
 
 	handystats::message_queue::wait_until_empty();

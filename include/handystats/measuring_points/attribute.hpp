@@ -8,6 +8,7 @@
 #include <string>
 
 #include <handystats/metrics/attribute.hpp>
+#include <handystats/macros.h>
 
 
 namespace handystats { namespace measuring_points {
@@ -80,21 +81,21 @@ void attribute_set<std::string>(
 
 #ifndef HANDYSTATS_DISABLE
 
-	#define HANDY_ATTRIBUTE_SET(...) handystats::measuring_points::attribute_set(__VA_ARGS__)
+	#define HANDY_ATTRIBUTE_SET(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::attribute_set, __VA_ARGS__)
 
-	#define HANDY_ATTRIBUTE_SET_BOOL(...) handystats::measuring_points::attribute_set<bool>(__VA_ARGS__)
+	#define HANDY_ATTRIBUTE_SET_BOOL(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::attribute_set<bool>, __VA_ARGS__)
 
-	#define HANDY_ATTRIBUTE_SET_INT(...) handystats::measuring_points::attribute_set<int>(__VA_ARGS__)
+	#define HANDY_ATTRIBUTE_SET_INT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::attribute_set<int>, __VA_ARGS__)
 
-	#define HANDY_ATTRIBUTE_SET_UINT(...) handystats::measuring_points::attribute_set<unsigned>(__VA_ARGS__)
+	#define HANDY_ATTRIBUTE_SET_UINT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::attribute_set<unsigned>, __VA_ARGS__)
 
-	#define HANDY_ATTRIBUTE_SET_INT64(...) handystats::measuring_points::attribute_set<int64_t>(__VA_ARGS__)
+	#define HANDY_ATTRIBUTE_SET_INT64(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::attribute_set<int64_t>, __VA_ARGS__)
 
-	#define HANDY_ATTRIBUTE_SET_UINT64(...) handystats::measuring_points::attribute_set<uint64_t>(__VA_ARGS__)
+	#define HANDY_ATTRIBUTE_SET_UINT64(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::attribute_set<uint64_t>, __VA_ARGS__)
 
-	#define HANDY_ATTRIBUTE_SET_DOUBLE(...) handystats::measuring_points::attribute_set<double>(__VA_ARGS__)
+	#define HANDY_ATTRIBUTE_SET_DOUBLE(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::attribute_set<double>, __VA_ARGS__)
 
-	#define HANDY_ATTRIBUTE_SET_STRING(...) handystats::measuring_points::attribute_set<std::string>(__VA_ARGS__)
+	#define HANDY_ATTRIBUTE_SET_STRING(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::attribute_set<std::string>, __VA_ARGS__)
 
 #else
 

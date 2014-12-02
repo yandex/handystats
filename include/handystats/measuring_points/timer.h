@@ -8,6 +8,7 @@
 #include <boost/preprocessor/list/cat.hpp>
 
 #include <handystats/common.h>
+#include <handystats/macros.h>
 #include <handystats/chrono.h>
 
 HANDYSTATS_EXTERN_C
@@ -49,17 +50,17 @@ void handystats_timer_set(
 #ifndef __cplusplus
 	#ifndef HANDYSTATS_DISABLE
 
-		#define HANDY_TIMER_INIT(...) handystats_timer_init(__VA_ARGS__)
+		#define HANDY_TIMER_INIT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_timer_init, __VA_ARGS__)
 
-		#define HANDY_TIMER_START(...) handystats_timer_start(__VA_ARGS__)
+		#define HANDY_TIMER_START(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_timer_start, __VA_ARGS__)
 
-		#define HANDY_TIMER_STOP(...) handystats_timer_stop(__VA_ARGS__)
+		#define HANDY_TIMER_STOP(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_timer_stop, __VA_ARGS__)
 
-		#define HANDY_TIMER_DISCARD(...) handystats_timer_discard(__VA_ARGS__)
+		#define HANDY_TIMER_DISCARD(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_timer_discard, __VA_ARGS__)
 
-		#define HANDY_TIMER_HEARTBEAT(...) handystats_timer_heartbeat(__VA_ARGS__)
+		#define HANDY_TIMER_HEARTBEAT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_timer_heartbeat, __VA_ARGS__)
 
-		#define HANDY_TIMER_SET(...) handystats_timer_set(__VA_ARGS__)
+		#define HANDY_TIMER_SET(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_timer_set, __VA_ARGS__)
 
 	#else
 
@@ -92,9 +93,22 @@ void handystats_timer_set(
 	#ifndef HANDYSTATS_DISABLE
 
 		#define HANDY_TIMER_SCOPE(timer_name) \
-			struct handystats_scoped_timer_helper\
-			C_UNIQUE_SCOPED_TIMER_NAME __attribute__((cleanup(handystats_scoped_timer_cleanup))) =\
-				{timer_name, handystats_now()}
+			BOOST_PP_EXPAND( BOOST_PP_TUPLE_REM() \
+				BOOST_PP_IF( \
+					HANDY_PP_IS_TUPLE(timer_name), \
+					( \
+						HANDY_PP_METRIC_NAME_BUFFER_SET(timer_name); \
+						struct handystats_scoped_timer_helper \
+						C_UNIQUE_SCOPED_TIMER_NAME __attribute__((cleanup(handystats_scoped_timer_cleanup))) = \
+							{HANDY_PP_METRIC_NAME_BUFFER_VAR, handystats_now()} \
+					), \
+					( \
+						struct handystats_scoped_timer_helper \
+						C_UNIQUE_SCOPED_TIMER_NAME __attribute__((cleanup(handystats_scoped_timer_cleanup))) = \
+							{timer_name, handystats_now()} \
+					) \
+				) \
+			)
 
 	#else
 

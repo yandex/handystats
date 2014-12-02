@@ -2,6 +2,21 @@
 Handystats Changelog
 ====================
 
+2.0.1 (2014-12-02)
+==================
+
+Bugs fixed
+----------
+
+* Updating message queue's size statistic from client threads may lead
+  to data race.
+
+Configuration changes
+---------------------
+
+* Reserved ``"backends"`` section name.
+
+
 2.0.0 (2014-11-12)
 ==================
 

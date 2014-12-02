@@ -3,7 +3,7 @@
 pkgbase=handystats
 pkgdesc="Handystats is C++ library for collecting user-defined in-process runtime statistics with low overhead."
 pkgname=('libhandystats' 'python2-handystats' 'handystats-utils')
-pkgver=2.0.0
+pkgver=2.0.1
 pkgrel=1
 arch=('x86_64')
 url=('https://github.com/shindo/handystats')

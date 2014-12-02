@@ -1,3 +1,12 @@
+handystats (2.0.1) unstable; urgency=low
+
+  * reserved "backends" config section name.
+
+  * fixed possible data race when updating message queue's size statistic from
+    client threads.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Tue, 02 Dec 2014 14:00:00 +0400
+
 handystats (2.0.0) unstable; urgency=low
 
   * added template methods for writing handystats objects to rapidjson::Value.

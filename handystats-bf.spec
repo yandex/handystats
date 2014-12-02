@@ -10,7 +10,7 @@
 
 
 Name: handystats
-Version: 2.0.0
+Version: 2.0.1
 Release: 1%{?dist}
 Summary: C++ library to collect runtime statistics
 License: LGPLv3+
@@ -173,6 +173,13 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Dec 28 2014 Danil Osherov <shindo@yandex-team.ru> 2.0.1
+
+- reserved "backends" config section name.
+
+- fixed possible data race when updating message queue's size statistic from
+  client threads.
+
 * Sun Dec 28 2014 Danil Osherov <shindo@yandex-team.ru> 2.0.0
 
 - added template methods for writing handystats objects to rapidjson::Value.

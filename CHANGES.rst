@@ -2,6 +2,20 @@
 Handystats Changelog
 ====================
 
+2.1.0 (YYYY-MM-DD)
+==================
+
+Features added
+--------------
+
+* Added support for printf-like syntax for metric name in measuring points.
+
+Other changes
+-------------
+
+* ``HANDY_MODULE()`` removed due to inability to support new printf-like syntax.
+
+
 2.0.1 (2014-12-02)
 ==================
 

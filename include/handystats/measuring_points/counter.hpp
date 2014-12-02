@@ -26,7 +26,7 @@
 #include <boost/preprocessor/list/cat.hpp>
 
 #include <handystats/metrics/counter.hpp>
-#include <handystats/macro_overload.hpp>
+#include <handystats/macros.h>
 
 
 namespace handystats { namespace measuring_points {
@@ -80,13 +80,13 @@ struct scoped_counter_helper {
 
 #ifndef HANDYSTATS_DISABLE
 
-	#define HANDY_COUNTER_INIT(...) handystats::measuring_points::counter_init(__VA_ARGS__)
+	#define HANDY_COUNTER_INIT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::counter_init, __VA_ARGS__)
 
-	#define HANDY_COUNTER_INCREMENT(...) handystats::measuring_points::counter_increment(__VA_ARGS__)
+	#define HANDY_COUNTER_INCREMENT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::counter_increment, __VA_ARGS__)
 
-	#define HANDY_COUNTER_DECREMENT(...) handystats::measuring_points::counter_decrement(__VA_ARGS__)
+	#define HANDY_COUNTER_DECREMENT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::counter_decrement, __VA_ARGS__)
 
-	#define HANDY_COUNTER_CHANGE(...) handystats::measuring_points::counter_change(__VA_ARGS__)
+	#define HANDY_COUNTER_CHANGE(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::counter_change, __VA_ARGS__)
 
 #else
 
@@ -109,7 +109,18 @@ struct scoped_counter_helper {
 #define HANDY_COUNTER_SCOPE_1(counter_name) HANDY_COUNTER_SCOPE_2(counter_name, 1)
 
 #define HANDY_COUNTER_SCOPE_2(counter_name, delta_value) \
-	handystats::measuring_points::scoped_counter_helper UNIQUE_SCOPED_COUNTER_NAME (counter_name, delta_value)
+	BOOST_PP_EXPAND( BOOST_PP_TUPLE_REM() \
+		BOOST_PP_IF( \
+			HANDY_PP_IS_TUPLE(counter_name), \
+			( \
+				HANDY_PP_METRIC_NAME_BUFFER_SET(counter_name); \
+				handystats::measuring_points::scoped_counter_helper UNIQUE_SCOPED_COUNTER_NAME (HANDY_PP_METRIC_NAME_BUFFER_VAR, delta_value) \
+			), \
+			( \
+				handystats::measuring_points::scoped_counter_helper UNIQUE_SCOPED_COUNTER_NAME (counter_name, delta_value) \
+			) \
+		) \
+	)
 
 /*
  * HANDY_COUNTER_SCOPE event constructs scoped_counter_helper named variable.

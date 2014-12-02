@@ -23,6 +23,7 @@
 #include <stdlib.h>
 
 #include <handystats/common.h>
+#include <handystats/macros.h>
 
 HANDYSTATS_EXTERN_C
 void handystats_attribute_set_bool(
@@ -70,19 +71,19 @@ void handystats_attribute_set_string(
 #ifndef __cplusplus
 	#ifndef HANDYSTATS_DISABLE
 
-		#define HANDY_ATTRIBUTE_SET_BOOL(...) handystats_attribute_set_bool(__VA_ARGS__)
+		#define HANDY_ATTRIBUTE_SET_BOOL(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_attribute_set_bool, __VA_ARGS__)
 
-		#define HANDY_ATTRIBUTE_SET_INT(...) handystats_attribute_set_int(__VA_ARGS__)
+		#define HANDY_ATTRIBUTE_SET_INT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_attribute_set_int, __VA_ARGS__)
 
-		#define HANDY_ATTRIBUTE_SET_UINT(...) handystats_attribute_set_uint(__VA_ARGS__)
+		#define HANDY_ATTRIBUTE_SET_UINT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_attribute_set_uint, __VA_ARGS__)
 
-		#define HANDY_ATTRIBUTE_SET_INT64(...) handystats_attribute_set_int64(__VA_ARGS__)
+		#define HANDY_ATTRIBUTE_SET_INT64(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_attribute_set_int64, __VA_ARGS__)
 
-		#define HANDY_ATTRIBUTE_SET_UINT64(...) handystats_attribute_set_uint64(__VA_ARGS__)
+		#define HANDY_ATTRIBUTE_SET_UINT64(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_attribute_set_uint64, __VA_ARGS__)
 
-		#define HANDY_ATTRIBUTE_SET_DOUBLE(...) handystats_attribute_set_double(__VA_ARGS__)
+		#define HANDY_ATTRIBUTE_SET_DOUBLE(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_attribute_set_double, __VA_ARGS__)
 
-		#define HANDY_ATTRIBUTE_SET_STRING(...) handystats_attribute_set_string(__VA_ARGS__)
+		#define HANDY_ATTRIBUTE_SET_STRING(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_attribute_set_string, __VA_ARGS__)
 
 	#else
 

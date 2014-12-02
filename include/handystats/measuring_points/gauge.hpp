@@ -22,6 +22,7 @@
 
 #include <string>
 
+#include <handystats/macros.h>
 #include <handystats/metrics/gauge.hpp>
 
 
@@ -44,9 +45,9 @@ void gauge_set(
 
 #ifndef HANDYSTATS_DISABLE
 
-	#define HANDY_GAUGE_INIT(...) handystats::measuring_points::gauge_init(__VA_ARGS__)
+	#define HANDY_GAUGE_INIT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::gauge_init, __VA_ARGS__)
 
-	#define HANDY_GAUGE_SET(...) handystats::measuring_points::gauge_set(__VA_ARGS__)
+	#define HANDY_GAUGE_SET(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::gauge_set, __VA_ARGS__)
 
 #else
 

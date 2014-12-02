@@ -24,6 +24,7 @@
 
 #include <boost/preprocessor/list/cat.hpp>
 
+#include <handystats/macros.h>
 #include <handystats/common.h>
 
 HANDYSTATS_EXTERN_C
@@ -54,13 +55,13 @@ void handystats_counter_change(
 #ifndef __cplusplus
 	#ifndef HANDYSTATS_DISABLE
 
-		#define HANDY_COUNTER_INIT(...) handystats_counter_init(__VA_ARGS__)
+		#define HANDY_COUNTER_INIT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_counter_init, __VA_ARGS__)
 
-		#define HANDY_COUNTER_INCREMENT(...) handystats_counter_increment(__VA_ARGS__)
+		#define HANDY_COUNTER_INCREMENT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_counter_increment, __VA_ARGS__)
 
-		#define HANDY_COUNTER_DECREMENT(...) handystats_counter_decrement(__VA_ARGS__)
+		#define HANDY_COUNTER_DECREMENT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_counter_decrement, __VA_ARGS__)
 
-		#define HANDY_COUNTER_CHANGE(...) handystats_counter_change(__VA_ARGS__)
+		#define HANDY_COUNTER_CHANGE(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_counter_change, __VA_ARGS__)
 
 	#else
 
@@ -87,9 +88,23 @@ void handystats_counter_change(
 
 	#ifndef HANDYSTATS_DISABLE
 
-		#define HANDY_COUNTER_SCOPE(...) \
-			struct handystats_scoped_counter_helper C_UNIQUE_SCOPED_COUNTER_NAME __attribute__((cleanup(handystats_scoped_counter_cleanup))) = {__VA_ARGS__};\
-			HANDY_COUNTER_INCREMENT(__VA_ARGS__)
+		#define HANDY_COUNTER_SCOPE(counter_name, delta_value) \
+			BOOST_PP_EXPAND( BOOST_PP_TUPLE_REM() \
+				BOOST_PP_IF( \
+					HANDY_PP_IS_TUPLE(counter_name), \
+					( \
+						HANDY_PP_METRIC_NAME_BUFFER_SET(counter_name); \
+						struct handystats_scoped_counter_helper C_UNIQUE_SCOPED_COUNTER_NAME __attribute__((cleanup(handystats_scoped_counter_cleanup))) = \
+							{HANDY_PP_METRIC_NAME_BUFFER_VAR, delta_value}; \
+						HANDY_COUNTER_INCREMENT(HANDY_PP_METRIC_NAME_BUFFER_VAR, delta_value) \
+					), \
+					( \
+						struct handystats_scoped_counter_helper C_UNIQUE_SCOPED_COUNTER_NAME __attribute__((cleanup(handystats_scoped_counter_cleanup))) = \
+							{counter_name, delta_value}; \
+						HANDY_COUNTER_INCREMENT(counter_name, delta_value) \
+					) \
+				) \
+			)
 
 	#else
 

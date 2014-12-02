@@ -4,6 +4,7 @@
 #define HANDY_GAUGE_MEASURING_POINTS_H_
 
 #include <handystats/common.h>
+#include <handystats/macros.h>
 
 HANDYSTATS_EXTERN_C
 void handystats_gauge_init(
@@ -21,9 +22,9 @@ void handystats_gauge_set(
 #ifndef __cplusplus
 	#ifndef HANDYSTATS_DISABLE
 
-		#define HANDY_GAUGE_INIT(...) handystats_gauge_init(__VA_ARGS__)
+		#define HANDY_GAUGE_INIT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_gauge_init, __VA_ARGS__)
 
-		#define HANDY_GAUGE_SET(...) handystats_gauge_set(__VA_ARGS__)
+		#define HANDY_GAUGE_SET(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats_gauge_set, __VA_ARGS__)
 
 	#else
 

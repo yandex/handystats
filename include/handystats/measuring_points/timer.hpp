@@ -10,7 +10,7 @@
 #include <boost/preprocessor/list/cat.hpp>
 
 #include <handystats/metrics/timer.hpp>
-#include <handystats/macro_overload.hpp>
+#include <handystats/macros.h>
 
 
 namespace handystats { namespace measuring_points {
@@ -76,17 +76,17 @@ struct scoped_timer_helper {
 
 #ifndef HANDYSTATS_DISABLE
 
-	#define HANDY_TIMER_INIT(...) handystats::measuring_points::timer_init(__VA_ARGS__)
+	#define HANDY_TIMER_INIT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::timer_init, __VA_ARGS__)
 
-	#define HANDY_TIMER_START(...) handystats::measuring_points::timer_start(__VA_ARGS__)
+	#define HANDY_TIMER_START(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::timer_start, __VA_ARGS__)
 
-	#define HANDY_TIMER_STOP(...) handystats::measuring_points::timer_stop(__VA_ARGS__)
+	#define HANDY_TIMER_STOP(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::timer_stop, __VA_ARGS__)
 
-	#define HANDY_TIMER_DISCARD(...) handystats::measuring_points::timer_discard(__VA_ARGS__)
+	#define HANDY_TIMER_DISCARD(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::timer_discard, __VA_ARGS__)
 
-	#define HANDY_TIMER_HEARTBEAT(...) handystats::measuring_points::timer_heartbeat(__VA_ARGS__)
+	#define HANDY_TIMER_HEARTBEAT(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::timer_heartbeat, __VA_ARGS__)
 
-	#define HANDY_TIMER_SET(...) handystats::measuring_points::timer_set(__VA_ARGS__)
+	#define HANDY_TIMER_SET(...) HANDY_PP_MEASURING_POINT_WRAPPER(handystats::measuring_points::timer_set, __VA_ARGS__)
 
 #else
 
@@ -116,7 +116,20 @@ struct scoped_timer_helper {
 #ifndef HANDYSTATS_DISABLE
 
 	#define HANDY_TIMER_SCOPE(timer_name) \
-	handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME (timer_name, handystats::chrono::tsc_clock::now())
+		BOOST_PP_EXPAND( HANDY_PP_TUPLE_REM() \
+			BOOST_PP_IF( \
+				HANDY_PP_IS_TUPLE(timer_name), \
+				( \
+					HANDY_PP_METRIC_NAME_BUFFER_SET(counter_name); \
+					handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME \
+						(HANDY_PP_METRIC_NAME_BUFFER_VAR, handystats::chrono::tsc_clock::now()) \
+				), \
+				( \
+					handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME \
+						(timer_name, handystats::chrono::tsc_clock::now()) \
+				) \
+			) \
+		)
 
 #else
 

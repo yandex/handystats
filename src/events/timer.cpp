@@ -143,7 +143,14 @@ event_message* create_set_event(
 	message->timestamp = timestamp;
 
 	message->event_type = event_type::SET;
-	new (&message->event_data) int64_t(measurement.count());
+	new (&message->event_data)
+		int64_t(
+			chrono::duration::convert_to(
+				metrics::timer::value_unit,
+				measurement
+			)
+			.count()
+		);
 
 	return message;
 }

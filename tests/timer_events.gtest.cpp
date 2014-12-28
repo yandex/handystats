@@ -103,7 +103,12 @@ TEST(TimerEventsTest, TestTimerSetEvent) {
 	ASSERT_EQ(message->destination_type, handystats::events::event_destination_type::TIMER);
 
 	ASSERT_EQ(message->event_type, event_type::SET);
-	ASSERT_EQ(reinterpret_cast<int64_t>(message->event_data), duration.count());
+	ASSERT_EQ(reinterpret_cast<int64_t>(message->event_data),
+			handystats::chrono::duration::convert_to(
+				handystats::metrics::timer::value_unit,
+				duration
+			).count()
+		);
 
 	delete_event_message(message);
 }

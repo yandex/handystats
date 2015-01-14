@@ -93,6 +93,16 @@ void timer_set(
 
 }} // namespace measuring_points
 
+namespace {
+
+handystats::chrono::time_unit tsc_clock_unit;
+
+__attribute__((constructor(300)))
+void init_tsc_clock_unit() {
+	tsc_clock_unit = handystats::chrono::tsc_clock::now().time_since_epoch().unit();
+}
+
+} // unnamed namespace
 
 extern "C" {
 
@@ -143,7 +153,7 @@ void handystats_timer_set(
 {
 	handystats::measuring_points::timer_set(
 			timer_name,
-			handystats::chrono::duration(measurement, handystats::metrics::timer::value_unit)
+			handystats::chrono::duration(measurement, tsc_clock_unit)
 		);
 }
 

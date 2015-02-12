@@ -1,3 +1,9 @@
+handystats (1.10.5) unstable; urgency=low
+
+  * message_queue: memory consumption statistics added.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Tue, 12 Feb 2015 21:00:00 +0400
+
 handystats (1.10.4) unstable; urgency=low
 
   * measuring_points: timer's set event in C bindings handles measurement in

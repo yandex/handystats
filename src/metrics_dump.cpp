@@ -132,6 +132,13 @@ create_dump()
 
 			new_dump->insert(
 					std::pair<std::string, metrics::metric_variant>(
+						"handystats.message_queue.mem_consume",
+						message_queue::stats::mem_consume
+						)
+					);
+
+			new_dump->insert(
+					std::pair<std::string, metrics::metric_variant>(
 						"handystats.message_queue.message_wait_time",
 						message_queue::stats::message_wait_time
 						)

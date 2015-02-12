@@ -92,11 +92,13 @@ namespace handystats { namespace message_queue {
 namespace stats {
 
 metrics::gauge size;
+metrics::gauge mem_consume;
 metrics::gauge message_wait_time;
 metrics::counter pop_count;
 
 void update(const chrono::time_point& timestamp) {
 	size.update_statistics(timestamp);
+	mem_consume.update_statistics(timestamp);
 	message_wait_time.update_statistics(timestamp);
 	pop_count.update_statistics(timestamp);
 }
@@ -111,6 +113,16 @@ static void reset() {
 
 	size = metrics::gauge(size_opts);
 	size.set(0);
+
+	config::metrics::gauge mem_consume_opts;
+	mem_consume_opts.values.tags =
+		statistics::tag::value | statistics::tag::max |
+		statistics::tag::moving_avg
+		;
+	mem_consume_opts.values.moving_interval = chrono::duration(1, chrono::time_unit::SEC);
+
+	mem_consume = metrics::gauge(mem_consume_opts);
+	mem_consume.set(0);
 
 	config::metrics::gauge message_wait_time_opts;
 	message_wait_time_opts.values.tags =
@@ -143,11 +155,20 @@ void finalize() {
 __event_message_queue* event_message_queue = nullptr;
 
 std::atomic<size_t> mq_size(0);
+std::atomic<size_t> mq_mem_consume(0);
 
 void push(node* n) {
 	if (event_message_queue) {
 		event_message_queue->push(n);
 		++mq_size;
+
+		{
+			events::event_message* message = static_cast<events::event_message*>(n);
+			size_t message_mem_consume = sizeof(*message);
+			message_mem_consume += message->destination_name.size();
+
+			mq_mem_consume += message_mem_consume;
+		}
 	}
 }
 
@@ -160,8 +181,17 @@ events::event_message* pop() {
 
 	if (message) {
 		--mq_size;
+
+		{
+			size_t message_mem_consume = sizeof(*message);
+			message_mem_consume += message->destination_name.size();
+
+			mq_mem_consume -= message_mem_consume;
+		}
+
 		auto current_time = chrono::tsc_clock::now();
 		stats::size.set(size(), current_time);
+		stats::mem_consume.set(mq_mem_consume.load(std::memory_order_acquire), current_time);
 		stats::pop_count.increment(1, current_time);
 
 		stats::message_wait_time.set(
@@ -185,6 +215,7 @@ void initialize() {
 	if (!event_message_queue) {
 		event_message_queue = new __event_message_queue();
 		mq_size.store(0, std::memory_order_release);
+		mq_mem_consume.store(0, std::memory_order_release);
 	}
 
 	stats::initialize();
@@ -196,6 +227,7 @@ void finalize() {
 		events::delete_event_message(message);
 	}
 	mq_size.store(0);
+	mq_mem_consume.store(0);
 
 	delete event_message_queue;
 	event_message_queue = nullptr;

@@ -33,6 +33,7 @@ void finalize();
 namespace stats {
 
 extern metrics::gauge size;
+extern metrics::gauge mem_consume;
 extern metrics::gauge message_wait_time;
 extern metrics::counter pop_count;
 

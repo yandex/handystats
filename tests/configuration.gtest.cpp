@@ -35,9 +35,7 @@ protected:
 TEST_F(HandyConfigurationTest, MetricsDumpConfiguration) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics-dump\": {\
-					\"interval\": 750\
-				}\
+				\"dump-interval\": 750\
 			}"
 		);
 
@@ -50,9 +48,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpConfiguration) {
 TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics-dump\": {\
-					\"interval\": 2\
-				}\
+				\"dump-interval\": 2\
 			}"
 		);
 
@@ -80,9 +76,7 @@ TEST_F(HandyConfigurationTest, MetricsDumpToJsonTrueCheck) {
 TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics-dump\": {\
-					\"interval\": 0\
-				}\
+				\"dump-interval\": 0\
 			}"
 		);
 
@@ -110,14 +104,10 @@ TEST_F(HandyConfigurationTest, NoMetricsDumpCheck) {
 TEST_F(HandyConfigurationTest, TimerConfigurationIdleTimeout) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics\": {\
-					\"timer\": {\
-						\"idle-timeout\": 100\
-					}\
+				\"timer\": {\
+					\"idle-timeout\": 100\
 				},\
-				\"metrics-dump\": {\
-					\"interval\": 2\
-				}\
+				\"dump-interval\": 2\
 			}"
 		);
 
@@ -171,7 +161,7 @@ TEST_F(HandyConfigurationTest, NoConfigurationUseDefaults) {
 TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"statistics\": {\
+				\"defaults\": {\
 					\"moving-interval\": 1234,\
 					\"histogram-bins\": 200\
 				}\
@@ -188,12 +178,8 @@ TEST_F(HandyConfigurationTest, IncrementalStatisticsConfiguration) {
 TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"core\": {\
-					\"enable\": false\
-				},\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"enable\": false,\
+				\"dump-interval\": 1\
 			}"
 		);
 
@@ -214,14 +200,12 @@ TEST_F(HandyConfigurationTest, EnableFalseConfigOption) {
 TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"statistics\": {\
+				\"defaults\": {\
 					\"histogram-bins\": 25,\
 					\"moving-interval\": 1000,\
 					\"tags\": [\"histogram\"]\
 				},\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"dump-interval\": 1\
 			}"
 		);
 
@@ -261,14 +245,12 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionEnabled) {
 TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"statistics\": {\
+				\"defaults\": {\
 					\"histogram-bins\": 20,\
 					\"tags\": [],\
 					\"moving-interval\": 1000\
 				},\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"dump-interval\": 1\
 			}"
 		);
 
@@ -294,19 +276,15 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 TEST_F(HandyConfigurationTest, MetricsConfigOverwritesStatistcs) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"statistics\": {\
+				\"defaults\": {\
 					\"histogram-bins\": 50,\
 					\"tags\": [\"histogram\"],\
 					\"moving-interval\": 1000\
 				},\
-				\"metrics\": {\
-					\"gauge\": {\
-						\"tags\": []\
-					}\
+				\"gauge\": {\
+					\"tags\": []\
 				},\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"dump-interval\": 1\
 			}"
 		);
 

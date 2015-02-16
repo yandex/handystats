@@ -62,9 +62,7 @@ static void check_full_json_dump(const std::string& string_dump) {
 TEST(JsonDumpTest, TestJsonDumpMethods) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"dump-interval\": 1\
 			}"
 		);
 
@@ -106,16 +104,12 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics\": {\
-					\"gauge\": {\
-						\"tags\": []\
-					},\
-					\"counter\": {\
-					}\
+				\"gauge\": {\
+					\"tags\": []\
 				},\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"counter\": {\
+				},\
+				\"dump-interval\": 1\
 			}"
 		);
 

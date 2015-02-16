@@ -1,3 +1,12 @@
+handystats (1.11.0) unstable; urgency=low
+
+  * metrics_dump: empty (disabled) metrics are not added to metrics dump.
+  * measuring_points: added ability to use printf-like syntax for metric name.
+  * measuring_points: handy module removed due to inability to support new printf-like syntax.
+  * config: added ability to configure metrics with patterns.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Fri, 20 Feb 2015 16:00:00 +0400
+
 handystats (1.10.4) unstable; urgency=low
 
   * measuring_points: timer's set event in C bindings handles measurement in

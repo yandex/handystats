@@ -242,7 +242,7 @@ TEST_F(HandyConfigurationTest, HistogramConfigOptionDisabled) {
 			"{\
 				\"defaults\": {\
 					\"histogram-bins\": 20,\
-					\"tags\": [],\
+					\"tags\": [\"value\"],\
 					\"moving-interval\": 1000\
 				},\
 				\"dump-interval\": 1\
@@ -277,7 +277,7 @@ TEST_F(HandyConfigurationTest, MetricsConfigOverwritesStatistcs) {
 					\"moving-interval\": 1000\
 				},\
 				\"gauge\": {\
-					\"tags\": []\
+					\"tags\": [\"value\"]\
 				},\
 				\"dump-interval\": 1\
 			}"

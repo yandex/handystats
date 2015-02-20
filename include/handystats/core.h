@@ -6,6 +6,7 @@
 #include <handystats/common.h>
 
 /*
+ * Old configuration format
  * {
  *     "core": {
  *         "enable": <boolean value>
@@ -30,10 +31,39 @@
  *     },
  *     "metrics-dump": {
  *         "interval": <value in msec>
+ *     },
+ *     "<pattern>": {
+ *         <statistics opts>
  *     }
  * }
  */
 
+/*
+ * New configuration format
+ * {
+ *     "enable": <boolean value>,
+ *     "dump-interval": <value in msec>,
+ *     "defaults": {
+ *         "moving-interval": <value in msec>,
+ *         "histogram-bins": <integer value>,
+ *         "tags": ["<tag name>", "<tag name>", ...],
+ *         "rate-unit": <"ns" | "us" | "ms" | "s" | "m" | "h">
+ *     },
+ *     "gauge": {
+ *         <statistics opts>
+ *     },
+ *     "counter": {
+ *         <statistics opts>
+ *     },
+ *     "timer": {
+ *         "idle-timeout": <value in msec>,
+ *         <statistics opts>
+ *     },
+ *     "<pattern>": {
+ *         <statistics opts>
+ *     }
+ * }
+ */
 
 HANDYSTATS_EXTERN_C
 void handystats_initialize();

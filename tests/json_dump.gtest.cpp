@@ -5,18 +5,12 @@
 #include <gtest/gtest.h>
 
 #include <handystats/core.hpp>
-#include <handystats/module.h>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
 #include <handystats/json_dump.hpp>
 
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
-
-#ifndef _HAVE_HANDY_MODULE_TEST
-#define _HAVE_HANDY_MODULE_TEST 1
-#endif
-HANDY_MODULE(TEST)
 
 static void check_full_json_dump(const std::string& string_dump) {
 	rapidjson::Document dump;
@@ -62,20 +56,18 @@ static void check_full_json_dump(const std::string& string_dump) {
 TEST(JsonDumpTest, TestJsonDumpMethods) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"dump-interval\": 1\
 			}"
 		);
 
 	HANDY_INIT();
 
 	for (int i = 0; i < 10; ++i) {
-		TEST_TIMER_START("test.timer");
-		TEST_GAUGE_SET("test.gauge", i);
-		TEST_COUNTER_INCREMENT("test.counter", i);
-		TEST_ATTRIBUTE_SET("cycle.interation", i);
-		TEST_TIMER_STOP("test.timer");
+		HANDY_TIMER_START("test.timer");
+		HANDY_GAUGE_SET("test.gauge", i);
+		HANDY_COUNTER_INCREMENT("test.counter", i);
+		HANDY_ATTRIBUTE_SET("cycle.interation", i);
+		HANDY_TIMER_STOP("test.timer");
 	}
 
 	handystats::message_queue::wait_until_empty();
@@ -106,27 +98,23 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 	HANDY_CONFIG_JSON(
 			"{\
-				\"metrics\": {\
-					\"gauge\": {\
-						\"tags\": []\
-					},\
-					\"counter\": {\
-					}\
+				\"gauge\": {\
+					\"tags\": []\
 				},\
-				\"metrics-dump\": {\
-					\"interval\": 1\
-				}\
+				\"counter\": {\
+				},\
+				\"dump-interval\": 1\
 			}"
 		);
 
 	HANDY_INIT();
 
 	for (int i = 0; i < 10; ++i) {
-		TEST_TIMER_START("test.timer");
-		TEST_GAUGE_SET("test.gauge", i);
-		TEST_COUNTER_INCREMENT("test.counter", i);
-		TEST_ATTRIBUTE_SET("cycle.interation", i);
-		TEST_TIMER_STOP("test.timer");
+		HANDY_TIMER_START("test.timer");
+		HANDY_GAUGE_SET("test.gauge", i);
+		HANDY_COUNTER_INCREMENT("test.counter", i);
+		HANDY_ATTRIBUTE_SET("cycle.interation", i);
+		HANDY_TIMER_STOP("test.timer");
 	}
 
 	handystats::message_queue::wait_until_empty();

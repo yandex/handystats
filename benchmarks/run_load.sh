@@ -1,24 +1,20 @@
 #!/bin/sh
 
 handystats_config="{
-	\"core\": {
-		\"enabled\": true
-	},
-	\"statistics\": {
+	\"enabled\": true,
+	\"defaults\": {
 		\"moving-interval\": 1000,
 		\"histogram-bins\": 20,
 		\"tags\": []
 	},
-	\"metrics\": {
-		\"gauge\": {
-			\"tags\": [\"value\", \"moving-avg\"]
-		},
-		\"counter\": {
-			\"tags\": [\"value\", \"moving-avg\"]
-		},
-		\"timer\": {
-			\"tags\": [\"moving-avg\", \"quantile\"]
-		}
+	\"load_test.counter.*\": {
+		\"tags\": [\"value\", \"moving-avg\"]
+	},
+	\"load_test.gauge.*\": {
+		\"tags\": [\"value\", \"moving-avg\"]
+	},
+	\"load_test.timer.*\": {
+		\"tags\": [\"quantile\", \"moving-avg\"]
 	}
 }"
 

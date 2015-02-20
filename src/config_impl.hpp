@@ -3,6 +3,9 @@
 #ifndef HANDYSTATS_CONFIG_IMPL_HPP_
 #define HANDYSTATS_CONFIG_IMPL_HPP_
 
+#include <memory>
+#include <vector>
+
 #include <handystats/config/statistics.hpp>
 #include <handystats/config/metrics/gauge.hpp>
 #include <handystats/config/metrics/counter.hpp>
@@ -23,6 +26,20 @@ namespace metrics {
 
 extern metrics_dump metrics_dump_opts;
 extern core core_opts;
+
+extern
+std::vector<
+	std::pair<
+		std::vector<std::string>,
+		rapidjson::Value*
+	>
+>
+pattern_opts;
+
+extern
+std::shared_ptr<rapidjson::Document> source;
+
+rapidjson::Value* select_pattern(const std::string&);
 
 void initialize();
 void finalize();

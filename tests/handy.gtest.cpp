@@ -13,24 +13,16 @@
 #include <handystats/core.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
-#include <handystats/module.h>
 
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
-
-#ifndef _HAVE_HANDY_MODULE_TEST
-#define _HAVE_HANDY_MODULE_TEST 1
-#endif
-HANDY_MODULE(TEST)
 
 class HandyCounterTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
 		HANDY_CONFIG_JSON(
 				"{\
-					\"metrics-dump\": {\
-						\"interval\": 10\
-					}\
+					\"dump-interval\": 10\
 				}"
 			);
 
@@ -46,9 +38,7 @@ protected:
 	virtual void SetUp() {
 		HANDY_CONFIG_JSON(
 				"{\
-					\"metrics-dump\": {\
-						\"interval\": 10\
-					}\
+					\"dump-interval\": 10\
 				}"
 			);
 
@@ -75,7 +65,7 @@ TEST_F(HandyCounterTest, HandyBubbleSortMonitoring) {
 				sorted = false;
 				swaps_count++;
 
-				TEST_COUNTER_INCREMENT("swaps.count", 1);
+				HANDY_COUNTER_INCREMENT("swaps.count", 1);
 			}
 		}
 
@@ -113,7 +103,7 @@ TEST_F(HandyGaugeTest, HandyQueueSizeMonitoring) {
 				data.pop();
 			}
 		}
-		TEST_GAUGE_SET("queue.size", data.size());
+		HANDY_GAUGE_SET("queue.size", data.size());
 
 		if (data.size() > max_queue_size) {
 			max_queue_size = data.size();

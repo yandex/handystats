@@ -68,37 +68,54 @@ create_dump()
 	for (auto metric_iter = internal::metrics_map.cbegin(); metric_iter != internal::metrics_map.cend(); ++metric_iter) {
 		switch (metric_iter->second.which()) {
 			case metrics::metric_index::GAUGE:
-				new_dump->insert(
-						std::pair<std::string, metrics::metric_variant>(
-							metric_iter->first,
-							*boost::get<metrics::gauge*>(metric_iter->second)
-						)
-					);
-				break;
+				{
+					const auto& metric = *boost::get<metrics::gauge*>(metric_iter->second);
+					if (metric.values().tags() != statistics::tag::empty) {
+						new_dump->insert(
+								std::pair<std::string, metrics::metric_variant>(
+									metric_iter->first,
+									metric
+								)
+							);
+					}
+					break;
+				}
 			case metrics::metric_index::COUNTER:
-				new_dump->insert(
-						std::pair<std::string, metrics::metric_variant>(
-							metric_iter->first,
-							*boost::get<metrics::counter*>(metric_iter->second)
-						)
-					);
-				break;
+				{
+					const auto& metric = *boost::get<metrics::counter*>(metric_iter->second);
+					if (metric.values().tags() != statistics::tag::empty) {
+						new_dump->insert(
+								std::pair<std::string, metrics::metric_variant>(
+									metric_iter->first,
+									metric
+								)
+							);
+					}
+					break;
+				}
 			case metrics::metric_index::TIMER:
-				new_dump->insert(
-						std::pair<std::string, metrics::metric_variant>(
-							metric_iter->first,
-							*boost::get<metrics::timer*>(metric_iter->second)
-						)
-					);
-				break;
+				{
+					const auto& metric = *boost::get<metrics::timer*>(metric_iter->second);
+					if (metric.values().tags() != statistics::tag::empty) {
+						new_dump->insert(
+								std::pair<std::string, metrics::metric_variant>(
+									metric_iter->first,
+									metric
+								)
+							);
+					}
+					break;
+				}
 			case metrics::metric_index::ATTRIBUTE:
-				new_dump->insert(
-						std::pair<std::string, metrics::metric_variant>(
-							metric_iter->first,
-							*boost::get<metrics::attribute*>(metric_iter->second)
-						)
-					);
-				break;
+				{
+					new_dump->insert(
+							std::pair<std::string, metrics::metric_variant>(
+								metric_iter->first,
+								*boost::get<metrics::attribute*>(metric_iter->second)
+							)
+						);
+					break;
+				}
 		}
 	}
 

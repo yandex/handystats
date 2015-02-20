@@ -136,19 +136,41 @@ void process_event_message(const events::event_message& message) {
 	}
 
 	if (empty_metric) {
+		rapidjson::Value* pattern_cfg = config::select_pattern(message.destination_name);
+
 		switch (message.destination_type) {
 			case events::event_destination_type::COUNTER:
-				metric_ptr = new metrics::counter(config::metrics::counter_opts);
-				break;
+				{
+					auto counter_opts = config::metrics::counter_opts;
+					if (pattern_cfg) {
+						counter_opts.configure(*pattern_cfg);
+					}
+					metric_ptr = new metrics::counter(counter_opts);
+					break;
+				}
 			case events::event_destination_type::GAUGE:
-				metric_ptr = new metrics::gauge(config::metrics::gauge_opts);
-				break;
+				{
+					auto gauge_opts = config::metrics::gauge_opts;
+					if (pattern_cfg) {
+						gauge_opts.configure(*pattern_cfg);
+					}
+					metric_ptr = new metrics::gauge(gauge_opts);
+					break;
+				}
 			case events::event_destination_type::TIMER:
-				metric_ptr = new metrics::timer(config::metrics::timer_opts);
-				break;
+				{
+					auto timer_opts = config::metrics::timer_opts;
+					if (pattern_cfg) {
+						timer_opts.configure(*pattern_cfg);
+					}
+					metric_ptr = new metrics::timer(timer_opts);
+					break;
+				}
 			case events::event_destination_type::ATTRIBUTE:
-				metric_ptr = new metrics::attribute();
-				break;
+				{
+					metric_ptr = new metrics::attribute();
+					break;
+				}
 		}
 	}
 

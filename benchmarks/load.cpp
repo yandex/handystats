@@ -18,15 +18,7 @@
 #include <handystats/metrics_dump.hpp>
 #include <handystats/measuring_points.hpp>
 
-#include <handystats/module.h>
-
 #include "command_executor.hpp"
-
-#ifndef _HAVE_HANDY_MODULE_LOAD
-#define _HAVE_HANDY_MODULE_LOAD 1
-#endif
-
-HANDY_MODULE(LOAD)
 
 uint64_t threads = 1;
 uint64_t timers = 0;
@@ -51,17 +43,17 @@ void command() {
 	double choice = double(rand()) / RAND_MAX;
 
 	if (handystats::math_utils::cmp(choice, counter_prob) < 0) {
-		LOAD_COUNTER_INCREMENT("load_test.counter." + std::to_string(rand() % counters), rand());
+		HANDY_COUNTER_INCREMENT(("load_test.counter.%d", rand() % counters), rand());
 	}
 	else if (handystats::math_utils::cmp(choice, gauge_prob) < 0) {
-		LOAD_GAUGE_SET("load_test.gauge." + std::to_string(rand() % gauges), rand());
+		HANDY_GAUGE_SET(("load_test.gauge.%d", rand() % gauges), rand());
 	}
 	else {
 		if (rand() & 1) {
-			LOAD_TIMER_START("load_test.timer." + std::to_string(rand() % timers), std::hash<std::thread::id>()(std::this_thread::get_id()));
+			HANDY_TIMER_START(("load_test.timer.%d", rand() % timers), std::hash<std::thread::id>()(std::this_thread::get_id()));
 		}
 		else {
-			LOAD_TIMER_STOP("load_test.timer." + std::to_string(rand() % timers), std::hash<std::thread::id>()(std::this_thread::get_id()));
+			HANDY_TIMER_STOP(("load_test.timer.%d", rand() % timers), std::hash<std::thread::id>()(std::this_thread::get_id()));
 		}
 	}
 }

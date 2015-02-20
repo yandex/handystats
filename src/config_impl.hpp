@@ -4,6 +4,7 @@
 #define HANDYSTATS_CONFIG_IMPL_HPP_
 
 #include <memory>
+#include <vector>
 
 #include <handystats/config/statistics.hpp>
 #include <handystats/config/metrics/gauge.hpp>

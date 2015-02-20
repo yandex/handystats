@@ -141,7 +141,7 @@ std::vector<
 >
 pattern_opts;
 
-std::shared_ptr<rapidjson::Document> source;
+std::shared_ptr<rapidjson::Document> source(new rapidjson::Document());
 
 static void reset() {
 	statistics_opts = statistics();

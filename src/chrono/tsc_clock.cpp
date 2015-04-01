@@ -1,5 +1,7 @@
 // Copyright (c) 2014 Yandex LLC. All rights reserved.
 
+#include <cstring>
+#include <cstdlib>
 #include <cstdint>
 #include <cassert>
 #include <algorithm>
@@ -52,6 +54,32 @@ enum clock_source_t {
 };
 
 clock_source_t get_available_clock_source() {
+	// check HANDY_CLOCK_SOURCE env variable first.
+	// possible values:
+	// - RDTSC
+	// - RDTSCP
+	// - CLOCK_MONOTONIC
+	// - CLOCK_REALTIME
+	//
+	// if invalid value is passed CS_CLOCK_REALTIME will be used.
+
+	if (const char* env_clock_source = std::getenv("HANDY_CLOCK_SOURCE")) {
+		if (strcmp(env_clock_source, "RDTSCP") == 0) {
+			return CS_RDTSCP;
+		}
+		else if (strcmp(env_clock_source, "RDTSC") == 0) {
+			return CS_RDTSC;
+		}
+		else if (strcmp(env_clock_source, "CLOCK_MONOTONIC") == 0) {
+			return CS_CLOCK_MONOTONIC;
+		}
+		else if (strcmp(env_clock_source, "CLOCK_REALTIME") == 0) {
+			return CS_CLOCK_REALTIME;
+		}
+
+		return CS_CLOCK_REALTIME;
+	}
+
 	if (handystats::tsc_supported() && handystats::invariant_tsc())
 	{
 		if (handystats::rdtscp_supported()) {

@@ -1,3 +1,9 @@
+handystats (1.11.3) unstable; urgency=low
+
+  * measuring_points: HANDY_TIMER_SCOPE macro fixed.
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Mon, 15 Jun 2015 14:00:00 +0400
+
 handystats (1.11.2) unstable; urgency=low
 
   * chrono: added ability to explicitly choose clock source via env variable

@@ -120,7 +120,7 @@ struct scoped_timer_helper {
 			BOOST_PP_IF( \
 				HANDY_PP_IS_TUPLE(timer_name), \
 				( \
-					HANDY_PP_METRIC_NAME_BUFFER_SET(counter_name); \
+					HANDY_PP_METRIC_NAME_BUFFER_SET(timer_name); \
 					handystats::measuring_points::scoped_timer_helper UNIQUE_SCOPED_TIMER_NAME \
 						(HANDY_PP_METRIC_NAME_BUFFER_VAR, handystats::chrono::tsc_clock::now()) \
 				), \

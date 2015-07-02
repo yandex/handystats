@@ -3,7 +3,7 @@ Version: 1.11.3
 Release: 1%{?dist}
 Summary: C++ library for collecting user-defined in-process runtime statistics with low overhead.
 Group: System Environment/Libraries
-License: GPLv2+
+License: LGPLv3+
 URL: https://github.com/shindo/handystats
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)

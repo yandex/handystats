@@ -5,7 +5,7 @@ pkgrel=1
 pkgdesc="C++ library for collecting user-defined in-process runtime statistics with low overhead"
 arch=('any')
 url=('https://github.com/shindo/handystats')
-license=('unknown')
+license=('LGPL3')
 depends=('boost>=1.46')
 checkdepends=('gtest')
 makedepends=('git' 'cmake')

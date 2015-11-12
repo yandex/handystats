@@ -1,18 +1,43 @@
 Source: handystats
-Section: libdevel
 Priority: optional
+Section: libs
 Maintainer: Danil Osherov <shindo@yandex-team.ru>
 Build-Depends: debhelper (>= 7),
-		cdbs,
 		cmake,
 		libboost-dev,
 		libgtest-dev,
-Standards-Version: 3.8.0
-Homepage: https://github.com/shindo/handystats
-Vcs-git: git://github.com/shindo/handystats.git
-Vcs-Browser: https://github.com/shindo/handystats
+Standards-Version: 3.9.5
+Homepage: https://github.com/yandex/handystats
+Vcs-git: git://github.com/yandex/handystats.git
+Vcs-Browser: https://github.com/yandex/handystats
 
-Package: handystats
+Package: libhandystats1
 Architecture: any
+Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: C++ library for collecting user-defined in-process runtime statistics with low overhead
+Description: C++ library for user-defined in-process runtime statistics 
+ Handystats is C++ library for collecting user-defined
+ in-process runtime statistics with low overhead that allows
+ users to monitor their applications in a production
+ environment.
+
+Package: libhandystats-dev
+Architecture: any
+Section: libdevel
+Depends: ${misc:Depends}, libhandystats1 (= ${binary:Version})
+Description: C++ library for user-defined in-process runtime statistics development files
+ Handystats is C++ library for collecting user-defined
+ in-process runtime statistics with low overhead that allows
+ users to monitor their applications in a production
+ environment.
+
+Package: libhandystats1-dbg
+Architecture: any
+Priority: extra
+Section: debug
+Depends: ${misc:Depends}, libhandystats1 (= ${binary:Version})
+Description: C++ library for user-defined in-process runtime statistics debug files
+ Handystats is C++ library for collecting user-defined
+ in-process runtime statistics with low overhead that allows
+ users to monitor their applications in a production
+ environment.

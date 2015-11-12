@@ -1,6 +1,16 @@
 #!/usr/bin/make -f
 
-include /usr/share/cdbs/1/class/cmake.mk
-include /usr/share/cdbs/1/rules/debhelper.mk
+%:
+	dh $@
 
-DEB_MAKE_CHECK_TARGET=check
+override_dh_auto_configure:
+	cmake -DCMAKE_VERBOSE_MAKEFILE=1 -DCMAKE_INSTALL_PREFIX:PATH=/usr
+
+override_dh_auto_build:
+	make -j4
+
+override_dh_auto_test:
+	make check
+
+override_dh_strip:
+	dh_strip --dbg-package=libhandystats1-dbg

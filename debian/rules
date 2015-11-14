@@ -13,4 +13,4 @@ override_dh_auto_test:
 	make check
 
 override_dh_strip:
-	dh_strip --dbg-package=libhandystats1-dbg
+	dh_strip --dbg-package=handystats-dbg

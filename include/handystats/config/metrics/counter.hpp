@@ -18,7 +18,7 @@
 #ifndef HANDYSTATS_CONFIG_METRICS_COUNTER_HPP_
 #define HANDYSTATS_CONFIG_METRICS_COUNTER_HPP_
 
-#include <handystats/rapidjson/document.h>
+#include <rapidjson/document.h>
 
 #include <handystats/config/statistics.hpp>
 

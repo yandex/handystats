@@ -6,6 +6,7 @@ Build-Depends: debhelper (>= 7),
 		cdbs,
 		cmake,
 		libboost-dev,
+		rapidjson-dev,
 		libgtest-dev,
 Standards-Version: 3.8.0
 Homepage: https://github.com/shindo/handystats

@@ -54,7 +54,7 @@ void fill(
 				break;
 		}
 
-		dump.AddMember(metric_iter->first.c_str(), allocator, metric_value, allocator);
+		dump.AddMember(rapidjson::Value(metric_iter->first.c_str(), allocator), metric_value, allocator);
 	}
 }
 

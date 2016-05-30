@@ -3,7 +3,3 @@ Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Files: *
 Copyright: 2013-2015 YANDEX LLC
 License: LGPL-3+
-
-Files: include/handystats/rapidjson/*
-Copyright: 2011 Milo Yip
-License: MIT

@@ -19,7 +19,7 @@
 #define HANDYSTATS_CONFIG_INCREMENTAL_STATISTICS_HPP_
 
 #include <handystats/chrono.hpp>
-#include <handystats/rapidjson/document.h>
+#include <rapidjson/document.h>
 
 namespace handystats { namespace config {
 

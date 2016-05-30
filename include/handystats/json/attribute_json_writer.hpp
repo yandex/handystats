@@ -22,9 +22,9 @@
 
 #include <string>
 
-#include <handystats/rapidjson/document.h>
-#include <handystats/rapidjson/stringbuffer.h>
-#include <handystats/rapidjson/prettywriter.h>
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
 
 #include <handystats/json/timestamp.hpp>
 #include <handystats/metrics/attribute.hpp>
@@ -67,7 +67,7 @@ inline void write_to_json_value(const metrics::attribute* const obj, rapidjson::
 			json_value->AddMember("value", boost::get<double>(obj->value()), allocator);
 			break;
 		case metrics::attribute::value_index::STRING:
-			json_value->AddMember("value", boost::get<std::string>(obj->value()).c_str(), allocator);
+			json_value->AddMember("value", rapidjson::Value(boost::get<std::string>(obj->value()).c_str(), allocator), allocator);
 			break;
 	}
 }

@@ -6,7 +6,7 @@ pkgdesc="C++ library for collecting user-defined in-process runtime statistics w
 arch=('any')
 url=('https://github.com/shindo/handystats')
 license=('LGPL3')
-depends=('boost>=1.46')
+depends=('boost>=1.46' 'rapidjson>=1.0.0')
 checkdepends=('gtest')
 makedepends=('git' 'cmake')
 source=("$pkgname"::"git://github.com/shindo/handystats.git#tag=$pkgver")

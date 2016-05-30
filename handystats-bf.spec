@@ -15,6 +15,7 @@ BuildRequires: cmake
 %endif
 
 BuildRequires: boost-devel
+BuildRequires: rapidjson
 BuildRequires: gtest-devel
 
 %description

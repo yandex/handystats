@@ -164,7 +164,7 @@ protected:
 
 	//! \todo Optimization with custom double-to-string converter.
 	void WriteDouble(double d) {
-		if (isnan(d)) {
+		if (std::isnan(d)) {
 			d = 0;
 		}
 		char buffer[100];

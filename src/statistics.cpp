@@ -42,6 +42,50 @@ find_z(const long double& a, const long double& b, const long double& c) {
 	throw std::logic_error("find_z: not found (" + std::to_string(a) + ", " + std::to_string(b) + ", " + std::to_string(c) + ")");
 }
 
+static void
+remove_empty_bins(handystats::statistics::histogram_type& histogram) {
+	using handystats::statistics;
+	using handystats::math_utils;
+
+	auto is_empty_bin = [](const statistics::bin_type& bin) {
+		return math_utils::cmp(std::get<statistics::BIN_COUNT>(bin), 0.0) <= 0;
+	};
+
+	// remove leading empty bins
+	auto first_nonempty_bin = std::find_if_not(histogram.begin(), histogram.end(), is_empty_bin);
+	histogram.erase(histogram.begin(), first_nonempty_bin);
+
+	// remove trailing empty bins
+	// NOTE: reverse_iterator.base() returns iterator pointing to the element next
+	// to the one the reverse_iterator is currently pointing to
+	auto last_nonempty_bin = std::find_if_not(histogram.rbegin(), histogram.rend(), is_empty_bin);
+	histogram.erase(last_nonempty_bin.base(), histogram.end());
+
+	// remove empty bins that are surrounded by empty bins
+	for (size_t index = 1; index < histogram.size() - 1;) {
+		if (!is_empty_bin(histogram[index])) {
+			// as the current bin is not empty, next bin could not be surrouned by empty
+			// bins, skip it too
+			index += 2;
+			continue;
+		}
+
+		if (!is_empty_bin(histogram[index + 1])) {
+			// as the bin to the right is not empty it could not be surrounded by empty
+			// bins, as well as the next one
+			index += 3;
+			continue;
+		}
+
+		if (!is_empty_bin(histogram[index - 1])) {
+			index += 1;
+			continue;
+		}
+
+		histogram.erase(histogram.begin() + index);
+	}
+}
+
 namespace handystats {
 
 statistics::quantile_extractor::quantile_extractor(const statistics* const statistics)
@@ -355,6 +399,12 @@ void statistics::update_histogram(const statistics::value_type& value, const sta
 
 	shift_histogram(timestamp);
 
+	if (m_histogram.size() <= m_config.histogram_bins) {
+		return;
+	}
+
+	// remove excess empty bins from histogram before merging
+	remove_empty_bins(m_histogram);
 	if (m_histogram.size() <= m_config.histogram_bins) {
 		return;
 	}

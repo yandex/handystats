@@ -177,6 +177,40 @@ TEST_F(IncrementalStatisticsTest, QuantileNormalTest) {
 	ASSERT_NEAR(stats.get<handystats::statistics::tag::quantile>().at(0.99), normal_value, normal_value * 0.10);
 }
 
+TEST_F(IncrementalStatisticsTest, HistogramMovingValuesRangeTest) {
+	opts.histogram_bins = 10;
+	opts.moving_interval = handystats::chrono::duration::convert_to(
+			handystats::chrono::time_unit::NSEC,
+			handystats::chrono::duration(1, handystats::chrono::time_unit::SEC)
+		);
+	opts.tags = handystats::statistics::tag::histogram;
+
+	stats = handystats::statistics(opts);
+
+	std::vector<std::pair<int, int>> value_ranges = {{0, 10}, {90, 100}, {0, 10}};
+	handystats::chrono::time_point current_time = handystats::chrono::tsc_clock::now();
+
+	for (auto value_range : value_ranges) {
+		for (int step = 0; step < 10; step++) {
+			for (auto value = value_range.first; value < value_range.second; ++value) {
+				stats.update(value, current_time);
+			}
+			current_time += opts.moving_interval / 10;
+		}
+
+		auto histogram = stats.get<handystats::statistics::tag::histogram>();
+		ASSERT_EQ(histogram.size(), 10);
+		for (size_t index = 0; index < 10; ++index) {
+			ASSERT_NEAR(std::get<handystats::statistics::BIN_CENTER>(histogram[index]), value_range.first + index, 1E-3);
+		}
+
+		for (int sleep_step = 0; sleep_step < 5; sleep_step++) {
+			current_time += opts.moving_interval;
+			stats.update_time(current_time);
+		}
+	}
+}
+
 TEST_F(IncrementalStatisticsTest, HistogramTest) {
 	opts.histogram_bins = 10;
 	opts.moving_interval = handystats::chrono::duration::convert_to(

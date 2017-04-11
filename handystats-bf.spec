@@ -1,5 +1,5 @@
 Name: handystats
-Version: 1.11.3
+Version: 1.11.4
 Release: 1%{?dist}
 Summary: C++ library for collecting user-defined in-process runtime statistics with low overhead.
 Group: System Environment/Libraries

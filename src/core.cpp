@@ -59,7 +59,7 @@ static void process_message_queue() {
 	events::delete_event_message(message);
 }
 
-static void run_processor() {
+static void run_processor() noexcept {
 	char thread_name[16];
 	memset(thread_name, 0, sizeof(thread_name));
 

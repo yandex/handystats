@@ -29,20 +29,7 @@
 
 /* noexcept */
 #ifdef __cplusplus
-	#if GCC_VERSION >= 40600
-		#define HANDYSTATS_NOEXCEPT noexcept
-	#else
-		#define HANDYSTATS_NOEXCEPT throw()
-	#endif
-#endif
-
-/* nullptr */
-#ifndef HAVE_NULLPTR
-	#ifndef __cplusplus
-		#define nullptr ((void*)0)
-	#else
-		#define nullptr __null
-	#endif
+	#define HANDYSTATS_NOEXCEPT noexcept
 #endif
 
 #endif // HANDYSTATS_COMMON_H_

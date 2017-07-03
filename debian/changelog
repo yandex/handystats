@@ -1,3 +1,9 @@
+handystats (1.11.6) unstable; urgency=low
+
+  * common.h: Drop support for GCC 4.6
+
+ -- Danil Osherov <shindo@yandex-team.ru>  Mon, 03 Jul 2017 15:00:00 +0400
+
 handystats (1.11.5) unstable; urgency=low
 
   * config: Show proper traceback on invalid tag in pattern spec

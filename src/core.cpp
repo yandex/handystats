@@ -73,7 +73,7 @@ static void run_processor() noexcept {
 		}
 		else {
 			last_message_timestamp = std::max(last_message_timestamp, chrono::tsc_clock::now());
-			std::this_thread::sleep_for(std::chrono::microseconds(10));
+			std::this_thread::sleep_for(std::chrono::microseconds(1000));
 		}
 
 		metrics_dump::update(chrono::tsc_clock::now(), last_message_timestamp);

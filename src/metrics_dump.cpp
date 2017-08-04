@@ -180,6 +180,23 @@ create_dump()
 		// metrics_dump.dump_time will be added later
 	}
 
+	// config
+	{
+		auto dump_interval = config::metrics_dump_opts.interval;
+
+		metrics::attribute dump_interval_attr;
+		dump_interval_attr.set(
+				chrono::duration::convert_to(chrono::time_unit::MSEC, dump_interval).count()
+			);
+
+		new_dump->insert(
+				std::pair<std::string, metrics::metric_variant>(
+					"handystats.config.dump_interval",
+					dump_interval_attr
+					)
+				);
+	}
+
 	{
 		// NOTE: possible call chrono::system_clock::now()
 		chrono::time_point system_timestamp =

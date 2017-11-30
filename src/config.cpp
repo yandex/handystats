@@ -26,9 +26,9 @@
 #include <handystats/core.hpp>
 #include <handystats/core.h>
 
-#include <handystats/rapidjson/document.h>
-#include <handystats/rapidjson/stringbuffer.h>
-#include <handystats/rapidjson/writer.h>
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
 
 #include "core_impl.hpp"
 

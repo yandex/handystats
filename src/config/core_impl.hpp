@@ -18,7 +18,7 @@
 #ifndef HANDYSTATS_CONFIG_CORE_IMPL_HPP_
 #define HANDYSTATS_CONFIG_CORE_IMPL_HPP_
 
-#include <handystats/rapidjson/document.h>
+#include <rapidjson/document.h>
 
 namespace handystats { namespace config {
 

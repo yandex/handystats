@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include <handystats/rapidjson/document.h>
+#include <rapidjson/document.h>
 
 #include <handystats/core.hpp>
 #include <handystats/metrics_dump.hpp>

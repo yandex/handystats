@@ -19,9 +19,9 @@
 #define HANDYSTATS_JSON_TIMESTAMP_HPP_
 
 #include <handystats/chrono.hpp>
-#include <handystats/rapidjson/document.h>
-#include <handystats/rapidjson/stringbuffer.h>
-#include <handystats/rapidjson/prettywriter.h>
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
 
 namespace handystats { namespace json {
 

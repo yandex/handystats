@@ -21,6 +21,8 @@
 #include <memory>
 #include <vector>
 
+#include <rapidjson/document.h>
+
 #include <handystats/config/statistics.hpp>
 #include <handystats/config/metrics/gauge.hpp>
 #include <handystats/config/metrics/counter.hpp>
@@ -58,6 +60,14 @@ rapidjson::Value* select_pattern(const std::string&);
 
 void initialize();
 void finalize();
+
+void configure(statistics&, const rapidjson::Value& config);
+
+namespace metrics {
+	void configure(gauge&, const rapidjson::Value& config);
+	void configure(counter&, const rapidjson::Value& config);
+	void configure(timer&, const rapidjson::Value& config);
+} // namespace metrics
 
 }} // namespace handystats::config
 

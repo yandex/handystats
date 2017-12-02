@@ -158,7 +158,7 @@ void process_event_message(const events::event_message& message) {
 				{
 					auto counter_opts = config::metrics::counter_opts;
 					if (pattern_cfg) {
-						counter_opts.configure(*pattern_cfg);
+						configure(counter_opts, *pattern_cfg);
 					}
 					metric_ptr = new metrics::counter(counter_opts);
 					break;
@@ -167,7 +167,7 @@ void process_event_message(const events::event_message& message) {
 				{
 					auto gauge_opts = config::metrics::gauge_opts;
 					if (pattern_cfg) {
-						gauge_opts.configure(*pattern_cfg);
+						configure(gauge_opts, *pattern_cfg);
 					}
 					metric_ptr = new metrics::gauge(gauge_opts);
 					break;
@@ -176,7 +176,7 @@ void process_event_message(const events::event_message& message) {
 				{
 					auto timer_opts = config::metrics::timer_opts;
 					if (pattern_cfg) {
-						timer_opts.configure(*pattern_cfg);
+						configure(timer_opts, *pattern_cfg);
 					}
 					metric_ptr = new metrics::timer(timer_opts);
 					break;

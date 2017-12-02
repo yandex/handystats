@@ -17,6 +17,8 @@
 
 #include <handystats/config/metrics/counter.hpp>
 
+#include "config_impl.hpp"
+
 namespace handystats { namespace config { namespace metrics {
 
 counter::counter()
@@ -24,12 +26,12 @@ counter::counter()
 {
 }
 
-void counter::configure(const rapidjson::Value& config) {
+void configure(counter& obj, const rapidjson::Value& config) {
 	if (!config.IsObject()) {
 		return;
 	}
 
-	this->values.configure(config);
+	configure(obj.values, config);
 }
 
 }}} // namespace handystats::config::metrics

@@ -21,9 +21,9 @@
 #include <string>
 #include <algorithm>
 
-#include <handystats/rapidjson/document.h>
-#include <handystats/rapidjson/stringbuffer.h>
-#include <handystats/rapidjson/prettywriter.h>
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
 
 #include <handystats/json/timestamp.hpp>
 #include <handystats/statistics.hpp>

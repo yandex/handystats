@@ -35,7 +35,7 @@ static void check_full_json_dump(const std::string& string_dump) {
 
 	for (rapidjson::Value::MemberIterator iter = dump.MemberBegin(); iter != dump.MemberEnd(); ++iter) {
 		ASSERT_TRUE(iter->value.IsObject());
-		ASSERT_TRUE(iter->value.FindMember("type") != NULL);
+		ASSERT_TRUE(iter->value.HasMember("type"));
 
 		std::string type(iter->value.FindMember("type")->value.GetString(), iter->value.FindMember("type")->value.GetStringLength());
 		std::string name(iter->name.GetString());
@@ -46,26 +46,26 @@ static void check_full_json_dump(const std::string& string_dump) {
 		}
 
 		if (type == "gauge") {
-//			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
-//			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
+//			ASSERT_TRUE(iter->value.HasMember("timestamp"));
+//			ASSERT_TRUE(iter->value.HasMember("value"));
 
-//			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
+//			ASSERT_TRUE(iter->value.HasMember("values"));
 		}
 		else if (type == "counter") {
-//			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
-//			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
+//			ASSERT_TRUE(iter->value.HasMember("timestamp"));
+//			ASSERT_TRUE(iter->value.HasMember("value"));
 
-//			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
+//			ASSERT_TRUE(iter->value.HasMember("values"));
 		}
 		else if (type == "timer") {
-//			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
-//			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
+//			ASSERT_TRUE(iter->value.HasMember("timestamp"));
+//			ASSERT_TRUE(iter->value.HasMember("value"));
 
-//			ASSERT_TRUE(iter->value.FindMember("values") != NULL);
+//			ASSERT_TRUE(iter->value.HasMember("values"));
 		}
 		else if (type == "attribute") {
-//			ASSERT_TRUE(iter->value.FindMember("timestamp") != NULL);
-			ASSERT_TRUE(iter->value.FindMember("value") != NULL);
+//			ASSERT_TRUE(iter->value.HasMember("timestamp"));
+			ASSERT_TRUE(iter->value.HasMember("value"));
 		}
 	}
 }

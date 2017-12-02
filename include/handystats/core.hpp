@@ -18,7 +18,7 @@
 #ifndef HANDYSTATS_CORE_HPP_
 #define HANDYSTATS_CORE_HPP_
 
-#include <handystats/rapidjson/document.h>
+#include <rapidjson/document.h>
 
 /*
  * Old configuration format

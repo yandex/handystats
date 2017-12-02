@@ -27,8 +27,6 @@
 #include <handystats/core.h>
 
 #include <rapidjson/document.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
 
 #include "core_impl.hpp"
 
@@ -189,19 +187,6 @@ void finalize() {
 
 
 namespace handystats {
-
-bool config_json(const rapidjson::Value& config) {
-	typedef rapidjson::MemoryPoolAllocator<> allocator_type;
-	allocator_type allocator;
-
-	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type> buffer(&allocator);
-	rapidjson::Writer<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type>> writer(buffer);
-	config.Accept(writer);
-
-	std::string config_str(buffer.GetString(), buffer.GetSize());
-
-	return config_json(config_str.c_str());
-}
 
 bool config_json(const char* config_data) {
 	std::lock_guard<std::mutex> lock(handystats::operation_mutex);

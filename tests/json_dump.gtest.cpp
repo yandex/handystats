@@ -21,6 +21,10 @@
 
 #include <gtest/gtest.h>
 
+#include <rapidjson/document.h>
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/prettywriter.h>
+
 #include <handystats/core.hpp>
 #include <handystats/measuring_points.hpp>
 #include <handystats/metrics_dump.hpp>
@@ -28,6 +32,16 @@
 
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
+
+namespace handystats { namespace json {
+
+template<typename Allocator>
+void fill(
+		rapidjson::Value& dump, Allocator& allocator,
+		const std::map<std::string, handystats::metrics::metric_variant>& metrics_map
+	);
+
+}} // namespace handystats::json
 
 static void check_full_json_dump(const std::string& string_dump) {
 	rapidjson::Document dump;

@@ -22,7 +22,7 @@
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/attribute.hpp>
 
-#include <handystats/json/attribute_json_writer.hpp>
+#include "json/attribute_json_writer.hpp"
 
 using namespace handystats::metrics;
 

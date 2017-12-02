@@ -25,7 +25,7 @@
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/timer.hpp>
 
-#include <handystats/json/timer_json_writer.hpp>
+#include "json/timer_json_writer.hpp"
 
 using namespace handystats::metrics;
 

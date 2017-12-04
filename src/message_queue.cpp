@@ -45,7 +45,9 @@ struct __event_message_queue
 	void push(node* n)
 	{
 		n->next.store(nullptr, std::memory_order_release);
-		node* prev = m_head_node.exchange(n, std::memory_order_acquire);
+		// NOTE: memory model here must be memory_order_acq_rel as exchange is both
+		// read and modify operation
+		node* prev = m_head_node.exchange(n, std::memory_order_acq_rel);
 		prev->next.store(static_cast<handystats::events::event_message*>(n), std::memory_order_release);
 	}
 

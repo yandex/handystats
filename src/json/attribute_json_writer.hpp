@@ -26,8 +26,9 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 
-#include <handystats/json/timestamp.hpp>
 #include <handystats/metrics/attribute.hpp>
+
+#include "json/timestamp.hpp"
 
 namespace handystats { namespace json {
 

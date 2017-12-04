@@ -18,8 +18,6 @@
 #ifndef HANDYSTATS_CORE_HPP_
 #define HANDYSTATS_CORE_HPP_
 
-#include <rapidjson/document.h>
-
 /*
  * Old configuration format
  * {
@@ -88,7 +86,6 @@ void finalize();
 
 bool config_file(const char* filename);
 bool config_json(const char* config);
-bool config_json(const rapidjson::Value& config);
 
 } // namespace handystats
 

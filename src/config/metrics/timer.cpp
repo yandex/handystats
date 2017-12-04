@@ -19,6 +19,8 @@
 
 #include <handystats/config/metrics/timer.hpp>
 
+#include "config_impl.hpp"
+
 namespace handystats { namespace config { namespace metrics {
 
 timer::timer()
@@ -27,7 +29,7 @@ timer::timer()
 {
 }
 
-void timer::configure(const rapidjson::Value& config) {
+void configure(timer& obj, const rapidjson::Value& config) {
 	if (!config.IsObject()) {
 		return;
 	}
@@ -35,11 +37,11 @@ void timer::configure(const rapidjson::Value& config) {
 	if (config.HasMember("idle-timeout")) {
 		const rapidjson::Value& idle_timeout = config["idle-timeout"];
 		if (idle_timeout.IsUint64()) {
-			this->idle_timeout = chrono::duration(idle_timeout.GetUint64(), chrono::time_unit::MSEC);
+			obj.idle_timeout = chrono::duration(idle_timeout.GetUint64(), chrono::time_unit::MSEC);
 		}
 	}
 
-	this->values.configure(config);
+	configure(obj.values, config);
 }
 
 }}} // namespace handystats::config::metrics

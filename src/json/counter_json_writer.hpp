@@ -24,9 +24,9 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 
-#include <handystats/json/gauge_json_writer.hpp>
 #include <handystats/metrics/counter.hpp>
 
+#include "json/gauge_json_writer.hpp"
 
 namespace handystats { namespace json {
 

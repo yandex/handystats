@@ -17,6 +17,8 @@
 
 #include <handystats/config/metrics/gauge.hpp>
 
+#include "config_impl.hpp"
+
 namespace handystats { namespace config { namespace metrics {
 
 gauge::gauge()
@@ -24,12 +26,12 @@ gauge::gauge()
 {
 }
 
-void gauge::configure(const rapidjson::Value& config) {
+void configure(gauge& obj, const rapidjson::Value& config) {
 	if (!config.IsObject()) {
 		return;
 	}
 
-	this->values.configure(config);
+	configure(obj.values, config);
 }
 
 }}} // namespace handystats::config::metrics

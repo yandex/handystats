@@ -19,7 +19,6 @@
 #define HANDYSTATS_CONFIG_INCREMENTAL_STATISTICS_HPP_
 
 #include <handystats/chrono.hpp>
-#include <rapidjson/document.h>
 
 namespace handystats { namespace config {
 
@@ -30,7 +29,6 @@ struct statistics {
 	chrono::time_unit rate_unit;
 
 	statistics();
-	void configure(const rapidjson::Value& config);
 };
 
 }} // namespace handystats::config

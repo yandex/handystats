@@ -15,6 +15,7 @@
 * License along with this library.
 */
 
+#include <cstring>
 #include <limits>
 #include <algorithm>
 #include <iterator>

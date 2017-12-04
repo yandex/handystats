@@ -22,7 +22,7 @@
 #include <handystats/chrono.hpp>
 #include <handystats/metrics/gauge.hpp>
 
-#include <handystats/json/gauge_json_writer.hpp>
+#include "json/gauge_json_writer.hpp"
 
 using namespace handystats::metrics;
 

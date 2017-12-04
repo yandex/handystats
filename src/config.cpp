@@ -27,8 +27,6 @@
 #include <handystats/core.h>
 
 #include <rapidjson/document.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
 
 #include "core_impl.hpp"
 
@@ -190,19 +188,6 @@ void finalize() {
 
 namespace handystats {
 
-bool config_json(const rapidjson::Value& config) {
-	typedef rapidjson::MemoryPoolAllocator<> allocator_type;
-	allocator_type allocator;
-
-	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type> buffer(&allocator);
-	rapidjson::Writer<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, allocator_type>> writer(buffer);
-	config.Accept(writer);
-
-	std::string config_str(buffer.GetString(), buffer.GetSize());
-
-	return config_json(config_str.c_str());
-}
-
 bool config_json(const char* config_data) {
 	std::lock_guard<std::mutex> lock(handystats::operation_mutex);
 	if (handystats::is_enabled()) {
@@ -254,26 +239,26 @@ bool config_json(const char* config_data) {
 	if (cfg.HasMember("statistics")) {
 		const rapidjson::Value& statistics_config = cfg["statistics"];
 
-		config::statistics_opts.configure(statistics_config);
+		configure(config::statistics_opts, statistics_config);
 
-		config::metrics::gauge_opts.values.configure(statistics_config);
+		configure(config::metrics::gauge_opts.values, statistics_config);
 
-		config::metrics::counter_opts.values.configure(statistics_config);
+		configure(config::metrics::counter_opts.values, statistics_config);
 
-		config::metrics::timer_opts.values.configure(statistics_config);
+		configure(config::metrics::timer_opts.values, statistics_config);
 	}
 
 	if (cfg.HasMember("metrics")) {
 		const rapidjson::Value& metrics_config = cfg["metrics"];
 
 		if (metrics_config.HasMember("gauge")) {
-			config::metrics::gauge_opts.configure(metrics_config["gauge"]);
+			configure(config::metrics::gauge_opts, metrics_config["gauge"]);
 		}
 		if (metrics_config.HasMember("counter")) {
-			config::metrics::counter_opts.configure(metrics_config["counter"]);
+			configure(config::metrics::counter_opts, metrics_config["counter"]);
 		}
 		if (metrics_config.HasMember("timer")) {
-			config::metrics::timer_opts.configure(metrics_config["timer"]);
+			configure(config::metrics::timer_opts, metrics_config["timer"]);
 		}
 	}
 
@@ -315,28 +300,28 @@ bool config_json(const char* config_data) {
 	if (cfg.HasMember("defaults")) {
 		const rapidjson::Value& statistics_config = cfg["defaults"];
 
-		config::statistics_opts.configure(statistics_config);
+		configure(config::statistics_opts, statistics_config);
 
-		config::metrics::gauge_opts.values.configure(statistics_config);
+		configure(config::metrics::gauge_opts.values, statistics_config);
 
-		config::metrics::counter_opts.values.configure(statistics_config);
+		configure(config::metrics::counter_opts.values, statistics_config);
 
-		config::metrics::timer_opts.values.configure(statistics_config);
+		configure(config::metrics::timer_opts.values, statistics_config);
 	}
 
 	if (cfg.HasMember("gauge")) {
 		const rapidjson::Value& gauge_config = cfg["gauge"];
-		config::metrics::gauge_opts.configure(gauge_config);
+		configure(config::metrics::gauge_opts, gauge_config);
 	}
 
 	if (cfg.HasMember("counter")) {
 		const rapidjson::Value& counter_config = cfg["counter"];
-		config::metrics::counter_opts.configure(counter_config);
+		configure(config::metrics::counter_opts, counter_config);
 	}
 
 	if (cfg.HasMember("timer")) {
 		const rapidjson::Value& timer_config = cfg["timer"];
-		config::metrics::timer_opts.configure(timer_config);
+		configure(config::metrics::timer_opts, timer_config);
 	}
 
 	if (cfg.HasMember("dump-interval")) {

@@ -7,7 +7,7 @@ We see **metrics** and **statistics** on different levels of abstraction.
 While *statistics* (in particular, :ref:`incremental-statistics`) characterize time-stamped data series whitout any relations with another series,
 *metrics* are data sources for statistics and can aggragate related statistics.
 
-**Mertics** are an interface to represent internal processes and inherent data in user's application.
+**Metrics** are an interface to represent internal processes and inherent data in user's application.
 And metrics' collected statistics provide user an opportunity to understand application's state.
 
 Examples of metrics presented in handystats library are:

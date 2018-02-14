@@ -32,6 +32,15 @@
 
 #include "config_impl.hpp"
 
+namespace {
+
+rapidjson::Document& get_source() {
+	static rapidjson::Document source;
+	return source;
+}
+
+} // namespace
+
 namespace handystats { namespace config {
 
 /*
@@ -154,8 +163,6 @@ std::vector<
 >
 pattern_opts;
 
-std::shared_ptr<rapidjson::Document> source(new rapidjson::Document());
-
 static void reset() {
 	statistics_opts = statistics();
 
@@ -167,7 +174,8 @@ static void reset() {
 	core_opts = core();
 
 	pattern_opts.clear();
-	source.reset(new rapidjson::Document());
+	rapidjson::Document doc;
+	get_source().Swap(doc);
 }
 
 __attribute__((constructor(300)))
@@ -194,7 +202,7 @@ bool config_json(const char* config_data) {
 		return true;
 	}
 
-	rapidjson::Document& cfg = *config::source.get();
+	rapidjson::Document& cfg = get_source();
 
 	cfg.Parse<0>(config_data);
 	if (cfg.HasParseError()) {

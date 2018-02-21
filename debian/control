@@ -5,8 +5,6 @@ Maintainer: Danil Osherov <shindo@yandex-team.ru>
 Build-Depends: debhelper (>= 7),
 		cmake,
 		libboost-dev,
-		libgtest-dev,
-		librapidjson1,
 Standards-Version: 3.9.5
 Homepage: https://github.com/yandex/handystats
 Vcs-git: git://github.com/yandex/handystats.git

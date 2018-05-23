@@ -3,6 +3,6 @@
 		*;
 	local:
 		extern "C++" {
-			rapidjson::*;
+			*rapidjson::*;
 		};
 };

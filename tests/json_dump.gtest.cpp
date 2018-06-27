@@ -35,14 +35,6 @@
 
 namespace handystats { namespace json {
 
-template<typename Allocator>
-void fill(
-		rapidjson::Value& dump, Allocator& allocator,
-		const std::map<std::string, handystats::metrics::metric_variant>& metrics_map
-	);
-
-}} // namespace handystats::json
-
 static void check_full_json_dump(const std::string& string_dump) {
 	rapidjson::Document dump;
 	dump.Parse<0>(string_dump.c_str());
@@ -104,22 +96,9 @@ TEST(JsonDumpTest, TestJsonDumpMethods) {
 	handystats::message_queue::wait_until_empty();
 	handystats::metrics_dump::wait_until(handystats::chrono::system_clock::now());
 
-	auto metrics_dump = HANDY_METRICS_DUMP();
+	std::string string_dump = handystats::json::to_string(*HANDY_METRICS_DUMP());
 
-	rapidjson::Document dump;
-	handystats::json::fill(dump, dump.GetAllocator(), *metrics_dump);
-
-	rapidjson::GenericStringBuffer<rapidjson::UTF8<>, rapidjson::Document::AllocatorType> buffer(&dump.GetAllocator());
-	rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF8<>, rapidjson::Document::AllocatorType>> writer(buffer);
-	dump.Accept(writer);
-
-	std::string string_dump(buffer.GetString(), buffer.GetSize());
-
-	std::string to_string_dump = handystats::json::to_string(*metrics_dump);
-
-	ASSERT_EQ(to_string_dump, string_dump);
-
-	check_full_json_dump(to_string_dump);
+	check_full_json_dump(string_dump);
 
 	check_full_json_dump(HANDY_JSON_DUMP());
 
@@ -153,8 +132,8 @@ TEST(JsonDumpTest, CheckEmptyStatisticsNotShown) {
 
 	auto metrics_dump = HANDY_METRICS_DUMP();
 
-	rapidjson::Document dump;
-	handystats::json::fill(dump, dump.GetAllocator(), *metrics_dump);
+//	rapidjson::Document dump;
+//	handystats::json::fill(dump, dump.GetAllocator(), *metrics_dump);
 
 //	ASSERT_FALSE(dump["test.gauge"].HasMember("values"));
 

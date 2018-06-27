@@ -33,8 +33,6 @@
 #include "message_queue_helper.hpp"
 #include "metrics_dump_helper.hpp"
 
-namespace handystats { namespace json {
-
 static void check_full_json_dump(const std::string& string_dump) {
 	rapidjson::Document dump;
 	dump.Parse<0>(string_dump.c_str());

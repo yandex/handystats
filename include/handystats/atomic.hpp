@@ -20,16 +20,6 @@
 
 #include <handystats/common.h>
 
-#if GCC_VERSION >= 40500
-	#include <atomic>
-#else
-	#include <cstdatomic>
-
-	template <typename T>
-	void
-	std::atomic<T*>::store(T* value, std::memory_order order) volatile {
-		this->exchange(value, order);
-	}
-#endif
+#include <atomic>
 
 #endif // HANDYSTATS_ATOMIC_HPP_

@@ -35,7 +35,11 @@ namespace handystats { namespace json {
 template<typename Allocator>
 inline void write_to_json_value(const metrics::attribute* const obj, rapidjson::Value* json_value, Allocator& allocator) {
 	if (!obj) {
-		json_value = new rapidjson::Value();
+		if (!json_value) {
+			json_value = new rapidjson::Value();
+		} else {
+			json_value->SetNull();
+		}
 		return;
 	}
 
